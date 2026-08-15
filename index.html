@@ -152,6 +152,13 @@
 
     /* MAIN */
     main { background: linear-gradient(#fff, #f5f8fc 36%, #eef4fb); }
+    .welcome-btn { position: fixed; right: 18px; bottom: 18px; z-index: 120; width: 52px; height: 52px;
+      border-radius: 50%; border: 2px solid var(--cyan); background: linear-gradient(135deg,#0a234a,#06142c);
+      color: var(--cyan); font-size: 22px; cursor: pointer; display: grid; place-items: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,.45); transition: transform .15s ease; }
+    .welcome-btn:hover { transform: scale(1.1); }
+    .welcome-btn.playing { animation: rcw-welcome-pulse 1s ease-in-out infinite; }
+    @keyframes rcw-welcome-pulse { 0%,100% { box-shadow: 0 6px 20px rgba(0,0,0,.45); } 50% { box-shadow: 0 0 0 12px rgba(75,215,255,.15), 0 6px 20px rgba(0,0,0,.45); } }
     .ticker { background: linear-gradient(90deg,#0a234a,#06142c 30%,#0a234a 70%,#06142c); border-bottom: 2px solid var(--blue);
       overflow: hidden; padding: 11px 0; position: relative; }
     .ticker-track { display: flex; width: max-content; animation: ticker-scroll 32s linear infinite; }
@@ -346,6 +353,8 @@
   </style>
 </head>
 <body>
+  <audio id="welcomeAudio" src="welcome.mp3" preload="auto"></audio>
+  <button id="welcomeBtn" class="welcome-btn" type="button" title="Play welcome message" aria-label="Play welcome message">🔊</button>
   <a class="skip-link" href="#labs">Skip to labs</a>
 
   <header class="hero">
@@ -584,5 +593,40 @@
     loadPublishedLabs();
 
   </script>
+<script>
+  (function(){
+    var audio = document.getElementById('welcomeAudio');
+    var btn = document.getElementById('welcomeBtn');
+    if(!audio) return;
+    var played = false;
+    function playOnce(){
+      if(played) return;
+      played = true;
+      var p = audio.play();
+      if(p && p.catch) p.catch(function(){});
+      document.removeEventListener('pointerdown', playOnce);
+      document.removeEventListener('touchstart', playOnce);
+      document.removeEventListener('keydown', playOnce);
+    }
+    // try auto-play (most browsers block until first interaction)
+    var ap = audio.play();
+    if(ap && ap.catch) ap.catch(function(){});
+    // guaranteed trigger: first click/tap/keypress anywhere
+    document.addEventListener('pointerdown', playOnce);
+    document.addEventListener('touchstart', playOnce);
+    document.addEventListener('keydown', playOnce);
+    // replay button
+    if(btn){
+      btn.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        audio.currentTime = 0;
+        var p = audio.play();
+        if(p && p.catch) p.catch(function(){});
+        btn.classList.add('playing');
+        setTimeout(function(){ btn.classList.remove('playing'); }, 1200);
+      });
+    }
+  })();
+</script>
 </body>
 </html>
