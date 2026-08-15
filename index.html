@@ -378,62 +378,62 @@
     const SITE_DOMAIN = "https://www.rcwittraining.in";
 
     const labs = [
-      {
-        title: "Azure Virtual Desktop Lab",
-        category: "Azure • Virtual Desktop",
-        badge: "AVD",
-        accent: "#086dcc",
-        repoPath: "/azure-virtual-desktop-lab-simulator/"
-      },
-      {
-        title: "AWS Control Tower Lab",
-        category: "AWS • Governance",
-        badge: "AWS",
-        accent: "#ff6b0b",
-        repoPath: "/aws-control-tower-landing-zone-lab/"
-      },
-      {
-        title: "VMware to Hyper-V Migration Lab",
-        category: "VMware • Hyper-V • Veeam",
-        badge: "V→H",
-        accent: "#42a62a",
-        repoPath: "/vmware-to-hyper-v-migration-using-veeam/"
-      },
-      {
-        title: "VMware to Azure Migration Lab",
-        category: "VMware • Microsoft Azure",
-        badge: "V→A",
-        accent: "#0d97cf",
-        repoPath: "/vmware-to-azure-migration-lab-simulator/"
-      },
-      {
-        title: "TrueNAS Debug Export Lab",
-        category: "TrueNAS • Storage",
-        badge: "NAS",
-        accent: "#0b9ddd",
-        repoPath: "/true-nas-scale-debug-export-simulation/"
-      },
-      {
-        title: "GCP Admin Exam Simulator",
-        category: "Google Cloud • Exam Practice",
-        badge: "GCP",
-        accent: "#4285f4",
-        repoPath: "/gcp-administrator-exam-simulator/"
-      },
-      {
-        title: "Azure Admin Exam Simulator",
-        category: "Microsoft Azure • Exam Practice",
-        badge: "AZ",
-        accent: "#087ed2",
-        repoPath: "/azure-administrator-exam-simulator/"
-      },
-      {
-        title: "RHEL 10 Installation Lab",
-        category: "Red Hat • Linux",
-        badge: "RHEL",
-        accent: "#d71920",
-        repoPath: "/rhel-10-os-installation-lab-simulator/"
-      }
+          {
+                "title": "Azure Virtual Desktop Lab",
+                "category": "Azure • Virtual Desktop",
+                "badge": "AVD",
+                "accent": "#086dcc",
+                "id": "azure-virtual-desktop",
+          },
+          {
+                "title": "AWS Control Tower Lab",
+                "category": "AWS • Governance",
+                "badge": "AWS",
+                "accent": "#ff6b0b",
+                "id": "aws-control-tower",
+          },
+          {
+                "title": "VMware to Hyper-V Migration Lab",
+                "category": "VMware • Hyper-V • Veeam",
+                "badge": "V→H",
+                "accent": "#42a62a",
+                "id": "vmware-hyper-v",
+          },
+          {
+                "title": "VMware to Azure Migration Lab",
+                "category": "VMware • Microsoft Azure",
+                "badge": "V→A",
+                "accent": "#0d97cf",
+                "id": "vmware-azure",
+          },
+          {
+                "title": "TrueNAS Debug Export Lab",
+                "category": "TrueNAS • Storage",
+                "badge": "NAS",
+                "accent": "#0b9ddd",
+                "id": "truenas-debug",
+          },
+          {
+                "title": "GCP Admin Exam Simulator",
+                "category": "Google Cloud • Exam Practice",
+                "badge": "GCP",
+                "accent": "#4285f4",
+                "id": "gcp-admin",
+          },
+          {
+                "title": "Azure Admin Exam Simulator",
+                "category": "Microsoft Azure • Exam Practice",
+                "badge": "AZ",
+                "accent": "#087ed2",
+                "id": "azure-admin",
+          },
+          {
+                "title": "RHEL 10 Installation Lab",
+                "category": "Red Hat • Linux",
+                "badge": "RHEL",
+                "accent": "#d71920",
+                "id": "rhel-10-install",
+          }
     ];
 
     /* Published data is loaded from simulators.json.
@@ -451,13 +451,12 @@
       })[char]);
     }
 
-    function siteUrl(repoPath) {
-      const cleanPath = "/" + String(repoPath || "").replace(/^\/+|\/+$/g, "") + "/";
-      return SITE_DOMAIN + cleanPath;
+    function launcherUrl(lab) {
+      return `./open.html?lab=${encodeURIComponent(lab.id)}`;
     }
 
     function labCard(lab) {
-      const destination = siteUrl(lab.repoPath);
+      const destination = launcherUrl(lab);
       return `
         <article class="lab-card" style="--accent:${safeText(lab.accent)}">
           <div class="lab-icon" aria-hidden="true">${safeText(lab.badge)}</div>
@@ -497,7 +496,7 @@
         if (!Array.isArray(published)) throw new Error("Invalid simulators.json format");
 
         allLabs = published.filter(item =>
-          item && item.title && item.category && item.repoPath
+          item && item.id && item.title && item.category && item.targetUrl
         );
       } catch (error) {
         console.warn("Using built-in simulator list because simulators.json could not be loaded.", error);

@@ -201,7 +201,7 @@
       <div class="dashboard-head">
         <div>
           <h1>Manage simulators</h1>
-          <p>Add, edit, remove or reorder cards on the public page.</p>
+          <p>Add, edit, remove or reorder cards and their GitHub Pages destinations.</p>
           <span class="repo-chip" id="repoChip"></span>
         </div>
         <div class="dashboard-actions">
@@ -219,7 +219,7 @@
 
       <section class="card manager">
         <div class="manager-title">
-          <div><h2>Simulator cards</h2><span>The displayed count changes automatically after publishing.</span></div>
+          <div><h2>Simulator cards</h2><span>Cards use same-domain launcher URLs; the count changes automatically after publishing.</span></div>
           <button class="button dark" id="addButton" type="button">＋ Add simulator</button>
         </div>
         <div class="sim-list" id="simList"></div>
@@ -250,10 +250,15 @@
             <input id="simAccent" type="color" required value="#087fe0">
           </div>
           <div class="field full">
-            <label for="simPath">Repository name or path</label>
-            <input id="simPath" required spellcheck="false" placeholder="network-troubleshooting">
-            <span class="help">Enter only the GitHub repository name. Do not enter github.com or github.io.</span>
-            <div class="preview-url" id="urlPreview">https://www.rcwittraining.in/network-troubleshooting/</div>
+            <label for="simId">Public launcher ID</label>
+            <input id="simId" required spellcheck="false" maxlength="60" placeholder="network-troubleshooting">
+            <span class="help">Visitors see this RCW launcher address, not the GitHub Pages destination.</span>
+            <div class="preview-url" id="urlPreview">https://www.rcwittraining.in/open.html?lab=network-troubleshooting</div>
+          </div>
+          <div class="field full">
+            <label for="simTarget">GitHub Pages simulator URL</label>
+            <input id="simTarget" type="url" required spellcheck="false" placeholder="https://rcwittraining.github.io/Repository-Name/">
+            <span class="help">This destination loads inside the RCW launcher and is not displayed on the public card or in the address bar.</span>
           </div>
         </div>
         <div class="dialog-actions">
@@ -339,16 +344,25 @@
       return btoa(binary);
     }
 
-    function normalizePath(value) {
-      let path = String(value || "").trim();
-      if (/https?:|github\.com|github\.io/i.test(path)) {
-        throw new Error("Enter only the repository name, not a GitHub URL.");
+    function normalizeId(value) {
+      const id = String(value || "").trim().toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9._-]/g, "")
+        .replace(/-+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      if (!id) throw new Error("Enter a valid public launcher ID.");
+      return id;
+    }
+
+    function normalizeTargetUrl(value) {
+      let target;
+      try { target = new URL(String(value || "").trim()); }
+      catch (_) { throw new Error("Enter a complete GitHub Pages URL."); }
+      if (target.protocol !== "https:" || target.hostname !== "rcwittraining.github.io") {
+        throw new Error("The simulator URL must begin with https://rcwittraining.github.io/");
       }
-      path = path.replace(/^\/+|\/+$/g, "");
-      if (!/^[A-Za-z0-9._-]+$/.test(path)) {
-        throw new Error("Repository names may contain letters, numbers, dots, hyphens and underscores only.");
-      }
-      return `/${path}/`;
+      if (!target.pathname.endsWith("/")) target.pathname += "/";
+      return target.href;
     }
 
     function parseApiError(response, body) {
@@ -374,7 +388,8 @@
         category: String(item.category || ""),
         badge: String(item.badge || "NEW"),
         accent: String(item.accent || "#087fe0"),
-        repoPath: normalizePath(item.repoPath || "")
+        id: normalizeId(item.id || item.repoPath || item.title),
+        targetUrl: item.targetUrl ? normalizeTargetUrl(item.targetUrl) : ""
       }));
       fileSha = body.sha;
       dirty = false;
@@ -432,7 +447,7 @@
         <div class="sim-row">
           <span class="sim-badge" style="--accent:${escapeHtml(item.accent)}">${escapeHtml(item.badge)}</span>
           <div class="sim-name"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.category)}</span></div>
-          <div class="sim-path">${escapeHtml(SITE_DOMAIN + item.repoPath)}</div>
+          <div class="sim-path">${escapeHtml(SITE_DOMAIN + "/open.html?lab=" + encodeURIComponent(item.id))}</div>
           <div class="row-actions">
             <button class="icon-button" type="button" data-action="up" data-index="${index}" aria-label="Move up" ${index === 0 ? "disabled" : ""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg></button>
             <button class="icon-button" type="button" data-action="down" data-index="${index}" aria-label="Move down" ${index === items.length - 1 ? "disabled" : ""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -475,14 +490,15 @@
     function openEditor(index = -1) {
       editingIndex = index;
       const item = index >= 0 ? items[index] : {
-        title: "", category: "", badge: "NEW", accent: "#087fe0", repoPath: ""
+        title: "", category: "", badge: "NEW", accent: "#087fe0", id: "", targetUrl: ""
       };
       $("editorTitle").textContent = index >= 0 ? "Edit simulator" : "Add simulator";
       $("simTitle").value = item.title;
       $("simCategory").value = item.category;
       $("simBadge").value = item.badge;
       $("simAccent").value = /^#[0-9a-f]{6}$/i.test(item.accent) ? item.accent : "#087fe0";
-      $("simPath").value = item.repoPath.replace(/^\/+|\/+$/g, "");
+      $("simId").value = item.id;
+      $("simTarget").value = item.targetUrl;
       updateUrlPreview();
       editorDialog.showModal();
       setTimeout(() => $("simTitle").focus(), 0);
@@ -491,11 +507,11 @@
     function closeEditor() { editorDialog.close(); }
 
     function updateUrlPreview() {
-      const raw = $("simPath").value.trim().replace(/^\/+|\/+$/g, "") || "repository-name";
-      $("urlPreview").textContent = `${SITE_DOMAIN}/${raw}/`;
+      const raw = $("simId").value.trim().toLowerCase().replace(/\s+/g, "-") || "simulator-id";
+      $("urlPreview").textContent = `${SITE_DOMAIN}/open.html?lab=${encodeURIComponent(raw)}`;
     }
 
-    $("simPath").addEventListener("input", updateUrlPreview);
+    $("simId").addEventListener("input", updateUrlPreview);
     $("addButton").addEventListener("click", () => openEditor());
     $("dialogClose").addEventListener("click", closeEditor);
     $("cancelEditor").addEventListener("click", closeEditor);
@@ -503,22 +519,24 @@
     $("editorForm").addEventListener("submit", event => {
       event.preventDefault();
       try {
+        const wasEditing = editingIndex >= 0;
         const item = {
           title: $("simTitle").value.trim(),
           category: $("simCategory").value.trim(),
           badge: $("simBadge").value.trim().toUpperCase(),
           accent: $("simAccent").value,
-          repoPath: normalizePath($("simPath").value)
+          id: normalizeId($("simId").value),
+          targetUrl: normalizeTargetUrl($("simTarget").value)
         };
         if (!item.title || !item.category || !item.badge) throw new Error("Complete all fields.");
-        const duplicate = items.findIndex((existing, index) => existing.repoPath === item.repoPath && index !== editingIndex);
-        if (duplicate >= 0) throw new Error("That repository path is already used by another simulator.");
+        const duplicate = items.findIndex((existing, index) => existing.id === item.id && index !== editingIndex);
+        if (duplicate >= 0) throw new Error("That public launcher ID is already used by another simulator.");
 
-        if (editingIndex >= 0) items[editingIndex] = item;
+        if (wasEditing) items[editingIndex] = item;
         else items.push(item);
         closeEditor();
         setDirty();
-        showToast(editingIndex >= 0 ? "Draft updated." : "Simulator added to draft.");
+        showToast(wasEditing ? "Draft updated." : "Simulator added to draft.");
       } catch (error) {
         alert(error.message);
       }

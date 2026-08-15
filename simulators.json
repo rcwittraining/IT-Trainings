@@ -6,56 +6,64 @@
       "category": "Azure • Virtual Desktop",
       "badge": "AVD",
       "accent": "#086dcc",
-      "repoPath": "/azure-virtual-desktop-lab-simulator/"
+      "id": "azure-virtual-desktop",
+      "targetUrl": "https://rcwittraining.github.io/Azure-VirtualDesktop-Lab/"
     },
     {
       "title": "AWS Control Tower Lab",
       "category": "AWS • Governance",
       "badge": "AWS",
       "accent": "#ff6b0b",
-      "repoPath": "/aws-control-tower-landing-zone-lab/"
+      "id": "aws-control-tower",
+      "targetUrl": "https://rcwittraining.github.io/AWS-ControlTower-LAB/"
     },
     {
       "title": "VMware to Hyper-V Migration Lab",
       "category": "VMware • Hyper-V • Veeam",
       "badge": "V→H",
       "accent": "#42a62a",
-      "repoPath": "/vmware-to-hyper-v-migration-using-veeam/"
+      "id": "vmware-hyper-v",
+      "targetUrl": "https://rcwittraining.github.io/VMware-to-Hyper-V-using-Veeam/"
     },
     {
       "title": "VMware to Azure Migration Lab",
       "category": "VMware • Microsoft Azure",
       "badge": "V→A",
       "accent": "#0d97cf",
-      "repoPath": "/vmware-to-azure-migration-lab-simulator/"
+      "id": "vmware-azure",
+      "targetUrl": "https://rcwittraining.github.io/VMware-to-Azure-Migrate/"
     },
     {
       "title": "TrueNAS Debug Export Lab",
       "category": "TrueNAS • Storage",
       "badge": "NAS",
       "accent": "#0b9ddd",
-      "repoPath": "/true-nas-scale-debug-export-simulation/"
+      "id": "truenas-debug",
+      "targetUrl": "https://rcwittraining.github.io/TrueNAS-Scale---Debug-Export/"
     },
     {
       "title": "GCP Admin Exam Simulator",
       "category": "Google Cloud • Exam Practice",
       "badge": "GCP",
       "accent": "#4285f4",
-      "repoPath": "/gcp-administrator-exam-simulator/"
+      "id": "gcp-admin",
+      "targetUrl": "https://rcwittraining.github.io/GCP-Admin-Exam-Simulator/"
     },
     {
       "title": "Azure Admin Exam Simulator",
       "category": "Microsoft Azure • Exam Practice",
       "badge": "AZ",
       "accent": "#087ed2",
-      "repoPath": "/azure-administrator-exam-simulator/"
+      "id": "azure-admin",
+      "targetUrl": "https://rcwittraining.github.io/Azure-Admin-Exam-Simulator/"
     },
     {
       "title": "RHEL 10 Installation Lab",
       "category": "Red Hat • Linux",
       "badge": "RHEL",
       "accent": "#d71920",
-      "repoPath": "/rhel-10-os-installation-lab-simulator/"
+      "id": "rhel-10-install",
+      "targetUrl": "https://rcwittraining.github.io/RHEL-10---OS-Installation-Lab/"
     }
   ]
 }

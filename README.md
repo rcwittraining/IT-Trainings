@@ -5,7 +5,8 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 ## Files
 
 - `index.html` — public lab page
-- `simulators.json` — simulator data used by the public page
+- `open.html` — same-domain simulator launcher
+- `simulators.json` — simulator data and GitHub Pages targets
 - `admin/index.html` — unlisted simulator editor at `/admin/`
 - `CNAME` — GitHub Pages custom-domain setting
 - `.nojekyll` — tells GitHub Pages to publish these files directly
@@ -44,12 +45,17 @@ The token is held only in browser memory. It is not saved to local storage, HTML
 2. Enter the GitHub owner/username, website repository, publishing branch and fine-grained token.
 3. Select **Connect and load simulators**.
 4. Add, edit, delete or reorder simulator cards.
-5. Select **Publish changes**.
+5. For each card, enter:
+   - a short public launcher ID, such as `gcp-admin`
+   - its GitHub Pages target, such as `https://rcwittraining.github.io/GCP-Admin-Exam-Simulator/`
+6. Select **Publish changes**.
 
-The admin commits only `simulators.json`. The public page reads that file and automatically updates the cards, search results and lab count. GitHub Pages can take a minute or two to publish a new commit.
+The admin commits only `simulators.json`. The public card opens a URL such as `https://www.rcwittraining.in/open.html?lab=gcp-admin`; `open.html` loads the simulator inside a full-page frame. The GitHub address is therefore not displayed on the card or in the browser address bar. The public page automatically updates its cards, search results and lab count. GitHub Pages can take a minute or two to publish a new commit.
 
 ## Security limitation
 
 With GitHub Pages only, `/admin/` cannot be made invisible or protected before it loads. Anyone who guesses the URL can see the sign-in form. However, they cannot publish changes without a GitHub credential that has write permission to the repository.
+
+The simulator's GitHub Pages URL is hidden from normal page display and from the address bar. It is not cryptographically secret: a technical user can still discover an iframe destination with browser developer tools. Completely concealing it would require a reverse proxy or authenticated backend.
 
 For true email/password protection of the URL itself, a service such as Cloudflare Access or an authenticated server would be required later.
