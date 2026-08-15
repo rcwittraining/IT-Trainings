@@ -238,7 +238,11 @@
     .benefit-icon svg { width: 25px; }
     .benefit strong { display: block; color: #10b7ff; font-size: 17px; line-height: 1.25; }
     .benefit span { color: #e4eef9; font-size: 13px; }
-    .bottom-bar { padding: 15px 18px; text-align: center; color: #dce9f6; background: #030d20; border-top: 1px solid #163b66; }
+    .bottom-bar { padding: 18px 18px 20px; text-align: center; color: #dce9f6; background: #030d20; border-top: 1px solid #163b66; }
+    .bottom-bar .site-links { margin-top: 10px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .bottom-bar .site-links a { color: var(--cyan); text-decoration: none; font-size: 13px; font-weight: 600; }
+    .bottom-bar .site-links a:hover { text-decoration: underline; }
+    .bottom-bar .legal-note { margin: 12px auto 0; max-width: 800px; font-size: 12px; line-height: 1.6; color: #8fa3b8; }
     .bottom-bar b { color: var(--yellow); }
     .heart { color: #ff354e; }
 
@@ -367,7 +371,15 @@
         <div><strong>Safe Environment. Real Skills.</strong><span>Build a better future.</span></div>
       </div>
     </div>
-    <footer class="bottom-bar"><span class="heart">♥</span>&nbsp; RCW IT TRAINING — Creating Practice Ground for All, Completely <b>FREE!</b></footer>
+    <footer class="bottom-bar">
+      <div><span class="heart">♥</span>&nbsp; RCW IT TRAINING — Creating Practice Ground for All, Completely <b>FREE!</b></div>
+      <div class="site-links">
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="disclaimer.html#trademarks">Trademarks</a>
+        <a href="disclaimer.html#privacy">Privacy</a>
+      </div>
+      <p class="legal-note">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners. Any vendor name is used for identification and educational purposes only and does not imply affiliation with, sponsorship by, or endorsement from the vendor. All labs are unofficial visual simulations.</p>
+    </footer>
   </section>
 
   <script>

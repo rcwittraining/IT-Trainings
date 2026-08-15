@@ -16,6 +16,7 @@
     .copy { min-width: 0; flex: 1; }
     .copy strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
     .copy span { display: block; color: #8faed1; font-size: 10px; font-weight: 750; letter-spacing: .5px; text-transform: uppercase; }
+    .unofficial { position: fixed; left: 12px; bottom: 10px; z-index: 5; font-size: 10.5px; color: #8faed1; background: rgba(4,17,38,.85); border: 1px solid #163b66; padding: 5px 10px; border-radius: 999px; max-width: 90vw; }
     .back, .full { min-height: 34px; display: inline-flex; align-items: center; padding: 6px 11px; border: 1px solid #2b5a8b; border-radius: 9px; color: #c7e4ff; background: #09224a; text-decoration: none; font-size: 12px; font-weight: 800; cursor: pointer; }
     .back:hover, .full:hover { color: #fff; border-color: #4cbce9; }
     .full { font-family: inherit; }
@@ -42,6 +43,7 @@
 </head>
 <body>
   <header class="bar">
+    <span class="unofficial">Unofficial practice labs — not affiliated with any vendor.</span>
     <span class="brand">RCW</span>
     <div class="copy"><strong id="labTitle">Opening simulator…</strong><span>RCW IT Training secure launcher</span></div>
     <button class="full" id="fullscreenButton" type="button">Full screen</button>
