@@ -133,6 +133,21 @@
     <p class="note">RHCSA is a registered trademark of Red Hat, Inc. This page is independent training material and is not affiliated with or endorsed by Red Hat, Inc.</p>
   </div>
 
+  <script>
+    // Reliable YouTube link handling: try new tab; if blocked (popup blocker /
+    // in-app browser), open in the same tab so the click always responds.
+    (function(){
+      document.addEventListener('click', function(e){
+        var a = e.target && e.target.closest ? e.target.closest('a[href*="youtube.com"]') : null;
+        if(!a) return;
+        e.preventDefault();
+        var w = null;
+        try { w = window.open(a.href, '_blank'); } catch(err) {}
+        if(!w) { window.location.href = a.href; }
+      });
+    })();
+  </script>
+
   <div class="footer">
     © 2026 RCW IT Training — Free practice labs for everyone. ·
     <a href="./">All labs</a> · <a href="rhcsa-videos.html">RHCSA Videos</a> · <a href="disclaimer.html">Disclaimer</a>
