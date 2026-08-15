@@ -131,6 +131,18 @@
 
     /* MAIN */
     main { background: linear-gradient(#fff, #f5f8fc 36%, #eef4fb); }
+    .ticker { background: linear-gradient(90deg,#0a234a,#06142c 30%,#0a234a 70%,#06142c); border-bottom: 2px solid var(--blue);
+      overflow: hidden; padding: 11px 0; position: relative; }
+    .ticker-track { display: flex; width: max-content; animation: ticker-scroll 32s linear infinite; }
+    .ticker:hover .ticker-track { animation-play-state: paused; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 14px; white-space: nowrap;
+      color: #eaf2ff; font-size: 15px; font-weight: 600; letter-spacing: .3px; padding: 0 28px; }
+    .ticker-item .t-name { color: var(--yellow); font-weight: 800; }
+    .ticker-item .t-star { color: var(--cyan); }
+    .ticker-item .t-hl { color: #9fe8ff; font-weight: 700; }
+    .ticker-sep { color: var(--yellow); font-size: 15px; margin: 0 6px; }
+    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; flex-wrap: wrap; } }
     .labs { padding: 58px 0 28px; }
     .videos { padding: 14px 0 10px; }
     .video-banner { display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:linear-gradient(112deg,#06142c,#0a234a);
@@ -343,6 +355,12 @@
   </header>
 
   <main id="main-content">
+    <div class="ticker" aria-label="About the instructor">
+      <div class="ticker-track">
+        <span class="ticker-item"><span class="t-star">✦</span><span class="t-name">Pradeep Raju</span><span class="ticker-sep">•</span>Senior Architect<span class="ticker-sep">•</span><span class="t-hl">19+ Years of Experience</span><span class="ticker-sep">•</span>Enterprise Infrastructure<span class="t-star">✦</span></span>
+        <span class="ticker-item"><span class="t-star">✦</span><span class="t-name">Pradeep Raju</span><span class="ticker-sep">•</span>Senior Architect<span class="ticker-sep">•</span><span class="t-hl">19+ Years of Experience</span><span class="ticker-sep">•</span>Enterprise Infrastructure<span class="t-star">✦</span></span>
+      </div>
+    </div>
     <section class="labs" id="labs" aria-labelledby="labs-title">
       <div class="container">
         <div class="section-heading">
