@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-15T18:29:52.269Z",
+  "updatedAt": "2026-08-15T18:33:47.477Z",
   "simulators": [
     {
       "title": "Azure Virtual Desktop Lab",
@@ -64,6 +64,14 @@
       "accent": "#d71920",
       "id": "rhel-10-install",
       "targetUrl": "https://rcwittraining.github.io/RHEL-10---OS-Installation-Lab/"
+    },
+    {
+      "title": "AWS Cloud Watch Lab",
+      "category": "Cloud",
+      "badge": "AWS",
+      "accent": "#087fe0",
+      "id": "aws-cloudwatch",
+      "targetUrl": "https://rcwittraining.github.io/AWS---CloudWatch---Lab/"
     }
   ]
 }
