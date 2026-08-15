@@ -75,7 +75,7 @@
     }
     .hero-photo::after {
       content: ""; position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent 35%, #05132b 96%), linear-gradient(0deg, #06142c 0%, transparent 23%);
+      background: linear-gradient(90deg, transparent 55%, rgba(5,19,43,.9) 100%), linear-gradient(0deg, rgba(6,20,44,.85) 0%, transparent 26%);
     }
  }
     .hero-inner {
@@ -93,7 +93,8 @@
       opacity: .95;
     }
     .brand-title { margin: 0; line-height: .88; letter-spacing: -5px; text-transform: uppercase; }
-    .brand-title .rcw { display: block; font-size: clamp(72px, 9.2vw, 126px); font-weight: 950; }
+    .brand-title .rcw { display: block; font-size: clamp(72px, 9.2vw, 126px); font-weight: 950;
+      color: #ffffff; text-shadow: 0 0 30px rgba(75,215,255,.30), 0 0 70px rgba(75,215,255,.18); }
     .brand-title .training {
       display: block; margin-top: 16px;
       color: #0799ed; font-size: clamp(48px, 6.3vw, 85px); font-weight: 900;
@@ -131,14 +132,7 @@
     .promise-item .cyan { color: #13b9ff; font-weight: 800; }
 
     /* MAIN */
-    main { background: linear-gradient(#fff, #f5f8fc 36%, #eef4fb); }
-    .welcome-btn { position: fixed; right: 18px; bottom: 18px; z-index: 120; width: 52px; height: 52px;
-      border-radius: 50%; border: 2px solid var(--cyan); background: linear-gradient(135deg,#0a234a,#06142c);
-      color: var(--cyan); font-size: 22px; cursor: pointer; display: grid; place-items: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,.45); transition: transform .15s ease; }
-    .welcome-btn:hover { transform: scale(1.1); }
-    .welcome-btn.playing { animation: rcw-welcome-pulse 1s ease-in-out infinite; }
-    @keyframes rcw-welcome-pulse { 0%,100% { box-shadow: 0 6px 20px rgba(0,0,0,.45); } 50% { box-shadow: 0 0 0 12px rgba(75,215,255,.15), 0 6px 20px rgba(0,0,0,.45); } }
+    main { background: linear-gradient(#fff, #f5f8fc 36%, #eef4fb); } }
     .ticker { background: linear-gradient(90deg,#0a234a,#06142c 30%,#0a234a 70%,#06142c); border-bottom: 2px solid var(--blue);
       overflow: hidden; padding: 11px 0; position: relative; }
     .ticker-track { display: flex; width: max-content; animation: ticker-scroll 32s linear infinite; }
@@ -279,6 +273,7 @@
 
     @media (max-width: 940px) {
       .hero-photo { width: 44%; opacity: .65; }
+      .hero-photo::after { background: linear-gradient(90deg, transparent 62%, rgba(5,19,43,.8) 100%), linear-gradient(0deg, rgba(6,20,44,.8) 0%, transparent 22%); }
       .hero-copy { width: 67%; }
       .cloud { width: 96px; top: 28px; }
       .hero-promise { grid-template-columns: 1fr; }
@@ -291,8 +286,8 @@
     @media (max-width: 680px) {
       .container { width: min(100% - 24px, 1120px); }
       .hero { min-height: auto; }
-      .hero-photo { width: 100%; height: 310px; opacity: .82; background-position: center top; }
-      .hero-photo::after { background: linear-gradient(0deg, #06142c 2%, transparent 60%), linear-gradient(90deg, transparent, rgba(5,19,43,.25)); }
+      .hero-photo { width: 100%; height: 310px; opacity: .6; background-position: center top; }
+      .hero-photo::after { background: linear-gradient(0deg, rgba(6,20,44,.85) 0%, transparent 18%), linear-gradient(90deg, transparent, rgba(5,19,43,.12)); }
       .hero-inner { min-height: auto; padding-top: 268px; padding-bottom: 34px; justify-content: center; }
       .hero-copy { width: 100%; }
       .cloud { display: none; }
@@ -333,8 +328,6 @@
   </style>
 </head>
 <body>
-  <audio id="welcomeAudio" src="welcome.mp3" preload="auto"></audio>
-  <button id="welcomeBtn" class="welcome-btn" type="button" title="Play welcome message" aria-label="Play welcome message">🔊</button>
   <a class="skip-link" href="#labs">Skip to labs</a>
 
   <header class="hero">
@@ -573,65 +566,6 @@
     loadPublishedLabs();
 
   </script>
-<script>
-  (function(){
-    var audio = document.getElementById('welcomeAudio');
-    var btn = document.getElementById('welcomeBtn');
-    if(!audio) return;
-    var played = false, attempts = 0;
 
-    function startPlay(){
-      if(played) return;
-      played = true;
-      audio.currentTime = 0;
-      var p = audio.play();
-      if(p && p.catch) p.catch(function(){});
-      document.removeEventListener('pointerdown', startPlay);
-      document.removeEventListener('touchstart', startPlay);
-      document.removeEventListener('keydown', startPlay);
-    }
-
-    // 1) try to auto-play immediately (allowed in some browsers / if user enabled autoplay)
-    audio.play().catch(function(){});
-
-    // 2) hidden iframe fallback — iframes with allow=autoplay are exempt from the user-gesture rule
-    function iframePlay(){
-      try{
-        var fr = document.createElement('iframe');
-        fr.style.display = 'none';
-        fr.setAttribute('allow', 'autoplay');
-        fr.src = 'welcome.html?t=' + Date.now();
-        document.body.appendChild(fr);
-        setTimeout(function(){ fr.parentNode && fr.parentNode.removeChild(fr); }, 12000);
-      }catch(e){}
-    }
-    iframePlay();
-
-    // 3) retry auto-play every 3 seconds (up to ~15s) — triggers as soon as the browser allows it
-    var timer = setInterval(function(){
-      attempts++;
-      if(played){ clearInterval(timer); return; }
-      audio.play().catch(function(){});
-      if(attempts >= 5) clearInterval(timer);
-    }, 3000);
-
-    // 4) guaranteed: first click/tap/keypress anywhere plays it
-    document.addEventListener('pointerdown', startPlay);
-    document.addEventListener('touchstart', startPlay);
-    document.addEventListener('keydown', startPlay);
-
-    // replay button
-    if(btn){
-      btn.addEventListener('click', function(ev){
-        ev.stopPropagation();
-        audio.currentTime = 0;
-        var p = audio.play();
-        if(p && p.catch) p.catch(function(){});
-        btn.classList.add('playing');
-        setTimeout(function(){ btn.classList.remove('playing'); }, 1200);
-      });
-    }
-  })();
-</script>
 </body>
 </html>
