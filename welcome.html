@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex"></head>
+<body>
+  <audio id="welcomeAudio" src="welcome.mp3" autoplay preload="auto"></audio>
+  <script>
+    var a = document.getElementById('welcomeAudio');
+    a.volume = 1.0;
+    a.play().catch(function(){});
+  </script>
+</body>
+</html>
