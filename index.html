@@ -132,6 +132,17 @@
     /* MAIN */
     main { background: linear-gradient(#fff, #f5f8fc 36%, #eef4fb); }
     .labs { padding: 58px 0 28px; }
+    .videos { padding: 14px 0 10px; }
+    .video-banner { display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:linear-gradient(112deg,#06142c,#0a234a);
+      border:1px solid #1b4a86; border-radius:var(--radius); padding:20px 24px; color:#fff; box-shadow:var(--shadow); }
+    .video-banner .vic { width:52px; height:52px; flex:0 0 auto; border-radius:14px; background:#ff0033;
+      display:grid; place-items:center; font-size:22px; }
+    .video-banner h3 { margin:0 0 3px; font-size:18px; }
+    .video-banner p { margin:0; color:#a9c6ea; font-size:13.5px; }
+    .video-banner .vbtn { margin-left:auto; background:var(--yellow); color:#101b3b; font-weight:800; font-size:13.5px;
+      text-decoration:none; padding:11px 18px; border-radius:11px; white-space:nowrap; }
+    .video-banner .vbtn:hover { filter:brightness(1.08); }
+    @media(max-width:640px){ .video-banner .vbtn { margin-left:0; } }
     .section-heading { text-align: center; margin-bottom: 26px; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 13px;
@@ -351,6 +362,19 @@
 
         <div class="lab-list" id="labList"></div>
         <div class="empty-search" id="emptySearch">No labs match your search. Try another keyword.</div>
+      </div>
+    </section>
+
+    <section class="videos" aria-label="RHCSA training videos">
+      <div class="container">
+        <div class="video-banner">
+          <span class="vic">▶</span>
+          <div>
+            <h3>RHCSA Training Videos — free on YouTube</h3>
+            <p>14 hands-on RHEL 10 lessons: sudo, SSH hardening &amp; keys, disk space, certificates, root password reset and more.</p>
+          </div>
+          <a class="vbtn" href="rhcsa-videos.html">Watch all videos →</a>
+        </div>
       </div>
     </section>
 
