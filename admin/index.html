@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#061633">
+  <title>RCW Simulator Admin</title>
+  <style>
+    :root {
+      --navy: #061633;
+      --navy-2: #0b2755;
+      --blue: #087fe0;
+      --cyan: #3fcfff;
+      --green: #79cf25;
+      --red: #d8324a;
+      --amber: #f2aa18;
+      --ink: #111d3c;
+      --muted: #68758c;
+      --line: #dce4ef;
+      --paper: #f3f7fc;
+      --white: #fff;
+      --shadow: 0 14px 38px rgba(7, 29, 65, .12);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--ink); background:
+        radial-gradient(circle at 88% -10%, rgba(31, 171, 255, .17), transparent 30%),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .topbar { color: #fff; background: linear-gradient(120deg, #041126, #082758); border-bottom: 3px solid #078be8; }
+    .topbar-inner { width: min(1160px, calc(100% - 32px)); min-height: 82px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-mark { width: 46px; height: 46px; display: grid; place-items: center; border: 1px solid #45caff; border-radius: 13px; color: #60dbff; font-size: 13px; font-weight: 950; }
+    .brand strong { display: block; font-size: 18px; letter-spacing: .2px; }
+    .brand span { color: #9db9da; font-size: 12px; }
+    .private-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border: 1px solid #245789; border-radius: 999px; color: #b9d9f7; font-size: 12px; font-weight: 800; }
+    .private-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 9px rgba(121, 207, 37, .8); }
+    main { width: min(1160px, calc(100% - 32px)); margin: 38px auto 70px; }
+    .card { border: 1px solid var(--line); border-radius: 20px; background: #fff; box-shadow: var(--shadow); }
+    .login-shell { max-width: 720px; margin: 55px auto; overflow: hidden; }
+    .login-head { padding: 30px 32px 22px; color: #fff; background: linear-gradient(135deg, #071a3d, #0b3473); }
+    .login-head .lock { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 16px; border: 1px solid #45bff2; border-radius: 14px; color: #62d7ff; }
+    .login-head .lock svg { width: 25px; }
+    h1, h2, h3, p { margin-top: 0; }
+    .login-head h1 { margin-bottom: 7px; font-size: clamp(25px, 5vw, 34px); letter-spacing: -.8px; }
+    .login-head p { margin-bottom: 0; color: #b7d1ed; }
+    .login-body { padding: 28px 32px 32px; }
+    .security-note { display: flex; gap: 12px; margin-bottom: 23px; padding: 13px 15px; border: 1px solid #cae5f5; border-radius: 12px; color: #365873; background: #f0faff; font-size: 13px; }
+    .security-note svg { flex: 0 0 auto; width: 20px; color: #0783ca; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+    .field { display: grid; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    label { color: #34415a; font-size: 13px; font-weight: 850; }
+    input {
+      width: 100%; min-height: 47px; padding: 10px 12px; border: 1px solid #cbd7e5; border-radius: 10px; outline: 0; color: #0e1b37; background: #fff;
+    }
+    input:focus { border-color: #078be8; box-shadow: 0 0 0 4px rgba(7, 139, 232, .12); }
+    .help { color: #748198; font-size: 11px; }
+    .help a { color: #0577c8; }
+    .actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 23px; }
+    .button { min-height: 43px; padding: 9px 16px; border: 0; border-radius: 10px; font-weight: 850; transition: transform .15s ease, opacity .15s ease, background .15s ease; }
+    .button:hover:not(:disabled) { transform: translateY(-1px); }
+    .button:disabled { cursor: not-allowed; opacity: .55; }
+    .primary { color: #fff; background: linear-gradient(135deg, #078fe7, #0757c7); }
+    .dark { color: #fff; background: var(--navy); }
+    .ghost { color: #1f3856; border: 1px solid #cad7e5; background: #fff; }
+    .danger { color: #b31f35; border: 1px solid #f0c3ca; background: #fff5f6; }
+    .button svg { width: 17px; vertical-align: -3px; margin-right: 5px; }
+    .login-error { margin-top: 15px; padding: 11px 13px; border: 1px solid #f2c4ca; border-radius: 10px; color: #a92438; background: #fff4f5; font-size: 13px; }
+
+    .dashboard-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 25px; }
+    .dashboard-head h1 { margin-bottom: 5px; font-size: clamp(28px, 5vw, 40px); letter-spacing: -1.3px; }
+    .dashboard-head p { margin: 0; color: var(--muted); }
+    .repo-chip { display: inline-flex; align-items: center; gap: 7px; margin-top: 9px; padding: 6px 10px; border-radius: 999px; color: #176293; background: #e9f7ff; font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .dashboard-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+    .stat { padding: 18px 20px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .stat span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; }
+    .stat strong { display: block; margin-top: 4px; font-size: 25px; }
+    .stat strong.small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; line-height: 2.1; }
+    .dirty { color: #a56200 !important; }
+    .clean { color: #248213 !important; }
+    .manager { overflow: hidden; }
+    .manager-title { display: flex; justify-content: space-between; align-items: center; gap: 15px; padding: 20px 22px; border-bottom: 1px solid var(--line); }
+    .manager-title h2 { margin: 0; font-size: 20px; }
+    .manager-title span { color: var(--muted); font-size: 12px; }
+    .sim-list { display: grid; }
+    .sim-row { display: grid; grid-template-columns: 48px minmax(180px, 1fr) minmax(180px, .8fr) auto; align-items: center; gap: 15px; padding: 14px 18px; border-bottom: 1px solid #e8edf4; }
+    .sim-row:last-child { border-bottom: 0; }
+    .sim-row:hover { background: #f9fbfe; }
+    .sim-badge { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 11px; color: #fff; background: var(--accent, #078be8); font-size: 10px; font-weight: 950; }
+    .sim-name { min-width: 0; }
+    .sim-name strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sim-name span, .sim-path { color: var(--muted); font-size: 12px; }
+    .sim-path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .row-actions { display: flex; gap: 5px; }
+    .icon-button { width: 35px; height: 35px; display: grid; place-items: center; border: 1px solid #d6e0eb; border-radius: 9px; color: #42536d; background: #fff; }
+    .icon-button:hover:not(:disabled) { color: #056dc1; border-color: #9ecdf0; background: #f1faff; }
+    .icon-button.delete:hover { color: #b82036; border-color: #efb9c1; background: #fff5f6; }
+    .icon-button:disabled { cursor: not-allowed; opacity: .3; }
+    .icon-button svg { width: 16px; }
+    .empty { padding: 50px 20px; text-align: center; color: var(--muted); }
+
+    dialog { width: min(650px, calc(100% - 24px)); padding: 0; border: 0; border-radius: 18px; color: var(--ink); box-shadow: 0 28px 90px rgba(0, 12, 38, .35); }
+    dialog::backdrop { background: rgba(2, 12, 30, .68); backdrop-filter: blur(3px); }
+    .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 23px; color: #fff; background: var(--navy); }
+    .dialog-head h2 { margin: 0; font-size: 20px; }
+    .dialog-close { width: 34px; height: 34px; border: 1px solid #31517a; border-radius: 9px; color: #fff; background: transparent; font-size: 21px; }
+    .dialog-body { padding: 24px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 23px; }
+    .preview-url { margin-top: 7px; overflow: hidden; text-overflow: ellipsis; color: #0870bd; font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .toast { position: fixed; z-index: 100; right: 20px; bottom: 20px; max-width: min(420px, calc(100% - 40px)); padding: 13px 16px; border-radius: 11px; color: #fff; background: #14243d; box-shadow: 0 14px 36px rgba(3, 18, 45, .25); font-size: 13px; font-weight: 750; }
+    .toast.success { background: #19752a; }
+    .toast.error { background: #aa263a; }
+    .footer-note { margin-top: 22px; text-align: center; color: #78869c; font-size: 12px; }
+    .footer-note a { color: #1674b7; }
+
+    @media (max-width: 800px) {
+      .dashboard-head { flex-direction: column; }
+      .dashboard-actions { justify-content: flex-start; }
+      .stats { grid-template-columns: 1fr; }
+      .sim-row { grid-template-columns: 48px 1fr auto; }
+      .sim-path { grid-column: 2 / -1; grid-row: 2; }
+      .row-actions { grid-column: 3; grid-row: 1; }
+    }
+    @media (max-width: 600px) {
+      main { width: min(100% - 20px, 1160px); margin-top: 22px; }
+      .topbar-inner { width: min(100% - 20px, 1160px); }
+      .private-badge { font-size: 0; }
+      .private-badge::after { content: "Admin"; font-size: 12px; }
+      .login-body, .login-head { padding-inline: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .sim-row { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; padding: 13px 12px; }
+      .sim-badge { width: 39px; height: 39px; }
+      .sim-path { grid-column: 2; }
+      .row-actions { grid-column: 1 / -1; grid-row: auto; justify-content: flex-end; }
+      .manager-title { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-mark">RCW</span><div><strong>Simulator Admin</strong><span>www.rcwittraining.in</span></div></div>
+      <span class="private-badge">Publishing credentials required</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card login-shell" id="loginView">
+      <div class="login-head">
+        <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h1>Private publishing access</h1>
+        <p>Connect securely to the GitHub repository that publishes your simulator list.</p>
+      </div>
+      <div class="login-body">
+        <div class="security-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div>Your token is sent directly from this browser to GitHub's API. It is held only in memory and is never saved to local storage, the HTML file, or <code>simulators.json</code>.</div>
+        </div>
+        <form id="loginForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="owner">GitHub owner or username</label>
+              <input id="owner" required autocomplete="username" placeholder="your-github-name">
+            </div>
+            <div class="field">
+              <label for="repository">Website repository</label>
+              <input id="repository" required placeholder="your-pages-repository">
+            </div>
+            <div class="field">
+              <label for="branch">Publishing branch</label>
+              <input id="branch" required value="main" placeholder="main">
+            </div>
+            <div class="field">
+              <label for="token">Fine-grained GitHub token</label>
+              <input id="token" type="password" required autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+            </div>
+            <div class="field full">
+              <span class="help">Use a fine-grained token limited to this repository with only <b>Contents: Read and write</b>. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Create a token on GitHub ↗</a></span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="button primary" id="connectButton" type="submit">Connect and load simulators</button>
+          </div>
+          <div class="login-error" id="loginError" role="alert" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="dashboardView" hidden>
+      <div class="dashboard-head">
+        <div>
+          <h1>Manage simulators</h1>
+          <p>Add, edit, remove or reorder cards on the public page.</p>
+          <span class="repo-chip" id="repoChip"></span>
+        </div>
+        <div class="dashboard-actions">
+          <button class="button ghost" id="refreshButton" type="button">Refresh</button>
+          <button class="button ghost" id="disconnectButton" type="button">Disconnect</button>
+          <button class="button primary" id="publishButton" type="button">Publish changes</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span>Published lab count</span><strong id="labCount">0</strong></div>
+        <div class="stat"><span>Draft status</span><strong class="small clean" id="draftStatus">No unpublished changes</strong></div>
+        <div class="stat"><span>Data file</span><strong class="small">simulators.json</strong></div>
+      </div>
+
+      <section class="card manager">
+        <div class="manager-title">
+          <div><h2>Simulator cards</h2><span>The displayed count changes automatically after publishing.</span></div>
+          <button class="button dark" id="addButton" type="button">＋ Add simulator</button>
+        </div>
+        <div class="sim-list" id="simList"></div>
+      </section>
+      <p class="footer-note">Publishing commits only <code>simulators.json</code>. GitHub Pages may need a minute or two before visitors see the update.</p>
+    </section>
+  </main>
+
+  <dialog id="editorDialog">
+    <form id="editorForm">
+      <div class="dialog-head"><h2 id="editorTitle">Add simulator</h2><button class="dialog-close" id="dialogClose" type="button" aria-label="Close">×</button></div>
+      <div class="dialog-body">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="simTitle">Simulator title</label>
+            <input id="simTitle" required maxlength="100" placeholder="Network Troubleshooting Lab">
+          </div>
+          <div class="field full">
+            <label for="simCategory">Category and keywords</label>
+            <input id="simCategory" required maxlength="120" placeholder="Networking • Troubleshooting">
+          </div>
+          <div class="field">
+            <label for="simBadge">Short badge</label>
+            <input id="simBadge" required maxlength="8" placeholder="NET">
+          </div>
+          <div class="field">
+            <label for="simAccent">Card colour</label>
+            <input id="simAccent" type="color" required value="#087fe0">
+          </div>
+          <div class="field full">
+            <label for="simPath">Repository name or path</label>
+            <input id="simPath" required spellcheck="false" placeholder="network-troubleshooting">
+            <span class="help">Enter only the GitHub repository name. Do not enter github.com or github.io.</span>
+            <div class="preview-url" id="urlPreview">https://www.rcwittraining.in/network-troubleshooting/</div>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="button ghost" id="cancelEditor" type="button">Cancel</button>
+          <button class="button primary" type="submit">Save to draft</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script>
+    "use strict";
+
+    const API_VERSION = "2022-11-28";
+    const DATA_FILE = "simulators.json";
+    const SITE_DOMAIN = "https://www.rcwittraining.in";
+    const SETTINGS_KEY = "rcw-admin-repository-settings";
+
+    let credentials = null;
+    let fileSha = null;
+    let items = [];
+    let editingIndex = -1;
+    let dirty = false;
+    let toastTimer = null;
+
+    const $ = id => document.getElementById(id);
+    const loginView = $("loginView");
+    const dashboardView = $("dashboardView");
+    const loginForm = $("loginForm");
+    const loginError = $("loginError");
+    const connectButton = $("connectButton");
+    const simList = $("simList");
+    const editorDialog = $("editorDialog");
+
+    function restoreSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+        $("owner").value = saved.owner || "";
+        $("repository").value = saved.repository || "";
+        $("branch").value = saved.branch || "main";
+      } catch (_) {}
+    }
+
+    function rememberNonSecretSettings() {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+        owner: credentials.owner,
+        repository: credentials.repository,
+        branch: credentials.branch
+      }));
+    }
+
+    function apiUrl(includeRef = false) {
+      const owner = encodeURIComponent(credentials.owner);
+      const repo = encodeURIComponent(credentials.repository);
+      const file = DATA_FILE.split("/").map(encodeURIComponent).join("/");
+      const base = `https://api.github.com/repos/${owner}/${repo}/contents/${file}`;
+      return includeRef ? `${base}?ref=${encodeURIComponent(credentials.branch)}` : base;
+    }
+
+    function apiHeaders() {
+      return {
+        "Accept": "application/vnd.github+json",
+        "Authorization": `Bearer ${credentials.token}`,
+        "X-GitHub-Api-Version": API_VERSION
+      };
+    }
+
+    function decodeBase64Utf8(value) {
+      const binary = atob(value.replace(/\s/g, ""));
+      const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }
+
+    function encodeBase64Utf8(value) {
+      const bytes = new TextEncoder().encode(value);
+      let binary = "";
+      const size = 0x8000;
+      for (let index = 0; index < bytes.length; index += size) {
+        binary += String.fromCharCode(...bytes.subarray(index, index + size));
+      }
+      return btoa(binary);
+    }
+
+    function normalizePath(value) {
+      let path = String(value || "").trim();
+      if (/https?:|github\.com|github\.io/i.test(path)) {
+        throw new Error("Enter only the repository name, not a GitHub URL.");
+      }
+      path = path.replace(/^\/+|\/+$/g, "");
+      if (!/^[A-Za-z0-9._-]+$/.test(path)) {
+        throw new Error("Repository names may contain letters, numbers, dots, hyphens and underscores only.");
+      }
+      return `/${path}/`;
+    }
+
+    function parseApiError(response, body) {
+      if (response.status === 401) return "GitHub rejected the token. Check that it is valid and not expired.";
+      if (response.status === 403) return "Access denied. The token needs Contents: Read and write permission for this repository.";
+      if (response.status === 404) return "Repository or simulators.json was not found. Check the owner, repository and branch.";
+      if (response.status === 409) return "The file changed on GitHub. Refresh, review the latest list and try again.";
+      return body?.message || `GitHub request failed with status ${response.status}.`;
+    }
+
+    async function loadFromGitHub() {
+      const response = await fetch(apiUrl(true), { headers: apiHeaders(), cache: "no-store" });
+      let body = null;
+      try { body = await response.json(); } catch (_) {}
+      if (!response.ok) throw new Error(parseApiError(response, body));
+
+      const parsed = JSON.parse(decodeBase64Utf8(body.content));
+      const loaded = Array.isArray(parsed) ? parsed : parsed.simulators;
+      if (!Array.isArray(loaded)) throw new Error("simulators.json does not contain a simulator list.");
+
+      items = loaded.map(item => ({
+        title: String(item.title || ""),
+        category: String(item.category || ""),
+        badge: String(item.badge || "NEW"),
+        accent: String(item.accent || "#087fe0"),
+        repoPath: normalizePath(item.repoPath || "")
+      }));
+      fileSha = body.sha;
+      dirty = false;
+      renderDashboard();
+    }
+
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      loginError.hidden = true;
+      credentials = {
+        owner: $("owner").value.trim(),
+        repository: $("repository").value.trim(),
+        branch: $("branch").value.trim() || "main",
+        token: $("token").value.trim()
+      };
+      connectButton.disabled = true;
+      connectButton.textContent = "Connecting…";
+      try {
+        await loadFromGitHub();
+        rememberNonSecretSettings();
+        $("token").value = "";
+        loginView.hidden = true;
+        dashboardView.hidden = false;
+        $("repoChip").textContent = `${credentials.owner}/${credentials.repository} • ${credentials.branch}`;
+        showToast("Connected to GitHub.", "success");
+      } catch (error) {
+        credentials = null;
+        loginError.textContent = error.message;
+        loginError.hidden = false;
+      } finally {
+        connectButton.disabled = false;
+        connectButton.textContent = "Connect and load simulators";
+      }
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>'"]/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+      })[char]);
+    }
+
+    function renderDashboard() {
+      $("labCount").textContent = items.length;
+      const status = $("draftStatus");
+      status.textContent = dirty ? "Unpublished changes" : "No unpublished changes";
+      status.className = `small ${dirty ? "dirty" : "clean"}`;
+      $("publishButton").disabled = !dirty;
+
+      if (!items.length) {
+        simList.innerHTML = '<div class="empty">No simulators yet. Select “Add simulator” to create the first card.</div>';
+        return;
+      }
+
+      simList.innerHTML = items.map((item, index) => `
+        <div class="sim-row">
+          <span class="sim-badge" style="--accent:${escapeHtml(item.accent)}">${escapeHtml(item.badge)}</span>
+          <div class="sim-name"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.category)}</span></div>
+          <div class="sim-path">${escapeHtml(SITE_DOMAIN + item.repoPath)}</div>
+          <div class="row-actions">
+            <button class="icon-button" type="button" data-action="up" data-index="${index}" aria-label="Move up" ${index === 0 ? "disabled" : ""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg></button>
+            <button class="icon-button" type="button" data-action="down" data-index="${index}" aria-label="Move down" ${index === items.length - 1 ? "disabled" : ""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+            <button class="icon-button" type="button" data-action="edit" data-index="${index}" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg></button>
+            <button class="icon-button delete" type="button" data-action="delete" data-index="${index}" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg></button>
+          </div>
+        </div>`).join("");
+    }
+
+    function setDirty() {
+      dirty = true;
+      renderDashboard();
+    }
+
+    simList.addEventListener("click", event => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const index = Number(button.dataset.index);
+      const action = button.dataset.action;
+      if (!Number.isInteger(index) || !items[index]) return;
+
+      if (action === "edit") return openEditor(index);
+      if (action === "delete") {
+        if (confirm(`Remove “${items[index].title}” from the public page?`)) {
+          items.splice(index, 1);
+          setDirty();
+        }
+        return;
+      }
+      if (action === "up" && index > 0) {
+        [items[index - 1], items[index]] = [items[index], items[index - 1]];
+        setDirty();
+      }
+      if (action === "down" && index < items.length - 1) {
+        [items[index], items[index + 1]] = [items[index + 1], items[index]];
+        setDirty();
+      }
+    });
+
+    function openEditor(index = -1) {
+      editingIndex = index;
+      const item = index >= 0 ? items[index] : {
+        title: "", category: "", badge: "NEW", accent: "#087fe0", repoPath: ""
+      };
+      $("editorTitle").textContent = index >= 0 ? "Edit simulator" : "Add simulator";
+      $("simTitle").value = item.title;
+      $("simCategory").value = item.category;
+      $("simBadge").value = item.badge;
+      $("simAccent").value = /^#[0-9a-f]{6}$/i.test(item.accent) ? item.accent : "#087fe0";
+      $("simPath").value = item.repoPath.replace(/^\/+|\/+$/g, "");
+      updateUrlPreview();
+      editorDialog.showModal();
+      setTimeout(() => $("simTitle").focus(), 0);
+    }
+
+    function closeEditor() { editorDialog.close(); }
+
+    function updateUrlPreview() {
+      const raw = $("simPath").value.trim().replace(/^\/+|\/+$/g, "") || "repository-name";
+      $("urlPreview").textContent = `${SITE_DOMAIN}/${raw}/`;
+    }
+
+    $("simPath").addEventListener("input", updateUrlPreview);
+    $("addButton").addEventListener("click", () => openEditor());
+    $("dialogClose").addEventListener("click", closeEditor);
+    $("cancelEditor").addEventListener("click", closeEditor);
+
+    $("editorForm").addEventListener("submit", event => {
+      event.preventDefault();
+      try {
+        const item = {
+          title: $("simTitle").value.trim(),
+          category: $("simCategory").value.trim(),
+          badge: $("simBadge").value.trim().toUpperCase(),
+          accent: $("simAccent").value,
+          repoPath: normalizePath($("simPath").value)
+        };
+        if (!item.title || !item.category || !item.badge) throw new Error("Complete all fields.");
+        const duplicate = items.findIndex((existing, index) => existing.repoPath === item.repoPath && index !== editingIndex);
+        if (duplicate >= 0) throw new Error("That repository path is already used by another simulator.");
+
+        if (editingIndex >= 0) items[editingIndex] = item;
+        else items.push(item);
+        closeEditor();
+        setDirty();
+        showToast(editingIndex >= 0 ? "Draft updated." : "Simulator added to draft.");
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    $("refreshButton").addEventListener("click", async () => {
+      if (dirty && !confirm("Discard your unpublished changes and reload from GitHub?")) return;
+      const button = $("refreshButton");
+      button.disabled = true;
+      try {
+        await loadFromGitHub();
+        showToast("Latest simulator list loaded.", "success");
+      } catch (error) {
+        showToast(error.message, "error");
+      } finally { button.disabled = false; }
+    });
+
+    $("publishButton").addEventListener("click", async () => {
+      if (!dirty || !credentials) return;
+      const button = $("publishButton");
+      button.disabled = true;
+      button.textContent = "Publishing…";
+      const documentData = {
+        updatedAt: new Date().toISOString(),
+        simulators: items
+      };
+      const body = {
+        message: `Update simulator list (${items.length} labs)`,
+        content: encodeBase64Utf8(JSON.stringify(documentData, null, 2) + "\n"),
+        branch: credentials.branch,
+        sha: fileSha
+      };
+      try {
+        const response = await fetch(apiUrl(false), {
+          method: "PUT",
+          headers: { ...apiHeaders(), "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        let result = null;
+        try { result = await response.json(); } catch (_) {}
+        if (!response.ok) throw new Error(parseApiError(response, result));
+        fileSha = result.content?.sha || fileSha;
+        dirty = false;
+        renderDashboard();
+        showToast(`Published ${items.length} simulators successfully.`, "success");
+      } catch (error) {
+        showToast(error.message, "error");
+        button.disabled = false;
+      } finally {
+        button.textContent = "Publish changes";
+      }
+    });
+
+    $("disconnectButton").addEventListener("click", () => {
+      if (dirty && !confirm("Disconnect and discard your unpublished changes?")) return;
+      credentials = null;
+      fileSha = null;
+      items = [];
+      dirty = false;
+      dashboardView.hidden = true;
+      loginView.hidden = false;
+      $("token").value = "";
+      loginError.hidden = true;
+    });
+
+    window.addEventListener("beforeunload", event => {
+      if (!dirty) return;
+      event.preventDefault();
+      event.returnValue = "";
+    });
+
+    function showToast(message, type = "") {
+      const toast = $("toast");
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.className = `toast ${type}`.trim();
+      toast.hidden = false;
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 4200);
+    }
+
+    restoreSettings();
+  </script>
+</body>
+</html>
