@@ -381,6 +381,29 @@
     taskDelete.classList.toggle("is-complete", state.deleted);
   }
 
+  function saveToPassport() {
+    // Record this completed lab in the Skill Passport (shared via localStorage).
+    try {
+      const KEY = "rcw_passport";
+      let S = null;
+      try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+      if (!S || !S.act) {
+        S = { name: "Student", xp: 0, labs: 0, qs: 0, streak: 0, act: {}, badges: { first: 0, five: 0, quiz: 0, streak7: 0, streak14: 0, beat: 0, elite: 0 } };
+      }
+      if (state.learnerName) S.name = state.learnerName;
+      S.labs += 1;
+      S.xp += 40;
+      const today = new Date().toISOString().slice(0, 10);
+      S.act[today] = (S.act[today] || 0) + 3;
+      const d = new Date(); let streak = 0;
+      while (S.act[d.toISOString().slice(0, 10)]) { streak++; d.setDate(d.getDate() - 1); }
+      S.streak = streak;
+      S.badges.first = S.labs >= 1 ? 1 : S.badges.first;
+      S.badges.five = S.labs >= 5 ? 1 : S.badges.five;
+      localStorage.setItem(KEY, JSON.stringify(S));
+    } catch (e) { /* non-critical */ }
+  }
+
   function completeChallenge() {
     state.completed = true;
     state.elapsedSeconds = Math.max(1, Math.floor((Date.now() - state.startedAt) / 1000));
@@ -388,6 +411,7 @@
     timerElement.textContent = formatDuration(state.elapsedSeconds);
     commandInput.disabled = true;
     state.certificateId = makeCertificateId(state.learnerName);
+    saveToPassport();
 
     window.setTimeout(() => {
       $("#resultName").textContent = state.learnerName;
