@@ -73,6 +73,10 @@
   .btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
   .linkbox{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
     font-size:13px;color:var(--blue);word-break:break-all;user-select:all;margin-top:12px;line-height:1.5}
+  .field{width:100%;background:var(--white);border:1px solid var(--line);border-radius:10px;color:var(--ink);
+    padding:12px 14px;font-size:15px;font-family:inherit}
+  .field:focus{outline:none;border-color:var(--blue)}
+  .badge-cta{display:flex;gap:10px;flex-wrap:wrap}
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--navy);
     color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:2000;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -129,8 +133,17 @@
     <button class="btn primary" id="sync">🔗 Create / refresh public link</button>
     <div class="desc" id="syncStatus" style="margin-top:12px">Not synced yet.</div>
     <div class="linkbox" id="pubLink" style="display:none"></div>
-    <button class="btn ghost" id="copyLink" style="display:none">📋 Copy public link</button>
-    <button class="btn ghost" id="openLink" style="display:none">↗ Open public page</button>
+    <div class="linkbox" id="syncCodeBox" style="display:none;margin-top:8px"></div>
+    <div class="badge-cta" id="syncActions" style="display:none;margin-top:12px">
+      <button class="btn ghost" id="copyLink">📋 Copy link</button>
+      <button class="btn ghost" id="copyCode">🔑 Copy sync code</button>
+      <button class="btn ghost" id="openLink">↗ Open public page</button>
+    </div>
+    <div class="desc" style="margin-top:16px">On another device? Enter your sync code to restore this passport there.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+      <input class="field" id="restoreCode" placeholder="Sync code (e.g. ravi.9f2c81…)" style="flex:1;min-width:220px;margin-bottom:0">
+      <button class="btn ghost" id="restoreBtn">↩ Restore on this device</button>
+    </div>
   </div>
 
   <div class="note">Your passport fills up automatically as you complete labs and quizzes. The more you practice, the higher your level, the longer your streak, and the more badges you unlock — share it on your LinkedIn or resume to prove your skills.</div>
@@ -138,6 +151,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="passport.js"></script>
 <script>
 (function(){
   var KEY='rcw_passport';
@@ -266,55 +280,57 @@
     S.streak=streak;
   }
 
-  // ---- backend sync (cross-device). API_BASE is empty = same origin.
-  // GitHub Pages is static-only, so set this to your API host to enable cross-device sync.
-  var REMOTE_KEY='rcw_passport_remote';
-  var API_BASE = '';
-  function remote(){ try{ return JSON.parse(localStorage.getItem(REMOTE_KEY)); }catch(e){ return null; } }
+  // ---- backend sync (cross-device), via shared passport.js ----
   function syncStatus(msg, cls){ var el=document.getElementById('syncStatus'); el.textContent=msg; el.style.color=cls||'var(--muted)'; }
 
-  async function pushRemote(){
-    var r = remote(); if(!r) return null;
-    var res = await fetch(API_BASE+'/api/passport', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id:r.id, token:r.token, passport:S }) });
-    return res.ok ? r : null;
-  }
-  async function pullRemote(){
-    var r = remote(); if(!r) return null;
-    var res = await fetch(API_BASE+'/api/passport/'+r.id);
-    if(!res.ok) return null;
-    return await res.json();
+  function showSyncUI(r){
+    var base = RCWPassport.apiBase();
+    var pubUrl = (base || location.origin) + '/p/' + r.id;
+    document.getElementById('pubLink').textContent = pubUrl;
+    document.getElementById('pubLink').style.display = 'block';
+    var code = RCWPassport.getCode();
+    if(code){
+      document.getElementById('syncCodeBox').textContent = 'Sync code: ' + code;
+      document.getElementById('syncCodeBox').style.display = 'block';
+    }
+    document.getElementById('syncActions').style.display = 'flex';
+    document.getElementById('openLink').onclick = function(){ window.open(pubUrl, '_blank'); };
   }
 
   document.getElementById('sync').onclick=async function(){
-    if(!API_BASE){
-      syncStatus('⚠️ Cross-device sync needs a small backend. Same-device progress is already saved in your browser.', '#b8860b');
+    if(!RCWPassport.apiBase()){
+      syncStatus('⚠️ Cross-device sync needs the backend deployed. Same-device progress is already saved in your browser.', '#b8860b');
       toast('Sync needs a backend — progress is saved locally for now.');
       return;
     }
     try{
-      var r = remote();
+      var r = RCWPassport.getRemote();
       if(!r){
-        var res = await fetch(API_BASE+'/api/passport', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ passport:S }) });
-        if(!res.ok){ syncStatus('Error '+res.status, 'var(--red)'); return; }
-        r = await res.json();
-        localStorage.setItem(REMOTE_KEY, JSON.stringify({ id:r.id, token:r.token }));
+        r = await RCWPassport.syncCreate();
       } else {
-        var fresh = await pullRemote();
+        await RCWPassport.syncRefresh();
+        var fresh = await RCWPassport.pull();
         if(fresh && fresh.updatedAt && (!S.updatedAt || fresh.updatedAt > S.updatedAt)){ S = fresh; save(); render(); }
-        await pushRemote();
       }
-      var url = location.origin + '/p/' + r.id;
-      document.getElementById('pubLink').textContent = url;
-      document.getElementById('pubLink').style.display = 'block';
-      document.getElementById('copyLink').style.display = 'inline-block';
-      document.getElementById('openLink').style.display = 'inline-block';
-      document.getElementById('openLink').onclick = function(){ window.open(url, '_blank'); };
+      showSyncUI(r);
       syncStatus('✅ Synced. Your public passport is live.', 'var(--green)');
       toast('Synced to the cloud!');
     }catch(e){ syncStatus('Sync failed: '+e.message, 'var(--red)'); }
   };
 
   document.getElementById('copyLink').onclick=function(){ copy(document.getElementById('pubLink').textContent); };
+  document.getElementById('copyCode').onclick=function(){ copy(RCWPassport.getCode()); };
+
+  document.getElementById('restoreBtn').onclick=async function(){
+    var code = document.getElementById('restoreCode').value.trim();
+    if(!code){ toast('Paste your sync code first.'); return; }
+    try{
+      S = await RCWPassport.restoreFromCode(code);
+      save(); render();
+      syncStatus('✅ Passport restored on this device.', 'var(--green)');
+      toast('Passport restored!');
+    }catch(e){ syncStatus('Restore failed: '+e.message, 'var(--red)'); }
+  };
 
   document.getElementById('shareProfile').onclick=function(){
     var lvl=levelOf(S.xp);
