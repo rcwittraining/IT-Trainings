@@ -143,8 +143,7 @@
       background-image: linear-gradient(90deg,#0e3066,#0a234a 30%,#0e3066 70%,#0a234a) !important;
       border-top: 3px solid #078be8; border-bottom: 3px solid #078be8;
       overflow: hidden; padding: 15px 0; position: relative; }
-    .ticker-track { display: flex; width: max-content; animation: ticker-scroll 32s linear infinite; }
-    .ticker:hover .ticker-track { animation-play-state: paused; }
+    .ticker-track { display: flex; width: max-content; will-change: transform; }
     .ticker-item { display: inline-flex; align-items: center; gap: 16px; white-space: nowrap;
       color: #ffffff !important; font-size: 19px; font-weight: 900; letter-spacing: .5px; padding: 0 30px;
       text-shadow: 0 1px 4px rgba(0,0,0,.7); }
@@ -152,8 +151,6 @@
     .ticker-item .t-star { color: #4bd7ff !important; text-shadow: 0 0 10px rgba(75,215,255,.7); }
     .ticker-item .t-hl { color: #8ff1ff !important; font-weight: 900; text-shadow: 0 0 12px rgba(75,215,255,.6); }
     .ticker-sep { color: #ffd51d !important; font-size: 17px; margin: 0 8px; }
-    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; flex-wrap: wrap; } }
     .labs { padding: 58px 0 28px; }
     .videos { padding: 14px 0 10px; }
     .video-banner { display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:linear-gradient(112deg,#06142c,#0a234a);
@@ -557,6 +554,60 @@
       <p class="legal-note">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners. Any vendor name is used for identification and educational purposes only and does not imply affiliation with, sponsorship by, or endorsement from the vendor. All labs are unofficial visual simulations.</p>
     </footer>
   </section>
+
+  <script>
+    /* ================================================================
+       RUNNING BANNER (ticker)
+       JS-driven so it scrolls on every device, even when the OS has
+       "reduce motion" enabled (which disabled the old CSS animation).
+       ================================================================ */
+    (function () {
+      var track = document.querySelector('.ticker-track');
+      if (!track) return;
+      var ticker = track.parentElement;
+      var speed = 70;            // px per second
+      var offset = 0, half = 0, raf = null, last = 0, running = true;
+
+      // Duplicate the set once more if needed, so there are always >= 2
+      // identical copies for a seamless loop.
+      var items = track.querySelectorAll('.ticker-item');
+      if (items.length === 1) {
+        var clone = items[0].cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      }
+
+      function measure() {
+        // half = width of one full set (2 identical items => scrollWidth / 2)
+        half = track.scrollWidth / (items.length > 1 ? 2 : 1);
+      }
+      measure();
+      window.addEventListener('load', measure);
+      window.addEventListener('resize', measure);
+
+      function step(now) {
+        if (!running) return;
+        if (!last) last = now;
+        var dt = (now - last) / 1000;
+        last = now;
+        offset += speed * dt;
+        if (half && offset >= half) offset -= half;
+        track.style.transform = 'translateX(' + (-offset) + 'px)';
+        raf = requestAnimationFrame(step);
+      }
+
+      function play()  { running = true;  last = 0; raf = requestAnimationFrame(step); }
+      function pause() { running = false; if (raf) cancelAnimationFrame(raf); }
+
+      ticker.addEventListener('mouseenter', pause);
+      ticker.addEventListener('mouseleave', play);
+      document.addEventListener('visibilitychange', function () {
+        document.hidden ? pause() : play();
+      });
+
+      play();
+    })();
+  </script>
 
   <script>
     /* ================================================================
