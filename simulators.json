@@ -1,6 +1,14 @@
 {
-  "updatedAt": "2026-08-16T10:30:00.000Z",
+  "updatedAt": "2026-08-16T16:26:00.000Z",
   "simulators": [
+    {
+      "title": "Raju Rishi Dev — Technical Quiz Agent",
+      "category": "Adaptive Quiz • Technical Skills",
+      "badge": "QUIZ",
+      "accent": "#19a7ff",
+      "id": "technical-quiz-agent",
+      "targetUrl": "https://www.rcwittraining.in/technical-quiz-agent/"
+    },
     {
       "title": "Production Outage Game",
       "category": "IT Architecture • Incident Response",

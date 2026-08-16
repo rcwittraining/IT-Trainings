@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071426">
+  <meta name="description" content="A free adaptive technical skills quiz from RCW IT Training.">
+  <meta name="robots" content="index,follow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'">
+  <link rel="canonical" href="https://www.rcwittraining.in/technical-quiz-agent/">
+  <title>Raju Rishi Dev | Technical Quiz Agent</title>
+  <style>
+    :root {
+      --navy:#071426; --navy-2:#0b2140; --panel:#102b4f; --blue:#19a7ff; --cyan:#61dcff;
+      --mint:#53e2b8; --yellow:#ffd45a; --paper:#f4f8fc; --ink:#10203b; --muted:#687790;
+      --line:#d8e4ef; --white:#fff; --danger:#c63e52; --shadow:0 24px 70px rgba(3,19,43,.22);
+    }
+    * { box-sizing:border-box; }
+    html, body { min-height:100%; }
+    body { margin:0; color:var(--ink); background:
+      radial-gradient(circle at 12% 8%, rgba(25,167,255,.20), transparent 28rem),
+      radial-gradient(circle at 88% 92%, rgba(83,226,184,.16), transparent 30rem),
+      var(--navy); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, input, textarea { font:inherit; }
+    button { touch-action:manipulation; }
+    [hidden] { display:none !important; }
+    .shell { width:min(1060px, calc(100% - 28px)); margin:0 auto; padding:22px 0 34px; }
+    .topbar { display:flex; align-items:center; gap:14px; color:#fff; margin-bottom:18px; }
+    .brand { display:grid; place-items:center; width:44px; height:44px; border:1px solid rgba(97,220,255,.75);
+      border-radius:13px; color:var(--cyan); background:rgba(13,48,86,.75); font-weight:950; font-size:12px; letter-spacing:.5px; }
+    .brand-copy { min-width:0; }
+    .brand-copy strong { display:block; font-size:15px; letter-spacing:.1px; }
+    .brand-copy span { display:block; color:#90aeca; font-size:10.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+    .home { margin-left:auto; color:#c9e8ff; border:1px solid #2b5783; border-radius:10px; padding:8px 12px;
+      background:rgba(10,35,68,.75); text-decoration:none; font-size:12px; font-weight:800; }
+    .home:hover, .home:focus-visible { color:#fff; border-color:var(--cyan); outline:none; }
+    .app { overflow:hidden; min-height:680px; border:1px solid rgba(131,188,228,.36); border-radius:26px;
+      background:var(--paper); box-shadow:var(--shadow); }
+    .agent-head { display:flex; align-items:center; gap:16px; padding:18px 24px; color:#fff;
+      background:linear-gradient(125deg,#0b2445,#0d3158 58%,#074c68); border-bottom:1px solid rgba(255,255,255,.1); }
+    .avatar-wrap { position:relative; flex:0 0 auto; }
+    .avatar { display:block; width:66px; height:66px; border-radius:50%; object-fit:cover; border:3px solid #d9f7ff;
+      box-shadow:0 0 0 4px rgba(97,220,255,.16), 0 8px 20px rgba(0,0,0,.25); }
+    .online { position:absolute; right:1px; bottom:2px; width:15px; height:15px; border-radius:50%;
+      background:var(--mint); border:3px solid #0d3158; }
+    .agent-name { margin:0 0 2px; font-size:20px; letter-spacing:-.25px; }
+    .agent-role { color:#a9c9e4; font-size:12px; font-weight:700; }
+    .session-tag { margin-left:auto; padding:7px 10px; border-radius:999px; color:#c9f3ff;
+      background:rgba(0,0,0,.17); border:1px solid rgba(115,222,255,.25); font-size:11px; font-weight:850; letter-spacing:.35px; }
+    .screen { padding:28px; }
+    .chat { display:flex; gap:12px; align-items:flex-start; max-width:780px; margin:0 auto 22px; }
+    .mini-avatar { flex:0 0 auto; width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid #d1e7f5; }
+    .bubble { position:relative; flex:1; padding:17px 18px; border:1px solid #cfe1ee; border-radius:5px 17px 17px 17px;
+      background:#fff; box-shadow:0 7px 22px rgba(26,66,105,.08); }
+    .bubble::before { content:""; position:absolute; left:-8px; top:0; border-top:10px solid #fff; border-left:10px solid transparent; }
+    .bubble strong { display:block; margin-bottom:4px; color:#0a335d; font-size:14px; }
+    .bubble p { margin:0; color:#40516b; font-size:14px; line-height:1.55; }
+    .setup-card { max-width:780px; margin:0 auto; padding:22px; border:1px solid var(--line); border-radius:18px; background:#fff; }
+    .setup-card label { display:block; margin-bottom:8px; color:#162b48; font-weight:850; font-size:14px; }
+    .setup-card textarea { width:100%; min-height:92px; resize:vertical; padding:13px 14px; color:var(--ink);
+      border:1px solid #bdccda; border-radius:12px; background:#fbfdff; line-height:1.45; outline:none; }
+    .setup-card textarea:focus { border-color:var(--blue); box-shadow:0 0 0 4px rgba(25,167,255,.13); }
+    .hint { margin:7px 0 15px; color:var(--muted); font-size:12px; }
+    .skill-title { margin:15px 0 9px; color:#324661; font-size:12px; font-weight:850; }
+    .chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip { border:1px solid #c9d8e5; border-radius:999px; padding:8px 11px; color:#29435f; background:#f6f9fc;
+      font-size:12px; font-weight:800; cursor:pointer; }
+    .chip:hover, .chip:focus-visible { border-color:#5abfea; outline:none; }
+    .chip[aria-pressed="true"] { color:#fff; border-color:#087bc1; background:#087bc1; box-shadow:0 5px 14px rgba(8,123,193,.22); }
+    .error { margin:14px 0 0; padding:10px 12px; color:#8e2435; border:1px solid #f1b3bc; border-radius:10px;
+      background:#fff2f4; font-size:12.5px; font-weight:700; }
+    .primary { display:inline-flex; align-items:center; justify-content:center; min-height:46px; margin-top:20px; padding:10px 18px;
+      border:0; border-radius:12px; color:#fff; background:linear-gradient(115deg,#087bc1,#0756b8); box-shadow:0 9px 22px rgba(7,93,184,.24);
+      font-weight:900; cursor:pointer; }
+    .primary:hover, .primary:focus-visible { filter:brightness(1.08); outline:3px solid rgba(25,167,255,.25); outline-offset:2px; }
+    .quiz-wrap { max-width:820px; margin:0 auto; }
+    .progress-row { display:flex; align-items:center; gap:13px; margin-bottom:19px; }
+    .progress-copy { min-width:102px; color:#30445e; font-size:12px; font-weight:900; }
+    .track { flex:1; height:9px; overflow:hidden; border-radius:999px; background:#dce7f0; }
+    .bar { width:5%; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--blue),var(--mint)); transition:width .3s ease; }
+    .skill-badge { max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:6px 9px;
+      border-radius:999px; color:#17634e; background:#e1f9f1; font-size:11px; font-weight:900; }
+    .question-card { padding:24px; border:1px solid var(--line); border-radius:20px; background:#fff; box-shadow:0 10px 30px rgba(18,56,94,.08); }
+    .question-kicker { margin-bottom:9px; color:#0874b8; font-size:11px; font-weight:950; letter-spacing:.9px; text-transform:uppercase; }
+    .question { margin:0; color:#142945; font-size:clamp(19px,2.6vw,25px); line-height:1.38; letter-spacing:-.25px; }
+    .answers { display:grid; gap:11px; margin-top:21px; }
+    .answer { display:flex; align-items:flex-start; gap:12px; width:100%; padding:13px 15px; text-align:left; color:#263b56;
+      border:1px solid #cbd9e5; border-radius:13px; background:#f9fbfd; cursor:pointer; font-weight:700; line-height:1.4; }
+    .answer:hover, .answer:focus-visible { border-color:#28a8e8; background:#eff9ff; outline:none; transform:translateY(-1px); }
+    .answer:disabled { cursor:default; opacity:.7; transform:none; }
+    .answer.selected { color:#fff; border-color:#087bc1; background:#087bc1; opacity:1; }
+    .letter { display:grid; place-items:center; flex:0 0 auto; width:25px; height:25px; border:1px solid currentColor; border-radius:7px; font-size:11px; font-weight:950; opacity:.82; }
+    .recording { min-height:20px; margin:13px 3px 0; color:#4b6380; font-size:12px; font-weight:750; }
+    .result-screen { min-height:520px; display:grid; place-items:center; text-align:center; }
+    .result-card { width:min(560px,100%); padding:33px 25px; border:1px solid var(--line); border-radius:24px; background:#fff;
+      box-shadow:0 15px 42px rgba(21,59,97,.11); }
+    .result-avatar { width:88px; height:88px; border-radius:50%; object-fit:cover; border:4px solid #d9f5ff;
+      box-shadow:0 0 0 5px rgba(25,167,255,.11); }
+    .result-card h1 { margin:17px 0 5px; font-size:24px; color:#102d4d; }
+    .result-label { color:var(--muted); font-size:13px; }
+    .score { margin:19px 0 0; color:#075eb5; font-size:clamp(46px,8vw,68px); font-weight:950; line-height:1; letter-spacing:-2px; }
+    .percent { margin-top:6px; color:#4b627d; font-size:16px; font-weight:850; }
+    .stars { display:flex; justify-content:center; gap:6px; margin:20px 0 4px; color:#d7dee7; font-size:34px; letter-spacing:2px; }
+    .star.on { color:#f2b600; filter:drop-shadow(0 3px 5px rgba(194,139,0,.18)); }
+    .star-note { color:#5b708b; font-size:12px; font-weight:850; }
+    .result-card .primary { margin-top:24px; }
+    .app-foot { padding:0 22px 22px; color:#8390a1; text-align:center; font-size:11px; font-weight:700; }
+    @media (max-width:680px) {
+      .shell { width:min(100% - 16px,1060px); padding-top:8px; }
+      .topbar { margin:0 6px 9px; }
+      .brand-copy span { display:none; }
+      .home { padding:7px 9px; }
+      .app { min-height:calc(100vh - 82px); border-radius:20px; }
+      .agent-head { padding:14px 16px; }
+      .avatar { width:56px; height:56px; }
+      .agent-name { font-size:17px; }
+      .session-tag { display:none; }
+      .screen { padding:20px 14px; }
+      .chat { gap:9px; }
+      .mini-avatar { width:36px; height:36px; }
+      .bubble { padding:14px; }
+      .setup-card, .question-card { padding:18px; }
+      .progress-row { flex-wrap:wrap; }
+      .track { order:3; flex-basis:100%; }
+      .skill-badge { margin-left:auto; }
+      .answer { padding:12px; }
+    }
+    @media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition:none !important; scroll-behavior:auto !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <span class="brand">RCW</span>
+      <div class="brand-copy"><strong>RCW IT Training</strong><span>Adaptive technical skills quiz</span></div>
+      <a class="home" href="../" target="_top">← All labs</a>
+    </header>
+
+    <main class="app">
+      <section class="agent-head" aria-label="Quiz agent">
+        <div class="avatar-wrap">
+          <img class="avatar" src="assets/raju-rishi-dev-avatar.jpg" alt="Raju Rishi Dev">
+          <span class="online" aria-label="Ready"></span>
+        </div>
+        <div>
+          <h1 class="agent-name">Raju Rishi Dev</h1>
+          <div class="agent-role">Technical Quiz Agent</div>
+        </div>
+        <span class="session-tag">20-question adaptive quiz</span>
+      </section>
+
+      <section class="screen" id="setupScreen">
+        <div class="chat">
+          <img class="mini-avatar" src="assets/raju-rishi-dev-avatar.jpg" alt="">
+          <div class="bubble"><strong>Hi, I’m Raju Rishi Dev.</strong><p>Tell me your technical skills. I’ll choose 20 questions for those skills and adjust the challenge as you play.</p></div>
+        </div>
+        <div class="setup-card">
+          <label for="skillsInput">What are your technical skills?</label>
+          <textarea id="skillsInput" maxlength="180" placeholder="Example: Linux, networking, cloud security and databases" autocomplete="off"></textarea>
+          <p class="hint">Type your skills, select from the choices below, or do both.</p>
+          <div class="skill-title">Quick skill choices</div>
+          <div class="chips" id="skillChips" aria-label="Technical skill choices"></div>
+          <p class="error" id="setupError" role="alert" hidden></p>
+          <button class="primary" id="startButton" type="button">Start my 20-question quiz →</button>
+        </div>
+      </section>
+
+      <section class="screen" id="quizScreen" hidden>
+        <div class="quiz-wrap">
+          <div class="progress-row" aria-label="Quiz progress">
+            <span class="progress-copy" id="progressCopy">Question 1 of 20</span>
+            <div class="track"><div class="bar" id="progressBar"></div></div>
+            <span class="skill-badge" id="topicBadge">Technical skills</span>
+          </div>
+          <div class="chat">
+            <img class="mini-avatar" src="assets/raju-rishi-dev-avatar.jpg" alt="">
+            <div class="bubble"><strong id="agentPrompt">Let’s begin.</strong><p id="agentMessage">Choose the best answer. Your final score appears after question 20.</p></div>
+          </div>
+          <article class="question-card" aria-live="polite">
+            <div class="question-kicker" id="questionKicker">Technical question</div>
+            <h2 class="question" id="questionText"></h2>
+            <div class="answers" id="answers"></div>
+            <div class="recording" id="recordingStatus" aria-live="polite"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen result-screen" id="resultScreen" hidden>
+        <div class="result-card">
+          <img class="result-avatar" src="assets/raju-rishi-dev-avatar.jpg" alt="Raju Rishi Dev">
+          <h1>Quiz complete</h1>
+          <div class="result-label">Your final score</div>
+          <div class="score" id="finalScore">0 / 20</div>
+          <div class="percent" id="finalPercent">0%</div>
+          <div class="stars" id="stars" aria-label="1 out of 5 stars"></div>
+          <div class="star-note" id="starNote">1 out of 5 stars</div>
+          <button class="primary" id="restartButton" type="button">Play another quiz</button>
+        </div>
+      </section>
+
+      <div class="app-foot">Free technical skills practice from RCW IT Training</div>
+    </main>
+  </div>
+  <script src="questions.js"></script>
+  <script src="quiz-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

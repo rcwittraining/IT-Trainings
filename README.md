@@ -7,6 +7,7 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 - `index.html` — public lab catalogue and approved AdSense content page
 - `rhcsa-videos.html` — informational training content and approved AdSense content page
 - `open.html` — same-domain simulator launcher; intentionally has no AdSense tag
+- `technical-quiz-agent/` — Raju Rishi Dev adaptive 20-question technical quiz
 - `simulators.json` — simulator data and GitHub Pages targets
 - `privacy.html` — advertising, cookie, consent, and privacy disclosures
 - `privacy-settings.js` — opens the Google CMP consent-revocation flow

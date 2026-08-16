@@ -57,6 +57,7 @@ In **Ads → Edit site → Page exclusions**, add these safeguards if Auto ads i
 | URL or section | Exclusion type |
 |---|---|
 | `https://www.rcwittraining.in/open.html` | This page only |
+| `https://www.rcwittraining.in/technical-quiz-agent/` | All pages under section |
 | `https://www.rcwittraining.in/admin/` | All pages under section |
 | `https://www.rcwittraining.in/linux-challenge-1/` | All pages under section |
 | `https://www.rcwittraining.in/linux-challenge-2/` | All pages under section |
