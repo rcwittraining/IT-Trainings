@@ -133,15 +133,7 @@
     <button class="btn ghost" id="openLink" style="display:none">↗ Open public page</button>
   </div>
 
-  <div class="sec">
-    <h2>▶ Demo controls</h2>
-    <div class="desc">This is a prototype — these buttons simulate activity so you can see XP, streaks, heatmap and badges update live. Data is saved in your browser (localStorage).</div>
-    <button class="btn primary" id="doLab">🖥 Complete a lab (+40 XP)</button>
-    <button class="btn ghost" id="doQuiz">❓ Answer 5 quiz questions (+15 XP)</button>
-    <button class="btn ghost" id="reset">↺ Reset</button>
-  </div>
-
-  <div class="note">In production, this data comes automatically from labs and quizzes on your site. A public, read-only version of this page is what people link on their LinkedIn.</div>
+  <div class="note">Your passport fills up automatically as you complete labs and quizzes. The more you practice, the higher your level, the longer your streak, and the more badges you unlock — share it on your LinkedIn or resume to prove your skills.</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -162,17 +154,8 @@
   ];
 
   function seed(){
-    var act={}, d=new Date();
-    var base=[0,2,3,1,0,4,2,3,5,3,1,0,2,4,3,2,5,4,0,1,3,2,4,3,5,3,2,1,0,3,4,2,3,5,4,2,1,3,0,2,4,3,2,3,5,4,1,2,3,4,3,2,5,3,1,0,2,4,3,2,3,4,5,3,2,1,3,4,2,3,4,5,2,3,1,2,4,3,2,3,4,2,3,5,3,2,4,3,2,1,3,4,2,3,4,2,3,4,5,3];
-    var idx=base.length-1;
-    for(var i=0;i<105;i++){
-      d.setDate(d.getDate()-1);
-      var v = base[idx % base.length]; idx--;
-      if(v>0) act[d.toISOString().slice(0,10)]=v;
-    }
-    var labs=6, qs=95, streak=3;
-    var xp = labs*40 + Math.floor(qs/5)*15;
-    return {name:'Ravi', xp:xp, labs:labs, qs:qs, streak:streak, act:act, badges:{first:1,five:1,quiz:1,streak7:0,streak14:0,beat:0,elite:0}};
+    // Fresh, empty passport for a first-time visitor.
+    return {name:'Student', xp:0, labs:0, qs:0, streak:0, act:{}, badges:{first:0,five:0,quiz:0,streak7:0,streak14:0,beat:0,elite:0}};
   }
 
   var S;
@@ -333,19 +316,6 @@
 
   document.getElementById('copyLink').onclick=function(){ copy(document.getElementById('pubLink').textContent); };
 
-  function afterActivity(){ if(API_BASE && remote()) pushRemote().catch(function(){}); }
-  document.getElementById('doLab').addEventListener('click', afterActivity);
-  document.getElementById('doQuiz').addEventListener('click', afterActivity);
-
-  document.getElementById('doLab').onclick=function(){
-    S.labs++; S.xp+=40; addActivity(3); recomputeBadges(); save(); render(); toast('+40 XP — lab complete! 🖥');
-  };
-  document.getElementById('doQuiz').onclick=function(){
-    S.qs+=5; S.xp+=15; addActivity(1); recomputeBadges(); save(); render(); toast('+15 XP — 5 questions answered! ❓');
-  };
-  document.getElementById('reset').onclick=function(){
-    S=seed(); save(); render(); toast('Reset to demo data.');
-  };
   document.getElementById('shareProfile').onclick=function(){
     var lvl=levelOf(S.xp);
     copy('My RCW IT Training Skill Passport 🚀 — Level '+lvl+' ('+S.xp+' XP), '+S.labs+' labs, '+S.streak+'-day streak. Can you keep up? https://www.rcwittraining.in');
