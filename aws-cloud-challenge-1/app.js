@@ -29,6 +29,45 @@
     verify: $("#taskVerify")
   };
 
+  const gui = {
+    eventResults: $("#eventResults"),
+    trailValue: $("#trailValue"),
+    topicName: $("#topicNameInput"),
+    topicStatus: $("#topicStepStatus"),
+    createTopic: $("#createTopicButton"),
+    subscriptionCard: $("#subscriptionCard"),
+    subscriptionEmail: $("#subscriptionEmailInput"),
+    subscriptionStatus: $("#subscriptionStepStatus"),
+    createSubscription: $("#createSubscriptionButton"),
+    filterLogGroup: $("#filterLogGroup"),
+    filterName: $("#filterName"),
+    filterPattern: $("#filterPattern"),
+    metricNamespace: $("#metricNamespace"),
+    metricName: $("#metricName"),
+    metricValue: $("#metricValue"),
+    createFilter: $("#createFilterButton"),
+    alarmName: $("#alarmName"),
+    alarmMetric: $("#alarmMetric"),
+    alarmStatistic: $("#alarmStatistic"),
+    alarmPeriod: $("#alarmPeriod"),
+    alarmThreshold: $("#alarmThreshold"),
+    alarmAction: $("#alarmAction"),
+    createAlarm: $("#createAlarmButton"),
+    alarmState: $("#alarmStateValue"),
+    testUser: $("#testUserInput"),
+    testCount: $("#testCountInput"),
+    runTest: $("#runTestButton"),
+    emptyMailbox: $("#emptyMailbox"),
+    confirmationMessage: $("#confirmationMessage"),
+    confirmSubscription: $("#confirmSubscriptionButton"),
+    alertEmail: $("#alertEmailMessage"),
+    mailCount: $("#mailCount"),
+    findingUser: $("#findingUser"),
+    findingSource: $("#findingSource"),
+    findingEmail: $("#findingEmail"),
+    readiness: $("#submissionReadiness")
+  };
+
   const ACCOUNT_ID = "482193607715";
   const REGION = "us-east-1";
   const IAM_USER = "finance-ops";
@@ -60,6 +99,158 @@
     completed: false,
     certificateId: ""
   };
+
+  function navigateTo(page) {
+    document.querySelectorAll("[data-console-page]").forEach((panel) => {
+      panel.classList.toggle("is-active", panel.dataset.consolePage === page);
+    });
+    document.querySelectorAll(".console-nav [data-console-target]").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.consoleTarget === page);
+    });
+    if (page === "mailbox" && state.alertTriggered && state.subscriptionConfirmed) {
+      state.emailDelivered = true;
+    }
+    renderGui();
+  }
+
+  function setNotice(id, message, type = "") {
+    const notice = $(`#${id}`);
+    if (!notice) return;
+    notice.hidden = !message;
+    notice.className = `page-notice ${type}`.trim();
+    notice.textContent = message;
+  }
+
+  function runGuiCommand(command) {
+    appendCommand(command);
+    state.commandHistory.push(command);
+    state.historyIndex = state.commandHistory.length;
+    state.commandCount += 1;
+    executeCommand(command);
+    renderGui();
+    scrollTerminal();
+  }
+
+  function renderGui() {
+    gui.eventResults.hidden = !state.evidence;
+
+    gui.topicStatus.textContent = state.topicCreated ? "Created" : "Not created";
+    gui.topicStatus.classList.toggle("ready", state.topicCreated);
+    gui.createTopic.disabled = state.topicCreated;
+    gui.createTopic.textContent = state.topicCreated ? "Topic created" : "Create topic";
+
+    gui.subscriptionCard.classList.toggle("is-gated", !state.topicCreated);
+    gui.createSubscription.disabled = !state.topicCreated || state.subscriptionPending;
+    if (state.subscriptionConfirmed) gui.subscriptionStatus.textContent = "Confirmed";
+    else if (state.subscriptionPending) gui.subscriptionStatus.textContent = "Pending confirmation";
+    else gui.subscriptionStatus.textContent = state.topicCreated ? "Ready" : "Waiting for topic";
+    gui.subscriptionStatus.classList.toggle("ready", state.subscriptionConfirmed);
+    gui.createSubscription.textContent = state.subscriptionPending ? "Subscription created" : "Create subscription";
+
+    gui.createFilter.disabled = state.metricFilterCreated;
+    gui.createFilter.textContent = state.metricFilterCreated ? "Metric filter created" : "Create metric filter";
+    gui.createAlarm.disabled = state.alarmCreated;
+    gui.createAlarm.textContent = state.alarmCreated ? "Alarm created" : "Create alarm";
+    gui.runTest.disabled = !state.detect || !state.subscriptionConfirmed || state.alertTriggered;
+    gui.runTest.textContent = state.alertTriggered ? "Test completed" : "Run authorised test";
+
+    gui.alarmState.className = "alarm-state";
+    if (state.alertTriggered) {
+      gui.alarmState.textContent = "ALARM";
+      gui.alarmState.classList.add("alarm");
+    } else {
+      gui.alarmState.textContent = "INSUFFICIENT_DATA";
+      gui.alarmState.classList.add("insufficient");
+    }
+
+    const confirmationVisible = state.subscriptionPending;
+    const alertVisible = state.alertTriggered && state.subscriptionConfirmed;
+    gui.emptyMailbox.hidden = confirmationVisible || alertVisible;
+    gui.confirmationMessage.hidden = !confirmationVisible;
+    gui.confirmSubscription.hidden = state.subscriptionConfirmed;
+    gui.alertEmail.hidden = !alertVisible;
+    const messageCount = (confirmationVisible ? 1 : 0) + (alertVisible ? 1 : 0);
+    gui.mailCount.textContent = String(messageCount);
+    gui.mailCount.classList.toggle("has-mail", messageCount > 0);
+
+    const readiness = {
+      evidence: state.evidence,
+      notify: state.notify,
+      detect: state.detect,
+      email: state.emailDelivered
+    };
+    gui.readiness.querySelectorAll("[data-ready]").forEach((item) => {
+      item.classList.toggle("is-ready", Boolean(readiness[item.dataset.ready]));
+    });
+  }
+
+  document.querySelectorAll("[data-console-target]").forEach((button) => {
+    button.addEventListener("click", () => navigateTo(button.dataset.consoleTarget));
+  });
+
+  $("#lookupEventsButton").addEventListener("click", () => {
+    if (gui.trailValue.value.trim().toLowerCase() !== "consolelogin") {
+      showToast("Filter the event history by ConsoleLogin.");
+      return;
+    }
+    runGuiCommand("aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=ConsoleLogin");
+    showToast("Six ConsoleLogin events found. Evidence recorded.");
+  });
+
+  gui.createTopic.addEventListener("click", () => {
+    const name = gui.topicName.value.trim();
+    runGuiCommand(`aws sns create-topic --name ${name}`);
+    setNotice("snsNotice", state.topicCreated ? "Topic iam-security-alerts was created successfully." : "Use the approved topic name: iam-security-alerts.", state.topicCreated ? "success" : "error");
+  });
+
+  gui.createSubscription.addEventListener("click", () => {
+    const email = gui.subscriptionEmail.value.trim();
+    runGuiCommand(`aws sns subscribe --topic-arn ${TOPIC_ARN} --protocol email --notification-endpoint ${email}`);
+    if (state.subscriptionPending) {
+      setNotice("snsNotice", "Subscription created. Confirmation is pending in the simulated security mailbox.", "success");
+      navigateTo("mailbox");
+    } else {
+      setNotice("snsNotice", `Use the approved endpoint: ${SECURITY_EMAIL}.`, "error");
+    }
+  });
+
+  gui.confirmSubscription.addEventListener("click", () => {
+    runGuiCommand(`aws sns confirm-subscription --topic-arn ${TOPIC_ARN} --token ${CONFIRM_TOKEN}`);
+    setNotice("mailNotice", state.subscriptionConfirmed ? "Subscription confirmed. Security alerts can now be delivered to this inbox." : "The subscription could not be confirmed.", state.subscriptionConfirmed ? "success" : "error");
+  });
+
+  gui.createFilter.addEventListener("click", () => {
+    const command = `aws logs put-metric-filter --log-group-name ${gui.filterLogGroup.value} --filter-name ${gui.filterName.value.trim()} --filter-pattern '${gui.filterPattern.value.trim()}' --metric-transformations metricName=${gui.metricName.value.trim()},metricNamespace=${gui.metricNamespace.value.trim()},metricValue=${gui.metricValue.value.trim()}`;
+    runGuiCommand(command);
+    setNotice("logsNotice", state.metricFilterCreated ? "Metric filter created. Failed console logins now publish FailedConsoleLoginCount." : "Check the log group, ConsoleLogin failure pattern, namespace, metric name, and metric value.", state.metricFilterCreated ? "success" : "error");
+  });
+
+  gui.createAlarm.addEventListener("click", () => {
+    const action = gui.alarmAction.value;
+    const command = `aws cloudwatch put-metric-alarm --alarm-name ${gui.alarmName.value.trim()} --metric-name ${gui.alarmMetric.value} --namespace RCW/Security --statistic ${gui.alarmStatistic.value} --period ${gui.alarmPeriod.value} --threshold ${gui.alarmThreshold.value} --comparison-operator GreaterThanOrEqualToThreshold --evaluation-periods 1 --alarm-actions arn:aws:sns:${REGION}:${ACCOUNT_ID}:${action}`;
+    runGuiCommand(command);
+    setNotice("alarmNotice", state.alarmCreated ? "Alarm created. The detector is ready for an authorised event replay." : "Select iam-security-alerts and verify the Sum, five-minute period, and threshold of 3.", state.alarmCreated ? "success" : "error");
+  });
+
+  gui.runTest.addEventListener("click", () => {
+    const user = gui.testUser.value.trim();
+    const count = gui.testCount.value.trim();
+    runGuiCommand(`simulate-login-failures --user-name ${user} --count ${count}`);
+    if (state.alertTriggered) {
+      navigateTo("mailbox");
+      setNotice("mailNotice", "The alarm entered ALARM state and delivered a simulated notification email.", "success");
+    } else {
+      setNotice("alarmNotice", "Complete the confirmed notification path, metric filter, and alarm before running the test.", "error");
+    }
+  });
+
+  $("#submitFindingButton").addEventListener("click", () => {
+    const command = `submit ${gui.findingUser.value.trim()} ${gui.findingSource.value.trim()} ${gui.findingEmail.value.trim()}`;
+    runGuiCommand(command);
+    if (!state.completed) {
+      setNotice("findingNotice", state.emailDelivered ? "Finding not accepted. Verify the affected user, suspicious source IP, and notification destination." : "The finding is not ready. Complete each item in the readiness checklist first.", "error");
+    }
+  });
 
   function showScreen(name) {
     Object.values(screens).forEach((screen) => screen.classList.remove("is-active"));
@@ -99,8 +290,10 @@
     resetChallengeState();
     appendOutput("SEC-AWS-0816: Multiple IAM console password failures were followed by a successful sign-in from an unfamiliar source.\nScope: account 4821-9360-7715, us-east-1. Build a detection for three or more failures within five minutes and notify the security team by email.", "warning");
     showScreen("lab");
+    navigateTo("cloudtrail");
+    renderGui();
     startTimer();
-    setTimeout(() => commandInput.focus(), 180);
+    setTimeout(() => $("#lookupEventsButton").focus(), 180);
   }
 
   function resetChallengeState() {
@@ -128,7 +321,28 @@
     commandInput.value = "";
     commandInput.disabled = false;
     timerElement.textContent = "00:00";
+    gui.trailValue.value = "ConsoleLogin";
+    gui.topicName.value = "iam-security-alerts";
+    gui.subscriptionEmail.value = SECURITY_EMAIL;
+    gui.filterName.value = "FailedConsoleLogins";
+    gui.filterPattern.value = '{ ($.eventName = "ConsoleLogin") && ($.errorMessage = "Failed authentication") }';
+    gui.metricNamespace.value = "RCW/Security";
+    gui.metricName.value = "FailedConsoleLoginCount";
+    gui.metricValue.value = "1";
+    gui.alarmName.value = "MultipleFailedConsoleLogins";
+    gui.alarmStatistic.value = "Sum";
+    gui.alarmPeriod.value = "300";
+    gui.alarmThreshold.value = "3";
+    gui.alarmAction.value = "";
+    gui.testUser.value = IAM_USER;
+    gui.testCount.value = "5";
+    gui.findingUser.value = "";
+    gui.findingSource.value = "";
+    gui.findingEmail.value = SECURITY_EMAIL;
+    ["snsNotice", "logsNotice", "alarmNotice", "mailNotice", "findingNotice"].forEach((id) => setNotice(id, ""));
+    $("#cliDrawer").open = false;
     updateProgress();
+    renderGui();
   }
 
   function startTimer() {
@@ -157,6 +371,7 @@
     state.historyIndex = state.commandHistory.length;
     state.commandCount += 1;
     executeCommand(rawCommand);
+    renderGui();
     scrollTerminal();
   });
 
@@ -388,7 +603,7 @@
       return;
     }
     if (operation === "put-metric-filter") {
-      const valid = query.includes("/aws/cloudtrail/management-events") && query.includes("consolelogin") && (query.includes("failed authentication") || query.includes("errormessage")) && query.includes("failedconsolelogin");
+      const valid = query.includes("/aws/cloudtrail/management-events") && query.includes("consolelogin") && (query.includes("failed authentication") || query.includes("errormessage")) && query.includes("failedconsolelogin") && query.includes("rcw/security") && query.includes("metricvalue=1");
       if (!valid) {
         appendOutput("Metric filter incomplete. Match ConsoleLogin failures in /aws/cloudtrail/management-events and publish FailedConsoleLoginCount in RCW/Security.", "warning");
         return;
@@ -615,8 +830,9 @@
   $("#resetButton").addEventListener("click", () => {
     resetChallengeState();
     appendOutput("Cloud security challenge reset. Begin with CloudTrail ConsoleLogin evidence.", "info");
+    navigateTo("cloudtrail");
     startTimer();
-    commandInput.focus();
+    $("#lookupEventsButton").focus();
   });
 
   $("#replayButton").addEventListener("click", beginChallenge);
