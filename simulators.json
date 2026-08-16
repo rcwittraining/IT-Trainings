@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T02:40:00.058Z",
+  "updatedAt": "2026-08-16T03:15:00.000Z",
   "simulators": [
     {
       "title": "Linux Folder Challenge",
@@ -8,6 +8,14 @@
       "accent": "#09a7f5",
       "id": "linux-folder-challenge",
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-1/"
+    },
+    {
+      "title": "Linux Server Crash Root-Cause Analysis",
+      "category": "Linux • Troubleshooting",
+      "badge": "RCA",
+      "accent": "#12a9e9",
+      "id": "linux-server-crash-rca",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-2/"
     },
     {
       "title": "Azure Virtual Desktop Lab",

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Linux Server Crash RCA Challenge · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="RCW IT Training home">
+      <span class="brand-mark" aria-hidden="true"><span>&gt;_</span></span>
+      <span class="brand-copy"><strong>RCW</strong><small>IT TRAINING</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="secure-chip"><span class="status-dot"></span> Private lab session</span>
+      <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter focus mode" title="Focus mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen welcome-screen is-active" id="welcomeScreen" aria-labelledby="welcomeTitle">
+      <div class="welcome-grid">
+        <div class="welcome-copy">
+          <span class="eyebrow"><span class="eyebrow-icon">⌁</span> Linux troubleshooting · Challenge 02</span>
+          <h1 id="welcomeTitle">Follow the evidence.<br><span>Find the root cause.</span></h1>
+          <p class="lead">A production Linux server restarted after an unexpected crash. Investigate the previous boot, identify the failure chain, and submit a defensible root-cause analysis.</p>
+          <div class="incident-chip">INC-0816 · prod-web-01 · unexpected restart</div>
+          <div class="feature-row" aria-label="Challenge highlights">
+            <div><strong>4</strong><span>objectives</span></div>
+            <div><strong>15</strong><span>minute target</span></div>
+            <div><strong>100</strong><span>points</span></div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-card-top">
+            <span class="terminal-mini"><i></i><i></i><i></i></span>
+            <span>Incident session setup</span>
+          </div>
+          <div class="entry-card-body">
+            <div class="challenge-emblem" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><path d="M12 12h40v40H12z"/><path d="m20 24 8 8-8 8M33 40h12"/></svg>
+            </div>
+            <h2>Linux Server Crash RCA</h2>
+            <p>Enter your name exactly as it should appear on your certificate.</p>
+            <form id="startForm" novalidate>
+              <label for="learnerName">Full name</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <input id="learnerName" name="learnerName" type="text" autocomplete="name" maxlength="60" placeholder="e.g. Ananya Kumar" required>
+              </div>
+              <p class="field-error" id="nameError" role="alert"></p>
+              <button class="primary-button" type="submit">
+                Start investigation
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </form>
+            <p class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Your lab runs entirely in this browser. No account is required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen lab-screen" id="labScreen" aria-labelledby="labTitle">
+      <div class="lab-topline">
+        <div>
+          <span class="eyebrow">Incident response assessment</span>
+          <h1 id="labTitle">Linux Server Crash Root-Cause Analysis</h1>
+        </div>
+        <div class="session-metrics" aria-label="Session metrics">
+          <div><span>TIME</span><strong id="timer">00:00</strong></div>
+          <div><span>SCORE</span><strong><b id="score">0</b>/100</strong></div>
+        </div>
+      </div>
+
+      <div class="lab-layout rca-layout">
+        <aside class="brief-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">Mission brief</span>
+              <h2>Investigate the crash</h2>
+            </div>
+            <span class="difficulty">INTERMEDIATE</span>
+          </div>
+          <p class="brief-copy">The server is online after an automatic restart. Use evidence from the previous boot to explain exactly what caused the outage.</p>
+
+          <ol class="task-list">
+            <li id="taskTimeline">
+              <span class="task-state"><span>1</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+              <div><strong>Establish the timeline</strong><p>Confirm when the system crashed and rebooted.</p></div>
+              <em>20 pts</em>
+            </li>
+            <li id="taskFailure">
+              <span class="task-state"><span>2</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+              <div><strong>Find the failure event</strong><p>Inspect high-priority messages from the previous boot.</p></div>
+              <em>30 pts</em>
+            </li>
+            <li id="taskCulprit">
+              <span class="task-state"><span>3</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+              <div><strong>Identify the culprit</strong><p>Trace the resource failure to the responsible service.</p></div>
+              <em>30 pts</em>
+            </li>
+            <li id="taskReport">
+              <span class="task-state"><span>4</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+              <div><strong>Submit the root cause</strong><p>Use <code>submit &lt;root cause&gt;</code> with your conclusion.</p></div>
+              <em>20 pts</em>
+            </li>
+          </ol>
+
+          <div class="progress-block">
+            <div><span>Progress</span><strong id="progressText">0 of 4 complete</strong></div>
+            <div class="progress-track"><span id="progressBar"></span></div>
+          </div>
+
+          <details class="hint-box" id="hintBox">
+            <summary><span>Need a hint?</span><small>Open investigation guide</small></summary>
+            <div>
+              <p>Start with <code>last -x</code>.</p>
+              <p>Inspect the previous boot with <code>journalctl -b -1 -p err</code>.</p>
+              <p>Review a suspicious unit with <code>journalctl -b -1 -u UNIT</code>.</p>
+              <p>Type <code>help</code> to see all supported commands.</p>
+            </div>
+          </details>
+
+          <button class="text-button" id="resetButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+            Reset investigation
+          </button>
+        </aside>
+
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="terminal-title">prod-web-01 — incident shell</div>
+            <div class="terminal-status"><span></span>ONLINE AFTER RESTART</div>
+          </div>
+          <div class="terminal-body" id="terminalBody" role="log" aria-live="polite" aria-label="Linux incident terminal output">
+            <div class="terminal-welcome">
+              <pre aria-hidden="true">  ____   _______        __
+ |  _ \ / ___\ \      / /
+ | |_) | |    \ \ /\ / / 
+ |  _ &lt;| |___  \ V  V /  
+ |_| \_\\____|  \_/\_/   </pre>
+              <p>RCW Linux Incident Response Environment</p>
+              <small>Investigate the previous boot. Enter <b>help</b> for available commands.</small>
+            </div>
+            <div id="terminalOutput"></div>
+            <form class="terminal-input-line" id="terminalForm" autocomplete="off">
+              <label for="commandInput" aria-label="Command prompt"><span class="prompt-user">analyst@prod-web-01</span><span class="prompt-path">:~$</span></label>
+              <input id="commandInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Linux command" enterkeyhint="send">
+            </form>
+          </div>
+          <div class="terminal-footer">
+            <span><kbd>Enter</kbd> run command</span>
+            <span><kbd>↑</kbd><kbd>↓</kbd> command history</span>
+            <span class="footer-safe"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Safe simulation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen" aria-labelledby="resultTitle">
+      <div class="result-header">
+        <div class="success-orbit" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span></div>
+        <span class="eyebrow">Root cause confirmed</span>
+        <h1 id="resultTitle">Excellent investigation, <span id="resultName">Learner</span>!</h1>
+        <p>You followed the previous-boot evidence and identified the failure chain: a memory leak in <code>rcw-backup.service</code> exhausted RAM, triggered the OOM path, and caused a kernel panic followed by an automatic reboot.</p>
+      </div>
+
+      <div class="result-grid">
+        <div class="score-card">
+          <span class="panel-kicker">Final score</span>
+          <div class="score-ring" style="--score: 100">
+            <div><strong>100</strong><span>/ 100</span></div>
+          </div>
+          <div class="score-verdict"><span>PERFECT SCORE</span><p>Root cause correctly identified</p></div>
+          <dl>
+            <div><dt>Objectives</dt><dd>4 / 4</dd></div>
+            <div><dt>Completion time</dt><dd id="finalTime">00:00</dd></div>
+            <div><dt>Commands entered</dt><dd id="commandCount">4</dd></div>
+          </dl>
+        </div>
+
+        <div class="certificate-card">
+          <div class="certificate-card-head">
+            <div><span class="panel-kicker">Your achievement</span><h2>Certificate ready</h2></div>
+            <span class="pdf-chip">PDF</span>
+          </div>
+          <div class="certificate-preview-wrap">
+            <canvas id="certificateCanvas" width="1400" height="990" aria-label="Certificate preview"></canvas>
+          </div>
+          <div class="certificate-actions">
+            <button class="primary-button" id="downloadPdfButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+              Download certificate PDF
+            </button>
+            <button class="secondary-button" id="downloadPngButton" type="button">Save image</button>
+          </div>
+          <p class="certificate-note"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Issued by RCW IT Training and signed by Pradeep Raju.</p>
+        </div>
+      </div>
+
+      <button class="text-button replay-button" id="replayButton" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+        Run the investigation again
+      </button>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span></span><p></p></div>
+  <img id="instructorImage" src="assets/pradeep-raju.jpg" alt="" hidden>
+  <script src="app.js"></script>
+</body>
+</html>
