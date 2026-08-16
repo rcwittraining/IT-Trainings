@@ -4,10 +4,15 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 
 ## Files
 
-- `index.html` — public lab page
-- `open.html` — same-domain simulator launcher
+- `index.html` — public lab catalogue and approved AdSense content page
+- `rhcsa-videos.html` — informational training content and approved AdSense content page
+- `open.html` — same-domain simulator launcher; intentionally has no AdSense tag
 - `simulators.json` — simulator data and GitHub Pages targets
-- `admin/index.html` — unlisted simulator editor at `/admin/`
+- `privacy.html` — advertising, cookie, consent, and privacy disclosures
+- `privacy-settings.js` — opens the Google CMP consent-revocation flow
+- `ads.txt` — authorized Google advertising seller for the configured publisher
+- `ADSENSE_SETUP.md` — account-side CMP, Consent Mode, exclusion, and verification checklist
+- `admin/index.html` — unlisted simulator editor at `/admin/`; intentionally has no AdSense tag
 - `CNAME` — GitHub Pages custom-domain setting
 - `.nojekyll` — tells GitHub Pages to publish these files directly
 
@@ -21,6 +26,12 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 6. Open the unlisted editor at `https://www.rcwittraining.in/admin/`.
 
 The public page contains no link to `/admin/`, and the admin page has `noindex`/`nofollow` metadata.
+
+## Google AdSense and privacy
+
+The public catalogue, RHCSA videos page, and privacy page contain the public AdSense publisher tag for `ca-pub-8225059092422989`. Interactive labs, the secure launcher, the admin page, and certificate workflows intentionally do not contain the tag.
+
+Before enabling Auto ads, complete the Google-certified CMP, Consent Mode, and page-exclusion steps in [`ADSENSE_SETUP.md`](ADSENSE_SETUP.md). The account owner must perform those settings in the AdSense dashboard; no password, payment information, or private credential belongs in this repository.
 
 ## Create the restricted publishing credential
 
