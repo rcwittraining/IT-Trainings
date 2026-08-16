@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Linux Folder Challenge · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="RCW IT Training home">
+      <span class="brand-mark" aria-hidden="true"><span>&gt;_</span></span>
+      <span class="brand-copy"><strong>RCW</strong><small>IT TRAINING</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="secure-chip"><span class="status-dot"></span> Private lab session</span>
+      <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter focus mode" title="Focus mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen welcome-screen is-active" id="welcomeScreen" aria-labelledby="welcomeTitle">
+      <div class="welcome-grid">
+        <div class="welcome-copy">
+          <span class="eyebrow"><span class="eyebrow-icon">⌁</span> Linux essentials · Challenge 01</span>
+          <h1 id="welcomeTitle">Create it.<br><span>Prove it.</span> Remove it.</h1>
+          <p class="lead">Complete a focused command-line challenge in a safe Linux practice environment. Earn your score and an RCW certificate when both tasks pass.</p>
+          <div class="feature-row" aria-label="Challenge highlights">
+            <div><strong>2</strong><span>objectives</span></div>
+            <div><strong>5</strong><span>minute target</span></div>
+            <div><strong>100</strong><span>points</span></div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-card-top">
+            <span class="terminal-mini"><i></i><i></i><i></i></span>
+            <span>Session setup</span>
+          </div>
+          <div class="entry-card-body">
+            <div class="challenge-emblem" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><path d="M12 12h40v40H12z"/><path d="m20 24 8 8-8 8M33 40h12"/></svg>
+            </div>
+            <h2>Linux Folder Challenge</h2>
+            <p>Enter your name exactly as it should appear on your certificate.</p>
+            <form id="startForm" novalidate>
+              <label for="learnerName">Full name</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <input id="learnerName" name="learnerName" type="text" autocomplete="name" maxlength="60" placeholder="e.g. Ananya Kumar" required>
+              </div>
+              <p class="field-error" id="nameError" role="alert"></p>
+              <button class="primary-button" type="submit">
+                Start challenge
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </form>
+            <p class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Your lab runs entirely in this browser. No account is required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen lab-screen" id="labScreen" aria-labelledby="labTitle">
+      <div class="lab-topline">
+        <div>
+          <span class="eyebrow">Hands-on assessment</span>
+          <h1 id="labTitle">Linux Folder Challenge</h1>
+        </div>
+        <div class="session-metrics" aria-label="Session metrics">
+          <div><span>TIME</span><strong id="timer">00:00</strong></div>
+          <div><span>SCORE</span><strong><b id="score">0</b>/100</strong></div>
+        </div>
+      </div>
+
+      <div class="lab-layout">
+        <aside class="brief-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">Mission brief</span>
+              <h2>Manage a directory</h2>
+            </div>
+            <span class="difficulty">BEGINNER</span>
+          </div>
+          <p class="brief-copy">Use Linux commands in the terminal to complete both objectives in order. The checker updates automatically.</p>
+
+          <ol class="task-list">
+            <li id="taskCreate">
+              <span class="task-state"><span>1</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+              <div><strong>Create the folder</strong><p>Create a directory named exactly <code>rcw</code>.</p></div>
+              <em>50 pts</em>
+            </li>
+            <li id="taskDelete">
+              <span class="task-state"><span>2</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+              <div><strong>Delete the folder</strong><p>Remove the empty <code>rcw</code> directory.</p></div>
+              <em>50 pts</em>
+            </li>
+          </ol>
+
+          <div class="progress-block">
+            <div><span>Progress</span><strong id="progressText">0 of 2 complete</strong></div>
+            <div class="progress-track"><span id="progressBar"></span></div>
+          </div>
+
+          <details class="hint-box" id="hintBox">
+            <summary><span>Need a hint?</span><small>Open command guide</small></summary>
+            <div><p>Create directories with <code>mkdir</code>.</p><p>Remove an empty directory with <code>rmdir</code>.</p></div>
+          </details>
+
+          <button class="text-button" id="resetButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+            Reset challenge
+          </button>
+        </aside>
+
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="terminal-title">rcw-lab — bash</div>
+            <div class="terminal-status"><span></span>CONNECTED</div>
+          </div>
+          <div class="terminal-body" id="terminalBody" role="log" aria-live="polite" aria-label="Linux terminal output">
+            <div class="terminal-welcome">
+              <pre aria-hidden="true">  ____   _______        __
+ |  _ \ / ___\ \      / /
+ | |_) | |    \ \ /\ / / 
+ |  _ &lt;| |___  \ V  V /  
+ |_| \_\\____|  \_/\_/   </pre>
+              <p>RCW Linux Practice Environment</p>
+              <small>Type commands below. Enter <b>help</b> for available commands.</small>
+            </div>
+            <div id="terminalOutput"></div>
+            <form class="terminal-input-line" id="terminalForm" autocomplete="off">
+              <label for="commandInput" aria-label="Command prompt"><span class="prompt-user">learner@rcw-lab</span><span class="prompt-path">:~$</span></label>
+              <input id="commandInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Linux command" enterkeyhint="send">
+            </form>
+          </div>
+          <div class="terminal-footer">
+            <span><kbd>Enter</kbd> run command</span>
+            <span><kbd>↑</kbd><kbd>↓</kbd> command history</span>
+            <span class="footer-safe"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Safe simulation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen" aria-labelledby="resultTitle">
+      <div class="result-header">
+        <div class="success-orbit" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span></div>
+        <span class="eyebrow">Challenge completed</span>
+        <h1 id="resultTitle">Excellent work, <span id="resultName">Learner</span>!</h1>
+        <p>You created and deleted the <code>rcw</code> folder successfully. Your Linux fundamentals are off to a strong start.</p>
+      </div>
+
+      <div class="result-grid">
+        <div class="score-card">
+          <span class="panel-kicker">Final score</span>
+          <div class="score-ring" style="--score: 100">
+            <div><strong>100</strong><span>/ 100</span></div>
+          </div>
+          <div class="score-verdict"><span>PERFECT SCORE</span><p>Both objectives passed</p></div>
+          <dl>
+            <div><dt>Objectives</dt><dd>2 / 2</dd></div>
+            <div><dt>Completion time</dt><dd id="finalTime">00:00</dd></div>
+            <div><dt>Commands entered</dt><dd id="commandCount">2</dd></div>
+          </dl>
+        </div>
+
+        <div class="certificate-card">
+          <div class="certificate-card-head">
+            <div><span class="panel-kicker">Your achievement</span><h2>Certificate ready</h2></div>
+            <span class="pdf-chip">PDF</span>
+          </div>
+          <div class="certificate-preview-wrap">
+            <canvas id="certificateCanvas" width="1400" height="990" aria-label="Certificate preview"></canvas>
+          </div>
+          <div class="certificate-actions">
+            <button class="primary-button" id="downloadPdfButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+              Download certificate PDF
+            </button>
+            <button class="secondary-button" id="downloadPngButton" type="button">Save image</button>
+          </div>
+          <p class="certificate-note"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Issued by RCW IT Training and signed by Pradeep Raju.</p>
+        </div>
+      </div>
+
+      <button class="text-button replay-button" id="replayButton" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+        Try the challenge again
+      </button>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span></span><p></p></div>
+  <img id="instructorImage" src="assets/pradeep-raju.jpg" alt="" hidden>
+  <script src="app.js"></script>
+</body>
+</html>

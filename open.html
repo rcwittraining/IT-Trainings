@@ -85,7 +85,12 @@
         if (!lab) throw new Error("The requested simulator was not found.");
 
         const target = new URL(lab.targetUrl);
-        if (target.protocol !== "https:" || target.hostname !== "rcwittraining.github.io") {
+        const approvedHosts = new Set([
+          "rcwittraining.github.io",
+          "www.rcwittraining.in",
+          "rcwittraining.in"
+        ]);
+        if (target.protocol !== "https:" || !approvedHosts.has(target.hostname)) {
           throw new Error("The simulator destination is not approved.");
         }
 

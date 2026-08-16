@@ -1,6 +1,14 @@
 {
-  "updatedAt": "2026-08-15T18:33:47.477Z",
+  "updatedAt": "2026-08-16T02:40:00.058Z",
   "simulators": [
+    {
+      "title": "Linux Folder Challenge",
+      "category": "Linux • Command Line",
+      "badge": "LINUX",
+      "accent": "#09a7f5",
+      "id": "linux-folder-challenge",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-1/"
+    },
     {
       "title": "Azure Virtual Desktop Lab",
       "category": "Azure • Virtual Desktop",
