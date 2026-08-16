@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T03:41:22.000Z",
+  "updatedAt": "2026-08-16T04:46:01.000Z",
   "simulators": [
     {
       "title": "Linux Folder Challenge",
@@ -32,6 +32,14 @@
       "accent": "#12a9e9",
       "id": "linux-root-password-audit",
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-4/"
+    },
+    {
+      "title": "AWS IAM Compromise Alert Challenge",
+      "category": "AWS • Identity Security",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-iam-compromise-alert",
+      "targetUrl": "https://www.rcwittraining.in/aws-cloud-challenge-1/"
     },
     {
       "title": "Azure Virtual Desktop Lab",
