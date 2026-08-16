@@ -1,6 +1,14 @@
 {
-  "updatedAt": "2026-08-16T04:46:01.000Z",
+  "updatedAt": "2026-08-16T10:30:00.000Z",
   "simulators": [
+    {
+      "title": "Production Outage Game",
+      "category": "IT Architecture • Incident Response",
+      "badge": "SEV-1",
+      "accent": "#ef405b",
+      "id": "production-outage-game",
+      "targetUrl": "https://www.rcwittraining.in/production-outage-game/"
+    },
     {
       "title": "Linux Folder Challenge",
       "category": "Linux • Command Line",
