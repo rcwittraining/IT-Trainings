@@ -569,6 +569,7 @@
     updateTimer();
     state.finalScore = state.potentialScore;
     state.certificateId = makeCertificateId();
+    RCWPassport.record({ type: "lab", name: state.learnerName });
 
     $("#productionStatus").className = "status-pill healthy";
     $("#productionStatus").innerHTML = "<i></i> HEALTHY";

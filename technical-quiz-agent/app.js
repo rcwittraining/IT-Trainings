@@ -147,6 +147,7 @@
 
   function showResult() {
     var result = session.getResult();
+    RCWPassport.record({ type: "quiz", questions: result.total });
     document.getElementById("finalScore").textContent = result.score + " / " + result.total;
     document.getElementById("finalPercent").textContent = result.percent + "%";
     var stars = document.getElementById("stars");

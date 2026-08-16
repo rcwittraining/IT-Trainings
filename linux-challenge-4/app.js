@@ -530,6 +530,7 @@
     timerElement.textContent = formatDuration(state.elapsedSeconds);
     commandInput.disabled = true;
     state.certificateId = makeCertificateId(state.learnerName);
+    RCWPassport.record({ type: "lab", name: state.learnerName });
     window.setTimeout(() => {
       $("#resultName").textContent = state.learnerName;
       $("#finalTime").textContent = formatDuration(state.elapsedSeconds);
