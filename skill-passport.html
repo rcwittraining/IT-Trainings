@@ -284,8 +284,7 @@
   function syncStatus(msg, cls){ var el=document.getElementById('syncStatus'); el.textContent=msg; el.style.color=cls||'var(--muted)'; }
 
   function showSyncUI(r){
-    var base = RCWPassport.apiBase();
-    var pubUrl = (base || location.origin) + '/p/' + r.id;
+    var pubUrl = RCWPassport.publicUrl(r) || (location.origin + '/skill-passport.html');
     document.getElementById('pubLink').textContent = pubUrl;
     document.getElementById('pubLink').style.display = 'block';
     var code = RCWPassport.getCode();
@@ -298,8 +297,8 @@
   }
 
   document.getElementById('sync').onclick=async function(){
-    if(!RCWPassport.apiBase()){
-      syncStatus('⚠️ Cross-device sync needs the backend deployed. Same-device progress is already saved in your browser.', '#b8860b');
+    if(!RCWPassport.hasSupabase() && !RCWPassport.hasApi()){
+      syncStatus('⚠️ Cross-device sync needs the backend connected. Same-device progress is already saved in your browser.', '#b8860b');
       toast('Sync needs a backend — progress is saved locally for now.');
       return;
     }
