@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T03:15:00.000Z",
+  "updatedAt": "2026-08-16T03:30:00.000Z",
   "simulators": [
     {
       "title": "Linux Folder Challenge",
@@ -16,6 +16,14 @@
       "accent": "#12a9e9",
       "id": "linux-server-crash-rca",
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-2/"
+    },
+    {
+      "title": "Linux Unauthorised Access Review",
+      "category": "Linux • Security",
+      "badge": "SEC",
+      "accent": "#12a9e9",
+      "id": "linux-unauthorised-access-review",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-3/"
     },
     {
       "title": "Azure Virtual Desktop Lab",
