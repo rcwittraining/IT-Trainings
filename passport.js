@@ -17,8 +17,8 @@
   // ============================================================
   // 👉 CONFIG — fill these in (only ONE backend is needed).
   // ============================================================
-  var SUPABASE_URL = "__SUPABASE_URL__"; // e.g. "https://abcdefgh.supabase.co"
-  var SUPABASE_KEY = "__SUPABASE_KEY__"; // the "anon" public key (safe to expose)
+  var SUPABASE_URL = "https://ajgrukwgptirzlyrsdyo.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_hXDlCUVuBtydW7sUyTiePg_VmCIWD9S";
   var API_BASE = "";                     // custom HTTP API base (optional)
 
   var PUBLIC_PAGE = "https://www.rcwittraining.in/p.html?id="; // where public pages are served
