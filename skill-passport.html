@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Your RCW IT Training Skill Passport — track levels, streaks, badges and your learning journey.">
+<meta name="theme-color" content="#061633">
+<link rel="canonical" href="https://www.rcwittraining.in/skill-passport.html">
+<title>Skill Passport | RCW IT Training</title>
+<style>
+  :root{--navy:#061633;--navy-2:#0a234a;--ink:#101b3b;--blue:#078be8;--blue-2:#0758c8;--cyan:#4bd7ff;
+    --yellow:#ffd51d;--green:#9ee636;--red:#e04444;--paper:#f4f7fb;--white:#fff;--muted:#5f6c84;--line:#dce5f1;
+    --shadow:0 10px 28px rgba(8,31,69,.10);--radius:18px}
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background:linear-gradient(#fff,#f5f8fc 40%,#eef4fb);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5;min-height:100vh;padding:28px 18px 80px}
+  .container{width:min(860px,100%);margin-inline:auto}
+  .crumb{font-size:14px;color:var(--muted);margin-bottom:18px}
+  .crumb a{color:var(--blue);text-decoration:none;font-weight:600}
+  .crumb a:hover{text-decoration:underline}
+  h1{margin:0 0 6px;font-size:clamp(24px,4vw,32px);color:var(--navy);letter-spacing:-.5px}
+  .sub{color:var(--muted);margin:0 0 26px;font-size:16px}
+
+  .profile{display:flex;gap:20px;align-items:center;background:var(--white);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px;margin-bottom:20px;flex-wrap:wrap;box-shadow:var(--shadow)}
+  .avatar{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-2));
+    display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;flex-shrink:0}
+  .pinfo{flex:1;min-width:200px}
+  .pinfo .nm{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:2px}
+  .pinfo .lv{color:var(--blue);font-size:14px;font-weight:700;margin-bottom:8px}
+  .xpbar{height:10px;background:var(--paper);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+  .xpbar .fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px;transition:width .5s ease}
+  .pinfo .xptxt{font-size:12px;color:var(--muted);margin-top:6px}
+  .share-btn{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;border:none;border-radius:12px;
+    padding:12px 18px;font-weight:700;font-size:14px;cursor:pointer}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;margin-bottom:20px}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px;text-align:center;box-shadow:var(--shadow)}
+  .stat .v{font-size:24px;font-weight:800;color:var(--blue)}
+  .stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+
+  .sec{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
+  .sec h2{margin:0 0 16px;font-size:18px;color:var(--navy)}
+  .sec .desc{color:var(--muted);font-size:13px;line-height:1.6;margin:-8px 0 16px}
+
+  .heat{display:flex;gap:4px;overflow-x:auto;padding-bottom:6px}
+  .col{display:flex;flex-direction:column;gap:4px}
+  .cell{width:13px;height:13px;border-radius:3px;background:#e7edf5;flex-shrink:0}
+  .cell.l1{background:#a8d3f5}.cell.l2{background:#4ba3f0}.cell.l3{background:#078be8}.cell.l4{background:#0758c8}
+  .legend{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:var(--muted)}
+  .legend .cell{width:11px;height:11px}
+
+  .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  .badge{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;transition:.2s}
+  .badge .ic{font-size:30px;margin-bottom:8px}
+  .badge .bn{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .badge .bd{font-size:11px;color:var(--muted);line-height:1.4}
+  .badge.locked{opacity:.4;filter:grayscale(1)}
+
+  .road{display:flex;flex-direction:column;gap:0}
+  .step{display:flex;gap:14px;position:relative;padding-bottom:18px}
+  .step:not(:last-child)::before{content:'';position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+  .dot{width:30px;height:30px;border-radius:50%;background:var(--paper);border:2px solid var(--line);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);z-index:1}
+  .step.done .dot{background:var(--green);border-color:var(--green);color:#0b2a0e}
+  .step.now .dot{border-color:var(--blue);color:var(--blue)}
+  .step .tt{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+  .step .st{font-size:12px;color:var(--muted)}
+
+  .btn{border:none;border-radius:12px;padding:12px 18px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;margin-right:10px;margin-bottom:6px}
+  .btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff}
+  .btn.primary:hover{filter:brightness(1.1)}
+  .btn.ghost{background:var(--white);border:1px solid var(--line);color:var(--ink)}
+  .btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
+  .linkbox{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+    font-size:13px;color:var(--blue);word-break:break-all;user-select:all;margin-top:12px;line-height:1.5}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--navy);
+    color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:2000;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .note{font-size:13px;color:var(--muted);line-height:1.6;margin-top:24px}
+  .note code{color:var(--blue);font-size:12px;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="crumb"><a href="https://www.rcwittraining.in">← Back to all labs</a></div>
+  <h1>Skill Passport</h1>
+  <p class="sub">Your live proof of practice — levels, streaks, badges and your learning journey. Share it on your LinkedIn or resume.</p>
+
+  <div class="profile">
+    <div class="avatar" id="avatar">S</div>
+    <div class="pinfo">
+      <div class="nm" id="pname">Student</div>
+      <div class="lv" id="plv">Level 1</div>
+      <div class="xpbar"><div class="fill" id="xpfill" style="width:0%"></div></div>
+      <div class="xptxt" id="xptxt"></div>
+    </div>
+    <button class="share-btn" id="shareProfile">🔗 Share my passport</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v" id="sLabs">0</div><div class="k">Labs done</div></div>
+    <div class="stat"><div class="v" id="sQs">0</div><div class="k">Questions</div></div>
+    <div class="stat"><div class="v" id="sStreak">0</div><div class="k">Day streak</div></div>
+    <div class="stat"><div class="v" id="sRank">—</div><div class="k">Best rank</div></div>
+    <div class="stat"><div class="v" id="sBadges">0</div><div class="k">Badges</div></div>
+  </div>
+
+  <div class="sec">
+    <h2>🔥 Practice heatmap</h2>
+    <div class="desc">Your practice over the last weeks — darker = more practice. Streaks are how skills stick.</div>
+    <div class="heat" id="heat"></div>
+    <div class="legend">Less <span class="cell"></span><span class="cell l1"></span><span class="cell l2"></span><span class="cell l3"></span><span class="cell l4"></span> More</div>
+  </div>
+
+  <div class="sec">
+    <h2>🏅 Badges</h2>
+    <div class="badges" id="badges"></div>
+  </div>
+
+  <div class="sec">
+    <h2>🧭 Your learning journey</h2>
+    <div class="desc">A recommended path based on your progress — each step maps to a free lab.</div>
+    <div class="road" id="road"></div>
+  </div>
+
+  <div class="sec">
+    <h2>🌐 Sync &amp; public link</h2>
+    <div class="desc">Create a public link so your passport follows you across devices — and can be shared on LinkedIn / your resume.</div>
+    <button class="btn primary" id="sync">🔗 Create / refresh public link</button>
+    <div class="desc" id="syncStatus" style="margin-top:12px">Not synced yet.</div>
+    <div class="linkbox" id="pubLink" style="display:none"></div>
+    <button class="btn ghost" id="copyLink" style="display:none">📋 Copy public link</button>
+    <button class="btn ghost" id="openLink" style="display:none">↗ Open public page</button>
+  </div>
+
+  <div class="sec">
+    <h2>▶ Demo controls</h2>
+    <div class="desc">This is a prototype — these buttons simulate activity so you can see XP, streaks, heatmap and badges update live. Data is saved in your browser (localStorage).</div>
+    <button class="btn primary" id="doLab">🖥 Complete a lab (+40 XP)</button>
+    <button class="btn ghost" id="doQuiz">❓ Answer 5 quiz questions (+15 XP)</button>
+    <button class="btn ghost" id="reset">↺ Reset</button>
+  </div>
+
+  <div class="note">In production, this data comes automatically from labs and quizzes on your site. A public, read-only version of this page is what people link on their LinkedIn.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var KEY='rcw_passport';
+  function today(){return new Date().toISOString().slice(0,10);}
+
+  var BADGES=[
+    {id:'first', name:'First Steps', ic:'🐣', desc:'Complete your first lab'},
+    {id:'five', name:'Lab Rat', ic:'🐀', desc:'Complete 5 labs'},
+    {id:'quiz', name:'Quiz Whiz', ic:'🧠', desc:'Answer 100 questions'},
+    {id:'streak7', name:'On Fire', ic:'🔥', desc:'7-day practice streak'},
+    {id:'streak14',name:'Unstoppable', ic:'⚡', desc:'14-day practice streak'},
+    {id:'beat', name:'Beat a Friend', ic:'🏆', desc:'Win a head-to-head challenge'},
+    {id:'elite', name:'Elite Scorer', ic:'💎', desc:'Reach Top 10% in any lab'}
+  ];
+
+  function seed(){
+    var act={}, d=new Date();
+    var base=[0,2,3,1,0,4,2,3,5,3,1,0,2,4,3,2,5,4,0,1,3,2,4,3,5,3,2,1,0,3,4,2,3,5,4,2,1,3,0,2,4,3,2,3,5,4,1,2,3,4,3,2,5,3,1,0,2,4,3,2,3,4,5,3,2,1,3,4,2,3,4,5,2,3,1,2,4,3,2,3,4,2,3,5,3,2,4,3,2,1,3,4,2,3,4,2,3,4,5,3];
+    var idx=base.length-1;
+    for(var i=0;i<105;i++){
+      d.setDate(d.getDate()-1);
+      var v = base[idx % base.length]; idx--;
+      if(v>0) act[d.toISOString().slice(0,10)]=v;
+    }
+    var labs=6, qs=95, streak=3;
+    var xp = labs*40 + Math.floor(qs/5)*15;
+    return {name:'Ravi', xp:xp, labs:labs, qs:qs, streak:streak, act:act, badges:{first:1,five:1,quiz:1,streak7:0,streak14:0,beat:0,elite:0}};
+  }
+
+  var S;
+  try{ S=JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(!S || !S.act) S=seed();
+
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+
+  function levelOf(xp){ return Math.floor(xp/150)+1; }
+  function rankOf(xp){ if(xp<200)return '—'; if(xp<400)return 'Top 50%'; if(xp<700)return 'Top 25%'; if(xp<1000)return 'Top 12%'; return 'Top 5%'; }
+
+  function recomputeBadges(){
+    S.badges.first = S.labs>=1?1:0;
+    S.badges.five  = S.labs>=5?1:0;
+    S.badges.quiz  = S.qs>=100?1:0;
+    S.badges.streak7 = S.streak>=7?1:0;
+    S.badges.streak14= S.streak>=14?1:0;
+  }
+
+  function render(){
+    var xp=S.xp, lvl=levelOf(xp), base=(lvl-1)*150, prog=xp-base;
+    document.getElementById('avatar').textContent=(S.name||'S').trim().charAt(0).toUpperCase();
+    document.getElementById('pname').textContent=S.name||'Student';
+    document.getElementById('plv').textContent='Level '+lvl;
+    document.getElementById('xpfill').style.width=Math.min(100,Math.round(prog/150*100))+'%';
+    document.getElementById('xptxt').textContent=xp+' XP · '+prog+'/150 XP to Level '+(lvl+1);
+
+    document.getElementById('sLabs').textContent=S.labs;
+    document.getElementById('sQs').textContent=S.qs;
+    document.getElementById('sStreak').textContent=S.streak;
+    document.getElementById('sRank').textContent=rankOf(xp);
+
+    var bCount=0; for(var k in S.badges) if(S.badges[k]) bCount++;
+    document.getElementById('sBadges').textContent=bCount;
+
+    renderHeat(); renderBadges(); renderRoad();
+  }
+
+  function renderHeat(){
+    var elh=document.getElementById('heat'); elh.innerHTML='';
+    var cols=15, rows=7, d=new Date();
+    var colsData=[];
+    for(var c=cols-1;c>=0;c--){
+      var week=[];
+      for(var r=0;r<rows;r++){
+        var daysBack=(cols-1-c)*7 + (6-r);
+        var dt=new Date(d); dt.setDate(d.getDate()-daysBack);
+        var key=dt.toISOString().slice(0,10);
+        week.push(S.act[key]||0);
+      }
+      colsData.push(week);
+    }
+    for(var i=0;i<cols;i++){
+      var col=document.createElement('div'); col.className='col';
+      for(var j=0;j<rows;j++){
+        var v=colsData[i][j], cell=document.createElement('div');
+        cell.className='cell'+(v>=5?' l4':v>=3?' l3':v>=2?' l2':v>=1?' l1':'');
+        cell.title=v?v+' practice sessions':'No practice';
+        col.appendChild(cell);
+      }
+      elh.appendChild(col);
+    }
+  }
+
+  function renderBadges(){
+    var eb=document.getElementById('badges'); eb.innerHTML='';
+    BADGES.forEach(function(b){
+      var d=document.createElement('div');
+      d.className='badge'+(S.badges[b.id]?'':' locked');
+      d.innerHTML='<div class="ic">'+(S.badges[b.id]?b.ic:'🔒')+'</div><div class="bn">'+b.name+'</div><div class="bd">'+b.desc+'</div>';
+      eb.appendChild(d);
+    });
+  }
+
+  var ROAD=[
+    {t:'Linux essentials — command line', s:'Linux Folder Challenge'},
+    {t:'Troubleshooting & RCA', s:'Linux Server Crash Root-Cause Analysis'},
+    {t:'Security & access', s:'Linux Unauthorised Access Review'},
+    {t:'Cloud basics — AWS', s:'AWS CloudWatch Lab'},
+    {t:'Cloud identity & governance', s:'AWS IAM Compromise Alert · AWS Control Tower'},
+    {t:'Certification readiness', s:'Azure Admin / GCP Admin exam simulators'}
+  ];
+  function renderRoad(){
+    var er=document.getElementById('road'); er.innerHTML='';
+    var doneCount=Math.min(S.labs, 3);
+    ROAD.forEach(function(r,i){
+      var st=document.createElement('div');
+      var cls='step';
+      if(i<doneCount) cls+=' done'; else if(i===doneCount) cls+=' now';
+      st.className=cls;
+      st.innerHTML='<div class="dot">'+(i<doneCount?'✓':i+1)+'</div><div><div class="tt">'+r.t+'</div><div class="st">'+r.s+'</div></div>';
+      er.appendChild(st);
+    });
+  }
+
+  function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+    clearTimeout(t._x);t._x=setTimeout(function(){t.classList.remove('show');},2200);}
+  function copy(text){function ok(){toast('Copied to clipboard!');}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok).catch(fb);}else fb();
+    function fb(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');ok();}catch(e){toast('Copy failed — select manually');}document.body.removeChild(ta);}
+  }
+
+  function addActivity(count){
+    var k=today(); S.act[k]=(S.act[k]||0)+count;
+    var d=new Date(), streak=0;
+    while(S.act[d.toISOString().slice(0,10)]){streak++;d.setDate(d.getDate()-1);}
+    S.streak=streak;
+  }
+
+  // ---- backend sync (cross-device). API_BASE is empty = same origin.
+  // GitHub Pages is static-only, so set this to your API host to enable cross-device sync.
+  var REMOTE_KEY='rcw_passport_remote';
+  var API_BASE = '';
+  function remote(){ try{ return JSON.parse(localStorage.getItem(REMOTE_KEY)); }catch(e){ return null; } }
+  function syncStatus(msg, cls){ var el=document.getElementById('syncStatus'); el.textContent=msg; el.style.color=cls||'var(--muted)'; }
+
+  async function pushRemote(){
+    var r = remote(); if(!r) return null;
+    var res = await fetch(API_BASE+'/api/passport', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id:r.id, token:r.token, passport:S }) });
+    return res.ok ? r : null;
+  }
+  async function pullRemote(){
+    var r = remote(); if(!r) return null;
+    var res = await fetch(API_BASE+'/api/passport/'+r.id);
+    if(!res.ok) return null;
+    return await res.json();
+  }
+
+  document.getElementById('sync').onclick=async function(){
+    if(!API_BASE){
+      syncStatus('⚠️ Cross-device sync needs a small backend. Same-device progress is already saved in your browser.', '#b8860b');
+      toast('Sync needs a backend — progress is saved locally for now.');
+      return;
+    }
+    try{
+      var r = remote();
+      if(!r){
+        var res = await fetch(API_BASE+'/api/passport', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ passport:S }) });
+        if(!res.ok){ syncStatus('Error '+res.status, 'var(--red)'); return; }
+        r = await res.json();
+        localStorage.setItem(REMOTE_KEY, JSON.stringify({ id:r.id, token:r.token }));
+      } else {
+        var fresh = await pullRemote();
+        if(fresh && fresh.updatedAt && (!S.updatedAt || fresh.updatedAt > S.updatedAt)){ S = fresh; save(); render(); }
+        await pushRemote();
+      }
+      var url = location.origin + '/p/' + r.id;
+      document.getElementById('pubLink').textContent = url;
+      document.getElementById('pubLink').style.display = 'block';
+      document.getElementById('copyLink').style.display = 'inline-block';
+      document.getElementById('openLink').style.display = 'inline-block';
+      document.getElementById('openLink').onclick = function(){ window.open(url, '_blank'); };
+      syncStatus('✅ Synced. Your public passport is live.', 'var(--green)');
+      toast('Synced to the cloud!');
+    }catch(e){ syncStatus('Sync failed: '+e.message, 'var(--red)'); }
+  };
+
+  document.getElementById('copyLink').onclick=function(){ copy(document.getElementById('pubLink').textContent); };
+
+  function afterActivity(){ if(API_BASE && remote()) pushRemote().catch(function(){}); }
+  document.getElementById('doLab').addEventListener('click', afterActivity);
+  document.getElementById('doQuiz').addEventListener('click', afterActivity);
+
+  document.getElementById('doLab').onclick=function(){
+    S.labs++; S.xp+=40; addActivity(3); recomputeBadges(); save(); render(); toast('+40 XP — lab complete! 🖥');
+  };
+  document.getElementById('doQuiz').onclick=function(){
+    S.qs+=5; S.xp+=15; addActivity(1); recomputeBadges(); save(); render(); toast('+15 XP — 5 questions answered! ❓');
+  };
+  document.getElementById('reset').onclick=function(){
+    S=seed(); save(); render(); toast('Reset to demo data.');
+  };
+  document.getElementById('shareProfile').onclick=function(){
+    var lvl=levelOf(S.xp);
+    copy('My RCW IT Training Skill Passport 🚀 — Level '+lvl+' ('+S.xp+' XP), '+S.labs+' labs, '+S.streak+'-day streak. Can you keep up? https://www.rcwittraining.in');
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
