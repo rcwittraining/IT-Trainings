@@ -55,15 +55,16 @@
 
   <div class="toolbar">
     <button class="btn primary" id="dl">⬇ Download image</button>
-    <button class="btn primary" id="linkedin" style="background:linear-gradient(135deg,#0a66c2,#004182)">in&nbsp; Share on LinkedIn</button>
+    <button class="btn primary" id="shareimg" style="background:linear-gradient(135deg,#0a66c2,#004182)">📤 Share image</button>
+    <button class="btn ghost" id="linkedin" style="display:inline-flex">in&nbsp; Open LinkedIn</button>
     <button class="btn ghost" id="sh">🔗 Copy text</button>
     <button class="btn ghost" id="save">📥 Save to my passport</button>
     <a class="btn ghost" id="goto" href="skill-passport.html" style="display:none">View passport →</a>
   </div>
 
   <div class="note">
-    <b>To post on LinkedIn:</b> ① tap <b>Download image</b> to save the card, ② tap <b>Share on LinkedIn</b>
-    (your caption is filled in automatically), ③ attach the saved image to the post. 👌
+    <b>To post the card:</b> tap <b>📤 Share image</b> (on phone, choose LinkedIn — the image goes with it),
+    or <b>⬇ Download image</b> then attach it to a post. 👌
   </div>
 
   <div class="note">
@@ -169,6 +170,39 @@
     var text = 'I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" at RCW IT Training 🏆\nCan you beat me? Try it free: https://www.rcwittraining.in';
     var url = 'https://www.linkedin.com/feed/?shareActive=true&text=' + encodeURIComponent(text);
     window.open(url, '_blank', 'noopener');
+  };
+
+  // Share the actual scorecard IMAGE via the native share sheet.
+  // On phones the user can pick LinkedIn and the image goes with the post.
+  document.getElementById('shareimg').onclick=async function(){
+    var cv = render(1200, 630);
+    var blob;
+    if (cv.toBlob) {
+      blob = await new Promise(function(res){ cv.toBlob(function(b){ res(b); }, 'image/png'); });
+    } else {
+      var r = await fetch(cv.toDataURL('image/png'));
+      blob = await r.blob();
+    }
+    var file = new File([blob], 'rcwittraining-scorecard.png', { type: 'image/png' });
+    var shareData = {
+      files: [file],
+      title: 'My RCW IT Training scorecard',
+      text: 'I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" 🏆 Can you beat me? https://www.rcwittraining.in'
+    };
+
+    // Can the browser share files directly?
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share(shareData);
+        return; // shared successfully (user picked the app, e.g. LinkedIn)
+      } catch (e) {
+        if (e && e.name === 'AbortError') return; // user cancelled — do nothing
+        // otherwise fall through to fallback
+      }
+    }
+    // Fallback: download the image and hint the user to attach it
+    var a=document.createElement('a');a.download='rcwittraining-scorecard.png';a.href=cv.toDataURL('image/png');a.click();
+    toast('This browser can\'t share files directly — image downloaded. Attach it to your post!');
   };
 
   // Save this score to the Skill Passport (same localStorage key as skill-passport.html)
