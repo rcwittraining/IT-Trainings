@@ -6,6 +6,12 @@
 <meta name="description" content="Download and share your RCW IT Training lab scorecard.">
 <meta name="theme-color" content="#061633">
 <link rel="canonical" href="https://www.rcwittraining.in/scorecard.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RCW IT Training — Practice Scorecard">
+<meta property="og:description" content="Score your free hands-on IT lab and challenge your friends. Can you beat me?">
+<meta property="og:url" content="https://www.rcwittraining.in/scorecard.html">
+<meta property="og:image" content="https://www.rcwittraining.in/og-scorecard.png">
+<meta name="twitter:card" content="summary_large_image">
 <title>Your Scorecard | RCW IT Training</title>
 <style>
   :root{--navy:#061633;--navy-2:#0a234a;--ink:#101b3b;--blue:#078be8;--blue-2:#0758c8;--cyan:#4bd7ff;
@@ -48,10 +54,16 @@
   <img id="preview" class="card-frame" alt="Your scorecard preview">
 
   <div class="toolbar">
-    <button class="btn primary" id="dl">⬇ Download PNG</button>
-    <button class="btn ghost" id="sh">🔗 Copy share text</button>
+    <button class="btn primary" id="dl">⬇ Download image</button>
+    <button class="btn primary" id="linkedin" style="background:linear-gradient(135deg,#0a66c2,#004182)">in&nbsp; Share on LinkedIn</button>
+    <button class="btn ghost" id="sh">🔗 Copy text</button>
     <button class="btn ghost" id="save">📥 Save to my passport</button>
     <a class="btn ghost" id="goto" href="skill-passport.html" style="display:none">View passport →</a>
+  </div>
+
+  <div class="note">
+    <b>To post on LinkedIn:</b> ① tap <b>Download image</b> to save the card, ② tap <b>Share on LinkedIn</b>
+    (your caption is filled in automatically), ③ attach the saved image to the post. 👌
   </div>
 
   <div class="note">
@@ -148,6 +160,15 @@
   };
   document.getElementById('sh').onclick=function(){
     copy('I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" at RCW IT Training 🏆 Can you beat me? Try it free: https://www.rcwittraining.in');
+  };
+
+  // Share on LinkedIn — opens the post composer with the caption pre-filled.
+  // (LinkedIn doesn't allow auto-attaching an image, so the user attaches the
+  //  downloaded PNG themselves.)
+  document.getElementById('linkedin').onclick=function(){
+    var text = 'I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" at RCW IT Training 🏆\nCan you beat me? Try it free: https://www.rcwittraining.in';
+    var url = 'https://www.linkedin.com/feed/?shareActive=true&text=' + encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener');
   };
 
   // Save this score to the Skill Passport (same localStorage key as skill-passport.html)
