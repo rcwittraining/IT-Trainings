@@ -77,8 +77,9 @@
     </div>
     <div class="badge-cta">
       <button class="btn primary" id="badge">🏆 Claim badge</button>
+      <button class="btn primary" id="shareCard" style="background:linear-gradient(135deg,#0a66c2,#004182)">📤 Share image</button>
       <button class="btn ghost" id="simulate">▶ Simulate friend's result</button>
-      <button class="btn ghost" id="dlCard">🖼 Download head-to-head card</button>
+      <button class="btn ghost" id="dlCard">🖼 Download card</button>
     </div>
   </div>
 
@@ -194,11 +195,44 @@
     ctx.fillText('Try to beat them free: rcwittraining.in', pad, H-40);
   }
 
-  document.getElementById('dlCard').onclick=function(){
+  function buildCardCanvas(){
     var W=1200,H=630,cv=document.createElement('canvas');cv.width=W;cv.height=H;
     drawCompare(cv.getContext('2d'),W,H);
+    return cv;
+  }
+
+  document.getElementById('dlCard').onclick=function(){
+    var cv = buildCardCanvas();
     var a=document.createElement('a');a.download='rcwittraining-challenge-result.png';a.href=cv.toDataURL('image/png');a.click();
     toast('Head-to-head card downloaded!');
+  };
+
+  // Share the head-to-head card IMAGE via the native share sheet (mobile).
+  document.getElementById('shareCard').onclick=async function(){
+    var cv = buildCardCanvas();
+    var blob;
+    if (cv.toBlob) {
+      blob = await new Promise(function(res){ cv.toBlob(function(b){ res(b); }, 'image/png'); });
+    } else {
+      var r = await fetch(cv.toDataURL('image/png'));
+      blob = await r.blob();
+    }
+    var file = new File([blob], 'rcwittraining-challenge-result.png', { type: 'image/png' });
+    var shareData = {
+      files: [file],
+      title: 'RCW IT Training head-to-head result',
+      text: (myScore!=null?myScore:8)+'/'+10+' vs '+(friendScore!=null?friendScore:'?')+'/10 — who wins on "'+labName+'"? 🥊 https://www.rcwittraining.in'
+    };
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (e) {
+        if (e && e.name === 'AbortError') return;
+      }
+    }
+    var a=document.createElement('a');a.download='rcwittraining-challenge-result.png';a.href=cv.toDataURL('image/png');a.click();
+    toast('This browser can\'t share files directly — image downloaded. Attach it to your post!');
   };
 })();
 </script>
