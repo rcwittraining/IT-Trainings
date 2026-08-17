@@ -98,7 +98,9 @@
       <div class="xpbar"><div class="fill" id="xpfill" style="width:0%"></div></div>
       <div class="xptxt" id="xptxt"></div>
     </div>
-    <button class="share-btn" id="shareProfile">🔗 Share my passport</button>
+    <button class="share-btn" id="shareProfile" style="margin-right:8px">🔗 Copy link</button>
+    <button class="share-btn" id="dlPassport" style="background:linear-gradient(135deg,#0a66c2,#004182)">⬇ Download image</button>
+    <button class="share-btn" id="sharePassportImg" style="background:linear-gradient(135deg,#22c55e,#16a34a)">📤 Share image</button>
   </div>
 
   <div class="stats">
@@ -331,24 +333,109 @@
     }catch(e){ syncStatus('Restore failed: '+e.message, 'var(--red)'); }
   };
 
-  document.getElementById('shareProfile').onclick=async function(){
-    var lvl=levelOf(S.xp);
-    var text='My RCW IT Training Skill Passport 🚀 — Level '+lvl+' ('+S.xp+' XP), '+S.labs+' labs, '+S.streak+'-day streak. Can you keep up?';
-    // Prefer the public link if the passport has been synced.
-    var pubUrl = document.getElementById('pubLink').textContent || '';
-    var url = (pubUrl && pubUrl.indexOf('http') === 0) ? pubUrl : 'https://www.rcwittraining.in/skill-passport.html';
+  function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
 
-    // Native share sheet (mobile): user can pick LinkedIn/WhatsApp/etc.
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: 'My Skill Passport', text: text, url: url });
-        return;
-      } catch (e) {
-        if (e && e.name === 'AbortError') return; // user cancelled
-        // else fall through to copy
+  function drawPassportCard(ctx,W,H){
+    var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#061633');g.addColorStop(1,'#0a234a');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(75,215,255,.07)';ctx.lineWidth=1;
+    for(var x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(var y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    var glow=ctx.createRadialGradient(W*.85,H*.05,0,W*.85,H*.05,W*.5);
+    glow.addColorStop(0,'rgba(7,139,232,.30)');glow.addColorStop(1,'rgba(7,139,232,0)');
+    ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+
+    var pad=48;
+    ctx.fillStyle='#ffffff';ctx.font='900 30px Inter,Arial,sans-serif';
+    ctx.fillText('RCW IT Training',pad,74);
+    ctx.fillStyle='#4bd7ff';ctx.font='700 17px Inter,Arial,sans-serif';
+    ctx.fillText('Skill Passport',pad,102);
+
+    var lvl=levelOf(S.xp);
+    // name + level
+    ctx.fillStyle='#ffffff';ctx.font='800 34px Inter,Arial,sans-serif';
+    ctx.fillText(S.name||'Student',pad,168);
+    ctx.fillStyle='#4bd7ff';ctx.font='700 22px Inter,Arial,sans-serif';
+    ctx.fillText('Level '+lvl,pad,200);
+
+    // XP bar
+    var barX=pad, barY=224, barW=W-pad*2, barH=16;
+    roundRect(ctx,barX,barY,barW,barH,8);
+    ctx.fillStyle='rgba(255,255,255,.12)';ctx.fill();
+    var base=(lvl-1)*150, prog=S.xp-base;
+    var fillW=Math.max(0,Math.min(barW, barW*(prog/150)));
+    if(fillW>0){ roundRect(ctx,barX,barY,fillW,barH,8); ctx.fillStyle='#4bd7ff'; ctx.fill(); }
+    ctx.fillStyle='#b7c4dd';ctx.font='600 16px Inter,Arial,sans-serif';
+    ctx.fillText(S.xp+' XP',barX,barY+barH+26);
+
+    // stats row
+    var stats=[['Labs done',S.labs],['Questions',S.qs],['Day streak',S.streak],['Badges',(function(){var n=0;for(var k in S.badges)if(S.badges[k])n++;return n;})()]];
+    var sw=(W-pad*2)/stats.length;
+    stats.forEach(function(st,i){
+      var sx=pad+i*sw, sy=280;
+      ctx.textAlign='left';
+      ctx.fillStyle='#9ee636';ctx.font='900 44px Inter,Arial,sans-serif';
+      ctx.fillText(String(st[1]),sx,sy+40);
+      ctx.fillStyle='#93a6c8';ctx.font='600 16px Inter,Arial,sans-serif';
+      ctx.fillText(st[0],sx,sy+66);
+    });
+
+    // mini heatmap (last 15 weeks, 7 rows)
+    var hmX=pad, hmY=370, cell=12, gap=4;
+    var cols=15, rows=7, d=new Date();
+    for(var c=cols-1;c>=0;c--){
+      for(var r=0;r<rows;r++){
+        var daysBack=(cols-1-c)*7+(6-r);
+        var dt=new Date(d);dt.setDate(dt.getDate()-daysBack);
+        var v=S.act[dt.toISOString().slice(0,10)]||0;
+        var col = v>=5?'#0758c8': v>=3?'#078be8': v>=2?'#4ba3f0': v>=1?'#a8d3f5':'rgba(255,255,255,.08)';
+        ctx.fillStyle=col;
+        roundRect(ctx,hmX+c*(cell+gap),hmY+r*(cell+gap),cell,cell,2);ctx.fill();
       }
     }
-    copy(text + ' ' + url);
+    ctx.fillStyle='#93a6c8';ctx.font='600 14px Inter,Arial,sans-serif';
+    ctx.fillText('Practice heatmap',hmX,hmY+rows*(cell+gap)+24);
+
+    // footer
+    ctx.fillStyle='#ffd51d';ctx.font='800 26px Inter,Arial,sans-serif';
+    ctx.fillText('Can you keep up?',pad,H-70);
+    ctx.fillStyle='#93a6c8';ctx.font='14px Inter,Arial,sans-serif';
+    ctx.fillText('Learn. Practice. Grow. · rcwittraining.in',pad,H-40);
+  }
+
+  function buildPassportCanvas(){
+    var W=1200,H=630,cv=document.createElement('canvas');cv.width=W;cv.height=H;
+    drawPassportCard(cv.getContext('2d'),W,H);
+    return cv;
+  }
+
+  document.getElementById('shareProfile').onclick=function(){
+    var pubUrl = document.getElementById('pubLink').textContent || '';
+    var url = (pubUrl && pubUrl.indexOf('http')===0) ? pubUrl : 'https://www.rcwittraining.in/skill-passport.html';
+    copy(url);
+  };
+
+  document.getElementById('dlPassport').onclick=function(){
+    var a=document.createElement('a');a.download='rcwittraining-skill-passport.png';
+    a.href=buildPassportCanvas().toDataURL('image/png');a.click();
+    toast('Passport image downloaded!');
+  };
+
+  document.getElementById('sharePassportImg').onclick=async function(){
+    var cv=buildPassportCanvas();
+    var blob;
+    if(cv.toBlob){ blob=await new Promise(function(res){cv.toBlob(function(b){res(b);},'image/png');}); }
+    else { var r=await fetch(cv.toDataURL('image/png')); blob=await r.blob(); }
+    var file=new File([blob],'rcwittraining-skill-passport.png',{type:'image/png'});
+    var lvl=levelOf(S.xp);
+    var shareData={files:[file], title:'My RCW IT Training Skill Passport',
+      text:'My Skill Passport 🚀 — Level '+lvl+' ('+S.xp+' XP), '+S.labs+' labs, '+S.streak+'-day streak. Can you keep up? https://www.rcwittraining.in'};
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share(shareData); return; }
+      catch(e){ if(e && e.name==='AbortError') return; }
+    }
+    var a=document.createElement('a');a.download='rcwittraining-skill-passport.png';a.href=cv.toDataURL('image/png');a.click();
+    toast('Image downloaded — attach it to your LinkedIn post!');
   };
 
   render();
