@@ -331,9 +331,24 @@
     }catch(e){ syncStatus('Restore failed: '+e.message, 'var(--red)'); }
   };
 
-  document.getElementById('shareProfile').onclick=function(){
+  document.getElementById('shareProfile').onclick=async function(){
     var lvl=levelOf(S.xp);
-    copy('My RCW IT Training Skill Passport 🚀 — Level '+lvl+' ('+S.xp+' XP), '+S.labs+' labs, '+S.streak+'-day streak. Can you keep up? https://www.rcwittraining.in');
+    var text='My RCW IT Training Skill Passport 🚀 — Level '+lvl+' ('+S.xp+' XP), '+S.labs+' labs, '+S.streak+'-day streak. Can you keep up?';
+    // Prefer the public link if the passport has been synced.
+    var pubUrl = document.getElementById('pubLink').textContent || '';
+    var url = (pubUrl && pubUrl.indexOf('http') === 0) ? pubUrl : 'https://www.rcwittraining.in/skill-passport.html';
+
+    // Native share sheet (mobile): user can pick LinkedIn/WhatsApp/etc.
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'My Skill Passport', text: text, url: url });
+        return;
+      } catch (e) {
+        if (e && e.name === 'AbortError') return; // user cancelled
+        // else fall through to copy
+      }
+    }
+    copy(text + ' ' + url);
   };
 
   render();
