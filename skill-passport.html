@@ -336,71 +336,88 @@
   function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
 
   function drawPassportCard(ctx,W,H){
-    var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#061633');g.addColorStop(1,'#0a234a');
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    ctx.strokeStyle='rgba(75,215,255,.07)';ctx.lineWidth=1;
-    for(var x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(var y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-    var glow=ctx.createRadialGradient(W*.85,H*.05,0,W*.85,H*.05,W*.5);
-    glow.addColorStop(0,'rgba(7,139,232,.30)');glow.addColorStop(1,'rgba(7,139,232,0)');
-    ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
-
-    var pad=48;
-    ctx.fillStyle='#ffffff';ctx.font='900 30px Inter,Arial,sans-serif';
-    ctx.fillText('RCW IT Training',pad,74);
-    ctx.fillStyle='#4bd7ff';ctx.font='700 17px Inter,Arial,sans-serif';
-    ctx.fillText('Skill Passport',pad,102);
-
+    var GOLD='#c9a227', GOLD_D='#9c7c14', NAVY='#0a234a', INK='#101b3b', MUT='#5f6c84';
     var lvl=levelOf(S.xp);
-    // name + level
-    ctx.fillStyle='#ffffff';ctx.font='800 34px Inter,Arial,sans-serif';
-    ctx.fillText(S.name||'Student',pad,168);
-    ctx.fillStyle='#4bd7ff';ctx.font='700 22px Inter,Arial,sans-serif';
-    ctx.fillText('Level '+lvl,pad,200);
+    var badgeCount=0; for(var k in S.badges) if(S.badges[k]) badgeCount++;
 
-    // XP bar
-    var barX=pad, barY=224, barW=W-pad*2, barH=16;
-    roundRect(ctx,barX,barY,barW,barH,8);
-    ctx.fillStyle='rgba(255,255,255,.12)';ctx.fill();
-    var base=(lvl-1)*150, prog=S.xp-base;
-    var fillW=Math.max(0,Math.min(barW, barW*(prog/150)));
-    if(fillW>0){ roundRect(ctx,barX,barY,fillW,barH,8); ctx.fillStyle='#4bd7ff'; ctx.fill(); }
-    ctx.fillStyle='#b7c4dd';ctx.font='600 16px Inter,Arial,sans-serif';
-    ctx.fillText(S.xp+' XP',barX,barY+barH+26);
+    // ---------- paper (interior bio page) ----------
+    ctx.fillStyle='#f6f2e7';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(10,35,74,.045)';ctx.lineWidth=1;
+    for(var x=-H;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+H,H);ctx.stroke();}
+    for(var x=0;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-H,H);ctx.stroke();}
 
-    // stats row
-    var stats=[['Labs done',S.labs],['Questions',S.qs],['Day streak',S.streak],['Badges',(function(){var n=0;for(var k in S.badges)if(S.badges[k])n++;return n;})()]];
-    var sw=(W-pad*2)/stats.length;
-    stats.forEach(function(st,i){
-      var sx=pad+i*sw, sy=280;
-      ctx.textAlign='left';
-      ctx.fillStyle='#9ee636';ctx.font='900 44px Inter,Arial,sans-serif';
-      ctx.fillText(String(st[1]),sx,sy+40);
-      ctx.fillStyle='#93a6c8';ctx.font='600 16px Inter,Arial,sans-serif';
-      ctx.fillText(st[0],sx,sy+66);
+    // ---------- gold crest ----------
+    var cx0=W/2, cy0=100, cr=44;
+    ctx.save();ctx.translate(cx0,cy0);
+    ctx.beginPath();ctx.arc(0,0,cr,0,Math.PI*2);ctx.strokeStyle=GOLD;ctx.lineWidth=4.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(0,0,cr-7,0,Math.PI*2);ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;ctx.stroke();
+    for(var i=0;i<24;i++){var a=i*Math.PI/12;ctx.beginPath();ctx.moveTo(Math.cos(a)*(cr-3),Math.sin(a)*(cr-3));ctx.lineTo(Math.cos(a)*(cr+5),Math.sin(a)*(cr+5));ctx.lineWidth=2.5;ctx.strokeStyle=GOLD;ctx.stroke();}
+    ctx.fillStyle=NAVY;ctx.font='900 28px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('RCW',0,2);
+    ctx.restore();
+
+    // ---------- header ----------
+    ctx.fillStyle=NAVY;ctx.textAlign='center';
+    ctx.font='900 34px Georgia,serif';ctx.fillText('RCW IT TRAINING',W/2,180);
+    ctx.fillStyle=GOLD_D;ctx.font='700 24px Georgia,serif';
+    ctx.fillText('SKILL PASSPORT',W/2,212);
+    ctx.strokeStyle=GOLD;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(W/2-170,230);ctx.lineTo(W/2+170,230);ctx.stroke();
+
+    // ---------- photo box ----------
+    var px=60, py=248, pw=160, ph=164;
+    ctx.fillStyle='#e8e2d0';ctx.fillRect(px,py,pw,ph);
+    ctx.strokeStyle=NAVY;ctx.lineWidth=3;ctx.strokeRect(px,py,pw,ph);
+    ctx.strokeStyle=NAVY;ctx.lineWidth=1;ctx.strokeRect(px+6,py+6,pw-12,ph-12);
+    ctx.fillStyle=NAVY;ctx.font='900 64px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText((S.name||'S').trim().charAt(0).toUpperCase(), px+pw/2, py+ph/2-4);
+
+    // ---------- fields ----------
+    var fx=260, fy=252, lw=150;
+    var fields=[
+      ['NAME',  (S.name||'Student')],
+      ['LEVEL', 'Level '+lvl],
+      ['XP',    S.xp+' XP'],
+      ['LABS',  S.labs+' completed'],
+      ['STREAK',S.streak+' day'+(S.streak===1?'':'s')],
+      ['BADGES',badgeCount+' earned']
+    ];
+    ctx.textAlign='left';
+    fields.forEach(function(f,i){
+      var y=fy+i*30;
+      ctx.fillStyle=MUT;ctx.font='700 12px Inter,Arial,sans-serif';
+      ctx.fillText(f[0],fx,y);
+      ctx.fillStyle=INK;ctx.font='800 19px Inter,Arial,sans-serif';
+      ctx.fillText(f[1],fx+lw,y);
     });
 
-    // mini heatmap (last 15 weeks, 7 rows)
-    var hmX=pad, hmY=370, cell=12, gap=4;
-    var cols=15, rows=7, d=new Date();
+    // ---------- heatmap ----------
+    var hmX=60, hmY=460, cell=9, gap=3, cols=20, rows=7, d=new Date();
+    ctx.fillStyle=MUT;ctx.font='700 12px Inter,Arial,sans-serif';
+    ctx.fillText('PRACTICE ACTIVITY',hmX,hmY-8);
     for(var c=cols-1;c>=0;c--){
       for(var r=0;r<rows;r++){
         var daysBack=(cols-1-c)*7+(6-r);
         var dt=new Date(d);dt.setDate(dt.getDate()-daysBack);
         var v=S.act[dt.toISOString().slice(0,10)]||0;
-        var col = v>=5?'#0758c8': v>=3?'#078be8': v>=2?'#4ba3f0': v>=1?'#a8d3f5':'rgba(255,255,255,.08)';
-        ctx.fillStyle=col;
+        ctx.fillStyle = v>=5?'#0758c8': v>=3?'#078be8': v>=2?'#4ba3f0': v>=1?'#a8d3f5':'#ddd6c2';
         roundRect(ctx,hmX+c*(cell+gap),hmY+r*(cell+gap),cell,cell,2);ctx.fill();
       }
     }
-    ctx.fillStyle='#93a6c8';ctx.font='600 14px Inter,Arial,sans-serif';
-    ctx.fillText('Practice heatmap',hmX,hmY+rows*(cell+gap)+24);
 
-    // footer
-    ctx.fillStyle='#ffd51d';ctx.font='800 26px Inter,Arial,sans-serif';
-    ctx.fillText('Can you keep up?',pad,H-70);
-    ctx.fillStyle='#93a6c8';ctx.font='14px Inter,Arial,sans-serif';
-    ctx.fillText('Learn. Practice. Grow. · rcwittraining.in',pad,H-40);
+    // ---------- footer ----------
+    ctx.fillStyle=GOLD_D;ctx.font='700 13px Georgia,serif';ctx.textAlign='center';
+    ctx.fillText('Learn. Practice. Grow. · rcwittraining.in',W/2,558);
+
+    // ---------- MRZ (machine readable zone) ----------
+    var mzy=H-54, mzh=54;
+    ctx.fillStyle='#0d1b2a';ctx.fillRect(0,mzy,W,mzh);
+    var initials=(S.name||'Student').trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+    var mrz = 'P<RCW<'+initials+'<<LEVEL<'+lvl+'<'+S.xp+'XP<<<<<<<<<<<<<<<<<<<<';
+    var mrz2 = 'SKILLPASSPORT<'+S.labs+'LABS<'+S.streak+'STREAK<'+badgeCount+'BADGES<<<<<<<<<<<<<';
+    ctx.fillStyle='#e8e6dd';ctx.font='600 22px "Courier New",monospace';ctx.textAlign='left';
+    ctx.fillText(mrz, 40, mzy+22);
+    ctx.fillText(mrz2, 40, mzy+44);
   }
 
   function buildPassportCanvas(){
