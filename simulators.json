@@ -74,6 +74,14 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-7/"
     },
     {
+      "title": "Squid Web Proxy Challenge",
+      "category": "RHEL • Networking",
+      "badge": "SQUID",
+      "accent": "#d71920",
+      "id": "squid-web-proxy",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-8/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
