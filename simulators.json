@@ -106,6 +106,38 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-10/"
     },
     {
+      "title": "Docker Basics Challenge",
+      "category": "Containers • Docker",
+      "badge": "DKR",
+      "accent": "#2496ed",
+      "id": "docker-basics",
+      "targetUrl": "https://www.rcwittraining.in/docker-challenge/"
+    },
+    {
+      "title": "Git & GitHub Challenge",
+      "category": "DevOps • Version Control",
+      "badge": "GIT",
+      "accent": "#f05033",
+      "id": "git-github",
+      "targetUrl": "https://www.rcwittraining.in/git-challenge/"
+    },
+    {
+      "title": "SQL Fundamentals Challenge",
+      "category": "Databases • SQL",
+      "badge": "SQL",
+      "accent": "#e38c00",
+      "id": "sql-fundamentals",
+      "targetUrl": "https://www.rcwittraining.in/sql-challenge/"
+    },
+    {
+      "title": "Python Basics Challenge",
+      "category": "Programming • Python",
+      "badge": "PY",
+      "accent": "#ffd343",
+      "id": "python-basics",
+      "targetUrl": "https://www.rcwittraining.in/python-challenge/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
