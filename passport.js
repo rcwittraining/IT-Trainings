@@ -210,6 +210,47 @@
     return "";
   }
 
+  // ---------- head-to-head challenges (Supabase) ----------
+  function challengeRPC(fn, body) { return supabaseRPC(fn, body); }
+
+  function createChallenge(opts) {
+    opts = opts || {};
+    if (!hasSupabase()) return Promise.reject(new Error("Challenge backend not configured"));
+    return challengeRPC("create_challenge", {
+      p_lab: opts.lab || "RCW IT Training lab",
+      p_lab_url: opts.labUrl || "",
+      p_creator_name: opts.name || "A friend",
+      p_creator_score: (typeof opts.score === "number" ? opts.score : 0),
+      p_creator_total: (typeof opts.total === "number" ? opts.total : 100)
+    }).then(function (res) {
+      if (!res.ok) throw new Error("Could not create challenge (" + res.status + ")");
+      return res.json();
+    });
+  }
+
+  function getChallenge(id) {
+    if (!hasSupabase()) return Promise.reject(new Error("Challenge backend not configured"));
+    var url = window.RCW_SUPABASE_URL + "/rest/v1/challenges?id=eq." + encodeURIComponent(id) + "&select=*";
+    return fetch(url, {
+      headers: { "apikey": window.RCW_SUPABASE_KEY, "Authorization": "Bearer " + window.RCW_SUPABASE_KEY }
+    }).then(function (res) {
+      if (!res.ok) return null;
+      return res.json();
+    }).then(function (rows) {
+      return (rows && rows.length) ? rows[0] : null;
+    });
+  }
+
+  function completeChallenge(id, friendName, friendScore, friendTotal) {
+    if (!hasSupabase()) return Promise.reject(new Error("Challenge backend not configured"));
+    return challengeRPC("complete_challenge", {
+      p_id: id, p_friend_name: friendName, p_friend_score: friendScore, p_friend_total: friendTotal
+    }).then(function (res) {
+      if (!res.ok) throw new Error("Could not record your score (" + res.status + ")");
+      return res.json();
+    });
+  }
+
   window.RCWPassport = {
     record: record, fresh: fresh, load: load, save: save,
     getRemote: getRemote, setRemote: setRemote,
@@ -217,6 +258,9 @@
     push: push, pull: pull,
     syncCreate: syncCreate, syncRefresh: syncRefresh,
     getCode: getCode, restoreFromCode: restoreFromCode,
-    publicUrl: publicUrl
+    publicUrl: publicUrl,
+    createChallenge: createChallenge,
+    getChallenge: getChallenge,
+    completeChallenge: completeChallenge
   };
 })();
