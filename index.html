@@ -385,6 +385,51 @@
   </style>
 </head>
 <body>
+  <div class="announce-bar" id="announceBar" role="region" aria-label="Announcement">
+    <style>
+      .announce-bar{position:relative;z-index:2000;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+        padding:10px 48px 10px 16px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        background:linear-gradient(112deg,#071b38,#0a4a72 55%,#071b38);color:#fff;border-bottom:2px solid #52cdf4;overflow:hidden}
+      .announce-bar::after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:34%;
+        background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);
+        transform:skewX(-18deg);animation:announce-flash 3.6s ease-in-out infinite}
+      @keyframes announce-flash{0%{left:-40%}55%{left:130%}100%{left:130%}}
+      .announce-ic{font-size:20px;flex:0 0 auto;animation:announce-pop 1.6s ease-in-out infinite}
+      @keyframes announce-pop{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+      .announce-msg{font-size:15px;font-weight:800;letter-spacing:.2px}
+      .announce-msg .hl{color:#ffd51d}
+      .announce-sub{font-size:13px;font-weight:600;color:#9cc9e8}
+      .announce-cta{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:900;
+        text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+      .announce-yt{background:linear-gradient(115deg,#ff0033,#d4002a);color:#fff;box-shadow:0 6px 16px rgba(255,0,51,.3)}
+      .announce-mail{background:linear-gradient(115deg,#0a66c2,#004182);color:#fff;box-shadow:0 6px 16px rgba(10,102,194,.3)}
+      .announce-cta:hover{transform:translateY(-1px)}
+      .announce-close{position:absolute;top:50%;right:10px;transform:translateY(-50%);width:30px;height:30px;border:1px solid rgba(166,211,239,.35);
+        border-radius:9px;background:rgba(1,13,31,.35);color:#c4d8e9;font-size:16px;line-height:1;cursor:pointer}
+      .announce-close:hover{color:#fff;border-color:#61dcff}
+      .announce-bar[hidden]{display:none}
+      @media (prefers-reduced-motion:reduce){.announce-bar::after,.announce-ic{animation:none}}
+    </style>
+    <span class="announce-ic" aria-hidden="true">🎉</span>
+    <span>
+      <span class="announce-msg">Wait for our <span class="hl">exciting updates</span> — stay connected!</span>
+      <span class="announce-sub"> New labs, simulators &amp; videos are on the way.</span>
+    </span>
+    <a class="announce-cta announce-yt" href="https://www.youtube.com/playlist?list=PLaZsfFYirhJI" target="_blank" rel="noopener">▶ Subscribe on YouTube</a>
+    <a class="announce-cta announce-mail" href="https://www.linkedin.com/in/pradeepmcp826/" target="_blank" rel="noopener">in&nbsp; Connect on LinkedIn</a>
+    <button class="announce-close" id="announceClose" type="button" aria-label="Dismiss announcement">×</button>
+  </div>
+  <script>
+    (function(){
+      var bar=document.getElementById('announceBar');
+      try{ if(localStorage.getItem('rcw_announce_dismissed')==='1') bar.hidden=true; }catch(e){}
+      document.getElementById('announceClose').addEventListener('click',function(){
+        bar.hidden=true;
+        try{ localStorage.setItem('rcw_announce_dismissed','1'); }catch(e){}
+      });
+    })();
+  </script>
+
   <a class="skip-link" href="#labs">Skip to labs</a>
 
   <aside class="quiz-assistant" id="quizAssistant" aria-labelledby="quizAssistantName">
