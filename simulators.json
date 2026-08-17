@@ -98,6 +98,14 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-9/"
     },
     {
+      "title": "Hard Links Challenge",
+      "category": "RHEL • Filesystem",
+      "badge": "HLNK",
+      "accent": "#8b5cf6",
+      "id": "hard-links",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-10/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
