@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Shell Aliases & History · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "shell-aliases", "title": "Shell Aliases & History", "category": "Linux • Shell", "badge": "SH", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "shell-node-01", "user": "student", "intro": ["Create aliases and use command history efficiently."], "files": {"/home/student/.bashrc": "# .bashrc\nalias ll='ls -l'\nalias gs='git status'\n"}, "objectives": [{"name": "View aliases", "desc": "List with alias.", "points": 25, "match": ["alias"], "success": "✓ Aliases listed."}, {"name": "Create alias", "desc": "Create with alias ll='ls -l'.", "points": 25, "match": ["alias\\s+\\w+='[^']*'"], "success": "✓ Alias created."}, {"name": "View history", "desc": "Show with history.", "points": 25, "match": ["history"], "success": "✓ History shown."}, {"name": "View bashrc", "desc": "Read .bashrc.", "points": 25, "match": ["cat\\s+.*\\.bashrc"], "success": "✓ .bashrc read."}], "hint": ["alias", "alias ll='ls -l'", "history", "cat ~/.bashrc"], "help": "alias · alias NAME='CMD' · history · cat ~/.bashrc", "certTitle": "Shell Champion", "certDesc1": "for mastering shell aliases and history", "certDesc2": "with customization.", "certChallenge": "shell aliases", "certFooter": "Linux Shell • Challenge", "headline": "Shell Aliases & History", "lead": "Create aliases and use command history efficiently.", "brief": "Shell Aliases & History", "briefCopy": "Create aliases and use command history efficiently.", "incident": "SHELL-ALIASES · shell-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Shell Aliases & History.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SH", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

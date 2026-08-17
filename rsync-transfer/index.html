@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>rsync File Transfer · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "rsync-transfer", "title": "rsync File Transfer", "category": "Linux • File Management", "badge": "RSYNC", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "fs-node-01", "user": "student", "intro": ["Sync files and directories with rsync."], "dirs": ["/data/src", "/data/dst"], "files": {"/data/src/file1.txt": "one\n", "/data/src/file2.txt": "two\n"}, "objectives": [{"name": "Sync directory", "desc": "Sync with rsync -av.", "points": 34, "match": ["rsync\\s+-av\\s+\\S+\\s+\\S+"], "success": "✓ Synced."}, {"name": "Dry run", "desc": "Preview with --dry-run.", "points": 33, "match": ["rsync\\s+.*--dry-run"], "success": "✓ Dry run done."}, {"name": "Delete extras", "desc": "Use --delete.", "points": 33, "match": ["rsync\\s+.*--delete"], "success": "✓ Extras deleted."}], "hint": ["rsync -av /data/src/ /data/dst/", "rsync -avn /data/src/ /data/dst/", "rsync -av --delete /data/src/ /data/dst/"], "help": "rsync -av SRC/ DST/ · -n (dry-run) · --delete · --exclude", "certTitle": "rsync Champion", "certDesc1": "for mastering rsync", "certDesc2": "with sync and dry-runs.", "certChallenge": "rsync transfer", "certFooter": "Linux File Management • Challenge", "headline": "rsync File Transfer", "lead": "Sync files and directories with rsync.", "brief": "rsync File Transfer", "briefCopy": "Sync files and directories with rsync.", "incident": "RSYNC-TRANSFER · fs-node-01 · hands-on practice", "resultCopy": "You completed all objectives for rsync File Transfer.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "RSYN", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

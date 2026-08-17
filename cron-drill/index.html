@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>cron Syntax Drill · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "cron-drill", "title": "cron Syntax Drill", "category": "Linux • Automation", "badge": "CRON", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "cron-node-01", "user": "student", "intro": ["Master cron schedule syntax for common scenarios."], "objectives": [{"name": "Daily job", "desc": "Schedule daily at 2am (0 2 * * *).", "points": 25, "match": ["0\\s+2\\s+\\*\\s+\\*\\s+\\*"], "success": "✓ Daily job set."}, {"name": "Weekly job", "desc": "Monday 6am (0 6 * * 1).", "points": 25, "match": ["0\\s+6\\s+\\*\\s+\\*\\s+1"], "success": "✓ Weekly job set."}, {"name": "Every 5 min", "desc": "Every 5 minutes (*/5 * * * *).", "points": 25, "match": ["\\*/5\\s+\\*\\s+\\*\\s+\\*\\s+\\*"], "success": "✓ Interval set."}, {"name": "Hourly", "desc": "Every hour (0 * * * *).", "points": 25, "match": ["0\\s+\\*\\s+\\*\\s+\\*\\s+\\*"], "success": "✓ Hourly set."}], "hint": ["0 2 * * * CMD", "0 6 * * 1 CMD", "*/5 * * * * CMD", "0 * * * * CMD"], "help": "cron: MIN HOUR DOM MON DOW — */5 every 5, 0 2 daily 2am, 0 6 * * 1 weekly Mon", "certTitle": "cron Syntax Champion", "certDesc1": "for mastering cron syntax", "certDesc2": "for common schedules.", "certChallenge": "cron syntax", "certFooter": "Linux Automation • Challenge", "headline": "cron Syntax Drill", "lead": "Master cron schedule syntax for common scenarios.", "brief": "cron Syntax Drill", "briefCopy": "Master cron schedule syntax for common scenarios.", "incident": "CRON-DRILL · cron-node-01 · hands-on practice", "resultCopy": "You completed all objectives for cron Syntax Drill.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "CRON", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

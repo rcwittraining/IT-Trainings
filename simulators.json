@@ -2,8 +2,8 @@
   "updatedAt": "2026-08-16T16:26:00.000Z",
   "simulators": [
     {
-      "title": "Raju Rishi Dev — Technical Quiz Agent",
-      "category": "Adaptive Quiz • Technical Skills",
+      "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
+      "category": "Adaptive Quiz \u2022 Technical Skills",
       "badge": "QUIZ",
       "accent": "#19a7ff",
       "id": "technical-quiz-agent",
@@ -11,7 +11,7 @@
     },
     {
       "title": "Production Outage Game",
-      "category": "IT Architecture • Incident Response",
+      "category": "IT Architecture \u2022 Incident Response",
       "badge": "SEV-1",
       "accent": "#ef405b",
       "id": "production-outage-game",
@@ -19,7 +19,7 @@
     },
     {
       "title": "Linux Folder Challenge",
-      "category": "Linux • Command Line",
+      "category": "Linux \u2022 Command Line",
       "badge": "LINUX",
       "accent": "#09a7f5",
       "id": "linux-folder-challenge",
@@ -27,7 +27,7 @@
     },
     {
       "title": "Linux Server Crash Root-Cause Analysis",
-      "category": "Linux • Troubleshooting",
+      "category": "Linux \u2022 Troubleshooting",
       "badge": "RCA",
       "accent": "#12a9e9",
       "id": "linux-server-crash-rca",
@@ -35,7 +35,7 @@
     },
     {
       "title": "Linux Unauthorised Access Review",
-      "category": "Linux • Security",
+      "category": "Linux \u2022 Security",
       "badge": "SEC",
       "accent": "#12a9e9",
       "id": "linux-unauthorised-access-review",
@@ -43,7 +43,7 @@
     },
     {
       "title": "Linux Root Password Audit",
-      "category": "Linux • Authentication",
+      "category": "Linux \u2022 Authentication",
       "badge": "AUTH",
       "accent": "#12a9e9",
       "id": "linux-root-password-audit",
@@ -51,7 +51,7 @@
     },
     {
       "title": "Kubernetes Cluster Setup Challenge",
-      "category": "Linux • Kubernetes",
+      "category": "Linux \u2022 Kubernetes",
       "badge": "K8S",
       "accent": "#326ce5",
       "id": "kubernetes-cluster-setup",
@@ -59,7 +59,7 @@
     },
     {
       "title": "Nginx Reverse Proxy Challenge",
-      "category": "Linux • Web Server",
+      "category": "Linux \u2022 Web Server",
       "badge": "NGINX",
       "accent": "#0c9c51",
       "id": "nginx-reverse-proxy",
@@ -67,7 +67,7 @@
     },
     {
       "title": "LVM Extend Challenge",
-      "category": "Linux • Storage",
+      "category": "Linux \u2022 Storage",
       "badge": "LVM",
       "accent": "#f5a623",
       "id": "lvm-extend",
@@ -75,7 +75,7 @@
     },
     {
       "title": "Squid Web Proxy Challenge",
-      "category": "RHEL • Networking",
+      "category": "RHEL \u2022 Networking",
       "badge": "SQUID",
       "accent": "#d71920",
       "id": "squid-web-proxy",
@@ -83,7 +83,7 @@
     },
     {
       "title": "RHEL 10 Practice Terminal",
-      "category": "Red Hat • Open Sandbox • RHCSA",
+      "category": "Red Hat \u2022 Open Sandbox \u2022 RHCSA",
       "badge": "RHEL",
       "accent": "#d71920",
       "id": "rhel10-practice-terminal",
@@ -91,7 +91,7 @@
     },
     {
       "title": "Soft Links Challenge",
-      "category": "RHEL • Filesystem",
+      "category": "RHEL \u2022 Filesystem",
       "badge": "LINK",
       "accent": "#6366f1",
       "id": "soft-links",
@@ -99,7 +99,7 @@
     },
     {
       "title": "Hard Links Challenge",
-      "category": "RHEL • Filesystem",
+      "category": "RHEL \u2022 Filesystem",
       "badge": "HLNK",
       "accent": "#8b5cf6",
       "id": "hard-links",
@@ -107,7 +107,7 @@
     },
     {
       "title": "Docker Basics Challenge",
-      "category": "Containers • Docker",
+      "category": "Containers \u2022 Docker",
       "badge": "DKR",
       "accent": "#2496ed",
       "id": "docker-basics",
@@ -115,7 +115,7 @@
     },
     {
       "title": "Git & GitHub Challenge",
-      "category": "DevOps • Version Control",
+      "category": "DevOps \u2022 Version Control",
       "badge": "GIT",
       "accent": "#f05033",
       "id": "git-github",
@@ -123,7 +123,7 @@
     },
     {
       "title": "SQL Fundamentals Challenge",
-      "category": "Databases • SQL",
+      "category": "Databases \u2022 SQL",
       "badge": "SQL",
       "accent": "#e38c00",
       "id": "sql-fundamentals",
@@ -131,7 +131,7 @@
     },
     {
       "title": "Python Basics Challenge",
-      "category": "Programming • Python",
+      "category": "Programming \u2022 Python",
       "badge": "PY",
       "accent": "#ffd343",
       "id": "python-basics",
@@ -139,7 +139,7 @@
     },
     {
       "title": "Networking Fundamentals Challenge",
-      "category": "Networking • Troubleshooting",
+      "category": "Networking \u2022 Troubleshooting",
       "badge": "NET",
       "accent": "#00bcd4",
       "id": "networking-fundamentals",
@@ -147,7 +147,7 @@
     },
     {
       "title": "Cybersecurity Challenge",
-      "category": "Security • Incident Response",
+      "category": "Security \u2022 Incident Response",
       "badge": "SEC",
       "accent": "#ef405b",
       "id": "cybersecurity",
@@ -155,7 +155,7 @@
     },
     {
       "title": "AWS IAM Compromise Alert Challenge",
-      "category": "AWS • Identity Security",
+      "category": "AWS \u2022 Identity Security",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-iam-compromise-alert",
@@ -163,7 +163,7 @@
     },
     {
       "title": "Azure Virtual Desktop Lab",
-      "category": "Azure • Virtual Desktop",
+      "category": "Azure \u2022 Virtual Desktop",
       "badge": "AVD",
       "accent": "#086dcc",
       "id": "azure-virtual-desktop",
@@ -171,7 +171,7 @@
     },
     {
       "title": "AWS Control Tower Lab",
-      "category": "AWS • Governance",
+      "category": "AWS \u2022 Governance",
       "badge": "AWS",
       "accent": "#ff6b0b",
       "id": "aws-control-tower",
@@ -179,23 +179,23 @@
     },
     {
       "title": "VMware to Hyper-V Migration Lab",
-      "category": "VMware • Hyper-V • Veeam",
-      "badge": "V→H",
+      "category": "VMware \u2022 Hyper-V \u2022 Veeam",
+      "badge": "V\u2192H",
       "accent": "#42a62a",
       "id": "vmware-hyper-v",
       "targetUrl": "https://rcwittraining.github.io/VMware-to-Hyper-V-using-Veeam/"
     },
     {
       "title": "VMware to Azure Migration Lab",
-      "category": "VMware • Microsoft Azure",
-      "badge": "V→A",
+      "category": "VMware \u2022 Microsoft Azure",
+      "badge": "V\u2192A",
       "accent": "#0d97cf",
       "id": "vmware-azure",
       "targetUrl": "https://rcwittraining.github.io/VMware-to-Azure-Migrate/"
     },
     {
       "title": "TrueNAS Debug Export Lab",
-      "category": "TrueNAS • Storage",
+      "category": "TrueNAS \u2022 Storage",
       "badge": "NAS",
       "accent": "#0b9ddd",
       "id": "truenas-debug",
@@ -203,7 +203,7 @@
     },
     {
       "title": "GCP Admin Exam Simulator",
-      "category": "Google Cloud • Exam Practice",
+      "category": "Google Cloud \u2022 Exam Practice",
       "badge": "GCP",
       "accent": "#4285f4",
       "id": "gcp-admin",
@@ -211,7 +211,7 @@
     },
     {
       "title": "Azure Admin Exam Simulator",
-      "category": "Microsoft Azure • Exam Practice",
+      "category": "Microsoft Azure \u2022 Exam Practice",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-admin",
@@ -219,7 +219,7 @@
     },
     {
       "title": "RHEL 10 Installation Lab",
-      "category": "Red Hat • Linux",
+      "category": "Red Hat \u2022 Linux",
       "badge": "RHEL",
       "accent": "#d71920",
       "id": "rhel-10-install",
@@ -232,6 +232,654 @@
       "accent": "#087fe0",
       "id": "aws-cloudwatch",
       "targetUrl": "https://rcwittraining.github.io/AWS---CloudWatch---Lab/"
+    },
+    {
+      "title": "grep Text Search Mastery",
+      "category": "Linux \u2022 Text Processing",
+      "badge": "GREP",
+      "accent": "#0ba8ee",
+      "id": "grep-mastery",
+      "targetUrl": "https://www.rcwittraining.in/grep-mastery/"
+    },
+    {
+      "title": "sed Stream Editing",
+      "category": "Linux \u2022 Text Processing",
+      "badge": "SED",
+      "accent": "#0ba8ee",
+      "id": "sed-editing",
+      "targetUrl": "https://www.rcwittraining.in/sed-editing/"
+    },
+    {
+      "title": "awk Text Processing",
+      "category": "Linux \u2022 Text Processing",
+      "badge": "AWK",
+      "accent": "#0ba8ee",
+      "id": "awk-processing",
+      "targetUrl": "https://www.rcwittraining.in/awk-processing/"
+    },
+    {
+      "title": "find File Search",
+      "category": "Linux \u2022 File Management",
+      "badge": "FIND",
+      "accent": "#0ba8ee",
+      "id": "find-files",
+      "targetUrl": "https://www.rcwittraining.in/find-files/"
+    },
+    {
+      "title": "tar Archive Management",
+      "category": "Linux \u2022 File Management",
+      "badge": "TAR",
+      "accent": "#0ba8ee",
+      "id": "tar-archives",
+      "targetUrl": "https://www.rcwittraining.in/tar-archives/"
+    },
+    {
+      "title": "gzip Compression",
+      "category": "Linux \u2022 File Management",
+      "badge": "GZIP",
+      "accent": "#0ba8ee",
+      "id": "gzip-compress",
+      "targetUrl": "https://www.rcwittraining.in/gzip-compress/"
+    },
+    {
+      "title": "cron Job Scheduling",
+      "category": "Linux \u2022 Automation",
+      "badge": "CRON",
+      "accent": "#0ba8ee",
+      "id": "cron-jobs",
+      "targetUrl": "https://www.rcwittraining.in/cron-jobs/"
+    },
+    {
+      "title": "at One-time Jobs",
+      "category": "Linux \u2022 Automation",
+      "badge": "AT",
+      "accent": "#0ba8ee",
+      "id": "at-jobs",
+      "targetUrl": "https://www.rcwittraining.in/at-jobs/"
+    },
+    {
+      "title": "User Management",
+      "category": "Linux \u2022 Users & Groups",
+      "badge": "USER",
+      "accent": "#0ba8ee",
+      "id": "user-management",
+      "targetUrl": "https://www.rcwittraining.in/user-management/"
+    },
+    {
+      "title": "Group Management",
+      "category": "Linux \u2022 Users & Groups",
+      "badge": "GROUP",
+      "accent": "#0ba8ee",
+      "id": "group-management",
+      "targetUrl": "https://www.rcwittraining.in/group-management/"
+    },
+    {
+      "title": "File Permissions (chmod)",
+      "category": "Linux \u2022 Permissions",
+      "badge": "CHMOD",
+      "accent": "#0ba8ee",
+      "id": "file-permissions",
+      "targetUrl": "https://www.rcwittraining.in/file-permissions/"
+    },
+    {
+      "title": "File Ownership (chown)",
+      "category": "Linux \u2022 Permissions",
+      "badge": "CHOWN",
+      "accent": "#0ba8ee",
+      "id": "file-ownership",
+      "targetUrl": "https://www.rcwittraining.in/file-ownership/"
+    },
+    {
+      "title": "Process Management",
+      "category": "Linux \u2022 System Admin",
+      "badge": "PROC",
+      "accent": "#0ba8ee",
+      "id": "process-management",
+      "targetUrl": "https://www.rcwittraining.in/process-management/"
+    },
+    {
+      "title": "systemd Service Management",
+      "category": "Linux \u2022 System Admin",
+      "badge": "SYSCTL",
+      "accent": "#0ba8ee",
+      "id": "systemd-services",
+      "targetUrl": "https://www.rcwittraining.in/systemd-services/"
+    },
+    {
+      "title": "journalctl Log Inspection",
+      "category": "Linux \u2022 System Admin",
+      "badge": "LOG",
+      "accent": "#0ba8ee",
+      "id": "journalctl-logs",
+      "targetUrl": "https://www.rcwittraining.in/journalctl-logs/"
+    },
+    {
+      "title": "dnf Package Management",
+      "category": "Linux \u2022 Software",
+      "badge": "DNF",
+      "accent": "#d71920",
+      "id": "dnf-packages",
+      "targetUrl": "https://www.rcwittraining.in/dnf-packages/"
+    },
+    {
+      "title": "rpm Package Queries",
+      "category": "Linux \u2022 Software",
+      "badge": "RPM",
+      "accent": "#d71920",
+      "id": "rpm-queries",
+      "targetUrl": "https://www.rcwittraining.in/rpm-queries/"
+    },
+    {
+      "title": "SSH Key Setup",
+      "category": "Linux \u2022 Security",
+      "badge": "SSH",
+      "accent": "#0ba8ee",
+      "id": "ssh-keygen",
+      "targetUrl": "https://www.rcwittraining.in/ssh-keygen/"
+    },
+    {
+      "title": "SSH Server Hardening",
+      "category": "Linux \u2022 Security",
+      "badge": "SSHH",
+      "accent": "#0ba8ee",
+      "id": "ssh-hardening",
+      "targetUrl": "https://www.rcwittraining.in/ssh-hardening/"
+    },
+    {
+      "title": "firewalld Rule Management",
+      "category": "Linux \u2022 Security",
+      "badge": "FW",
+      "accent": "#d71920",
+      "id": "firewall-rules",
+      "targetUrl": "https://www.rcwittraining.in/firewall-rules/"
+    },
+    {
+      "title": "SELinux Context Management",
+      "category": "Linux \u2022 Security",
+      "badge": "SELINUX",
+      "accent": "#d71920",
+      "id": "selinux-contexts",
+      "targetUrl": "https://www.rcwittraining.in/selinux-contexts/"
+    },
+    {
+      "title": "fdisk Partition Management",
+      "category": "Linux \u2022 Storage",
+      "badge": "FDISK",
+      "accent": "#0ba8ee",
+      "id": "fdisk-partitions",
+      "targetUrl": "https://www.rcwittraining.in/fdisk-partitions/"
+    },
+    {
+      "title": "Swap Management",
+      "category": "Linux \u2022 Storage",
+      "badge": "SWAP",
+      "accent": "#0ba8ee",
+      "id": "swap-management",
+      "targetUrl": "https://www.rcwittraining.in/swap-management/"
+    },
+    {
+      "title": "Mount & Filesystem Management",
+      "category": "Linux \u2022 Storage",
+      "badge": "MNT",
+      "accent": "#0ba8ee",
+      "id": "mount-filesystems",
+      "targetUrl": "https://www.rcwittraining.in/mount-filesystems/"
+    },
+    {
+      "title": "Disk Usage (du)",
+      "category": "Linux \u2022 Storage",
+      "badge": "DU",
+      "accent": "#0ba8ee",
+      "id": "du-usage",
+      "targetUrl": "https://www.rcwittraining.in/du-usage/"
+    },
+    {
+      "title": "nmcli Connection Management",
+      "category": "Networking \u2022 RHEL",
+      "badge": "NMCLI",
+      "accent": "#00bcd4",
+      "id": "nmcli-connections",
+      "targetUrl": "https://www.rcwittraining.in/nmcli-connections/"
+    },
+    {
+      "title": "DNS Configuration",
+      "category": "Networking \u2022 DNS",
+      "badge": "DNS",
+      "accent": "#00bcd4",
+      "id": "dns-config",
+      "targetUrl": "https://www.rcwittraining.in/dns-config/"
+    },
+    {
+      "title": "Subnetting Practice",
+      "category": "Networking \u2022 Subnetting",
+      "badge": "SUBNET",
+      "accent": "#00bcd4",
+      "id": "subnetting-drill",
+      "targetUrl": "https://www.rcwittraining.in/subnetting-drill/"
+    },
+    {
+      "title": "Port & Socket Inspection",
+      "category": "Networking \u2022 Troubleshooting",
+      "badge": "SS",
+      "accent": "#00bcd4",
+      "id": "port-scanning",
+      "targetUrl": "https://www.rcwittraining.in/port-scanning/"
+    },
+    {
+      "title": "iptables Basics",
+      "category": "Networking \u2022 Firewall",
+      "badge": "IPT",
+      "accent": "#00bcd4",
+      "id": "iptables-basics",
+      "targetUrl": "https://www.rcwittraining.in/iptables-basics/"
+    },
+    {
+      "title": "Docker Image Management",
+      "category": "Containers \u2022 Docker",
+      "badge": "DKR",
+      "accent": "#2496ed",
+      "id": "docker-images",
+      "targetUrl": "https://www.rcwittraining.in/docker-images/"
+    },
+    {
+      "title": "Docker Networking",
+      "category": "Containers \u2022 Docker",
+      "badge": "DKR",
+      "accent": "#2496ed",
+      "id": "docker-networking",
+      "targetUrl": "https://www.rcwittraining.in/docker-networking/"
+    },
+    {
+      "title": "Docker Volumes",
+      "category": "Containers \u2022 Docker",
+      "badge": "DKR",
+      "accent": "#2496ed",
+      "id": "docker-volumes",
+      "targetUrl": "https://www.rcwittraining.in/docker-volumes/"
+    },
+    {
+      "title": "Docker Compose",
+      "category": "Containers \u2022 Docker",
+      "badge": "COMP",
+      "accent": "#2496ed",
+      "id": "docker-compose",
+      "targetUrl": "https://www.rcwittraining.in/docker-compose/"
+    },
+    {
+      "title": "kubectl Pod Management",
+      "category": "Kubernetes",
+      "badge": "K8S",
+      "accent": "#326ce5",
+      "id": "kubectl-pods",
+      "targetUrl": "https://www.rcwittraining.in/kubectl-pods/"
+    },
+    {
+      "title": "kubectl Deployments",
+      "category": "Kubernetes",
+      "badge": "K8S",
+      "accent": "#326ce5",
+      "id": "kubectl-deployments",
+      "targetUrl": "https://www.rcwittraining.in/kubectl-deployments/"
+    },
+    {
+      "title": "kubectl Services",
+      "category": "Kubernetes",
+      "badge": "K8S",
+      "accent": "#326ce5",
+      "id": "kubectl-services",
+      "targetUrl": "https://www.rcwittraining.in/kubectl-services/"
+    },
+    {
+      "title": "kubectl ConfigMaps & Secrets",
+      "category": "Kubernetes",
+      "badge": "K8S",
+      "accent": "#326ce5",
+      "id": "kubectl-configmaps",
+      "targetUrl": "https://www.rcwittraining.in/kubectl-configmaps/"
+    },
+    {
+      "title": "Helm Package Management",
+      "category": "Kubernetes \u2022 Helm",
+      "badge": "HELM",
+      "accent": "#326ce5",
+      "id": "helm-basics",
+      "targetUrl": "https://www.rcwittraining.in/helm-basics/"
+    },
+    {
+      "title": "MySQL Basics",
+      "category": "Databases \u2022 MySQL",
+      "badge": "SQL",
+      "accent": "#e38c00",
+      "id": "mysql-basics",
+      "targetUrl": "https://www.rcwittraining.in/mysql-basics/"
+    },
+    {
+      "title": "MySQL Users & Grants",
+      "category": "Databases \u2022 MySQL",
+      "badge": "SQL",
+      "accent": "#e38c00",
+      "id": "mysql-users",
+      "targetUrl": "https://www.rcwittraining.in/mysql-users/"
+    },
+    {
+      "title": "MySQL Backup & Restore",
+      "category": "Databases \u2022 MySQL",
+      "badge": "SQL",
+      "accent": "#e38c00",
+      "id": "mysql-backup",
+      "targetUrl": "https://www.rcwittraining.in/mysql-backup/"
+    },
+    {
+      "title": "PostgreSQL Basics",
+      "category": "Databases \u2022 PostgreSQL",
+      "badge": "PSQL",
+      "accent": "#336791",
+      "id": "postgresql-basics",
+      "targetUrl": "https://www.rcwittraining.in/postgresql-basics/"
+    },
+    {
+      "title": "PostgreSQL Queries",
+      "category": "Databases \u2022 PostgreSQL",
+      "badge": "PSQL",
+      "accent": "#336791",
+      "id": "postgresql-queries",
+      "targetUrl": "https://www.rcwittraining.in/postgresql-queries/"
+    },
+    {
+      "title": "Redis Basics",
+      "category": "Databases \u2022 Redis",
+      "badge": "REDIS",
+      "accent": "#d82c20",
+      "id": "redis-basics",
+      "targetUrl": "https://www.rcwittraining.in/redis-basics/"
+    },
+    {
+      "title": "AWS S3 CLI",
+      "category": "AWS \u2022 Storage",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-s3-cli",
+      "targetUrl": "https://www.rcwittraining.in/aws-s3-cli/"
+    },
+    {
+      "title": "AWS EC2 CLI",
+      "category": "AWS \u2022 Compute",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-ec2-cli",
+      "targetUrl": "https://www.rcwittraining.in/aws-ec2-cli/"
+    },
+    {
+      "title": "AWS IAM CLI",
+      "category": "AWS \u2022 Identity",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-iam-cli",
+      "targetUrl": "https://www.rcwittraining.in/aws-iam-cli/"
+    },
+    {
+      "title": "AWS VPC CLI",
+      "category": "AWS \u2022 Networking",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-vpc-cli",
+      "targetUrl": "https://www.rcwittraining.in/aws-vpc-cli/"
+    },
+    {
+      "title": "AWS Lambda CLI",
+      "category": "AWS \u2022 Serverless",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-lambda-cli",
+      "targetUrl": "https://www.rcwittraining.in/aws-lambda-cli/"
+    },
+    {
+      "title": "AWS CloudFormation",
+      "category": "AWS \u2022 IaC",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-cloudformation",
+      "targetUrl": "https://www.rcwittraining.in/aws-cloudformation/"
+    },
+    {
+      "title": "AWS RDS CLI",
+      "category": "AWS \u2022 Database",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-rds-cli",
+      "targetUrl": "https://www.rcwittraining.in/aws-rds-cli/"
+    },
+    {
+      "title": "AWS Route 53",
+      "category": "AWS \u2022 DNS",
+      "badge": "AWS",
+      "accent": "#ff9900",
+      "id": "aws-route53",
+      "targetUrl": "https://www.rcwittraining.in/aws-route53/"
+    },
+    {
+      "title": "Azure CLI Basics",
+      "category": "Azure \u2022 CLI",
+      "badge": "AZ",
+      "accent": "#087ed2",
+      "id": "azure-cli-basics",
+      "targetUrl": "https://www.rcwittraining.in/azure-cli-basics/"
+    },
+    {
+      "title": "Azure Virtual Machines",
+      "category": "Azure \u2022 Compute",
+      "badge": "AZ",
+      "accent": "#087ed2",
+      "id": "azure-vm",
+      "targetUrl": "https://www.rcwittraining.in/azure-vm/"
+    },
+    {
+      "title": "Azure Storage",
+      "category": "Azure \u2022 Storage",
+      "badge": "AZ",
+      "accent": "#087ed2",
+      "id": "azure-storage",
+      "targetUrl": "https://www.rcwittraining.in/azure-storage/"
+    },
+    {
+      "title": "Azure Kubernetes Service",
+      "category": "Azure \u2022 Kubernetes",
+      "badge": "AZ",
+      "accent": "#087ed2",
+      "id": "azure-aks",
+      "targetUrl": "https://www.rcwittraining.in/azure-aks/"
+    },
+    {
+      "title": "Azure Entra ID",
+      "category": "Azure \u2022 Identity",
+      "badge": "AZ",
+      "accent": "#087ed2",
+      "id": "azure-entra",
+      "targetUrl": "https://www.rcwittraining.in/azure-entra/"
+    },
+    {
+      "title": "gcloud CLI Basics",
+      "category": "GCP \u2022 CLI",
+      "badge": "GCP",
+      "accent": "#4285f4",
+      "id": "gcloud-basics",
+      "targetUrl": "https://www.rcwittraining.in/gcloud-basics/"
+    },
+    {
+      "title": "GCP Compute Engine",
+      "category": "GCP \u2022 Compute",
+      "badge": "GCP",
+      "accent": "#4285f4",
+      "id": "gcp-compute",
+      "targetUrl": "https://www.rcwittraining.in/gcp-compute/"
+    },
+    {
+      "title": "GCP Cloud Storage",
+      "category": "GCP \u2022 Storage",
+      "badge": "GCP",
+      "accent": "#4285f4",
+      "id": "gcp-storage",
+      "targetUrl": "https://www.rcwittraining.in/gcp-storage/"
+    },
+    {
+      "title": "GCP IAM",
+      "category": "GCP \u2022 Identity",
+      "badge": "GCP",
+      "accent": "#4285f4",
+      "id": "gcp-iam",
+      "targetUrl": "https://www.rcwittraining.in/gcp-iam/"
+    },
+    {
+      "title": "Terraform Basics",
+      "category": "DevOps \u2022 IaC",
+      "badge": "TF",
+      "accent": "#7b42bc",
+      "id": "terraform-basics",
+      "targetUrl": "https://www.rcwittraining.in/terraform-basics/"
+    },
+    {
+      "title": "Terraform Plan & Apply",
+      "category": "DevOps \u2022 IaC",
+      "badge": "TF",
+      "accent": "#7b42bc",
+      "id": "terraform-apply",
+      "targetUrl": "https://www.rcwittraining.in/terraform-apply/"
+    },
+    {
+      "title": "Ansible Playbooks",
+      "category": "DevOps \u2022 Automation",
+      "badge": "ANS",
+      "accent": "#e00",
+      "id": "ansible-playbook",
+      "targetUrl": "https://www.rcwittraining.in/ansible-playbook/"
+    },
+    {
+      "title": "Ansible Inventory",
+      "category": "DevOps \u2022 Automation",
+      "badge": "ANS",
+      "accent": "#e00",
+      "id": "ansible-inventory",
+      "targetUrl": "https://www.rcwittraining.in/ansible-inventory/"
+    },
+    {
+      "title": "Git Rebase & History",
+      "category": "DevOps \u2022 Git",
+      "badge": "GIT",
+      "accent": "#f05033",
+      "id": "git-rebase",
+      "targetUrl": "https://www.rcwittraining.in/git-rebase/"
+    },
+    {
+      "title": "Bash Scripting",
+      "category": "Programming \u2022 Bash",
+      "badge": "BASH",
+      "accent": "#4eaa25",
+      "id": "bash-scripting",
+      "targetUrl": "https://www.rcwittraining.in/bash-scripting/"
+    },
+    {
+      "title": "Bash Variables & Loops",
+      "category": "Programming \u2022 Bash",
+      "badge": "BASH",
+      "accent": "#4eaa25",
+      "id": "bash-variables",
+      "targetUrl": "https://www.rcwittraining.in/bash-variables/"
+    },
+    {
+      "title": "Python Data Structures",
+      "category": "Programming \u2022 Python",
+      "badge": "PY",
+      "accent": "#ffd343",
+      "id": "python-datastructures",
+      "targetUrl": "https://www.rcwittraining.in/python-datastructures/"
+    },
+    {
+      "title": "System Log Analysis",
+      "category": "Security \u2022 Logs",
+      "badge": "LOG",
+      "accent": "#ef405b",
+      "id": "log-analysis",
+      "targetUrl": "https://www.rcwittraining.in/log-analysis/"
+    },
+    {
+      "title": "Password Policy Audit",
+      "category": "Security \u2022 Compliance",
+      "badge": "SEC",
+      "accent": "#ef405b",
+      "id": "password-policy",
+      "targetUrl": "https://www.rcwittraining.in/password-policy/"
+    },
+    {
+      "title": "System Performance Analysis",
+      "category": "Linux \u2022 Monitoring",
+      "badge": "PERF",
+      "accent": "#0ba8ee",
+      "id": "performance-tuning",
+      "targetUrl": "https://www.rcwittraining.in/performance-tuning/"
+    },
+    {
+      "title": "Network Troubleshooting",
+      "category": "Linux \u2022 Monitoring",
+      "badge": "NET",
+      "accent": "#00bcd4",
+      "id": "network-troubleshooting",
+      "targetUrl": "https://www.rcwittraining.in/network-troubleshooting/"
+    },
+    {
+      "title": "Service Troubleshooting",
+      "category": "Linux \u2022 Monitoring",
+      "badge": "TROUBLE",
+      "accent": "#0ba8ee",
+      "id": "service-troubleshooting",
+      "targetUrl": "https://www.rcwittraining.in/service-troubleshooting/"
+    },
+    {
+      "title": "Vim Editor Basics",
+      "category": "Linux \u2022 Editors",
+      "badge": "VIM",
+      "accent": "#0ba8ee",
+      "id": "vim-basics",
+      "targetUrl": "https://www.rcwittraining.in/vim-basics/"
+    },
+    {
+      "title": "Environment Variables",
+      "category": "Linux \u2022 Shell",
+      "badge": "ENV",
+      "accent": "#0ba8ee",
+      "id": "environment-vars",
+      "targetUrl": "https://www.rcwittraining.in/environment-vars/"
+    },
+    {
+      "title": "Shell Aliases & History",
+      "category": "Linux \u2022 Shell",
+      "badge": "SH",
+      "accent": "#0ba8ee",
+      "id": "shell-aliases",
+      "targetUrl": "https://www.rcwittraining.in/shell-aliases/"
+    },
+    {
+      "title": "rsync File Transfer",
+      "category": "Linux \u2022 File Management",
+      "badge": "RSYNC",
+      "accent": "#0ba8ee",
+      "id": "rsync-transfer",
+      "targetUrl": "https://www.rcwittraining.in/rsync-transfer/"
+    },
+    {
+      "title": "Symbolic Links Drill",
+      "category": "Linux \u2022 Filesystem",
+      "badge": "LNK",
+      "accent": "#6366f1",
+      "id": "softlink-drill",
+      "targetUrl": "https://www.rcwittraining.in/softlink-drill/"
+    },
+    {
+      "title": "cron Syntax Drill",
+      "category": "Linux \u2022 Automation",
+      "badge": "CRON",
+      "accent": "#0ba8ee",
+      "id": "cron-drill",
+      "targetUrl": "https://www.rcwittraining.in/cron-drill/"
     }
   ]
 }

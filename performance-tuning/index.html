@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>System Performance Analysis · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "performance-tuning", "title": "System Performance Analysis", "category": "Linux • Monitoring", "badge": "PERF", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "mon-node-01", "user": "student", "intro": ["Diagnose system performance with monitoring commands."], "objectives": [{"name": "Load average", "desc": "Check with uptime.", "points": 25, "match": ["uptime"], "success": "✓ Load checked."}, {"name": "Memory", "desc": "Check memory with free -h.", "points": 25, "match": ["free\\s+-h"], "success": "✓ Memory checked."}, {"name": "Top processes", "desc": "Show with top or ps.", "points": 25, "match": ["top|ps\\s+aux"], "success": "✓ Processes shown."}, {"name": "Disk I/O", "desc": "Check with vmstat.", "points": 25, "match": ["vmstat"], "success": "✓ I/O checked."}], "hint": ["uptime", "free -h", "top", "vmstat 1 5"], "help": "uptime · free -h · top · ps aux · vmstat · iostat", "certTitle": "Performance Champion", "certDesc1": "for mastering performance analysis", "certDesc2": "with load, memory, and I/O.", "certChallenge": "performance analysis", "certFooter": "Linux Monitoring • Challenge", "headline": "System Performance Analysis", "lead": "Diagnose system performance with monitoring commands.", "brief": "System Performance Analysis", "briefCopy": "Diagnose system performance with monitoring commands.", "incident": "PERFORMANCE-TUNING · mon-node-01 · hands-on practice", "resultCopy": "You completed all objectives for System Performance Analysis.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "PERF", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>
