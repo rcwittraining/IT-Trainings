@@ -339,62 +339,75 @@
     var GOLD='#c9a227', GOLD_D='#9c7c14', NAVY='#0a234a', INK='#101b3b', MUT='#5f6c84';
     var lvl=levelOf(S.xp);
     var badgeCount=0; for(var k in S.badges) if(S.badges[k]) badgeCount++;
+    var qs=S.qs||0;
 
-    // ---------- paper (interior bio page) ----------
+    // ---------- paper ----------
     ctx.fillStyle='#f6f2e7';ctx.fillRect(0,0,W,H);
     ctx.strokeStyle='rgba(10,35,74,.045)';ctx.lineWidth=1;
-    for(var x=-H;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+H,H);ctx.stroke();}
-    for(var x=0;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-H,H);ctx.stroke();}
+    for(var x=-H;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+H,H);ctx.stroke();}
+    for(var x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-H,H);ctx.stroke();}
 
-    // ---------- gold crest ----------
-    var cx0=W/2, cy0=100, cr=44;
+    // ---------- gold frame ----------
+    ctx.strokeStyle=GOLD;ctx.lineWidth=2.5;ctx.strokeRect(26,26,W-52,H-52);
+    ctx.strokeStyle=GOLD;ctx.lineWidth=1;ctx.strokeRect(34,34,W-68,H-68);
+
+    // ---------- crest ----------
+    var cx0=W/2, cy0=104, cr=48;
     ctx.save();ctx.translate(cx0,cy0);
-    ctx.beginPath();ctx.arc(0,0,cr,0,Math.PI*2);ctx.strokeStyle=GOLD;ctx.lineWidth=4.5;ctx.stroke();
-    ctx.beginPath();ctx.arc(0,0,cr-7,0,Math.PI*2);ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(0,0,cr,0,Math.PI*2);ctx.strokeStyle=GOLD;ctx.lineWidth=5;ctx.stroke();
+    ctx.beginPath();ctx.arc(0,0,cr-8,0,Math.PI*2);ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;ctx.stroke();
     for(var i=0;i<24;i++){var a=i*Math.PI/12;ctx.beginPath();ctx.moveTo(Math.cos(a)*(cr-3),Math.sin(a)*(cr-3));ctx.lineTo(Math.cos(a)*(cr+5),Math.sin(a)*(cr+5));ctx.lineWidth=2.5;ctx.strokeStyle=GOLD;ctx.stroke();}
-    ctx.fillStyle=NAVY;ctx.font='900 28px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle=NAVY;ctx.font='900 30px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.fillText('RCW',0,2);
     ctx.restore();
 
     // ---------- header ----------
     ctx.fillStyle=NAVY;ctx.textAlign='center';
-    ctx.font='900 34px Georgia,serif';ctx.fillText('RCW IT TRAINING',W/2,180);
+    ctx.font='900 38px Georgia,serif';ctx.fillText('RCW IT TRAINING',W/2,196);
     ctx.fillStyle=GOLD_D;ctx.font='700 24px Georgia,serif';
-    ctx.fillText('SKILL PASSPORT',W/2,212);
+    ctx.fillText('SKILL PASSPORT',W/2,234);
+    ctx.fillStyle=MUT;ctx.font='600 14px Inter,Arial,sans-serif';
+    ctx.fillText('Certificate of Practice · '+(S.name||'Student')+' · Level '+lvl,W/2,262);
     ctx.strokeStyle=GOLD;ctx.lineWidth=2;
-    ctx.beginPath();ctx.moveTo(W/2-170,230);ctx.lineTo(W/2+170,230);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(W/2-180,282);ctx.lineTo(W/2+180,282);ctx.stroke();
 
     // ---------- photo box ----------
-    var px=60, py=248, pw=160, ph=164;
+    var px=70, py=308, pw=220, ph=270;
     ctx.fillStyle='#e8e2d0';ctx.fillRect(px,py,pw,ph);
     ctx.strokeStyle=NAVY;ctx.lineWidth=3;ctx.strokeRect(px,py,pw,ph);
-    ctx.strokeStyle=NAVY;ctx.lineWidth=1;ctx.strokeRect(px+6,py+6,pw-12,ph-12);
-    ctx.fillStyle=NAVY;ctx.font='900 64px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText((S.name||'S').trim().charAt(0).toUpperCase(), px+pw/2, py+ph/2-4);
+    ctx.strokeStyle=NAVY;ctx.lineWidth=1;ctx.strokeRect(px+7,py+7,pw-14,ph-14);
+    ctx.fillStyle=NAVY;ctx.font='900 100px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText((S.name||'S').trim().charAt(0).toUpperCase(), px+pw/2, py+ph/2-8);
+    ctx.fillStyle=MUT;ctx.font='600 13px Inter,Arial,sans-serif';
+    ctx.fillText('PRACTITIONER', px+pw/2, py+ph-28);
 
-    // ---------- fields ----------
-    var fx=260, fy=252, lw=150;
+    // ---------- fields (2 columns) ----------
     var fields=[
-      ['NAME',  (S.name||'Student')],
-      ['LEVEL', 'Level '+lvl],
-      ['XP',    S.xp+' XP'],
-      ['LABS',  S.labs+' completed'],
-      ['STREAK',S.streak+' day'+(S.streak===1?'':'s')],
-      ['BADGES',badgeCount+' earned']
+      ['NAME',      (S.name||'Student')],
+      ['LEVEL',     'Level '+lvl],
+      ['XP',        S.xp+' XP'],
+      ['LABS',      S.labs+' completed'],
+      ['QUESTIONS', qs+' answered'],
+      ['STREAK',    S.streak+' day'+(S.streak===1?'':'s')],
+      ['BADGES',    badgeCount+' earned'],
+      ['RANK',      rankOf(S.xp)]
     ];
+    var col1x=340, col2x=760, fy=312;
     ctx.textAlign='left';
     fields.forEach(function(f,i){
-      var y=fy+i*30;
+      var col=i<4?0:1, row=i%4;
+      var x=col===0?col1x:col2x;
+      var y=fy+row*64;
       ctx.fillStyle=MUT;ctx.font='700 12px Inter,Arial,sans-serif';
-      ctx.fillText(f[0],fx,y);
-      ctx.fillStyle=INK;ctx.font='800 19px Inter,Arial,sans-serif';
-      ctx.fillText(f[1],fx+lw,y);
+      ctx.fillText(f[0],x,y);
+      ctx.fillStyle=INK;ctx.font='800 21px Inter,Arial,sans-serif';
+      ctx.fillText(f[1],x,y+24);
     });
 
     // ---------- heatmap ----------
-    var hmX=60, hmY=460, cell=9, gap=3, cols=20, rows=7, d=new Date();
-    ctx.fillStyle=MUT;ctx.font='700 12px Inter,Arial,sans-serif';
-    ctx.fillText('PRACTICE ACTIVITY',hmX,hmY-8);
+    var hmX=70, hmY=620, cell=11, gap=4, cols=28, rows=7, d=new Date();
+    ctx.fillStyle=MUT;ctx.font='700 13px Inter,Arial,sans-serif';
+    ctx.fillText('PRACTICE ACTIVITY (last 28 weeks)',hmX,hmY-10);
     for(var c=cols-1;c>=0;c--){
       for(var r=0;r<rows;r++){
         var daysBack=(cols-1-c)*7+(6-r);
@@ -404,24 +417,33 @@
         roundRect(ctx,hmX+c*(cell+gap),hmY+r*(cell+gap),cell,cell,2);ctx.fill();
       }
     }
+    // legend
+    var lgx=hmX+cols*(cell+gap)+30;
+    ctx.fillStyle=MUT;ctx.font='600 12px Inter,Arial,sans-serif';
+    ctx.fillText('less',lgx,hmY+12);
+    [0,1,2,3,4].forEach(function(i){
+      ctx.fillStyle=['#ddd6c2','#a8d3f5','#4ba3f0','#078be8','#0758c8'][i];
+      roundRect(ctx,lgx+34+i*18,hmY,12,12,2);ctx.fill();
+    });
+    ctx.fillStyle=MUT;ctx.fillText('more',lgx+34+5*18+6,hmY+12);
 
     // ---------- footer ----------
-    ctx.fillStyle=GOLD_D;ctx.font='700 13px Georgia,serif';ctx.textAlign='center';
-    ctx.fillText('Learn. Practice. Grow. · rcwittraining.in',W/2,558);
+    ctx.fillStyle=GOLD_D;ctx.font='700 14px Georgia,serif';ctx.textAlign='center';
+    ctx.fillText('Learn. Practice. Grow. · rcwittraining.in',W/2,760);
 
-    // ---------- MRZ (machine readable zone) ----------
-    var mzy=H-54, mzh=54;
+    // ---------- MRZ ----------
+    var mzy=H-60, mzh=60;
     ctx.fillStyle='#0d1b2a';ctx.fillRect(0,mzy,W,mzh);
     var initials=(S.name||'Student').trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
     var mrz = 'P<RCW<'+initials+'<<LEVEL<'+lvl+'<'+S.xp+'XP<<<<<<<<<<<<<<<<<<<<';
     var mrz2 = 'SKILLPASSPORT<'+S.labs+'LABS<'+S.streak+'STREAK<'+badgeCount+'BADGES<<<<<<<<<<<<<';
     ctx.fillStyle='#e8e6dd';ctx.font='600 22px "Courier New",monospace';ctx.textAlign='left';
-    ctx.fillText(mrz, 40, mzy+22);
-    ctx.fillText(mrz2, 40, mzy+44);
+    ctx.fillText(mrz, 44, mzy+24);
+    ctx.fillText(mrz2, 44, mzy+46);
   }
 
   function buildPassportCanvas(){
-    var W=1200,H=630,cv=document.createElement('canvas');cv.width=W;cv.height=H;
+    var W=1200,H=850,cv=document.createElement('canvas');cv.width=W;cv.height=H;
     drawPassportCard(cv.getContext('2d'),W,H);
     return cv;
   }
