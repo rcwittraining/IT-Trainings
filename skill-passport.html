@@ -427,12 +427,16 @@
     });
     ctx.fillStyle=MUT;ctx.fillText('more',lgx+34+5*18+6,hmY+12);
 
-    // ---------- footer ----------
-    ctx.fillStyle=GOLD_D;ctx.font='700 14px Georgia,serif';ctx.textAlign='center';
-    ctx.fillText('Learn. Practice. Grow. · rcwittraining.in',W/2,760);
+    // ---------- founder signature ----------
+    ctx.strokeStyle='#5f6c84';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(W/2-110,744);ctx.lineTo(W/2+110,744);ctx.stroke();
+    ctx.fillStyle=INK;ctx.font='italic 700 22px Georgia,serif';ctx.textAlign='center';
+    ctx.fillText('Pradeep Raju',W/2,768);
+    ctx.fillStyle=MUT;ctx.font='600 13px Inter,Arial,sans-serif';
+    ctx.fillText('Founder · RCW IT Training',W/2,786);
 
     // ---------- MRZ ----------
-    var mzy=H-60, mzh=60;
+    var mzy=H-58, mzh=58;
     ctx.fillStyle='#0d1b2a';ctx.fillRect(0,mzy,W,mzh);
     var initials=(S.name||'Student').trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
     var mrz = 'P<RCW<'+initials+'<<LEVEL<'+lvl+'<'+S.xp+'XP<<<<<<<<<<<<<<<<<<<<';
