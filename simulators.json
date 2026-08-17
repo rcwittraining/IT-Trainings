@@ -50,6 +50,14 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-4/"
     },
     {
+      "title": "Kubernetes Cluster Setup Challenge",
+      "category": "Linux • Kubernetes",
+      "badge": "K8S",
+      "accent": "#326ce5",
+      "id": "kubernetes-cluster-setup",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-5/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
