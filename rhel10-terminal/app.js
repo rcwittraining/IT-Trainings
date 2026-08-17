@@ -29,6 +29,13 @@
 
   const files = {
     "/etc/hostname": "rhel10.rcw.local\n",
+    "/etc/redhat-release": "Red Hat Enterprise Linux release 10.0 (Plow)\n",
+    "/etc/os-release": "NAME=\"Red Hat Enterprise Linux\"\nVERSION=\"10.0 (Plow)\"\nID=\"rhel\"\nID_LIKE=\"fedora\"\nVERSION_ID=\"10.0\"\nPLATFORM_ID=\"platform:el10\"\nPRETTY_NAME=\"Red Hat Enterprise Linux 10.0 (Plow)\"\nANSI_COLOR=\"0;31\"\nCPE_NAME=\"cpe:/o:redhat:enterprise_linux:10::baseos\"\n",
+    "/etc/issue": "\\S\nKernel \\r on an \\m\n\n",
+    "/etc/motd": "\nWelcome to the RCW IT Training RHEL 10 practice environment.\nPractice freely — this system is a simulated sandbox.\n\n",
+    "/etc/shells": "/bin/sh\n/bin/bash\n/usr/bin/sh\n/usr/bin/bash\n/usr/bin/tmux\n/bin/tmux\n",
+    "/proc/version": "Linux version 6.12.0-55.el10.x86_64 (mockbuild@rhel10) (gcc version 14.2.1 20250103 (Red Hat 14.2.1-6)) #1 SMP PREEMPT_DYNAMIC Wed Jul 15 10:00:00 UTC 2026\n",
+    "/etc/yum.repos.d/redhat.repo": "[example-BaseOS]\nname = RHEL 10 BaseOS\nbaseurl = https://cdn.redhat.com/content/dist/rhel10/10/x86_64/baseos/os\nenabled = 1\n\n[example-AppStream]\nname = RHEL 10 AppStream\nbaseurl = https://cdn.redhat.com/content/dist/rhel10/10/x86_64/appstream/os\nenabled = 1\n",
     "/etc/hosts": "127.0.0.1   localhost localhost.localdomain localhost4\n192.168.1.10 rhel10.rcw.local rhel10\n",
     "/etc/resolv.conf": "search rcw.local\nnameserver 192.168.1.1\n",
     "/etc/passwd":
@@ -425,9 +432,20 @@
       case "passwd": handlePasswd(args); break;
       case "groupadd": handleGroupadd(args); break;
       case "groupdel": handleGroupdel(args); break;
-      case "hostname": appendOutput(hostname); break;
+      case "hostname": if (args.includes("-I")) appendOutput("192.168.1.10"); else appendOutput(hostname); break;
       case "hostnamectl": handleHostnamectl(args); break;
+      case "timedatectl": handleTimedatectl(args); break;
+      case "localectl": handleLocalectl(args); break;
       case "uname": handleUname(args); break;
+      case "which": case "whereis": case "type": handleWhich(args, command); break;
+      case "md5sum": handleHash(args, "md5"); break;
+      case "sha256sum": handleHash(args, "sha256"); break;
+      case "uniq": handleUniq(args); break;
+      case "tr": handleTr(args, cmd); break;
+      case "chage": handleChage(args); break;
+      case "env": handleEnv(); break;
+      case "export": appendOutput("(variable exported)"); break;
+      case "kill": case "pkill": case "killall": handleKill(args, command); break;
       case "uptime": appendOutput(" 10:42:11 up  3:17,  1 user,  load average: 0.08, 0.12, 0.09"); break;
       case "date": appendOutput("Sun Aug 16 10:42:11 IST 2026"); break;
       case "free": appendOutput("               total        used        free      shared  buff/cache   available\nMem:         8153824     1204120     5232216       84020     1717488     6610940\nSwap:        3145728           0     3145728"); break;
@@ -892,6 +910,102 @@
     appendOutput("   Static hostname: " + hostname + "\n         Icon name: computer-vm\n           Chassis: vm\n  Operating System: Red Hat Enterprise Linux 10.0\n            Kernel: Linux 6.12.0-55.el10.x86_64\n      Architecture: x86-64");
   }
 
+  function handleTimedatectl(args) {
+    const joined = args.join(" ");
+    if (/set-timezone/.test(joined)) {
+      appendOutput("timezone set to " + (args[args.length - 1] || "UTC"));
+      return;
+    }
+    if (/set-ntp|set-ntp true/.test(joined)) { appendOutput("NTP synchronization enabled"); return; }
+    appendOutput("               Local time: Sun 2026-08-16 10:42:11 IST\n           Universal time: Sun 2026-08-16 05:12:11 UTC\n                 RTC time: Sun 2026-08-16 05:12:11\n                Time zone: Asia/Kolkata (IST, +0530)\nSystem clock synchronized: yes\n              NTP service: active\n          RTC in local TZ: no");
+  }
+
+  function handleLocalectl(args) {
+    const joined = args.join(" ");
+    if (/set-locale/.test(joined)) { appendOutput("locale set to " + (args[args.length - 1] || "en_US.UTF-8")); return; }
+    appendOutput("   System Locale: LANG=en_US.UTF-8\n       VC Keymap: us\n      X11 Layout: us");
+  }
+
+  function handleWhich(args, command) {
+    const target = args[0];
+    if (!target) { appendOutput(command + ": missing operand", "error"); return; }
+    if (command === "whereis") { appendOutput(target + ": /usr/bin/" + target + " /usr/share/man/man1/" + target + ".1.gz"); return; }
+    if (command === "type") { appendOutput(target + " is /usr/bin/" + target); return; }
+    // which
+    if (target === "ls" || target === "cat" || target === "grep" || target === "sed" || target === "awk" || target === "tar" || target === "dnf" || target === "systemctl" || target === "podman" || target === "python3" || target === "vim" || target === "tmux" || target === "git" || target === "ssh" || target === "scp") {
+      appendOutput("/usr/bin/" + target);
+    } else {
+      appendOutput("which: no " + target + " in (/usr/local/bin:/usr/bin:/bin)");
+    }
+  }
+
+  function handleHash(args, algo) {
+    const target = args.filter((a) => !a.startsWith("-")).pop() || "";
+    const content = files[resolve(target)];
+    if (!content && !Object.prototype.hasOwnProperty.call(files, resolve(target))) { appendOutput(algo + "sum: " + target + ": No such file or directory", "error"); return; }
+    // deterministic fake hash
+    let h = 0;
+    const s = (content || target);
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    const hex = h.toString(16).padStart(algo === "md5" ? 32 : 64, "0").slice(0, algo === "md5" ? 32 : 64);
+    appendOutput(hex + "  " + target);
+  }
+
+  function handleUniq(args) {
+    const target = args.filter((a) => !a.startsWith("-")).pop() || "";
+    const content = files[resolve(target)];
+    if (!content) { appendOutput("uniq: " + target + ": No such file or directory", "error"); return; }
+    const seen = new Set();
+    content.split("\n").filter(Boolean).forEach((l) => { if (!seen.has(l)) { seen.add(l); appendOutput(l); } });
+  }
+
+  function handleTr(args, cmd) {
+    // tr 'a-z' 'A-Z' < file  (or via pipe, not supported; accept a file after <)
+    const m = cmd.match(/<\s*(\S+)/);
+    const target = m ? m[1] : null;
+    if (!target) { appendOutput("tr: reading stdin is not supported here — use: tr 'a-z' 'A-Z' < file", "info"); return; }
+    const content = files[resolve(target)];
+    if (!content) { appendOutput("tr: " + target + ": No such file or directory", "error"); return; }
+    const set1 = args[0] || "";
+    const set2 = args[1] || "";
+    if (set1 === "a-z" && set2 === "A-Z") appendMultiline(content.toUpperCase());
+    else if (set1 === "A-Z" && set2 === "a-z") appendMultiline(content.toLowerCase());
+    else appendOutput(content);
+  }
+
+  function handleChage(args) {
+    const user = args.filter((a) => !a.startsWith("-")).pop();
+    if (!user) { appendOutput("chage: missing user name", "error"); return; }
+    if (!users.has(user)) { appendOutput("chage: user '" + user + "' does not exist in /etc/passwd", "error"); return; }
+    const listMode = args.includes("-l");
+    // Handle -M 90 and -M90 forms
+    const mIdx = args.findIndex((a) => a.startsWith("-M"));
+    if (mIdx >= 0 && !listMode) {
+      const attached = args[mIdx].slice(2);
+      const days = parseInt(attached || args[mIdx + 1], 10);
+      if (!isNaN(days)) { appendOutput("chage: maximum password age set to " + days + " days for user " + user); return; }
+    }
+    if (!listMode && (args.includes("-m") || args.includes("-W") || args.includes("-I"))) {
+      appendOutput("chage: password aging settings updated for user " + user);
+      return;
+    }
+    appendOutput("Last password change                                    : Aug 01, 2026\nPassword expires                                        : never\nPassword inactive                                       : never\nAccount expires                                         : never\nMinimum number of days between password change          : 0\nMaximum number of days between password change          : 99999\nNumber of days of warning before password expires       : 7");
+  }
+
+  function handleEnv() {
+    appendOutput("SHELL=/bin/bash\nUSER=student\nHOME=/home/student\nPATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin\nLANG=en_US.UTF-8\nPWD=" + cwd);
+  }
+
+  function handleKill(args, command) {
+    const target = args.filter((a) => !a.startsWith("-")).pop();
+    if (!target) { appendOutput(command + ": missing operand", "error"); return; }
+    if (command === "pkill" || command === "killall") {
+      appendOutput("(sent SIGTERM to processes matching '" + target + "')");
+      return;
+    }
+    appendOutput("(sent SIGTERM to process " + target + ")");
+  }
+
   function handleUname(args) {
     if (args.includes("-r")) appendOutput("6.12.0-55.el10.x86_64");
     else if (args.includes("-a")) appendOutput("Linux rhel10.rcw.local 6.12.0-55.el10.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Jul 15 10:00:00 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux");
@@ -1245,14 +1359,14 @@
   function handleHelp(args) {
     const topic = args[0] ? args[0].toLowerCase() : "";
     const guides = {
-      tools: "Essential tools:\n  grep PATTERN file        search text\n  sed 's/a/b/g' file       substitute text\n  awk '{print $1}' file    print a column\n  sort file / cut -d: -f1 file\n  diff a b / find . / wc -l file\n  tar -czf out.tar.gz dir/ / gzip file",
+      tools: "Essential tools:\n  grep PATTERN file        search text\n  sed 's/a/b/g' file       substitute text\n  awk '{print $1}' file    print a column\n  sort file / cut -d: -f1 file\n  uniq file / tr 'a-z' 'A-Z' < file\n  diff a b / find . / wc -l file\n  md5sum file / sha256sum file\n  which cmd / whereis cmd / type cmd\n  tar -czf out.tar.gz dir/ / gzip file",
       scripts: "Shell scripts:\n  cat > script.sh <<EOF\n    #!/bin/bash\n    echo hello\n  EOF\n  chmod +x script.sh\n  bash script.sh",
-      system: "Operate systems:\n  systemctl status sshd\n  systemctl enable --now httpd\n  journalctl -u sshd\n  timedatectl / hostnamectl / uname -a\n  ps aux / uptime / free",
+      system: "Operate systems:\n  systemctl status sshd\n  systemctl enable --now httpd\n  journalctl -u sshd\n  timedatectl / localectl / hostnamectl / uname -a\n  ps aux / top / uptime / free\n  kill <pid> / pkill <name>",
       storage: "Local storage (LVM):\n  lsblk / fdisk -l\n  pvcreate /dev/sdb\n  vgcreate vg_data /dev/sdb\n  lvcreate -n lv_app -L 10G vg_data\n  lvextend -r -l +100%FREE /dev/vg_data/lv_app",
       filesystem: "File systems:\n  mkfs.xfs /dev/sdb1\n  mkfs.ext4 /dev/sdb2\n  mount /dev/sdb1 /mnt\n  umount /mnt / findmnt / df -h\n  mkswap /dev/sdb3 / swapon -a",
       deploy: "Deploy & maintain:\n  dnf install <pkg> / dnf search <pkg>\n  rpm -q <pkg> / rpm -qa / rpm -qi <pkg>\n  subscription-manager status\n  ssh-keygen -t ed25519",
-      network: "Networking:\n  nmcli con show / nmcli dev status\n  ip addr / ip route / ping host\n  hostnamectl set-hostname new.name\n  ss -tlnp / curl URL",
-      users: "Users & groups:\n  useradd -m -s /bin/bash anna\n  passwd anna / usermod -aG wheel anna\n  groupadd devs / groupdel devs\n  getent passwd anna / id anna",
+      network: "Networking:\n  nmcli con show / nmcli dev status\n  ip addr / ip route / ping host\n  hostname -I / hostnamectl set-hostname new.name\n  ss -tlnp / curl URL",
+      users: "Users & groups:\n  useradd -m -s /bin/bash anna\n  passwd anna / usermod -aG wheel anna\n  chage -l anna / chage -M 90 anna\n  groupadd devs / groupdel devs\n  getent passwd anna / id anna",
       security: "Security & SELinux:\n  firewall-cmd --list-all\n  firewall-cmd --add-service=http --reload\n  sestatus / getenforce / setenforce 0\n  semanage fcontext -a -t httpd_sys_content_t \"/web(/.*)?\"\n  restorecon -Rv /web / chcon / ls -Z",
       containers: "Containers (podman):\n  podman search nginx\n  podman pull nginx\n  podman run -d --name web -p 8080:80 nginx\n  podman ps / podman stop web / podman rm web"
     };
@@ -1262,19 +1376,19 @@
     }
     appendOutput(
       "RHEL 10 practice terminal — command reference (type 'help <topic>'):\n" +
-      "  help tools        grep, sed, awk, sort, cut, diff, find, tar, gzip\n" +
+      "  help tools        grep, sed, awk, sort, cut, uniq, tr, md5sum, which\n" +
       "  help scripts      write & run shell scripts\n" +
-      "  help system       systemctl, journalctl, hostnamectl, ps\n" +
+      "  help system       systemctl, journalctl, timedatectl, hostnamectl, ps\n" +
       "  help storage      LVM: pvcreate, vgcreate, lvcreate, lvextend\n" +
       "  help filesystem   mkfs, mount, umount, mkswap, findmnt, df\n" +
       "  help deploy       dnf, rpm, subscription-manager, ssh-keygen\n" +
       "  help network      nmcli, ip, hostnamectl, ss, curl\n" +
-      "  help users        useradd, passwd, usermod, groupadd, getent\n" +
+      "  help users        useradd, passwd, usermod, chage, groupadd, getent\n" +
       "  help security     firewall-cmd, SELinux, semanage, restorecon\n" +
       "  help containers   podman search/pull/run/ps\n\n" +
       "Shell utilities: pwd ls cd cat head tail touch mkdir rm cp mv echo\n" +
-      "  grep wc sort cut sed awk find file stat ln chmod chown tar gzip diff\n" +
-      "  df du whoami id history clear man <cmd>",
+      "  grep wc sort cut sed awk uniq tr find file stat ln chmod chown tar gzip\n" +
+      "  diff md5sum sha256sum which env df du whoami id history clear man <cmd>",
       "info"
     );
   }
