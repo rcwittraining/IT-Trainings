@@ -82,6 +82,14 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-8/"
     },
     {
+      "title": "RHEL 10 Practice Terminal",
+      "category": "Red Hat • Open Sandbox • RHCSA",
+      "badge": "RHEL",
+      "accent": "#d71920",
+      "id": "rhel10-practice-terminal",
+      "targetUrl": "https://www.rcwittraining.in/rhel10-terminal/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",

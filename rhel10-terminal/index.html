@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>RHEL 10 Practice Terminal · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Sandbox-specific overrides */
+    .topic-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+    .topic-list li{display:flex;gap:10px;align-items:flex-start}
+    .topic-num{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:rgba(11,168,238,.14);
+      border:1px solid rgba(11,168,238,.4);color:var(--lime,#9ee636);font-weight:800;font-size:11px;
+      display:grid;place-items:center}
+    .topic-body strong{display:block;font-size:13px;color:var(--ink,#e8edf7);font-weight:800;margin-bottom:2px}
+    .topic-body span{display:block;font-size:11.5px;line-height:1.45;color:var(--muted,#8faed1)}
+    .topic-body code{color:var(--cyan,#4bd7ff);font-family:ui-monospace,monospace;font-size:11px}
+    .sandbox-terminal .terminal-body{min-height:680px;max-height:780px}
+    .open-hint{font-size:12px;color:var(--muted,#8faed1);margin-top:14px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="RCW IT Training home">
+      <span class="brand-mark" aria-hidden="true"><span>&gt;_</span></span>
+      <span class="brand-copy"><strong>RCW</strong><small>IT TRAINING</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="secure-chip"><span class="status-dot"></span> Free sandbox session</span>
+      <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter focus mode" title="Focus mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen welcome-screen is-active" id="welcomeScreen" aria-labelledby="welcomeTitle">
+      <div class="welcome-grid">
+        <div class="welcome-copy">
+          <span class="eyebrow"><span class="eyebrow-icon">⌁</span> Red Hat Enterprise Linux 10 · RHCSA practice</span>
+          <h1 id="welcomeTitle">The open terminal.<br><span>Your RHCSA practice ground.</span></h1>
+          <p class="lead">A free, open RHEL 10 environment with no objectives and no timer. Explore the filesystem, manage users and storage, configure networking and security — practice every command you need for the RHCSA exam, as many times as you like.</p>
+          <div class="incident-chip">RHEL 10 · kernel 6.12 · ~70 commands · full RHCSA command coverage</div>
+          <div class="feature-row" aria-label="Terminal highlights">
+            <div><strong>10</strong><span>RHCSA domains</span></div>
+            <div><strong>70+</strong><span>commands</span></div>
+            <div><strong>∞</strong><span>free practice</span></div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-card-top">
+            <span class="terminal-mini"><i></i><i></i><i></i></span>
+            <span>Sandbox session</span>
+          </div>
+          <div class="entry-card-body">
+            <div class="challenge-emblem" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="40" rx="4"/><path d="M16 24h8M16 34h14"/><path d="M20 20v8"/></svg>
+            </div>
+            <h2>RHEL 10 Practice Terminal</h2>
+            <p>No account, no objectives, no scoring — just a realistic Red Hat Enterprise Linux 10 shell to practice in.</p>
+            <button class="primary-button" id="launchButton" type="button">
+              Launch terminal
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <p class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Your terminal runs entirely in this browser. No account is required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen lab-screen" id="labScreen" aria-labelledby="labTitle">
+      <div class="lab-topline">
+        <div>
+          <span class="eyebrow">Open sandbox · Red Hat Enterprise Linux 10</span>
+          <h1 id="labTitle">RHEL 10 Practice Terminal</h1>
+        </div>
+        <div class="session-metrics" aria-label="Session metrics">
+          <div><span>SESSION</span><strong id="sessionTime">00:00</strong></div>
+          <div><span>COMMANDS</span><strong><b id="cmdCount">0</b></strong></div>
+        </div>
+      </div>
+
+      <div class="lab-layout rca-layout sandbox-terminal">
+        <aside class="brief-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">Reference</span>
+              <h2>RHCSA exam domains</h2>
+            </div>
+            <span class="difficulty">ALL LEVELS</span>
+          </div>
+          <p class="brief-copy">Type <code>help</code> for the full command list, or <code>help &lt;topic&gt;</code> for a specific domain. Practice freely — nothing is scored.</p>
+
+          <ol class="topic-list">
+            <li><span class="topic-num">1</span><div class="topic-body"><strong>Essential tools</strong><span><code>grep sed awk sort cut diff tar gzip find</code></span></div></li>
+            <li><span class="topic-num">2</span><div class="topic-body"><strong>Shell scripts</strong><span><code>cat &gt; script.sh &lt;&lt;EOF … chmod +x … bash script.sh</code></span></div></li>
+            <li><span class="topic-num">3</span><div class="topic-body"><strong>Operate systems</strong><span><code>systemctl journalctl timedatectl hostnamectl</code></span></div></li>
+            <li><span class="topic-num">4</span><div class="topic-body"><strong>Local storage</strong><span><code>fdisk lsblk pvcreate vgcreate lvextend mkfs mount</code></span></div></li>
+            <li><span class="topic-num">5</span><div class="topic-body"><strong>File systems</strong><span><code>mkfs.xfs mkfs.ext4 mount umount findmnt df</code></span></div></li>
+            <li><span class="topic-num">6</span><div class="topic-body"><strong>Deploy &amp; maintain</strong><span><code>dnf rpm subscription-manager ssh-keygen</code></span></div></li>
+            <li><span class="topic-num">7</span><div class="topic-body"><strong>Networking</strong><span><code>nmcli ip hostname ping ss firewall-cmd</code></span></div></li>
+            <li><span class="topic-num">8</span><div class="topic-body"><strong>Users &amp; groups</strong><span><code>useradd usermod passwd groupadd getent id</code></span></div></li>
+            <li><span class="topic-num">9</span><div class="topic-body"><strong>Security &amp; SELinux</strong><span><code>semanage restorecon chcon getenforce setsebool</code></span></div></li>
+            <li><span class="topic-num">10</span><div class="topic-body"><strong>Containers</strong><span><code>podman search pull run ps images</code></span></div></li>
+          </ol>
+
+          <div class="open-hint">💡 Everything is simulated locally and resets on refresh. Use <code>↑</code>/<code>↓</code> for history.</div>
+        </aside>
+
+        <div class="terminal-card">
+          <div class="terminal-bar">
+            <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="terminal-title">student@rhel10 — bash</div>
+            <div class="terminal-status"><span></span>RHEL 10 · SIMULATED</div>
+          </div>
+          <div class="terminal-body" id="terminalBody" role="log" aria-live="polite" aria-label="RHEL 10 terminal output">
+            <div class="terminal-welcome">
+              <pre aria-hidden="true">  ____   _______        __
+ |  _ \ / ___\\ \      / /
+ | |_) | |    \ \ /\ / /
+ |  _ <| |___  \ V  V /
+ |_| \_\\____|  \_/\_/   </pre>
+              <p>Red Hat Enterprise Linux 10 — Practice Terminal</p>
+              <small>Open shell. Type <b>help</b> to list all commands, <b>help &lt;topic&gt;</b> for a domain guide.</small>
+            </div>
+            <div id="terminalOutput"></div>
+            <form class="terminal-input-line" id="terminalForm" autocomplete="off">
+              <label for="commandInput" aria-label="Command prompt"><span class="prompt-user" id="promptUser">[student@rhel10</span><span class="prompt-path" id="promptPath"> ~]$</span></label>
+              <input id="commandInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Linux command" enterkeyhint="send">
+            </form>
+          </div>
+          <div class="terminal-footer">
+            <span><kbd>Enter</kbd> run command</span>
+            <span><kbd>↑</kbd><kbd>↓</kbd> command history</span>
+            <span class="footer-safe"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Safe simulation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span></span><p></p></div>
+  <script src="app.js"></script>
+</body>
+</html>
