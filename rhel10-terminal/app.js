@@ -276,19 +276,27 @@
     event.preventDefault();
     const rawCommand = commandInput.value.trim();
     commandInput.value = "";
+
+    // cat > file typing mode: an empty line finishes it (like Ctrl+D), a non-empty line is content
+    if (catInputTarget) {
+      appendCommand(rawCommand);
+      commandHistory.push(rawCommand);
+      if (!rawCommand) {
+        finishCatInput();
+        scrollTerminal();
+        return;
+      }
+      catInputLines.push(rawCommand);
+      scrollTerminal();
+      return;
+    }
+
     if (!rawCommand) return;
     appendCommand(rawCommand);
     commandHistory.push(rawCommand);
     historyIndex = commandHistory.length;
     commandCount += 1;
     cmdCountEl.textContent = String(commandCount);
-
-    // cat > file input mode (type lines, finish with Ctrl+D)
-    if (catInputTarget) {
-      catInputLines.push(rawCommand);
-      scrollTerminal();
-      return;
-    }
 
     // heredoc
     if (heredocDelimiter) {
@@ -410,13 +418,13 @@
       return;
     }
 
-    // cat > file  or  cat >> file — enter input mode (finish with Ctrl+D)
-    redir = rawCommand.match(/^cat\s+(>>?)\s*(\S+)\s*$/);
+    // cat > file  or  cat >> file — enter input mode (finish with an empty line or Ctrl+D)
+    redir = rawCommand.match(/^cat\s*(>>?)\s*(\S+)\s*$/);
     if (redir) {
       catInputTarget = resolve(redir[2]);
       catInputAppend = redir[1] === ">>";
       catInputLines = [];
-      appendOutput("(typing mode — enter your lines, then press Ctrl+D to save to " + redir[2] + ")", "info");
+      appendOutput("(typing mode — enter your lines, then press Enter on an empty line to save to " + redir[2] + ")", "info");
       return;
     }
 
@@ -581,11 +589,17 @@
   }
 
   function handleCat(args) {
-    const target = args.filter((a) => !a.startsWith("-")).pop() || "";
-    const path = resolve(target);
-    if (isDir(path)) { appendOutput("cat: " + target + ": Is a directory", "error"); return; }
-    if (Object.prototype.hasOwnProperty.call(files, path)) appendMultiline(files[path].replace(/\n$/, ""));
-    else appendOutput("cat: " + target + ": No such file or directory", "error");
+    const targets = args.filter((a) => !a.startsWith("-"));
+    if (!targets.length) {
+      appendOutput("cat: no input files\nUsage: cat <file>  (read a file)  or  cat > <file>  (create a file, finish with an empty line)");
+      return;
+    }
+    targets.forEach((t) => {
+      const path = resolve(t);
+      if (isDir(path)) { appendOutput("cat: " + t + ": Is a directory", "error"); return; }
+      if (Object.prototype.hasOwnProperty.call(files, path)) appendMultiline(files[path].replace(/\n$/, ""));
+      else appendOutput("cat: " + t + ": No such file or directory", "error");
+    });
   }
 
   function handleHead(args) {
