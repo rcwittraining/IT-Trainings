@@ -138,6 +138,22 @@
       "targetUrl": "https://www.rcwittraining.in/python-challenge/"
     },
     {
+      "title": "Networking Fundamentals Challenge",
+      "category": "Networking • Troubleshooting",
+      "badge": "NET",
+      "accent": "#00bcd4",
+      "id": "networking-fundamentals",
+      "targetUrl": "https://www.rcwittraining.in/networking-challenge/"
+    },
+    {
+      "title": "Cybersecurity Challenge",
+      "category": "Security • Incident Response",
+      "badge": "SEC",
+      "accent": "#ef405b",
+      "id": "cybersecurity",
+      "targetUrl": "https://www.rcwittraining.in/cybersecurity-challenge/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
