@@ -66,6 +66,14 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-6/"
     },
     {
+      "title": "LVM Extend Challenge",
+      "category": "Linux • Storage",
+      "badge": "LVM",
+      "accent": "#f5a623",
+      "id": "lvm-extend",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-7/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
