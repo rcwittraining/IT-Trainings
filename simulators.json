@@ -58,6 +58,14 @@
       "targetUrl": "https://www.rcwittraining.in/linux-challenge-5/"
     },
     {
+      "title": "Nginx Reverse Proxy Challenge",
+      "category": "Linux • Web Server",
+      "badge": "NGINX",
+      "accent": "#0c9c51",
+      "id": "nginx-reverse-proxy",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-6/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
