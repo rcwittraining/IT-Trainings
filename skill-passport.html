@@ -429,11 +429,13 @@
 
     // ---------- founder signature ----------
     ctx.strokeStyle='#5f6c84';ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.moveTo(W/2-110,744);ctx.lineTo(W/2+110,744);ctx.stroke();
-    ctx.fillStyle=INK;ctx.font='italic 700 22px Georgia,serif';ctx.textAlign='center';
-    ctx.fillText('Pradeep Raju',W/2,768);
-    ctx.fillStyle=MUT;ctx.font='600 13px Inter,Arial,sans-serif';
-    ctx.fillText('Founder · RCW IT Training',W/2,786);
+    ctx.beginPath();ctx.moveTo(W/2-140,756);ctx.lineTo(W/2+140,756);ctx.stroke();
+    if (sigImg && sigImg.complete && sigImg.naturalWidth) {
+      var sw=260, sh=sw*(sigImg.naturalHeight/sigImg.naturalWidth);
+      ctx.drawImage(sigImg, W/2-sw/2, 756-sh+8, sw, sh);
+    }
+    ctx.fillStyle=MUT;ctx.font='600 13px Inter,Arial,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Founder · RCW IT Training',W/2,776);
 
     // ---------- MRZ ----------
     var mzy=H-58, mzh=58;
@@ -451,6 +453,8 @@
     drawPassportCard(cv.getContext('2d'),W,H);
     return cv;
   }
+
+  var sigImg=new Image();sigImg.src='signature.png';
 
   document.getElementById('shareProfile').onclick=function(){
     var pubUrl = document.getElementById('pubLink').textContent || '';

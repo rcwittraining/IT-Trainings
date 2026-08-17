@@ -175,8 +175,12 @@
     // ---------- signature + stamp ----------
     ctx.strokeStyle='#5f6c84';ctx.lineWidth=1.5;
     ctx.beginPath();ctx.moveTo(120,560);ctx.lineTo(340,560);ctx.stroke();
+    if (sigImg && sigImg.complete && sigImg.naturalWidth) {
+      var sw=220, sh=sw*(sigImg.naturalHeight/sigImg.naturalWidth);
+      ctx.drawImage(sigImg, 230-sw/2, 560-sh+6, sw, sh);
+    }
     ctx.fillStyle='#5f6c84';ctx.font='600 13px Inter,Arial,sans-serif';ctx.textAlign='center';
-    ctx.fillText('Pradeep Raju · Founder',230,578);
+    ctx.fillText('Founder',230,578);
 
     ctx.save();ctx.translate(880,540);ctx.rotate(-0.12);
     ctx.strokeStyle='#b3261e';ctx.lineWidth=3.5;
@@ -195,6 +199,8 @@
   }
 
   function render(W,H){var cv=document.createElement('canvas');cv.width=W;cv.height=H;drawCard(cv.getContext('2d'),W,H);return cv;}
+  var sigImg=new Image();sigImg.src='signature.png';
+  sigImg.onload=function(){ document.getElementById('preview').src=render(1200,630).toDataURL('image/png'); };
   var cv=render(1200,630);
   document.getElementById('preview').src=cv.toDataURL('image/png');
 
