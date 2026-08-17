@@ -35,6 +35,21 @@
   const BIN_LINK = "/usr/local/bin/rcw-app";
   const CFG_LINK = "/etc/rcw-app/config.ini";
   const OLD_TARGET = "/opt/rcw-app/v2.0/rcw-app"; // removed — this is why the link is dangling
+  const HOST = "app-node-01";
+
+  // A virtual set of standard RHEL 10 files so exploration commands (cat, grep,
+  // head, tail, wc, sort, getent) work anywhere in the lab.
+  const SYSTEM_FILES = {
+    "/etc/hostname": HOST + "\n",
+    "/etc/redhat-release": "Red Hat Enterprise Linux release 10.0 (Plow)\n",
+    "/etc/os-release": 'NAME="Red Hat Enterprise Linux"\nVERSION="10.0 (Plow)"\nID="rhel"\nID_LIKE="fedora"\nVERSION_ID="10.0"\nPRETTY_NAME="Red Hat Enterprise Linux 10.0 (Plow)"\n',
+    "/etc/passwd": "root:x:0:0:root:/root:/bin/bash\nbin:x:1:1:bin:/bin:/sbin/nologin\nstudent:x:1000:1000:Student:/home/student:/bin/bash\noperator:x:1001:1001:Operator:/home/operator:/bin/bash\n",
+    "/etc/group": "root:x:0:\nwheel:x:10:student\nstudent:x:1000:\noperator:x:1001:\n",
+    "/etc/fstab": "/dev/mapper/rhel-root /  xfs  defaults  0 0\n/dev/sda1 /boot        xfs  defaults  0 0\n/dev/mapper/rhel-swap none swap defaults  0 0\n",
+    "/etc/shells": "/bin/bash\n/usr/bin/bash\n/bin/sh\n/usr/bin/sh\n",
+    "/etc/ssh/sshd_config": "# $OpenBSD: sshd_config\nPort 22\nPermitRootLogin no\nPasswordAuthentication yes\nPubkeyAuthentication yes\n",
+    "/proc/version": "Linux version 6.12.0-55.el10.x86_64 (mockbuild@rhel10) (gcc version 14.2.1 20250103 (Red Hat 14.2.1-6))\n"
+  };
 
   const state = {
     learnerName: "",
@@ -198,7 +213,7 @@
       case "cat": handleCat(args); break;
       case "pwd": appendOutput("/home/student"); break;
       case "whoami": appendOutput("student"); break;
-      case "hostname": appendOutput("app-node-01"); break;
+      case "hostname": appendOutput(HOST); break;
       case "id": appendOutput("uid=1000(student) gid=1000(student) groups=1000(student),10(wheel)"); break;
       case "date": appendOutput("Sun Aug 16 11:05:20 IST 2026"); break;
       case "history": appendOutput(state.commandHistory.map((item, index) => `${String(index + 1).padStart(4, " ")}  ${item}`).join("\n")); break;
@@ -206,6 +221,18 @@
       case "help": showHelp(); break;
       case "man": handleMan(args[0]); break;
       case "echo": appendOutput(args.join(" ")); break;
+      case "uname": handleUname(args); break;
+      case "df": handleDf(args); break;
+      case "free": handleFree(args); break;
+      case "uptime": handleUptime(); break;
+      case "hostnamectl": handleHostnamectl(args); break;
+      case "getent": handleGetent(args); break;
+      case "grep": handleGrep(args, cmd); break;
+      case "head": handleHead(args); break;
+      case "tail": handleTail(args); break;
+      case "wc": handleWc(args); break;
+      case "sort": handleSort(args); break;
+      case "systemctl": handleSystemctl(args); break;
       case "": break;
       default:
         appendOutput(`bash: ${command}: command not found`, "error");
@@ -414,17 +441,114 @@
   }
 
   function handleCat(args) {
-    const target = args.filter((a) => !a.startsWith("-")).pop() || "";
-    if (target.includes("config.ini")) {
-      if (!state.cfgLinkExists) { appendOutput("cat: " + target + ": No such file or directory", "error"); return; }
-      appendOutput("[rcw-app]\nversion = 2.1\nport = 8080\nlog_level = info");
+    const targets = args.filter((a) => !a.startsWith("-"));
+    if (!targets.length) {
+      appendOutput("cat: no input files (stdin is not available in this terminal)");
       return;
     }
-    appendOutput("cat: " + target + ": No such file or directory", "error");
+    targets.forEach((t) => {
+      if (Object.prototype.hasOwnProperty.call(SYSTEM_FILES, t)) {
+        appendMultiline(SYSTEM_FILES[t].replace(/\n$/, ""));
+        return;
+      }
+      if (t.includes("config.ini")) {
+        if (!state.cfgLinkExists) { appendOutput("cat: " + t + ": No such file or directory", "error"); return; }
+        appendOutput("[rcw-app]\nversion = 2.1\nport = 8080\nlog_level = info");
+        return;
+      }
+      if (t === APP_BINARY || t === "/opt/rcw-app/v2.1/rcw-app" || t === BIN_LINK) {
+        appendOutput("(binary file — use 'file' or 'readlink' to inspect this executable)");
+        return;
+      }
+      appendOutput("cat: " + t + ": No such file or directory", "error");
+    });
   }
 
   function markInspect() {
     markObjective("inspect", 20, "✓ Objective 1 passed — the existing symlinks were inspected. +20 points");
+  }
+
+  // ---------- standard RHEL 10 commands ----------
+  function handleUname(args) {
+    if (args.includes("-a")) appendOutput("Linux " + HOST + " 6.12.0-55.el10.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Jul 15 10:00:00 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux");
+    else if (args.includes("-r")) appendOutput("6.12.0-55.el10.x86_64");
+    else appendOutput("Linux");
+  }
+  function handleDf(args) {
+    appendOutput("Filesystem              1K-blocks    Used Available Use% Mounted on\n/dev/mapper/rhel-root   27194112 4172192  23021920  16% /\n/dev/sda1                 1038336  230400    807936  23% /boot\ntmpfs                     4076912       0   4076912   0% /dev/shm");
+  }
+  function handleFree(args) {
+    appendOutput("               total        used        free      shared  buff/cache   available\nMem:         8153824     1204120     5232216       84020     1717488     6610940\nSwap:        3145728           0     3145728");
+  }
+  function handleUptime() { appendOutput(" 11:40:00 up  3:35,  1 user,  load average: 0.08, 0.12, 0.09"); }
+  function handleHostnamectl(args) {
+    if (args.includes("set-hostname")) { appendOutput("hostname set to " + (args[args.length - 1] || HOST)); return; }
+    appendOutput("   Static hostname: " + HOST + "\n         Icon name: computer-vm\n           Chassis: vm\n  Operating System: Red Hat Enterprise Linux 10.0\n            Kernel: Linux 6.12.0-55.el10.x86_64\n      Architecture: x86-64");
+  }
+  function handleGetent(args) {
+    const db = (args[0] || "").toLowerCase();
+    const key = args[1];
+    if (db === "passwd") {
+      const line = key ? SYSTEM_FILES["/etc/passwd"].split("\n").find((l) => l.startsWith(key + ":")) : SYSTEM_FILES["/etc/passwd"];
+      if (line) appendMultiline(line.replace(/\n$/, "")); else appendOutput("getent: no entry", "error");
+      return;
+    }
+    if (db === "group") {
+      const line = key ? SYSTEM_FILES["/etc/group"].split("\n").find((l) => l.startsWith(key + ":")) : SYSTEM_FILES["/etc/group"];
+      if (line) appendMultiline(line.replace(/\n$/, "")); else appendOutput("getent: no entry", "error");
+      return;
+    }
+    if (db === "hosts") appendOutput("192.168.1.10  " + HOST + " " + HOST.split(".")[0]);
+    else appendOutput("getent: unknown database", "error");
+  }
+  function handleGrep(args, cmd) {
+    const targets = args.filter((a) => !a.startsWith("-"));
+    const pattern = targets.shift();
+    if (!pattern) { appendOutput("Usage: grep [OPTION]... PATTERN [FILE]...", "error"); return; }
+    const ci = /-i/.test(cmd);
+    const re = new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), ci ? "i" : "");
+    targets.forEach((t) => {
+      const content = SYSTEM_FILES[t];
+      if (content) content.split("\n").forEach((line) => { if (re.test(line)) appendOutput(line); });
+      else appendOutput("grep: " + t + ": No such file or directory", "error");
+    });
+  }
+  function handleHead(args) {
+    const n = parseInt((args.find((a) => a.startsWith("-n")) || "").replace("-n", ""), 10) || 10;
+    const t = args.filter((a) => !a.startsWith("-")).pop() || "";
+    const content = SYSTEM_FILES[t];
+    if (!content) { appendOutput("head: cannot open '" + t + "': No such file or directory", "error"); return; }
+    appendMultiline(content.split("\n").slice(0, n).join("\n"));
+  }
+  function handleTail(args) {
+    const n = parseInt((args.find((a) => a.startsWith("-n")) || "").replace("-n", ""), 10) || 10;
+    const t = args.filter((a) => !a.startsWith("-")).pop() || "";
+    const content = SYSTEM_FILES[t];
+    if (!content) { appendOutput("tail: cannot open '" + t + "': No such file or directory", "error"); return; }
+    appendMultiline(content.split("\n").slice(-n).join("\n"));
+  }
+  function handleWc(args) {
+    const t = args.filter((a) => !a.startsWith("-")).pop() || "";
+    const content = SYSTEM_FILES[t];
+    if (!content) { appendOutput("wc: " + t + ": No such file or directory", "error"); return; }
+    const lines = content.split("\n").length - (content.endsWith("\n") ? 1 : 0);
+    const words = content.trim() ? content.trim().split(/\s+/).length : 0;
+    appendOutput("  " + lines + "  " + words + "  " + content.length + " " + t);
+  }
+  function handleSort(args) {
+    const t = args.filter((a) => !a.startsWith("-")).pop() || "";
+    const content = SYSTEM_FILES[t];
+    if (!content) { appendOutput("sort: " + t + ": No such file or directory", "error"); return; }
+    appendMultiline(content.split("\n").filter(Boolean).sort().join("\n"));
+  }
+  function handleSystemctl(args) {
+    const action = (args[0] || "").toLowerCase();
+    const unit = (args.filter((a) => !a.startsWith("-")).pop() || "").toLowerCase();
+    if (action === "status" && unit === "sshd") {
+      appendOutput("● sshd.service - OpenSSH server daemon\n     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled)\n     Active: active (running) since Sun 2026-08-16 08:00:00 IST; 3h ago");
+    } else {
+      appendOutput("systemctl: use 'systemctl status sshd'");
+    }
   }
 
   function showHelp() {
