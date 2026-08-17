@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T16:26:00.000Z",
+  "updatedAt": "2026-08-18T12:00:00.000Z",
   "simulators": [
     {
       "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
@@ -8,6 +8,14 @@
       "accent": "#19a7ff",
       "id": "technical-quiz-agent",
       "targetUrl": "https://www.rcwittraining.in/technical-quiz-agent/"
+    },
+    {
+      "title": "Amazon Bedrock End-to-End GUI Lab",
+      "category": "AWS • Generative AI • Responsible AI",
+      "badge": "GENAI",
+      "accent": "#ff9d1f",
+      "id": "aws-bedrock-lab",
+      "targetUrl": "https://www.rcwittraining.in/aws-bedrock-lab/"
     },
     {
       "title": "Production Outage Game",

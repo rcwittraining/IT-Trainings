@@ -8,6 +8,7 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 - `rhcsa-videos.html` — informational training content and approved AdSense content page
 - `open.html` — same-domain simulator launcher; intentionally has no AdSense tag
 - `technical-quiz-agent/` — Raju Rishi Dev adaptive 20-question technical quiz
+- `aws-bedrock-lab/` — browser-local, console-style Amazon Bedrock end-to-end GUI lab with responsible-AI controls, RAG, Agent testing, evidence export, and PDF certificate
 - `simulators.json` — simulator data and GitHub Pages targets
 - `privacy.html` — advertising, cookie, consent, and privacy disclosures
 - `privacy-settings.js` — opens the Google CMP consent-revocation flow
