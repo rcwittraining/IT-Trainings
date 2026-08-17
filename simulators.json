@@ -90,6 +90,14 @@
       "targetUrl": "https://www.rcwittraining.in/rhel10-terminal/"
     },
     {
+      "title": "Soft Links Challenge",
+      "category": "RHEL • Filesystem",
+      "badge": "LINK",
+      "accent": "#6366f1",
+      "id": "soft-links",
+      "targetUrl": "https://www.rcwittraining.in/linux-challenge-9/"
+    },
+    {
       "title": "AWS IAM Compromise Alert Challenge",
       "category": "AWS • Identity Security",
       "badge": "AWS",
