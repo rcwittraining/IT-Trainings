@@ -150,6 +150,10 @@
   let heredocDelimiter = null;
   let heredocBuffer = [];
   let heredocCommand = "";
+  // cat > file input mode (finished with Ctrl+D, like a real shell)
+  let catInputTarget = null;
+  let catInputAppend = false;
+  let catInputLines = [];
 
   function showScreen(name) {
     Object.values(screens).forEach((s) => s.classList.remove("is-active"));
@@ -279,6 +283,13 @@
     commandCount += 1;
     cmdCountEl.textContent = String(commandCount);
 
+    // cat > file input mode (type lines, finish with Ctrl+D)
+    if (catInputTarget) {
+      catInputLines.push(rawCommand);
+      scrollTerminal();
+      return;
+    }
+
     // heredoc
     if (heredocDelimiter) {
       if (rawCommand.trim() === heredocDelimiter) {
@@ -309,6 +320,14 @@
   });
 
   commandInput.addEventListener("keydown", (event) => {
+    // Ctrl+D ends a cat > file input session (EOF), like a real shell
+    if ((event.ctrlKey && event.key === "d") || (event.key === "d" && event.ctrlKey)) {
+      if (catInputTarget) {
+        event.preventDefault();
+        finishCatInput();
+        return;
+      }
+    }
     if (event.key === "ArrowUp") {
       event.preventDefault();
       if (commandHistory.length) {
@@ -352,6 +371,23 @@
     appendOutput("heredoc: unsupported target (try 'cat > file <<EOF')", "error");
   }
 
+  function finishCatInput() {
+    const content = catInputLines.join("\n") + "\n";
+    const path = catInputTarget;
+    if (catInputAppend) {
+      files[path] = (files[path] || "") + content;
+    } else {
+      files[path] = content;
+    }
+    // ensure parent dir exists
+    const parent = parentOf(path);
+    if (!isDir(parent)) dirs.add(parent);
+    appendOutput("(saved " + catInputLines.length + " line" + (catInputLines.length === 1 ? "" : "s") + " to " + path + ")");
+    catInputTarget = null;
+    catInputAppend = false;
+    catInputLines = [];
+  }
+
   function writeFile(path, content) {
     files[path] = content;
     // ensure parent dir exists
@@ -374,10 +410,13 @@
       return;
     }
 
-    // cat > file  (single-line redirect without heredoc)
-    redir = rawCommand.match(/^cat\s+>>?\s*(\S+)\s*$/);
+    // cat > file  or  cat >> file — enter input mode (finish with Ctrl+D)
+    redir = rawCommand.match(/^cat\s+(>>?)\s*(\S+)\s*$/);
     if (redir) {
-      appendOutput("cat: use a heredoc: cat > " + redir[1] + " <<EOF", "info");
+      catInputTarget = resolve(redir[2]);
+      catInputAppend = redir[1] === ">>";
+      catInputLines = [];
+      appendOutput("(typing mode — enter your lines, then press Ctrl+D to save to " + redir[2] + ")", "info");
       return;
     }
 
