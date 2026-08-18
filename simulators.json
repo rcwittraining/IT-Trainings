@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T12:01:00.000Z",
+  "updatedAt": "2026-08-18T12:30:00.000Z",
   "simulators": [
     {
       "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
@@ -24,6 +24,14 @@
       "accent": "#ff9d1f",
       "id": "aws-ecs-gui-lab",
       "targetUrl": "https://www.rcwittraining.in/aws-ecs-gui-lab/"
+    },
+    {
+      "title": "On-Premises LLM Operations Automation Lab",
+      "category": "Private AI • Kubernetes • IT Operations",
+      "badge": "LLM",
+      "accent": "#0f9f8f",
+      "id": "onprem-llm-ops-lab",
+      "targetUrl": "https://www.rcwittraining.in/onprem-llm-ops-lab/"
     },
     {
       "title": "Production Outage Game",
