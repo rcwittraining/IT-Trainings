@@ -31,7 +31,7 @@
       "badge": "LLM",
       "accent": "#0f9f8f",
       "id": "onprem-llm-ops-lab",
-      "targetUrl": "https://www.rcwittraining.in/onprem-llm-ops-lab/"
+      "targetUrl": "https://rcwittraining.github.io/onprem-llm-ops-lab/"
     },
     {
       "title": "Production Outage Game",
