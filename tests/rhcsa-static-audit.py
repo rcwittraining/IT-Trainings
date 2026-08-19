@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static publication checks for the three stateful RHCSA preparation labs."""
+"""Static publication checks for the stateful RHCSA preparation labs."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ LABS = {
     "rhcsa-storage-build": ("Persistent Storage Build Challenge", 6),
     "rhcsa-system-operations": ("Boot, Timers and Recovery Challenge", 6),
     "rhcsa-network-selinux": ("Network, SELinux and Privilege Challenge", 7),
+    "rhcsa-user-lifecycle": ("User Lifecycle and Orphaned Home Challenge", 7),
 }
 FORBIDDEN = re.compile(r"github|codespaces|arena(?:\.ai)?|backend", re.I)
 
@@ -26,7 +27,7 @@ def main() -> None:
     catalogue = json.loads((ROOT / "simulators.json").read_text())
     entries = catalogue["simulators"]
     ids = [entry["id"] for entry in entries]
-    require(len(entries) == 117, f"expected 117 catalogue entries, got {len(entries)}")
+    require(len(entries) == 118, f"expected 118 catalogue entries, got {len(entries)}")
     require(len(ids) == len(set(ids)), "catalogue IDs must be unique")
 
     fallback = (ROOT / "index.html").read_text()

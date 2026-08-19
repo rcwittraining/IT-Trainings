@@ -34,6 +34,19 @@ const SCENARIOS = {
     "nmcli con mod ens160 ipv4.dns 192.0.2.53",
     "nmcli con up ens160",
     "hostnamectl set-hostname server1.example.com"
+  ],
+  "rhcsa-user-lifecycle": [
+    "getent passwd legacyops",
+    "id legacyops",
+    "ls -ld /home/legacyops",
+    "userdel legacyops",
+    "useradd -M -u 1701 -s /bin/bash opsadmin",
+    "usermod -d /home/legacyops opsadmin",
+    "chown -R opsadmin:opsadmin /home/legacyops",
+    "usermod -aG wheel,developers opsadmin",
+    "getent passwd opsadmin",
+    "id opsadmin",
+    "find /home -nouser -o -nogroup"
   ]
 };
 
@@ -134,6 +147,44 @@ async function networkTest() {
   env.dom.window.close();
 }
 
+async function userLifecycleTest() {
+  const env = makeDom("rhcsa-user-lifecycle"), { window } = env;
+  start(window);
+  execute(window, ["getent passwd legacyops", "id legacyops", "ls -ld /home/legacyops"]);
+  assert.strictEqual(window.__RCW_RHCSA_TEST__.getScore(), 10, "initial account and ownership inspection should score 10");
+  execute(window, ["userdel legacyops"]);
+  let state = window.__RCW_RHCSA_TEST__.getState();
+  assert(!state.identity.users.legacyops, "legacy account should be removed");
+  assert(state.dirs.has("/home/legacyops") && state.files["/home/legacyops/handover.txt"], "home data should survive non-recursive userdel");
+  assert.strictEqual(state.identity.ownership["/home/legacyops"].uid, 1450, "preserved home should retain the deleted UID until repaired");
+  execute(window, ["useradd -M -u 1701 -s /bin/bash opsadmin"]);
+  state = window.__RCW_RHCSA_TEST__.getState();
+  assert(!state.dirs.has("/home/opsadmin"), "-M should prevent an unused default home");
+  assert.strictEqual(state.identity.users.opsadmin.uid, 1701, "replacement UID should be modeled");
+  execute(window, ["usermod -d /home/legacyops opsadmin", "chown opsadmin:opsadmin /home/legacyops"]);
+  assert(!window.__RCW_RHCSA_TEST__.objectivePassed("ownership"), "changing only the directory must leave child ownership incomplete");
+  execute(window, ["chown -R opsadmin:opsadmin /home/legacyops"]);
+  const repairedScore = window.__RCW_RHCSA_TEST__.getScore();
+  execute(window, ["mkdir /home/legacyops/late-root-dir"]);
+  assert(window.__RCW_RHCSA_TEST__.getScore() < repairedScore, "a newly introduced root-owned child should revoke ownership points");
+  execute(window, ["chown -R opsadmin:opsadmin /home/legacyops", "usermod -G wheel opsadmin"]);
+  assert(!window.__RCW_RHCSA_TEST__.objectivePassed("modify"), "replacement semantics must not satisfy the append objective");
+  execute(window, ["usermod -aG wheel,developers opsadmin", "getent passwd opsadmin", "id opsadmin", "find /home -nouser -o -nogroup"]);
+  await verifyCompletion(env, 7);
+  env.dom.window.close();
+}
+
+async function destructiveUserdelTest() {
+  const env = makeDom("rhcsa-user-lifecycle"), { window } = env;
+  start(window);
+  execute(window, ["getent passwd legacyops", "ls -ld /home/legacyops", "userdel -r legacyops"]);
+  const state = window.__RCW_RHCSA_TEST__.getState();
+  assert(!state.dirs.has("/home/legacyops"), "userdel -r should remove the old home");
+  assert(!state.files["/home/legacyops/handover.txt"], "userdel -r should remove retained artifacts");
+  assert(!window.__RCW_RHCSA_TEST__.objectivePassed("preserve"), "destructive deletion must not pass the preservation objective");
+  env.dom.window.close();
+}
+
 async function verifyCompletion(env, objectiveCount) {
   const { window } = env;
   await new Promise((resolve) => setTimeout(resolve, 700));
@@ -169,6 +220,8 @@ async function editorTest() {
   await storageTest();
   await systemTest();
   await networkTest();
+  await userLifecycleTest();
+  await destructiveUserdelTest();
   await editorTest();
   console.log("RHCSA challenge state-flow, editor, score, passport and PDF tests passed.");
 })().catch((error) => { console.error(error); process.exitCode = 1; });

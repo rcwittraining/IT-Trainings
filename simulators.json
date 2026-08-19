@@ -66,6 +66,14 @@
       "targetUrl": "https://www.rcwittraining.in/rhcsa-network-selinux/"
     },
     {
+      "title": "User Lifecycle and Orphaned Home Challenge",
+      "category": "RHEL 10 • RHCSA • User Management",
+      "badge": "RHCSA",
+      "accent": "#21b5f5",
+      "id": "rhcsa-user-lifecycle",
+      "targetUrl": "https://www.rcwittraining.in/rhcsa-user-lifecycle/"
+    },
+    {
       "title": "Production Outage Game",
       "category": "IT Architecture \u2022 Incident Response",
       "badge": "SEV-1",

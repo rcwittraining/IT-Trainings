@@ -109,13 +109,31 @@
   let editorState = { open: false, path: "", original: "", mode: "normal" };
   let state = makeState();
 
+  function makeIdentityState() {
+    const initial = C.identityInitial || {}, groups = {}, users = {}, ownership = {};
+    (initial.groups || []).forEach((group) => { groups[group.name] = { gid: Number(group.gid), members: new Set(group.members || []) }; });
+    (initial.users || []).forEach((user) => {
+      users[user.name] = {
+        uid: Number(user.uid), gid: Number(user.gid), primaryGroup: user.primaryGroup,
+        groups: new Set(user.groups || []), home: normalizePath(user.home), shell: user.shell || "/bin/bash", createdBy: "initial"
+      };
+      (user.groups || []).forEach((group) => { if (groups[group]) groups[group].members.add(user.name); });
+    });
+    Object.entries(initial.ownership || {}).forEach(([path, owner]) => { ownership[normalizePath(path)] = { uid: Number(owner.uid), gid: Number(owner.gid) }; });
+    return {
+      groups, users, ownership, nextUid: Number(initial.nextUid || 1000), changed: false,
+      preservedHomes: new Set(), initialInspection: new Set(), verification: new Set(), usermodChanges: {}
+    };
+  }
+
   function makeState() {
     const base = {
       files: Object.assign({}, C.initialFiles || {}), dirs: new Set(C.initialDirs || ["/", "/etc", "/var", "/var/log"]), inspected: new Set(), history: [],
       storage: { diskLabel: "", partition: null, pv: new Set(), vg: {}, lvs: {}, filesystems: {}, swapSignatures: new Set(), mounts: {}, activeSwap: new Set() },
       system: { defaultTarget: "graphical.target", currentTarget: "graphical.target", visitedTargets: new Set(), enabled: new Set(), active: new Set(), restartCounts: {}, daemonSnapshot: "", grubSnapshot: "" },
       network: { connection: { name: "ens160", method: "auto", address: "", gateway: "", dns: "", active: true }, hostname: "server1", firewallPermanentServices: new Set(), firewallPermanentPorts: new Set(), firewallRuntimeServices: new Set(), firewallRuntimePorts: new Set() },
-      security: { selinuxMode: "Enforcing", ports: {}, fcontexts: {}, restored: new Set(), booleans: { httpd_can_network_connect: false }, groups: { wheel: new Set(["root"]) }, users: { root: { groups: new Set(["wheel"]), maxDays: 99999 } }, sudoValidated: new Set() }
+      security: { selinuxMode: "Enforcing", ports: {}, fcontexts: {}, restored: new Set(), booleans: { httpd_can_network_connect: false }, groups: { wheel: new Set(["root"]) }, users: { root: { groups: new Set(["wheel"]), maxDays: 99999 } }, sudoValidated: new Set() },
+      identity: makeIdentityState()
     };
     return base;
   }
@@ -212,6 +230,23 @@
         contexts: state.dirs.has("/srv/examweb") && !!contextEntry && sec.restored.has("/srv/examweb"),
         boolean: sec.booleans.httpd_can_network_connect === true,
         privilege: !!sec.groups.ops && !!user && user.groups.has("ops") && user.maxDays === 90 && sudoGood
+      }[id] || false;
+    }
+    if (C.scenario === "user-lifecycle") {
+      const identity = state.identity, target = C.identityTargets || {}, user = identity.users[target.replacementUser];
+      const changes = identity.usermodChanges[target.replacementUser] || new Set();
+      const requiredPaths = [target.orphanHome, ...(target.requiredArtifacts || [])].map(normalizePath);
+      const artifactsRetained = requiredPaths.every((path) => state.dirs.has(path) || Object.prototype.hasOwnProperty.call(state.files, path));
+      const ownedHomeEntries = Object.entries(identity.ownership).filter(([path]) => pathInside(path, target.orphanHome));
+      const ownershipGood = !!user && requiredPaths.every((path) => identity.ownership[path]) && ownedHomeEntries.every(([, owner]) => owner.uid === user.uid && owner.gid === user.gid);
+      return {
+        inspect: identity.initialInspection.has("accounts") && identity.initialInspection.has("ownership"),
+        preserve: !identity.users[target.retiredUser] && identity.preservedHomes.has(normalizePath(target.orphanHome)) && artifactsRetained,
+        create: !!user && user.createdBy === "useradd" && user.uid === Number(target.replacementUid) && user.shell === target.replacementShell && user.primaryGroup === target.replacementUser && !state.dirs.has(normalizePath(target.unwantedDefaultHome)),
+        redirect: !!user && user.home === normalizePath(target.orphanHome) && changes.has("home"),
+        ownership: ownershipGood,
+        modify: !!user && (target.requiredGroups || []).every((group) => user.groups.has(group)) && changes.has("groups-append"),
+        verify: !!user && identity.verification.has("id") && identity.verification.has("passwd") && identity.verification.has("no-orphans") && orphanEntries("/home").length === 0
       }[id] || false;
     }
     return false;
@@ -312,6 +347,7 @@
     else if (C.scenario === "storage") handled = storageCommand(cmd, words);
     else if (C.scenario === "system") handled = systemCommand(cmd, words);
     else if (C.scenario === "network-security") handled = networkSecurityCommand(cmd, words);
+    else if (C.scenario === "user-lifecycle") handled = userLifecycleCommand(cmd, words);
 
     if (!handled) line(`${bin || "command"}: command or option is not available in this scenario. Type help.`, "error");
     evaluate();
@@ -323,7 +359,8 @@
     const scenario = {
       storage: ["lsblk, blkid, parted, pvcreate, vgcreate, lvcreate, pvs, vgs, lvs", "mkfs.xfs, mkswap, mount, findmnt, swapon, df"],
       system: ["systemctl, journalctl, timedatectl, chronyc", "grub2-mkconfig, cat, mkdir, vi/vim"],
-      "network-security": ["nmcli, hostnamectl, firewall-cmd", "getenforce, setenforce, semanage, restorecon, setsebool, getsebool", "groupadd, useradd, usermod, chage, visudo"]
+      "network-security": ["nmcli, hostnamectl, firewall-cmd", "getenforce, setenforce, semanage, restorecon, setsebool, getsebool", "groupadd, useradd, usermod, chage, visudo"],
+      "user-lifecycle": ["getent, id, ls, stat, find", "groupadd, groupdel, useradd, userdel, usermod", "chown -R"]
     }[C.scenario] || [];
     [...common, ...scenario].forEach((item) => line(`  ${item}`, "muted"));
     line("The complete learner guide contains task-specific examples and verification steps.", "warning");
@@ -331,6 +368,8 @@
 
   function catFile(path) {
     path = normalizePath(path);
+    if (C.scenario === "user-lifecycle" && path === "/etc/passwd") { Object.keys(state.identity.users).sort().forEach((user) => line(passwdEntry(user))); return; }
+    if (C.scenario === "user-lifecycle" && path === "/etc/group") { Object.keys(state.identity.groups).sort().forEach((group) => line(groupEntry(group))); return; }
     if (!Object.prototype.hasOwnProperty.call(state.files, path)) line(`cat: ${path}: No such file`, "error");
     else String(state.files[path]).split("\n").forEach((value) => line(value));
   }
@@ -338,7 +377,11 @@
   function commandMkdir(words) {
     const paths = words.slice(1).filter((word) => !word.startsWith("-"));
     if (!paths.length) { line("mkdir: missing operand", "error"); return true; }
-    paths.forEach((path) => { state.dirs.add(normalizePath(path)); line(`created directory '${normalizePath(path)}'`, "success"); });
+    paths.forEach((path) => {
+      const normalized = normalizePath(path); state.dirs.add(normalized);
+      if (C.scenario === "user-lifecycle") state.identity.ownership[normalized] = { uid: 0, gid: 0 };
+      line(`created directory '${normalized}'`, "success");
+    });
     return true;
   }
 
@@ -458,6 +501,259 @@
     if (words[0] === "chage") { const m = words.findIndex((w) => w === "-M" || w === "--maxdays"), user = words[words.length - 1]; if (words.includes("-l") && sec.users[user]) { line(`Last password change                                    : ${dateText()}`); line(`Maximum number of days between password change          : ${sec.users[user].maxDays}`); } else if (m >= 0 && sec.users[user]) { sec.users[user].maxDays = Number(words[m + 1]); line(`Password aging updated for ${user}.`, "success"); } else line("chage: use -M DAYS USER or -l USER", "error"); return true; }
     if (words[0] === "id") { const user = words[1], data = sec.users[user]; if (!data) line(`id: '${user}': no such user`, "error"); else line(`uid=1001(${user}) gid=1001(${user}) groups=${Array.from(data.groups).join(",")}`); return true; }
     if (words[0] === "visudo") { const c = words.findIndex((w) => w === "-c" || w === "-cf" || w === "--check"); const path = c >= 0 && words[c] === "-cf" ? words[c + 1] : words[words.length - 1]; const content = state.files[path] || ""; if (hasLine(content, /^operator\s+ALL=\(ALL\)\s+ALL$/)) { sec.sudoValidated.add(path); line(`${path}: parsed OK`, "success"); } else line(`${path}: syntax error`, "error"); return true; }
+    return false;
+  }
+
+  function identityUserName(uid) {
+    const match = Object.entries(state.identity.users).find(([, user]) => user.uid === Number(uid));
+    return match ? match[0] : String(uid);
+  }
+
+  function identityGroupName(gid) {
+    const match = Object.entries(state.identity.groups).find(([, group]) => group.gid === Number(gid));
+    return match ? match[0] : String(gid);
+  }
+
+  function identityGroupByValue(value) {
+    if (Object.prototype.hasOwnProperty.call(state.identity.groups, value)) return value;
+    const match = Object.entries(state.identity.groups).find(([, group]) => group.gid === Number(value));
+    return match ? match[0] : "";
+  }
+
+  function passwdEntry(name) {
+    const user = state.identity.users[name];
+    return user ? `${name}:x:${user.uid}:${user.gid}:${name} account:${user.home}:${user.shell}` : "";
+  }
+
+  function groupEntry(name) {
+    const group = state.identity.groups[name];
+    return group ? `${name}:x:${group.gid}:${Array.from(group.members).sort().join(",")}` : "";
+  }
+
+  function pathInside(path, root) {
+    path = normalizePath(path); root = normalizePath(root);
+    return path === root || path.startsWith(`${root}/`);
+  }
+
+  function orphanEntries(root = "/") {
+    const identity = state.identity;
+    return Object.entries(identity.ownership).filter(([path, owner]) => pathInside(path, root) && (!Object.values(identity.users).some((user) => user.uid === owner.uid) || !Object.values(identity.groups).some((group) => group.gid === owner.gid))).map(([path]) => path).sort();
+  }
+
+  function optionArgument(words, names) {
+    const index = words.findIndex((word) => names.includes(word));
+    return index >= 0 ? words[index + 1] : undefined;
+  }
+
+  function nextIdentityUid() {
+    const used = new Set(Object.values(state.identity.users).map((user) => user.uid));
+    let uid = state.identity.nextUid;
+    while (used.has(uid)) uid += 1;
+    state.identity.nextUid = uid + 1;
+    return uid;
+  }
+
+  function markUsermod(user, change) {
+    if (!state.identity.usermodChanges[user]) state.identity.usermodChanges[user] = new Set();
+    state.identity.usermodChanges[user].add(change);
+  }
+
+  function removeIdentityTree(root) {
+    root = normalizePath(root);
+    Object.keys(state.files).forEach((path) => { if (pathInside(path, root)) delete state.files[path]; });
+    Object.keys(state.identity.ownership).forEach((path) => { if (pathInside(path, root)) delete state.identity.ownership[path]; });
+    Array.from(state.dirs).forEach((path) => { if (pathInside(path, root)) state.dirs.delete(path); });
+  }
+
+  function moveIdentityTree(from, to) {
+    from = normalizePath(from); to = normalizePath(to);
+    const movedDirs = Array.from(state.dirs).filter((path) => pathInside(path, from));
+    const movedFiles = Object.keys(state.files).filter((path) => pathInside(path, from));
+    const movedOwners = Object.keys(state.identity.ownership).filter((path) => pathInside(path, from));
+    movedDirs.forEach((path) => { state.dirs.delete(path); state.dirs.add(`${to}${path.slice(from.length)}`); });
+    movedFiles.forEach((path) => { const next = `${to}${path.slice(from.length)}`; state.files[next] = state.files[path]; delete state.files[path]; });
+    movedOwners.forEach((path) => { const next = `${to}${path.slice(from.length)}`; state.identity.ownership[next] = state.identity.ownership[path]; delete state.identity.ownership[path]; });
+  }
+
+  function identityGetent(words) {
+    const database = words[1], key = words[2], identity = state.identity, target = C.identityTargets || {};
+    if (database === "passwd") {
+      const names = key ? [key] : Object.keys(identity.users).sort();
+      const found = names.filter((name) => identity.users[name]);
+      if (!identity.changed && (!key || key === target.retiredUser)) identity.initialInspection.add("accounts");
+      if (key === target.replacementUser && identity.users[key]) identity.verification.add("passwd");
+      if (!found.length) line(`getent: '${key}' not found in passwd`, "error"); else found.forEach((name) => line(passwdEntry(name)));
+      return true;
+    }
+    if (database === "group") {
+      const names = key ? [key] : Object.keys(identity.groups).sort();
+      const found = names.filter((name) => identity.groups[name]);
+      if (!found.length) line(`getent: '${key}' not found in group`, "error"); else found.forEach((name) => line(groupEntry(name)));
+      return true;
+    }
+    line("getent: supported databases are passwd and group", "error"); return true;
+  }
+
+  function identityId(words) {
+    const name = words[1] || "root", identity = state.identity, user = identity.users[name], target = C.identityTargets || {};
+    if (!user) { line(`id: '${name}': no such user`, "error"); return true; }
+    if (!identity.changed && name === target.retiredUser) identity.initialInspection.add("accounts");
+    if (name === target.replacementUser) identity.verification.add("id");
+    const groups = [user.primaryGroup, ...Array.from(user.groups)].filter((value, index, array) => value && identity.groups[value] && array.indexOf(value) === index);
+    line(`uid=${user.uid}(${name}) gid=${user.gid}(${user.primaryGroup}) groups=${groups.map((group) => `${identity.groups[group].gid}(${group})`).join(",")}`);
+    return true;
+  }
+
+  function identityLs(words) {
+    const identity = state.identity, target = C.identityTargets || {}, flags = words.slice(1).filter((word) => word.startsWith("-"));
+    const numeric = flags.some((flag) => flag.includes("n")), directoryOnly = flags.some((flag) => flag.includes("d"));
+    const operands = words.slice(1).filter((word) => !word.startsWith("-")), path = normalizePath(operands[0] || "/home");
+    if (!identity.changed && path === normalizePath(target.orphanHome)) identity.initialInspection.add("ownership");
+    const ownerLine = (entryPath) => {
+      const owner = identity.ownership[entryPath] || { uid: 0, gid: 0 }, user = numeric ? owner.uid : identityUserName(owner.uid), group = numeric ? owner.gid : identityGroupName(owner.gid);
+      const directory = state.dirs.has(entryPath), name = entryPath.split("/").pop() || "/";
+      line(`${directory ? "d" : "-"}rw${directory ? "x" : "-"}r-xr-x 1 ${String(user).padEnd(10)} ${String(group).padEnd(10)} ${directory ? "4096" : "128"} Aug 19 09:00 ${directoryOnly ? entryPath : name}`);
+    };
+    if (directoryOnly) {
+      if (!state.dirs.has(path) && !Object.prototype.hasOwnProperty.call(state.files, path)) line(`ls: cannot access '${path}': No such file or directory`, "error"); else ownerLine(path);
+      return true;
+    }
+    const children = Object.keys(identity.ownership).filter((entry) => entry !== path && normalizePath(entry.slice(0, entry.lastIndexOf("/"))) === path).sort();
+    if (children.length) children.forEach(ownerLine);
+    else if (state.dirs.has(path) || Object.prototype.hasOwnProperty.call(state.files, path)) ownerLine(path);
+    else line(`ls: cannot access '${path}': No such file or directory`, "error");
+    return true;
+  }
+
+  function identityStat(words) {
+    const path = normalizePath(words[words.length - 1]), owner = state.identity.ownership[path], target = C.identityTargets || {};
+    if (!state.identity.changed && path === normalizePath(target.orphanHome)) state.identity.initialInspection.add("ownership");
+    if (!owner) line(`stat: cannot statx '${path}': No such file or directory`, "error");
+    else { line(`  File: ${path}`); line(`  Size: ${state.dirs.has(path) ? 4096 : 128}\tUid: ( ${owner.uid}/${identityUserName(owner.uid)} )\tGid: ( ${owner.gid}/${identityGroupName(owner.gid)} )`); }
+    return true;
+  }
+
+  function identityFind(words) {
+    const base = normalizePath(words.slice(1).find((word) => word.startsWith("/")) || "/"), checksOrphan = words.includes("-nouser") || words.includes("-nogroup");
+    if (!checksOrphan) { Object.keys(state.identity.ownership).filter((path) => pathInside(path, base)).sort().forEach((path) => line(path)); return true; }
+    const paths = orphanEntries(base);
+    paths.forEach((path) => line(path, "warning"));
+    if (!paths.length) { line("No orphaned ownership entries found.", "success"); if (state.identity.changed) state.identity.verification.add("no-orphans"); }
+    return true;
+  }
+
+  function identityGroupadd(words) {
+    const identity = state.identity, name = words[words.length - 1], gidValue = optionArgument(words, ["-g", "--gid"]);
+    if (!name || name.startsWith("-")) line("groupadd: group name required", "error");
+    else if (identity.groups[name]) line(`groupadd: group '${name}' already exists`, "error");
+    else {
+      let gid = gidValue === undefined ? Math.max(1000, ...Object.values(identity.groups).map((group) => group.gid + 1)) : Number(gidValue);
+      if (!Number.isInteger(gid) || gid < 0 || Object.values(identity.groups).some((group) => group.gid === gid)) line("groupadd: GID is invalid or already exists", "error");
+      else { identity.groups[name] = { gid, members: new Set() }; identity.changed = true; line(`Group ${name} created with GID ${gid}.`, "success"); }
+    }
+    return true;
+  }
+
+  function identityGroupdel(words) {
+    const identity = state.identity, name = words[1];
+    if (!identity.groups[name]) line(`groupdel: group '${name}' does not exist`, "error");
+    else if (Object.values(identity.users).some((user) => user.primaryGroup === name)) line(`groupdel: cannot remove the primary group of an existing user`, "error");
+    else { Object.values(identity.users).forEach((user) => user.groups.delete(name)); delete identity.groups[name]; identity.changed = true; line(`Group ${name} deleted.`, "success"); }
+    return true;
+  }
+
+  function identityUseradd(words) {
+    const identity = state.identity, name = words[words.length - 1];
+    if (!name || name.startsWith("-") || !/^[A-Za-z_][A-Za-z0-9_-]*$/.test(name)) { line("useradd: valid user name required", "error"); return true; }
+    if (identity.users[name]) { line(`useradd: user '${name}' already exists`, "error"); return true; }
+    const uidValue = optionArgument(words, ["-u", "--uid"]), uid = uidValue === undefined ? nextIdentityUid() : Number(uidValue);
+    if (!Number.isInteger(uid) || uid < 0 || Object.values(identity.users).some((user) => user.uid === uid)) { line("useradd: UID is invalid or already in use", "error"); return true; }
+    const primaryValue = optionArgument(words, ["-g", "--gid"]), primaryGroup = primaryValue === undefined ? name : identityGroupByValue(primaryValue);
+    if (primaryValue !== undefined && !primaryGroup) { line(`useradd: group '${primaryValue}' does not exist`, "error"); return true; }
+    const supplementaryValue = optionArgument(words, ["-G", "--groups"]), supplementary = supplementaryValue ? supplementaryValue.split(",").filter(Boolean) : [];
+    if (supplementary.some((group) => !identity.groups[group])) { line("useradd: one or more supplementary groups do not exist", "error"); return true; }
+    if (!identity.groups[primaryGroup]) {
+      if (Object.values(identity.groups).some((group) => group.gid === uid)) { line("useradd: a group already uses the requested private-group GID", "error"); return true; }
+      identity.groups[primaryGroup] = { gid: uid, members: new Set() };
+    }
+    const home = normalizePath(optionArgument(words, ["-d", "--home-dir"]) || `/home/${name}`), shell = optionArgument(words, ["-s", "--shell"]) || "/bin/bash";
+    identity.users[name] = { uid, gid: identity.groups[primaryGroup].gid, primaryGroup, groups: new Set(supplementary), home, shell, createdBy: "useradd" };
+    supplementary.forEach((group) => identity.groups[group].members.add(name));
+    identity.nextUid = Math.max(identity.nextUid, uid + 1); identity.changed = true;
+    const createHome = words.includes("-m") || words.includes("--create-home") || (!words.includes("-M") && !words.includes("--no-create-home"));
+    if (createHome) {
+      if (state.dirs.has(home)) line(`useradd: warning: home directory ${home} already exists; no files were copied`, "warning");
+      else { state.dirs.add(home); state.files[`${home}/.bash_profile`] = "# User profile\n"; identity.ownership[home] = { uid, gid: identity.users[name].gid }; identity.ownership[`${home}/.bash_profile`] = { uid, gid: identity.users[name].gid }; }
+    }
+    line(`User ${name} created with UID ${uid}, home ${home}, and shell ${shell}.`, "success"); return true;
+  }
+
+  function identityUserdel(words) {
+    const identity = state.identity, removeHome = words.includes("-r") || words.includes("--remove"), name = words[words.length - 1], user = identity.users[name];
+    if (!user) { line(`userdel: user '${name}' does not exist`, "error"); return true; }
+    if (name === "root") { line("userdel: cannot remove root", "error"); return true; }
+    Object.values(identity.groups).forEach((group) => group.members.delete(name));
+    delete identity.users[name]; identity.changed = true;
+    const privateGroup = identity.groups[name];
+    if (privateGroup && privateGroup.gid === user.gid && !privateGroup.members.size && !Object.values(identity.users).some((item) => item.primaryGroup === name)) delete identity.groups[name];
+    if (removeHome) { removeIdentityTree(user.home); identity.preservedHomes.delete(user.home); line(`User ${name} and ${user.home} deleted.`, "warning"); }
+    else { if (state.dirs.has(user.home)) identity.preservedHomes.add(user.home); line(`User ${name} deleted; ${user.home} was preserved.`, "success"); }
+    return true;
+  }
+
+  function identityUsermod(words) {
+    const identity = state.identity, name = words[words.length - 1], user = identity.users[name];
+    if (!user) { line(`usermod: user '${name}' does not exist`, "error"); return true; }
+    const homeValue = optionArgument(words, ["-d", "--home"]), shellValue = optionArgument(words, ["-s", "--shell"]), uidValue = optionArgument(words, ["-u", "--uid"]), primaryValue = optionArgument(words, ["-g", "--gid"]);
+    let groupsValue = optionArgument(words, ["-G", "--groups", "-aG"]), append = words.includes("-a") || words.includes("--append") || words.includes("-aG");
+    if (groupsValue === undefined) { const combined = words.find((word) => /^-aG.+/.test(word)); if (combined) { groupsValue = combined.slice(3); append = true; } }
+    const requestedGroups = groupsValue === undefined ? null : groupsValue.split(",").filter(Boolean);
+    if (requestedGroups && requestedGroups.some((group) => !identity.groups[group])) { line("usermod: one or more supplementary groups do not exist", "error"); return true; }
+    const primaryGroup = primaryValue === undefined ? "" : identityGroupByValue(primaryValue);
+    if (primaryValue !== undefined && !primaryGroup) { line(`usermod: group '${primaryValue}' does not exist`, "error"); return true; }
+    if (uidValue !== undefined && (!Number.isInteger(Number(uidValue)) || Number(uidValue) < 0 || Object.entries(identity.users).some(([other, item]) => other !== name && item.uid === Number(uidValue)))) { line("usermod: UID is invalid or already in use", "error"); return true; }
+    const newHome = homeValue === undefined ? "" : normalizePath(homeValue), moveHome = words.includes("-m") || words.includes("--move-home");
+    if (newHome && moveHome && newHome !== user.home && state.dirs.has(newHome)) { line(`usermod: directory ${newHome} already exists; do not move a new home over preserved data`, "error"); return true; }
+    let changed = false;
+    if (newHome) { if (moveHome && newHome !== user.home && state.dirs.has(user.home)) moveIdentityTree(user.home, newHome); user.home = newHome; markUsermod(name, "home"); changed = true; }
+    if (shellValue !== undefined) { user.shell = shellValue; markUsermod(name, "shell"); changed = true; }
+    if (uidValue !== undefined) { const oldUid = user.uid; user.uid = Number(uidValue); Object.entries(identity.ownership).forEach(([path, owner]) => { if (pathInside(path, user.home) && owner.uid === oldUid) owner.uid = user.uid; }); markUsermod(name, "uid"); changed = true; }
+    if (primaryGroup) { user.primaryGroup = primaryGroup; user.gid = identity.groups[primaryGroup].gid; markUsermod(name, "primary-group"); changed = true; }
+    if (requestedGroups) {
+      if (!append) { user.groups.forEach((group) => { if (identity.groups[group]) identity.groups[group].members.delete(name); }); user.groups = new Set(); }
+      requestedGroups.forEach((group) => { user.groups.add(group); identity.groups[group].members.add(name); });
+      markUsermod(name, append ? "groups-append" : "groups-replace"); changed = true;
+    }
+    if (!changed) line("usermod: use -d HOME, -s SHELL, -u UID, -g GROUP, or -aG GROUPS", "error");
+    else { identity.changed = true; line(`User ${name} attributes updated.`, "success"); }
+    return true;
+  }
+
+  function identityChown(words) {
+    const identity = state.identity, recursive = words.includes("-R") || words.includes("--recursive"), operands = words.slice(1).filter((word) => !word.startsWith("-"));
+    if (operands.length < 2) { line("chown: owner and path are required", "error"); return true; }
+    const specification = operands[0], path = normalizePath(operands[1]), parts = specification.split(":"), userName = parts[0], user = identity.users[userName];
+    if (!user) { line(`chown: invalid user: '${userName}'`, "error"); return true; }
+    const groupName = parts.length > 1 ? (parts[1] || user.primaryGroup) : "", group = groupName ? identity.groups[groupName] : null;
+    if (groupName && !group) { line(`chown: invalid group: '${groupName}'`, "error"); return true; }
+    const paths = Object.keys(identity.ownership).filter((entry) => recursive ? pathInside(entry, path) : entry === path);
+    if (!paths.length) { line(`chown: cannot access '${path}': No such file or directory`, "error"); return true; }
+    paths.forEach((entry) => { identity.ownership[entry].uid = user.uid; if (group) identity.ownership[entry].gid = group.gid; });
+    identity.changed = true; line(`Ownership updated${recursive ? " recursively" : ""} for ${path}.`, "success"); return true;
+  }
+
+  function userLifecycleCommand(cmd, words) {
+    if (words[0] === "getent") return identityGetent(words);
+    if (words[0] === "id") return identityId(words);
+    if (words[0] === "ls") return identityLs(words);
+    if (words[0] === "stat") return identityStat(words);
+    if (words[0] === "find") return identityFind(words);
+    if (words[0] === "groupadd") return identityGroupadd(words);
+    if (words[0] === "groupdel") return identityGroupdel(words);
+    if (words[0] === "useradd") return identityUseradd(words);
+    if (words[0] === "userdel") return identityUserdel(words);
+    if (words[0] === "usermod") return identityUsermod(words);
+    if (words[0] === "chown") return identityChown(words);
     return false;
   }
 
