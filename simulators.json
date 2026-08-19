@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-19T00:00:00.000Z",
+  "updatedAt": "2026-08-19T10:55:00.000Z",
   "simulators": [
     {
       "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
@@ -40,6 +40,30 @@
       "accent": "#c91f37",
       "id": "rhel10-vimrc-bashrc-lab",
       "targetUrl": "https://www.rcwittraining.in/rhel10-vimrc-bashrc-lab/"
+    },
+    {
+      "title": "Persistent Storage Build Challenge",
+      "category": "RHEL 10 • RHCSA • Storage",
+      "badge": "RHCSA",
+      "accent": "#21b5f5",
+      "id": "rhcsa-storage-build",
+      "targetUrl": "https://www.rcwittraining.in/rhcsa-storage-build/"
+    },
+    {
+      "title": "Boot, Timers and Recovery Challenge",
+      "category": "RHEL 10 • RHCSA • System Operations",
+      "badge": "RHCSA",
+      "accent": "#21b5f5",
+      "id": "rhcsa-system-operations",
+      "targetUrl": "https://www.rcwittraining.in/rhcsa-system-operations/"
+    },
+    {
+      "title": "Network, SELinux and Privilege Challenge",
+      "category": "RHEL 10 • RHCSA • Security",
+      "badge": "RHCSA",
+      "accent": "#21b5f5",
+      "id": "rhcsa-network-selinux",
+      "targetUrl": "https://www.rcwittraining.in/rhcsa-network-selinux/"
     },
     {
       "title": "Production Outage Game",
