@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T12:30:00.000Z",
+  "updatedAt": "2026-08-19T00:00:00.000Z",
   "simulators": [
     {
       "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
@@ -32,6 +32,14 @@
       "accent": "#0f9f8f",
       "id": "onprem-llm-ops-lab",
       "targetUrl": "https://rcwittraining.github.io/onprem-llm-ops-lab/"
+    },
+    {
+      "title": "RHEL 10 .vimrc & .bashrc Configuration Lab",
+      "category": "RHEL 10 • Vim • Bash",
+      "badge": "RHEL",
+      "accent": "#c91f37",
+      "id": "rhel10-vimrc-bashrc-lab",
+      "targetUrl": "https://www.rcwittraining.in/rhel10-vimrc-bashrc-lab/"
     },
     {
       "title": "Production Outage Game",
