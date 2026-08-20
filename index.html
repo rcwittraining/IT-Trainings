@@ -9,6 +9,7 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989"
      crossorigin="anonymous"></script>
   <title>RCW IT Training | Free Hands-on Labs &amp; Simulators</title>
+  <link rel="stylesheet" href="catalogue.css">
   <style>
     :root {
       --navy: #061633;
@@ -492,25 +493,61 @@
         <span class="ticker-item"><span class="t-star">✦</span><span class="t-name">Pradeep Raju</span><span class="ticker-sep">•</span>Senior Architect<span class="ticker-sep">•</span><span class="t-hl">19+ Years of Experience</span><span class="ticker-sep">•</span>Enterprise Infrastructure<span class="t-star">✦</span></span>
       </div>
     </div>
-    <section class="labs" id="labs" aria-labelledby="labs-title">
+    <section class="catalogue-home" id="labs" aria-labelledby="labs-title">
       <div class="container">
-        <div class="section-heading">
-          <div class="eyebrow">Free practice ground</div>
-          <h2 id="labs-title">Hands-on Labs &amp; Simulators</h2>
-          <p>Explore, practice and enhance your skills with realistic IT labs.</p>
-        </div>
+        <div class="catalogue-shell">
+          <header class="catalogue-intro">
+            <div class="catalogue-intro-copy">
+              <p class="catalogue-kicker">Public learning catalogue</p>
+              <h2 id="labs-title">Practice by <span>technology</span></h2>
+              <p>Explore independent labs, simulators and challenges through a catalogue organised by group, technology, content type and specialist subcategory.</p>
+            </div>
+            <div class="catalogue-stats" aria-label="Catalogue summary">
+              <div class="catalogue-stat"><strong id="catalogueTotal">180</strong><span>Free activities</span></div>
+              <div class="catalogue-stat"><strong id="technologyTotal">17</strong><span>Technologies</span></div>
+              <div class="catalogue-stat"><strong>100%</strong><span>Public access</span></div>
+            </div>
+          </header>
 
-        <div class="toolbar">
-          <label class="search-wrap">
-            <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search labs</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-            <input id="labSearch" type="search" placeholder="Search Azure, AWS, VMware, Linux…" autocomplete="off">
-          </label>
-          <div class="result-count" id="resultCount" aria-live="polite">Loading labs…</div>
-        </div>
+          <section class="cert-series" aria-labelledby="cert-series-title">
+            <div class="series-mark" aria-hidden="true">RHCSA<small>RHEL 10</small></div>
+            <div class="series-copy">
+              <span>New structured practice group</span>
+              <h3 id="cert-series-title">RHCSA Certification Practice</h3>
+              <p>62 original, independent challenge labs mapped task by task to the published EX200/RHEL 10 skill areas. Every lab evaluates modeled state, awards a score out of 100 and supports the RCW IT Training completion certificate.</p>
+            </div>
+            <div class="series-actions">
+              <a href="rhcsa-practice/">Explore all 62 tasks</a>
+              <button type="button" id="filterRhcsa">Show in catalogue</button>
+            </div>
+          </section>
 
-        <div class="lab-list" id="labList"></div>
-        <div class="empty-search" id="emptySearch">No labs match your search. Try another keyword.</div>
+          <div class="catalogue-controls" aria-label="Catalogue filters">
+            <div class="search-row">
+              <label class="catalogue-search">
+                <span class="visually-hidden">Search the catalogue</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                <input id="labSearch" type="search" placeholder="Search titles, technologies and skills…" autocomplete="off">
+              </label>
+              <label class="filter-field"><span>Technology</span><select id="technologyFilter" aria-label="Filter by technology"><option value="">All technologies</option></select></label>
+              <label class="filter-field"><span>Content type</span><select id="typeFilter" aria-label="Filter by content type"><option value="">All content types</option></select></label>
+            </div>
+            <div class="filter-row">
+              <label class="filter-field"><span>Catalogue group</span><select id="groupFilter" aria-label="Filter by catalogue group"><option value="">All catalogue groups</option></select></label>
+              <label class="filter-field"><span>Subcategory</span><select id="subcategoryFilter" aria-label="Filter by subcategory"><option value="">All subcategories</option></select></label>
+              <label class="filter-field"><span>Sort</span><select id="sortFilter" aria-label="Sort catalogue"><option value="featured">Featured order</option><option value="az">Title A–Z</option><option value="technology">Technology A–Z</option></select></label>
+              <button class="clear-filters" id="clearFilters" type="button">Clear filters</button>
+            </div>
+            <div class="group-tabs" id="groupTabs" aria-label="Quick group filters"></div>
+          </div>
+
+          <div class="catalogue-status">
+            <p id="resultCount" aria-live="polite">Loading the public catalogue…</p>
+            <p class="active-filter" id="activeFilter">All catalogue groups</p>
+          </div>
+          <div class="catalogue-groups" id="labList"></div>
+          <div class="catalogue-empty" id="emptySearch"><strong>No matching activities</strong>Try a broader search or clear one of the catalogue filters.</div>
+        </div>
       </div>
     </section>
 
@@ -654,243 +691,8 @@
     })();
   </script>
 
-  <script>
-    /* ================================================================
-       EXISTING LAB LINKS
-       Update any title or URL here. Cards are generated automatically.
-       ================================================================ */
-    const SITE_DOMAIN = "https://www.rcwittraining.in";
-
-    const labs = [
-          {
-                "title": "Raju Rishi Dev — Technical Quiz Agent",
-                "category": "Adaptive Quiz • Technical Skills",
-                "badge": "QUIZ",
-                "accent": "#19a7ff",
-                "id": "technical-quiz-agent",
-          },
-          {
-                "title": "Amazon Bedrock End-to-End GUI Lab",
-                "category": "AWS • Generative AI • Responsible AI",
-                "badge": "GENAI",
-                "accent": "#ff9d1f",
-                "id": "aws-bedrock-lab",
-          },
-          {
-                "title": "Amazon ECS End-to-End GUI Lab",
-                "category": "AWS • Containers • Security & Compliance",
-                "badge": "ECS",
-                "accent": "#ff9d1f",
-                "id": "aws-ecs-gui-lab",
-          },
-          {
-                "title": "On-Premises LLM Operations Automation Lab",
-                "category": "Private AI • Kubernetes • IT Operations",
-                "badge": "LLM",
-                "accent": "#0f9f8f",
-                "id": "onprem-llm-ops-lab",
-          },
-          {
-                "title": "RHEL 10 .vimrc & .bashrc Configuration Lab",
-                "category": "RHEL 10 • Vim • Bash",
-                "badge": "RHEL",
-                "accent": "#c91f37",
-                "id": "rhel10-vimrc-bashrc-lab",
-          },
-          {
-                "title": "Persistent Storage Build Challenge",
-                "category": "RHEL 10 • RHCSA • Storage",
-                "badge": "RHCSA",
-                "accent": "#21b5f5",
-                "id": "rhcsa-storage-build",
-          },
-          {
-                "title": "Boot, Timers and Recovery Challenge",
-                "category": "RHEL 10 • RHCSA • System Operations",
-                "badge": "RHCSA",
-                "accent": "#21b5f5",
-                "id": "rhcsa-system-operations",
-          },
-          {
-                "title": "Network, SELinux and Privilege Challenge",
-                "category": "RHEL 10 • RHCSA • Security",
-                "badge": "RHCSA",
-                "accent": "#21b5f5",
-                "id": "rhcsa-network-selinux",
-          },
-          {
-                "title": "User Lifecycle and Orphaned Home Challenge",
-                "category": "RHEL 10 • RHCSA • User Management",
-                "badge": "RHCSA",
-                "accent": "#21b5f5",
-                "id": "rhcsa-user-lifecycle",
-          },
-          {
-                "title": "Linux Folder Challenge",
-                "category": "Linux • Command Line",
-                "badge": "LINUX",
-                "accent": "#09a7f5",
-                "id": "linux-folder-challenge",
-          },
-          {
-                "title": "Linux Server Crash Root-Cause Analysis",
-                "category": "Linux • Troubleshooting",
-                "badge": "RCA",
-                "accent": "#12a9e9",
-                "id": "linux-server-crash-rca",
-          },
-          {
-                "title": "Linux Unauthorised Access Review",
-                "category": "Linux • Security",
-                "badge": "SEC",
-                "accent": "#12a9e9",
-                "id": "linux-unauthorised-access-review",
-          },
-          {
-                "title": "Linux Root Password Audit",
-                "category": "Linux • Authentication",
-                "badge": "AUTH",
-                "accent": "#12a9e9",
-                "id": "linux-root-password-audit",
-          },
-          {
-                "title": "AWS IAM Compromise Alert Challenge",
-                "category": "AWS • Identity Security",
-                "badge": "AWS",
-                "accent": "#ff9900",
-                "id": "aws-iam-compromise-alert",
-          },
-          {
-                "title": "Azure Virtual Desktop Lab",
-                "category": "Azure • Virtual Desktop",
-                "badge": "AVD",
-                "accent": "#086dcc",
-                "id": "azure-virtual-desktop",
-          },
-          {
-                "title": "AWS Control Tower Lab",
-                "category": "AWS • Governance",
-                "badge": "AWS",
-                "accent": "#ff6b0b",
-                "id": "aws-control-tower",
-          },
-          {
-                "title": "VMware to Hyper-V Migration Lab",
-                "category": "VMware • Hyper-V • Veeam",
-                "badge": "V→H",
-                "accent": "#42a62a",
-                "id": "vmware-hyper-v",
-          },
-          {
-                "title": "VMware to Azure Migration Lab",
-                "category": "VMware • Microsoft Azure",
-                "badge": "V→A",
-                "accent": "#0d97cf",
-                "id": "vmware-azure",
-          },
-          {
-                "title": "TrueNAS Debug Export Lab",
-                "category": "TrueNAS • Storage",
-                "badge": "NAS",
-                "accent": "#0b9ddd",
-                "id": "truenas-debug",
-          },
-          {
-                "title": "GCP Admin Exam Simulator",
-                "category": "Google Cloud • Exam Practice",
-                "badge": "GCP",
-                "accent": "#4285f4",
-                "id": "gcp-admin",
-          },
-          {
-                "title": "Azure Admin Exam Simulator",
-                "category": "Microsoft Azure • Exam Practice",
-                "badge": "AZ",
-                "accent": "#087ed2",
-                "id": "azure-admin",
-          },
-          {
-                "title": "RHEL 10 Installation Lab",
-                "category": "Red Hat • Linux",
-                "badge": "RHEL",
-                "accent": "#d71920",
-                "id": "rhel-10-install",
-          }
-    ];
-
-    /* Published data is loaded from simulators.json.
-       The list above is an offline fallback so the page never appears empty. */
-
-    const linkSvg = `
-      <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-        <path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/>
-        <path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/>
-      </svg>`;
-
-    function safeText(value) {
-      return String(value ?? "").replace(/[&<>'"]/g, char => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
-      })[char]);
-    }
-
-    function launcherUrl(lab) {
-      return `./open.html?lab=${encodeURIComponent(lab.id)}`;
-    }
-
-    function labCard(lab) {
-      const destination = launcherUrl(lab);
-      return `
-        <article class="lab-card" style="--accent:${safeText(lab.accent)}">
-          <div class="lab-icon" aria-hidden="true">${safeText(lab.badge)}</div>
-          <div>
-            <h3 class="lab-title">${safeText(lab.title)}</h3>
-            <span class="lab-meta">${safeText(lab.category)}</span>
-          </div>
-          <a class="lab-link" href="${safeText(destination)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${safeText(lab.title)} in a new tab">
-            ${linkSvg}
-            <span class="link-copy"><span class="link-label">Open free lab</span><span class="link-url">www.rcwittraining.in</span></span>
-            <span class="link-open">Click to open ↗</span>
-          </a>
-        </article>`;
-    }
-
-    let allLabs = [...labs];
-
-    const labList = document.getElementById("labList");
-    const search = document.getElementById("labSearch");
-    const count = document.getElementById("resultCount");
-    const empty = document.getElementById("emptySearch");
-
-    function renderLabs(query = "") {
-      const term = query.trim().toLowerCase();
-      const filtered = allLabs.filter(lab => `${lab.title} ${lab.category}`.toLowerCase().includes(term));
-      labList.innerHTML = filtered.map(labCard).join("");
-      count.textContent = `${filtered.length} free ${filtered.length === 1 ? "lab" : "labs"}`;
-      empty.style.display = filtered.length ? "none" : "block";
-    }
-
-    async function loadPublishedLabs() {
-      try {
-        const response = await fetch(`./simulators.json?v=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const payload = await response.json();
-        const published = Array.isArray(payload) ? payload : payload.simulators;
-        if (!Array.isArray(published)) throw new Error("Invalid simulators.json format");
-
-        allLabs = published.filter(item =>
-          item && item.id && item.title && item.category && item.targetUrl
-        );
-      } catch (error) {
-        console.warn("Using built-in simulator list because simulators.json could not be loaded.", error);
-      }
-      renderLabs(search.value);
-    }
-
-    search.addEventListener("input", event => renderLabs(event.target.value));
-    renderLabs();
-    loadPublishedLabs();
-
-  </script>
+  <script src="catalogue-data.js"></script>
+  <script src="catalogue.js"></script>
   <script>
     (() => {
       const assistant = document.getElementById("quizAssistant");

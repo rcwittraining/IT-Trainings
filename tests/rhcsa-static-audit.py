@@ -27,10 +27,24 @@ def main() -> None:
     catalogue = json.loads((ROOT / "simulators.json").read_text())
     entries = catalogue["simulators"]
     ids = [entry["id"] for entry in entries]
-    require(len(entries) == 118, f"expected 118 catalogue entries, got {len(entries)}")
+    require(len(entries) == 180, f"expected 180 catalogue entries, got {len(entries)}")
     require(len(ids) == len(set(ids)), "catalogue IDs must be unique")
+    require(len({entry["targetUrl"] for entry in entries}) == len(entries), "catalogue URLs must be unique")
+    original_fields = ("title", "category", "badge", "accent", "id", "targetUrl")
+    original_records = [{key: item.get(key) for key in original_fields} for item in entries[:118]]
+    original_digest = hashlib.sha256(json.dumps(original_records, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    require(original_digest == "2bb5de58d64aeaf4754198225d1fff5629f38aff0e85f0d445c102a6ff300cdc", "one or more of the 118 published catalogue records changed")
+    required_metadata = {"contentType", "technology", "subcategory", "group"}
+    require(all(required_metadata <= entry.keys() for entry in entries), "catalogue categorisation metadata is incomplete")
+    practice_entries = [entry for entry in entries if entry["group"] == "RHCSA Certification Practice"]
+    require(len(practice_entries) == 62, f"expected 62 RHCSA practice entries, got {len(practice_entries)}")
 
-    fallback = (ROOT / "index.html").read_text()
+    fallback = (ROOT / "catalogue-data.js").read_text()
+    homepage = (ROOT / "index.html").read_text()
+    require('src="catalogue-data.js"' in homepage and 'src="catalogue.js"' in homepage, "homepage catalogue scripts are missing")
+    for control in ("technologyFilter", "typeFilter", "groupFilter", "subcategoryFilter"):
+        require(f'id="{control}"' in homepage, f"homepage {control} is missing")
+    require("RHCSA Certification Practice" in homepage and "rhcsa-practice/" in homepage, "RHCSA practice group feature is missing")
     engine = (ROOT / "rhcsa-challenge-engine.js").read_text()
     css = (ROOT / "rhcsa-challenge.css").read_text()
     require("@media(max-width:820px)" in css and "@media(max-width:560px)" in css, "responsive breakpoints are missing")
