@@ -16,6 +16,7 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 - `ads.txt` — authorized Google advertising seller for the configured publisher
 - `ADSENSE_SETUP.md` — account-side CMP, Consent Mode, exclusion, and verification checklist
 - `admin/index.html` — unlisted simulator editor at `/admin/`; intentionally has no AdSense tag
+- `RCW-Panda.apk` / `RCW-Panda-v4.0.apk` — the RCW-Panda Android app (v4.0, package `in.rcw.panda`); the homepage download button points at the versioned file
 - `CNAME` — GitHub Pages custom-domain setting
 - `.nojekyll` — tells GitHub Pages to publish these files directly
 
