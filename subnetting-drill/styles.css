@@ -234,7 +234,7 @@ kbd { min-width: 20px; margin-right: 4px; padding: 3px 5px; display: inline-bloc
 .toast p { margin: 0; color: #bad2df; font-size: 11px; }
 
 @media (max-width: 980px) {
-  .welcome-grid { grid-template-columns: 1fr 390px; gap: 45px; }
+  .welcome-grid { grid-template-columns: minmax(0, 1fr) 390px; gap: 45px; }
   .welcome-copy h1 { font-size: 56px; }
   .lab-layout { grid-template-columns: 290px minmax(0,1fr); }
   .brief-panel { padding: 25px 21px; }
@@ -306,4 +306,13 @@ kbd { min-width: 20px; margin-right: 4px; padding: 3px 5px; display: inline-bloc
 
 @media (max-width: 780px) {
   .rca-layout .terminal-body { min-height: 520px; max-height: 66vh; }
+}
+
+/* ===== Horizontal-overflow safety (site update 2026-08) ===== */
+html, body { max-width: 100%; overflow-x: hidden; }
+.welcome-grid > * { min-width: 0; }
+.welcome-copy h1 { overflow-wrap: anywhere; }
+.welcome-copy p, .lead, .feature-row, .entry-card h2, .entry-card-body p { overflow-wrap: anywhere; }
+@media (min-width: 781px) and (max-width: 980px) {
+  .welcome-grid { grid-template-columns: minmax(0, 1fr) 390px; gap: clamp(24px, 5vw, 45px); }
 }
