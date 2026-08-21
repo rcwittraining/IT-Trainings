@@ -32,7 +32,7 @@
 .catalogue-home .filter-row{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr)) auto;gap:10px;margin-top:10px}
 .catalogue-home .catalogue-search input:focus,.catalogue-home .filter-field select:focus{border-color:#168fe3;box-shadow:0 0 0 3px rgba(22,143,227,.13)}
 .catalogue-home .clear-filters{padding:0 16px;color:#50647a;background:#fff;border:1px solid #c8d5e2;border-radius:6px;font-weight:800;cursor:pointer}
-.catalogue-home .group-tabs{display:flex;gap:7px;overflow:auto;margin-top:14px;padding:2px 0 4px;scrollbar-width:thin}
+.catalogue-home .group-tabs{display:flex;flex-wrap:wrap;gap:7px;overflow:visible;margin-top:14px;padding:2px 0 4px}
 .catalogue-home .group-tab{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:8px 10px;color:#465b72;background:#fff;border:1px solid #d2dee9;border-radius:999px;font-size:11px;font-weight:800;cursor:pointer}
 .catalogue-home .group-tab b{padding:2px 6px;color:#74869a;background:#edf2f7;border-radius:99px;font-size:9px}
 .catalogue-home .group-tab.active{color:#fff;background:#0d315d;border-color:#0d315d}.catalogue-home .group-tab.active b{color:#172b44;background:#ffd51d}
@@ -72,7 +72,7 @@
 html,body{max-width:100%;overflow-x:hidden}
 .catalogue-home{max-width:100%}
 .catalogue-home .catalogue-shell{max-width:100%;overflow-x:auto;overflow-y:visible}
-.catalogue-home .group-tabs{width:100%;max-width:100%;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-bottom:12px}
+.catalogue-home .group-tabs{width:100%;max-width:100%;flex-wrap:wrap;overflow:visible;padding-bottom:12px}
 .catalogue-home .catalogue-card{max-width:100%;overflow:visible;word-break:break-word}
 .catalogue-home .catalogue-card h4{overflow-wrap:anywhere}
 .catalogue-home .catalogue-grid{width:100%}
