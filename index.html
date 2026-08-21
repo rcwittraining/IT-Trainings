@@ -49,11 +49,13 @@
 
     .android-app-btn {
       display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
       margin-top: 18px;
-      padding: 12px 18px;
-      border-radius: 999px;
+      padding: 13px 22px;
+      border-radius: 16px;
+      line-height: 1.25;
       background: linear-gradient(115deg,#078be8,#0758c8);
       color: #fff;
       font-weight: 800;
@@ -62,7 +64,8 @@
       box-shadow: 0 10px 24px rgba(7,88,200,.35);
     }
     .android-app-btn:hover { filter: brightness(1.08); }
-    .android-app-btn small { font-weight: 600; opacity: .9; }
+    .android-app-btn .app-name { font-size: 16px; }
+    .android-app-btn small { font-weight: 600; opacity: .92; font-size: 12.5px; letter-spacing: .02em; }
 
     /* HERO */
     .hero {
@@ -501,7 +504,7 @@
           </div>
         </div>
       </div>
-        <a class="android-app-btn" href="RCW-Panda-v1.0.apk" download="RCW-Panda-v1.0.apk">RCW-Panda <small>Android app</small></a>
+        <a class="android-app-btn" href="RCW-Panda-v1.0.apk" download="RCW-Panda-v1.0.apk"><span class="app-name">RCW-Panda</span><small>Android app</small></a>
 
     </div>
   </header>
