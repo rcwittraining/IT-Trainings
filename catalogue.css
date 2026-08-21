@@ -67,3 +67,27 @@
 @media(max-width:720px){.catalogue-home{padding-top:46px}.catalogue-home .catalogue-intro{padding:33px 21px}.catalogue-home .catalogue-stats{display:grid;grid-template-columns:repeat(3,1fr)}.catalogue-home .catalogue-stat{min-width:0}.catalogue-home .cert-series{grid-template-columns:1fr;text-align:center}.catalogue-home .series-mark{margin:auto}.catalogue-home .search-row,.catalogue-home .filter-row{grid-template-columns:1fr}.catalogue-home .clear-filters{min-height:42px}.catalogue-home .catalogue-status{align-items:flex-start;flex-direction:column;gap:6px}.catalogue-home .catalogue-grid{grid-template-columns:1fr}.catalogue-home .catalogue-group-head{grid-template-columns:1fr auto}.catalogue-home .catalogue-group-head i{display:none}.catalogue-home .catalogue-group-head>div{display:block}.catalogue-home .catalogue-card{min-height:190px}}
 @media(max-width:430px){.catalogue-home .catalogue-stats{gap:5px}.catalogue-home .catalogue-stat{padding:12px 5px}.catalogue-home .catalogue-stat strong{font-size:24px}.catalogue-home .catalogue-stat span{font-size:8px}.catalogue-home .series-actions{flex-direction:column}.catalogue-home .catalogue-controls{padding:14px}.catalogue-home .catalogue-group-head a{display:none}}
 @media(prefers-reduced-motion:reduce){.catalogue-home *{transition:none!important}}
+
+/* Mobile app: keep every category/card fully on screen */
+html,body{max-width:100%;overflow-x:hidden}
+.catalogue-home{max-width:100%}
+.catalogue-home .catalogue-shell{max-width:100%;overflow-x:auto;overflow-y:visible}
+.catalogue-home .group-tabs{width:100%;max-width:100%;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-bottom:12px}
+.catalogue-home .catalogue-card{max-width:100%;overflow:visible;word-break:break-word}
+.catalogue-home .catalogue-card h4{overflow-wrap:anywhere}
+.catalogue-home .catalogue-grid{width:100%}
+@media(max-width:900px){
+  .catalogue-home .catalogue-grid{grid-template-columns:1fr!important}
+  .catalogue-home .search-row,.catalogue-home .filter-row{grid-template-columns:1fr!important}
+  .catalogue-home .cert-series{grid-template-columns:1fr!important;text-align:left}
+  .catalogue-home .catalogue-intro{grid-template-columns:1fr!important}
+  .catalogue-home .series-actions{grid-column:1/-1;display:flex;flex-direction:column}
+  .catalogue-home .series-actions>*{width:100%}
+}
+@media(max-width:600px){
+  .catalogue-home .catalogue-card{min-height:0;padding:16px}
+  .catalogue-home .catalogue-groups,.catalogue-home .catalogue-status,.catalogue-home .catalogue-empty{padding-left:14px;padding-right:14px}
+  .catalogue-home .cert-series{margin-left:14px;margin-right:14px}
+  .catalogue-home .catalogue-controls{padding:14px}
+  .catalogue-home .card-meta span{font-size:10px}
+}
