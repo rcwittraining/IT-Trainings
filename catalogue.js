@@ -9,7 +9,7 @@
     empty: document.getElementById('emptySearch'), technology: document.getElementById('technologyFilter'), type: document.getElementById('typeFilter'),
     group: document.getElementById('groupFilter'), subcategory: document.getElementById('subcategoryFilter'), sort: document.getElementById('sortFilter'),
     tabs: document.getElementById('groupTabs'), active: document.getElementById('activeFilter'), clear: document.getElementById('clearFilters'),
-    practice: document.getElementById('filterRhcsa'), total: document.getElementById('catalogueTotal'), technologies: document.getElementById('technologyTotal')
+    practice: document.getElementById('filterRhcsa'), incident: document.getElementById('filterIncidentResponse'), total: document.getElementById('catalogueTotal'), technologies: document.getElementById('technologyTotal')
   };
 
   function safeText(value) {
@@ -112,7 +112,7 @@
       var limit = hasFocusedFilter || expandedGroups[group.name] ? group.labs.length : 6;
       var visible = group.labs.slice(0, limit);
       var remaining = group.labs.length - visible.length;
-      var groupLink = group.name === PRACTICE_GROUP ? '<a href="rhcsa-practice/">Series overview →</a>' : '';
+      var groupLink = group.name === PRACTICE_GROUP ? '<a href="rhcsa-practice/">Series overview →</a>' : (group.name === 'Incident Response' ? '<a href="incident-response-freshers/">Incident desk →</a>' : '');
       return '<section class="catalogue-group"><header class="catalogue-group-head"><div><h3>' + safeText(group.name) + '</h3><span>' + group.labs.length + ' ' + (group.labs.length === 1 ? 'activity' : 'activities') + '</span></div><i></i>' + groupLink + '</header>' +
         '<div class="catalogue-grid">' + visible.map(card).join('') + '</div>' +
         (remaining ? '<button class="show-group" type="button" data-expand="' + safeText(group.name) + '">Show ' + remaining + ' more in ' + safeText(group.name) + '</button>' : '') + '</section>';
@@ -149,6 +149,12 @@
     elements.group.value = PRACTICE_GROUP; expandedGroups = Object.create(null); renderTabs(); render();
     document.querySelector('.catalogue-controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+  if (elements.incident) {
+    elements.incident.addEventListener('click', function () {
+      elements.group.value = 'Incident Response'; expandedGroups = Object.create(null); renderTabs(); render();
+      document.querySelector('.catalogue-controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 
   async function refreshPublishedCatalogue() {
     try {
