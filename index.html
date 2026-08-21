@@ -61,11 +61,11 @@
       box-shadow: 0 10px 24px rgba(7,88,200,.35);
     }
     .android-app-btn:hover { filter: brightness(1.08); }
-    .android-app-btn .btn-icon { display: flex; align-items: center; }
+    .android-app-btn .btn-icon { display: flex; align-items: center; flex-shrink: 0; }
     .android-app-btn .btn-icon svg { width: 30px; height: 30px; display: block; }
     .android-app-btn .btn-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; line-height: 1.2; }
-    .android-app-btn .app-name { font-size: 15px; }
-    .android-app-btn small { font-weight: 600; opacity: .92; font-size: 12px; letter-spacing: .02em; }
+    .android-app-btn .app-name { font-size: 15px; white-space: nowrap; }
+    .android-app-btn small { font-weight: 600; opacity: .92; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
 
     /* HERO */
     .hero {
