@@ -49,23 +49,23 @@
 
     .android-app-btn {
       display: inline-flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 3px;
+      align-items: center;
+      gap: 12px;
       margin-top: 18px;
-      padding: 13px 22px;
+      padding: 12px 20px;
       border-radius: 16px;
-      line-height: 1.25;
       background: linear-gradient(115deg,#078be8,#0758c8);
       color: #fff;
       font-weight: 800;
-      font-size: 15px;
       text-decoration: none;
       box-shadow: 0 10px 24px rgba(7,88,200,.35);
     }
     .android-app-btn:hover { filter: brightness(1.08); }
-    .android-app-btn .app-name { font-size: 16px; }
-    .android-app-btn small { font-weight: 600; opacity: .92; font-size: 12.5px; letter-spacing: .02em; }
+    .android-app-btn .btn-icon { display: flex; align-items: center; }
+    .android-app-btn .btn-icon svg { width: 30px; height: 30px; display: block; }
+    .android-app-btn .btn-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; line-height: 1.2; }
+    .android-app-btn .app-name { font-size: 15px; }
+    .android-app-btn small { font-weight: 600; opacity: .92; font-size: 12px; letter-spacing: .02em; }
 
     /* HERO */
     .hero {
@@ -504,7 +504,7 @@
           </div>
         </div>
       </div>
-        <a class="android-app-btn" href="RCW-Panda-v1.0.apk" download="RCW-Panda-v1.0.apk"><span class="app-name">RCW-Panda</span><small>Android app</small></a>
+        <a class="android-app-btn" href="RCW-Panda-v1.0.apk" download="RCW-Panda-v1.0.apk"><span class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.63.63 0 0 0-.26-.85.61.61 0 0 0-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67a.6.6 0 0 0-.87-.2.6.6 0 0 0-.22.83l1.84 3.18A11.53 11.53 0 0 0 1 18h22a11.53 11.53 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg></span><span class="btn-text"><span class="app-name">Download RCW-Panda</span><small>Android App</small></span></a>
 
     </div>
   </header>
