@@ -1320,6 +1320,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Technology Labs"
   },
   {
+    "title": "rcwansible automation",
+    "category": "DevOps \u2022 Automation \u2022 AI-assisted",
+    "badge": "RCW",
+    "accent": "#2563eb",
+    "id": "rcwansible-automation",
+    "targetUrl": "https://www.rcwittraining.in/rcwansible-automation/",
+    "contentType": "Tool",
+    "technology": "DevOps",
+    "subcategory": "Automation",
+    "group": "Technology Labs"
+  },
+  {
     "title": "Ansible Playbooks",
     "category": "DevOps \u2022 Automation",
     "badge": "ANS",
