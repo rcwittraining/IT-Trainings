@@ -1,5 +1,17 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "rcwansible automation desktop",
+    "category": "DevOps \u2022 Kubernetes \u2022 Admin-approved",
+    "badge": "RCW",
+    "accent": "#2563eb",
+    "id": "rcwansible-desktop",
+    "targetUrl": "https://www.rcwittraining.in/rcwansible-desktop/",
+    "contentType": "Tool",
+    "technology": "DevOps",
+    "subcategory": "Kubernetes",
+    "group": "Tools"
+  },
+  {
     "title": "IT Incident Response Desk for Freshers",
     "category": "Incident Response \u2022 L1 Helpdesk \u2022 Freshers",
     "badge": "IR",
