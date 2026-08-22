@@ -1,6 +1,18 @@
 {
-  "updatedAt": "2026-08-22T17:45:00Z",
+  "updatedAt": "2026-08-22T18:05:00Z",
   "simulators": [
+    {
+      "title": "RCW AI Log Analyzer",
+      "category": "IT Operations • Troubleshooting • Offline",
+      "badge": "LOG",
+      "accent": "#0c9a62",
+      "id": "rcw-ai-log-analyzer",
+      "targetUrl": "https://www.rcwittraining.in/rcw-ai-log-analyzer/",
+      "contentType": "Tool",
+      "technology": "IT Operations",
+      "subcategory": "Troubleshooting",
+      "group": "Tools"
+    },
     {
       "title": "rcwansible automation desktop — Request access",
       "category": "DevOps • Kubernetes • Admin-approved",

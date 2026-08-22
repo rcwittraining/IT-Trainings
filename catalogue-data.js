@@ -1,5 +1,17 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "RCW AI Log Analyzer",
+    "category": "IT Operations \u2022 Troubleshooting \u2022 Offline",
+    "badge": "LOG",
+    "accent": "#0c9a62",
+    "id": "rcw-ai-log-analyzer",
+    "targetUrl": "https://www.rcwittraining.in/rcw-ai-log-analyzer/",
+    "contentType": "Tool",
+    "technology": "IT Operations",
+    "subcategory": "Troubleshooting",
+    "group": "Tools"
+  },
+  {
     "title": "rcwansible automation desktop — Request access",
     "category": "DevOps \u2022 Kubernetes \u2022 Admin-approved",
     "badge": "RCW",
