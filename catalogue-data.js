@@ -2390,5 +2390,29 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "RHCSA Certification Practice",
     "seriesUrl": "https://www.rcwittraining.in/rhcsa-practice/",
     "taskNumber": 62
-  }
+  },
+{
+  "title": "IT Admin vs Zombies - RCW Server Room Defense Game",
+  "category": "IT Operations \u2022 Gamified Learning \u2022 RCW Office",
+  "badge": "GAME",
+  "accent": "#4e9fff",
+  "id": "it-admin-zombie-game",
+  "targetUrl": "https://www.rcwittraining.in/it-admin-zombie-game/",
+  "contentType": "Game",
+  "technology": "IT Operations",
+  "subcategory": "Incident Response",
+  "group": "Technology Labs"
+},
+{
+  "title": "Kubernetes Cluster Deployer - Single App",
+  "category": "Kubernetes \u2022 DevOps \u2022 Cluster Operations",
+  "badge": "K8S",
+  "accent": "#326ce5",
+  "id": "k8s-cluster-deployer",
+  "targetUrl": "https://www.rcwittraining.in/k8s-cluster-deployer/",
+  "contentType": "Lab",
+  "technology": "Kubernetes",
+  "subcategory": "Cluster Operations",
+  "group": "Technology Labs"
+}
 ]);

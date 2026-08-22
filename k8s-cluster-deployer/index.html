@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K8s Cluster Deployer - Single App Lab | RCW IT Training</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070b14;color:#dbe7ff;font-family:'Space Grotesk',sans-serif;min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+header{padding:16px 20px;border-bottom:1px solid rgba(78,159,255,0.18);display:flex;justify-content:space-between;align-items:center;background:rgba(10,22,40,0.7);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700}
+.logo i{width:32px;height:32px;background:linear-gradient(180deg,#4e9fff,#2a64c8);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#6ea8ff;background:rgba(78,159,255,0.12);border:1px solid rgba(78,159,255,0.22);padding:5px 10px;border-radius:99px}
+.wrap{max-width:1200px;margin:0 auto;padding:20px;display:grid;grid-template-columns:360px 1fr;gap:16px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,rgba(19,41,77,0.9),rgba(10,22,40,0.96));border:1px solid rgba(78,159,255,0.18);border-radius:16px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,0.35)}
+.card h2{font-size:14px;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#8aa0c2;text-transform:uppercase;display:block;margin:12px 0 6px}
+input,select{width:100%;height:42px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;padding:0 12px;font-size:14px;outline:none}
+input:focus,select:focus{border-color:#4e9fff}
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.type-card{border-radius:10px;background:rgba(0,0,0,0.28);border:1px solid rgba(255,255,255,0.08);padding:10px;cursor:pointer;position:relative}
+.type-card.active{border-color:#4e9fff;background:rgba(78,159,255,0.14)}
+.type-card h3{font-size:12px}
+.type-card p{font-size:11px;color:#8aa0c2}
+.btn{width:100%;height:46px;border-radius:10px;border:0;background:linear-gradient(180deg,#4e9fff,#2a64c8);color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px}
+.btn-ghost{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);box-shadow:none;margin-top:8px;height:40px}
+.terminal{background:#04070f;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;min-height:380px;display:flex;flex-direction:column}
+.term-head{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);font-family:'JetBrains Mono',monospace;font-size:11px}
+.term-body{flex:1;padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-all;overflow:auto;max-height:600px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 7px;border-radius:99px;background:rgba(78,159,255,0.14);border:1px solid rgba(78,159,255,0.22);color:#8ab6ff}
+pre.yaml{background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;overflow:auto;max-height:400px;margin-top:10px;color:#a8bdd8;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><i>☸️</i> K8s Deployer Lab <span style="opacity:0.5;font-weight:400">• RCW IT Training</span></div>
+  <div class="badge">SINGLE APP • STATIC • READY</div>
+</header>
+<div class="wrap">
+  <div>
+    <div class="card">
+      <h2>🚀 Generate Cluster Script <span class="tag">CLIENT SIDE</span></h2>
+      <label>Cluster Name</label>
+      <input id="cName" value="rcw-dev">
+      <label>Type</label>
+      <div class="type-grid" id="typeGrid">
+        <div class="type-card active" data-type="k3d"><h3>k3d (k3s)</h3><p>Fastest, 30 sec, Docker only</p></div>
+        <div class="type-card" data-type="kind"><h3>kind</h3><p>CNCF certified</p></div>
+        <div class="type-card" data-type="minikube"><h3>minikube</h3><p>VM / Docker</p></div>
+        <div class="type-card" data-type="kubeadm"><h3>kubeadm</h3><p>Bare-metal Ubuntu</p></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="flex:1"><label>K8s Version</label><select id="k8sVer"><option>v1.30.0</option><option>v1.29.3</option><option>v1.28.8</option></select></div>
+        <div style="flex:1"><label>Nodes</label><select id="nodes"><option>1</option><option>2</option><option selected>3</option><option>5</option></select></div>
+      </div>
+      <button class="btn" id="genBtn">⚡ GENERATE SCRIPT</button>
+      <button class="btn btn-ghost" id="copyBtn">📋 Copy to Clipboard</button>
+      <button class="btn btn-ghost" id="dlBtn">⬇️ Download app.py (Full Deployer)</button>
+      <div style="margin-top:12px;font-size:11px;color:#8aa0c2;line-height:1.5">
+        <b style="color:#fff">How to use:</b><br>
+        1. Select type & click Generate<br>
+        2. Copy script, run on your laptop/VM with Docker<br>
+        3. For full UI deployer, download app.py (Flask app from lab)
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>📦 What You Get</h2>
+      <div style="font-size:12px;color:#a8bdd8;line-height:1.6">
+        • <b style="color:#fff">Single App</b> = One Python file deploys everything<br>
+        • Live logs, cluster list, kubeconfig download<br>
+        • Add-ons: ingress-nginx, metrics-server<br>
+        • Works offline once generated<br>
+        • <b>Lab Files:</b><br>
+        - <code>app.py</code> → Full Flask deployer (needs Python)<br>
+        - <code>deploy.sh</code> → Bash-only deployer (no Python)<br>
+        - This page → Static generator (no backend)
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="terminal">
+        <div class="term-head"><span>generated-script.sh — ready to run</span><span class="tag" id="state">READY</span></div>
+        <div class="term-body" id="termBody">> RCW K8s Deployer Lab
+> Select options on left and click GENERATE
+> Script will appear here, ready to copy & run
+
+> Tip: k3d is fastest if you have Docker.
+> For bare-metal, choose kubeadm to get full Ubuntu setup script.
+</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>📝 Full App.py (Python Single App)</h2>
+      <p style="font-size:12px;color:#a8bdd8">Want the live UI with SSE logs, cluster management, Docker auto-detect? Download the full app:</p>
+      <pre class="yaml" id="fullAppPreview" style="max-height:200px">Loading app.py preview...</pre>
+      <button class="btn btn-ghost" onclick="window.open('https://github.com/rcwittraining/IT-Trainings/blob/main/k8s-cluster-deployer/app.py','_blank')">View on GitHub</button>
+    </div>
+  </div>
+</div>
+<script>
+let selected='k3d';
+document.querySelectorAll('.type-card').forEach(c=>{
+  c.onclick=()=>{document.querySelectorAll('.type-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');selected=c.dataset.type}
+});
+function genScript(p){
+  const name=p.name, ver=p.version, nodes=p.nodes;
+  if(p.type==='k3d'){
+    return `#!/bin/bash
+# RCW k3d deploy - ${name} - Generated by rcwittraining.in
+set -e
+echo "☸️ Creating k3d cluster ${name} with ${nodes} nodes (${ver})"
+k3d cluster create ${name} --image rancher/k3s:${ver.replace('v','')}-k3s1 --servers 1 --agents ${Math.max(0,nodes-1)} --port "80:80@loadbalancer" --port "443:443@loadbalancer" --k3s-arg "--disable=traefik@server:0"
+kubectl wait --for=condition=Ready nodes --all --timeout=120s
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+echo "✅ Cluster ${name} ready!"
+kubectl get nodes
+`;
+  } else if(p.type==='kind'){
+    let yaml=`kind: Cluster\napiVersion: kind.x-k8s.io/v1alpha4\nnodes:\n- role: control-plane\n  image: kindest/node:${ver}\n`;
+    for(let i=0;i<nodes-1;i++) yaml+=`- role: worker\n  image: kindest/node:${ver}\n`;
+    return `#!/bin/bash
+# RCW kind deploy - ${name}
+set -e
+cat <<'EOF' > /tmp/kind-${name}.yaml
+${yaml}EOF
+kind create cluster --name ${name} --config /tmp/kind-${name}.yaml --image kindest/node:${ver}
+kubectl wait --for=condition=Ready nodes --all --timeout=120s
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kubectl get nodes
+`;
+  } else if(p.type==='minikube'){
+    return `#!/bin/bash
+# RCW minikube deploy - ${name}
+minikube start -p ${name} --nodes ${nodes} --kubernetes-version ${ver} --driver docker --addons ingress,metrics-server
+kubectl get nodes
+`;
+  } else {
+    return `#!/bin/bash
+# RCW kubeadm bare-metal - ${name} - Ubuntu 22.04
+set -e
+K8S_VER=${ver.replace('v','').split('.').slice(0,2).join('.')}
+echo "Installing kubeadm ${ver}"
+sudo swapoff -a; sudo sed -i '/ swap / s/^/#/' /etc/fstab
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay; sudo modprobe br_netfilter
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables=1
+net.ipv4.ip_forward=1
+EOF
+sudo sysctl --system
+sudo apt-get update && sudo apt-get install -y containerd apt-transport-https ca-certificates curl gpg
+sudo mkdir -p /etc/containerd && containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+sudo systemctl restart containerd; sudo systemctl enable containerd
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v$K8S_VER/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v$K8S_VER/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update && sudo apt-get install -y kubelet kubeadm kubectl && sudo apt-mark hold kubelet kubeadm kubectl
+sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version ${ver}
+mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/calico.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
+echo "✅ Cluster ${name} ready"
+sudo kubeadm token create --print-join-command
+`;
+  }
+}
+document.getElementById('genBtn').onclick=()=>{
+  const p={name:document.getElementById('cName').value||'rcw-dev',type:selected,version:document.getElementById('k8sVer').value,nodes:parseInt(document.getElementById('nodes').value)};
+  const s=genScript(p);
+  document.getElementById('termBody').textContent=s;
+  document.getElementById('state').textContent='GENERATED';
+};
+document.getElementById('copyBtn').onclick=()=>{
+  const t=document.getElementById('termBody').textContent;
+  navigator.clipboard.writeText(t).then(()=>{document.getElementById('state').textContent='COPIED!'; setTimeout(()=>document.getElementById('state').textContent='GENERATED',1500)});
+};
+document.getElementById('dlBtn').onclick=()=>{
+  window.open('app.py','_blank');
+};
+fetch('app.py').then(r=>r.text()).then(t=>{document.getElementById('fullAppPreview').textContent=t.slice(0,2000)+'...\\n\\n[Full file 600+ lines - download via button]'}).catch(()=>{document.getElementById('fullAppPreview').textContent='app.py will be available after publish - contains full Flask deployer'});
+// auto gen
+document.getElementById('genBtn').click();
+</script>
+</body>
+</html>
