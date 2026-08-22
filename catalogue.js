@@ -72,7 +72,7 @@
     return '<article class="catalogue-card' + (isPractice ? ' practice' : '') + '" style="--accent:' + safeAccent(lab.accent) + '">' +
       '<div class="card-top"><span class="card-badge">' + safeText(lab.badge) + '</span><span class="card-type">' + safeText(lab.contentType) + '</span></div>' +
       '<h4>' + safeText(lab.title) + '</h4><div class="card-meta"><span>' + safeText(lab.technology) + '</span><span>' + safeText(lab.subcategory) + '</span></div>' +
-      '<a class="card-open" href="' + safeText(launcherUrl(lab)) + '" target="_blank" rel="noopener noreferrer" aria-label="Open ' + safeText(lab.title) + ' in a new tab"><span>Open free ' + (lab.contentType === 'Simulator' ? 'simulator' : 'activity') + '</span><span>↗</span></a></article>';
+      '<a class="card-open" href="' + safeText(launcherUrl(lab)) + '" target="_blank" rel="noopener noreferrer" aria-label="Open ' + safeText(lab.title) + ' in a new tab"><span>' + (lab.contentType === 'Restricted Tool' ? 'Request access' : 'Open free ' + (lab.contentType === 'Simulator' ? 'simulator' : 'activity')) + '</span><span>↗</span></a></article>';
   }
 
   function filteredLabs() {
