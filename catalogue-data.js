@@ -17,7 +17,7 @@ window.RCW_CATALOGUE = Object.freeze([
     "badge": "RCW",
     "accent": "#078be8",
     "id": "linux-autofixer",
-    "targetUrl": "https://www.rcwittraining.in/admin-restricted-tools/",
+    "targetUrl": "https://www.rcwittraining.in/linux-autofixer/",
     "contentType": "Restricted Tool",
     "technology": "Linux and RHEL",
     "subcategory": "Troubleshooting",
