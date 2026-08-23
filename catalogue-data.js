@@ -12,6 +12,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
+    "title": "Linux Auto-Fixer v2.0 — Request access",
+    "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
+    "badge": "RCW",
+    "accent": "#078be8",
+    "id": "linux-autofixer",
+    "targetUrl": "https://www.rcwittraining.in/admin-restricted-tools/",
+    "contentType": "Restricted Tool",
+    "technology": "Linux and RHEL",
+    "subcategory": "Troubleshooting",
+    "group": "Tools"
+  },
+  {
     "title": "rcwansible automation desktop — Request access",
     "category": "DevOps \u2022 Kubernetes \u2022 Admin-approved",
     "badge": "RCW",
