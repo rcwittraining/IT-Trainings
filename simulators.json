@@ -2,6 +2,18 @@
   "updatedAt": "2026-08-22T18:05:00Z",
   "simulators": [
     {
+      "title": "Linux Auto-Fixer v2.0 — Request access",
+      "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
+      "badge": "RCW",
+      "accent": "#078be8",
+      "id": "linux-autofixer",
+      "targetUrl": "https://www.rcwittraining.in/linux-autofixer/",
+      "contentType": "Restricted Tool",
+      "technology": "Linux and RHEL",
+      "subcategory": "Troubleshooting",
+      "group": "Tools"
+    },
+    {
       "title": "RCW AI Log Analyzer",
       "category": "IT Operations • Troubleshooting • Offline",
       "badge": "LOG",
