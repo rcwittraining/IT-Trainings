@@ -12,7 +12,7 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
-    "title": "Linux Auto-Fixer v2.0 — Request access",
+    "title": "Linux Auto-Fixer v2.0.0 — Official Download",
     "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
     "badge": "RCW",
     "accent": "#078be8",
