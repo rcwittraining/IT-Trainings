@@ -1,7 +1,7 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
     "title": "RCW AI Log Analyzer",
-    "category": "IT Operations \u2022 Troubleshooting \u2022 Offline",
+    "category": "IT Operations • Troubleshooting • Offline",
     "badge": "LOG",
     "accent": "#0c9a62",
     "id": "rcw-ai-log-analyzer",
@@ -13,7 +13,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Linux Auto-Fixer v2.0.0 — Official Download",
-    "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
+    "category": "Linux • Troubleshooting • Admin-approved",
     "badge": "RCW",
     "accent": "#078be8",
     "id": "linux-autofixer",
@@ -25,7 +25,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "rcwansible automation desktop — Request access",
-    "category": "DevOps \u2022 Kubernetes \u2022 Admin-approved",
+    "category": "DevOps • Kubernetes • Admin-approved",
     "badge": "RCW",
     "accent": "#2563eb",
     "id": "rcwansible-desktop",
@@ -37,7 +37,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RCW-NixDetect — Linux Log Root Cause Analyzer",
-    "category": "Linux \u2022 Log Analysis \u2022 Offline",
+    "category": "Linux • Log Analysis • Offline",
     "badge": "RCA",
     "accent": "#7c3aed",
     "id": "rcw-nixdetect",
@@ -49,7 +49,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RCW-NixPriv — Sudo Privilege Delegation Manager",
-    "category": "Linux \u2022 Security \u2022 Offline",
+    "category": "Linux • Security • Offline",
     "badge": "SUDO",
     "accent": "#37b6ff",
     "id": "rcw-nixpriv",
@@ -60,8 +60,20 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
+    "title": "RCW-NixTrace — Linux Server Inventory & Docs",
+    "category": "Linux • Inventory • Offline",
+    "badge": "INV",
+    "accent": "#2bb673",
+    "id": "rcw-nixtrace",
+    "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixtrace/",
+    "contentType": "Tool",
+    "technology": "Linux and RHEL",
+    "subcategory": "Compliance",
+    "group": "Tools"
+  },
+  {
     "title": "IT Incident Response Desk for Freshers",
-    "category": "Incident Response \u2022 L1 Helpdesk \u2022 Freshers",
+    "category": "Incident Response • L1 Helpdesk • Freshers",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "incident-response-freshers",
@@ -72,8 +84,8 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Incident Response"
   },
   {
-    "title": "Account lockout \u2014 user cannot log in",
-    "category": "Incident Response \u2022 Freshers \u2022 P3 identity",
+    "title": "Account lockout — user cannot log in",
+    "category": "Incident Response • Freshers • P3 identity",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1001-account-lockout",
@@ -85,7 +97,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Website 502s / php-fpm saturation",
-    "category": "Incident Response \u2022 Freshers \u2022 P2 web",
+    "category": "Incident Response • Freshers • P2 web",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1002-website-502",
@@ -97,7 +109,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Payroll mail not sending",
-    "category": "Incident Response \u2022 Freshers \u2022 P1 messaging",
+    "category": "Incident Response • Freshers • P1 messaging",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1003-mail-outage",
@@ -108,8 +120,8 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Incident Response"
   },
   {
-    "title": "Database disk 92% \u2014 WAL buildup",
-    "category": "Incident Response \u2022 Freshers \u2022 P2 data",
+    "title": "Database disk 92% — WAL buildup",
+    "category": "Incident Response • Freshers • P2 data",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1004-database-disk",
@@ -121,7 +133,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "VPN handshake timeout from home",
-    "category": "Incident Response \u2022 Freshers \u2022 P3 network",
+    "category": "Incident Response • Freshers • P3 network",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1005-vpn-timeout",
@@ -133,7 +145,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "API TLS certificate expires in 3 days",
-    "category": "Incident Response \u2022 Freshers \u2022 P2 security",
+    "category": "Incident Response • Freshers • P2 security",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1006-tls-expiry",
@@ -144,8 +156,8 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Incident Response"
   },
   {
-    "title": "Intern access \u2014 incident or request?",
-    "category": "Incident Response \u2022 Freshers \u2022 P4 process",
+    "title": "Intern access — incident or request?",
+    "category": "Incident Response • Freshers • P4 process",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1007-onboarding-vs-incident",
@@ -157,7 +169,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Cryptominer on jump host",
-    "category": "Incident Response \u2022 Freshers \u2022 P1 security",
+    "category": "Incident Response • Freshers • P1 security",
     "badge": "IR",
     "accent": "#ff5d6c",
     "id": "inc-1008-jump-host-malware",
@@ -168,8 +180,8 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Incident Response"
   },
   {
-    "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
-    "category": "Adaptive Quiz \u2022 Technical Skills",
+    "title": "Raju Rishi Dev — Technical Quiz Agent",
+    "category": "Adaptive Quiz • Technical Skills",
     "badge": "QUIZ",
     "accent": "#19a7ff",
     "id": "technical-quiz-agent",
@@ -181,7 +193,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Amazon Bedrock End-to-End GUI Lab",
-    "category": "AWS \u2022 Generative AI \u2022 Responsible AI",
+    "category": "AWS • Generative AI • Responsible AI",
     "badge": "GENAI",
     "accent": "#ff9d1f",
     "id": "aws-bedrock-lab",
@@ -193,7 +205,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Amazon ECS End-to-End GUI Lab",
-    "category": "AWS \u2022 Containers \u2022 Security & Compliance",
+    "category": "AWS • Containers • Security & Compliance",
     "badge": "ECS",
     "accent": "#ff9d1f",
     "id": "aws-ecs-gui-lab",
@@ -205,7 +217,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "On-Premises LLM Operations Automation Lab",
-    "category": "Private AI \u2022 Kubernetes \u2022 IT Operations",
+    "category": "Private AI • Kubernetes • IT Operations",
     "badge": "LLM",
     "accent": "#0f9f8f",
     "id": "onprem-llm-ops-lab",
@@ -217,7 +229,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHEL 10 .vimrc & .bashrc Configuration Lab",
-    "category": "RHEL 10 \u2022 Vim \u2022 Bash",
+    "category": "RHEL 10 • Vim • Bash",
     "badge": "RHEL",
     "accent": "#c91f37",
     "id": "rhel10-vimrc-bashrc-lab",
@@ -229,7 +241,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Persistent Storage Build Challenge",
-    "category": "RHEL 10 \u2022 RHCSA \u2022 Storage",
+    "category": "RHEL 10 • RHCSA • Storage",
     "badge": "RHCSA",
     "accent": "#21b5f5",
     "id": "rhcsa-storage-build",
@@ -241,7 +253,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Boot, Timers and Recovery Challenge",
-    "category": "RHEL 10 \u2022 RHCSA \u2022 System Operations",
+    "category": "RHEL 10 • RHCSA • System Operations",
     "badge": "RHCSA",
     "accent": "#21b5f5",
     "id": "rhcsa-system-operations",
@@ -253,7 +265,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Network, SELinux and Privilege Challenge",
-    "category": "RHEL 10 \u2022 RHCSA \u2022 Security",
+    "category": "RHEL 10 • RHCSA • Security",
     "badge": "RHCSA",
     "accent": "#21b5f5",
     "id": "rhcsa-network-selinux",
@@ -265,7 +277,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "User Lifecycle and Orphaned Home Challenge",
-    "category": "RHEL 10 \u2022 RHCSA \u2022 User Management",
+    "category": "RHEL 10 • RHCSA • User Management",
     "badge": "RHCSA",
     "accent": "#21b5f5",
     "id": "rhcsa-user-lifecycle",
@@ -277,7 +289,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Production Outage Game",
-    "category": "IT Architecture \u2022 Incident Response",
+    "category": "IT Architecture • Incident Response",
     "badge": "SEV-1",
     "accent": "#ef405b",
     "id": "production-outage-game",
@@ -289,7 +301,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Linux Folder Challenge",
-    "category": "Linux \u2022 Command Line",
+    "category": "Linux • Command Line",
     "badge": "LINUX",
     "accent": "#09a7f5",
     "id": "linux-folder-challenge",
@@ -301,7 +313,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Linux Server Crash Root-Cause Analysis",
-    "category": "Linux \u2022 Troubleshooting",
+    "category": "Linux • Troubleshooting",
     "badge": "RCA",
     "accent": "#12a9e9",
     "id": "linux-server-crash-rca",
@@ -313,7 +325,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Linux Unauthorised Access Review",
-    "category": "Linux \u2022 Security",
+    "category": "Linux • Security",
     "badge": "SEC",
     "accent": "#12a9e9",
     "id": "linux-unauthorised-access-review",
@@ -325,7 +337,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Linux Root Password Audit",
-    "category": "Linux \u2022 Authentication",
+    "category": "Linux • Authentication",
     "badge": "AUTH",
     "accent": "#12a9e9",
     "id": "linux-root-password-audit",
@@ -337,7 +349,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Kubernetes Cluster Setup Challenge",
-    "category": "Linux \u2022 Kubernetes",
+    "category": "Linux • Kubernetes",
     "badge": "K8S",
     "accent": "#326ce5",
     "id": "kubernetes-cluster-setup",
@@ -349,7 +361,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Nginx Reverse Proxy Challenge",
-    "category": "Linux \u2022 Web Server",
+    "category": "Linux • Web Server",
     "badge": "NGINX",
     "accent": "#0c9c51",
     "id": "nginx-reverse-proxy",
@@ -361,7 +373,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "LVM Extend Challenge",
-    "category": "Linux \u2022 Storage",
+    "category": "Linux • Storage",
     "badge": "LVM",
     "accent": "#f5a623",
     "id": "lvm-extend",
@@ -373,7 +385,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Squid Web Proxy Challenge",
-    "category": "RHEL \u2022 Networking",
+    "category": "RHEL • Networking",
     "badge": "SQUID",
     "accent": "#d71920",
     "id": "squid-web-proxy",
@@ -385,7 +397,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHEL 10 Practice Terminal",
-    "category": "Red Hat \u2022 Open Sandbox \u2022 RHCSA",
+    "category": "Red Hat • Open Sandbox • RHCSA",
     "badge": "RHEL",
     "accent": "#d71920",
     "id": "rhel10-practice-terminal",
@@ -397,7 +409,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Soft Links Challenge",
-    "category": "RHEL \u2022 Filesystem",
+    "category": "RHEL • Filesystem",
     "badge": "LINK",
     "accent": "#6366f1",
     "id": "soft-links",
@@ -409,7 +421,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Hard Links Challenge",
-    "category": "RHEL \u2022 Filesystem",
+    "category": "RHEL • Filesystem",
     "badge": "HLNK",
     "accent": "#8b5cf6",
     "id": "hard-links",
@@ -421,7 +433,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Docker Basics Challenge",
-    "category": "Containers \u2022 Docker",
+    "category": "Containers • Docker",
     "badge": "DKR",
     "accent": "#2496ed",
     "id": "docker-basics",
@@ -433,7 +445,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Git & GitHub Challenge",
-    "category": "DevOps \u2022 Version Control",
+    "category": "DevOps • Version Control",
     "badge": "GIT",
     "accent": "#f05033",
     "id": "git-github",
@@ -445,7 +457,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "SQL Fundamentals Challenge",
-    "category": "Databases \u2022 SQL",
+    "category": "Databases • SQL",
     "badge": "SQL",
     "accent": "#e38c00",
     "id": "sql-fundamentals",
@@ -457,7 +469,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Python Basics Challenge",
-    "category": "Programming \u2022 Python",
+    "category": "Programming • Python",
     "badge": "PY",
     "accent": "#ffd343",
     "id": "python-basics",
@@ -469,7 +481,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Networking Fundamentals Challenge",
-    "category": "Networking \u2022 Troubleshooting",
+    "category": "Networking • Troubleshooting",
     "badge": "NET",
     "accent": "#00bcd4",
     "id": "networking-fundamentals",
@@ -481,7 +493,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Cybersecurity Challenge",
-    "category": "Security \u2022 Incident Response",
+    "category": "Security • Incident Response",
     "badge": "SEC",
     "accent": "#ef405b",
     "id": "cybersecurity",
@@ -493,7 +505,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS IAM Compromise Alert Challenge",
-    "category": "AWS \u2022 Identity Security",
+    "category": "AWS • Identity Security",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-iam-compromise-alert",
@@ -505,7 +517,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure Virtual Desktop Lab",
-    "category": "Azure \u2022 Virtual Desktop",
+    "category": "Azure • Virtual Desktop",
     "badge": "AVD",
     "accent": "#086dcc",
     "id": "azure-virtual-desktop",
@@ -517,7 +529,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS Control Tower Lab",
-    "category": "AWS \u2022 Governance",
+    "category": "AWS • Governance",
     "badge": "AWS",
     "accent": "#ff6b0b",
     "id": "aws-control-tower",
@@ -529,8 +541,8 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "VMware to Hyper-V Migration Lab",
-    "category": "VMware \u2022 Hyper-V \u2022 Veeam",
-    "badge": "V\u2192H",
+    "category": "VMware • Hyper-V • Veeam",
+    "badge": "V→H",
     "accent": "#42a62a",
     "id": "vmware-hyper-v",
     "targetUrl": "https://rcwittraining.github.io/VMware-to-Hyper-V-using-Veeam/",
@@ -541,8 +553,8 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "VMware to Azure Migration Lab",
-    "category": "VMware \u2022 Microsoft Azure",
-    "badge": "V\u2192A",
+    "category": "VMware • Microsoft Azure",
+    "badge": "V→A",
     "accent": "#0d97cf",
     "id": "vmware-azure",
     "targetUrl": "https://rcwittraining.github.io/VMware-to-Azure-Migrate/",
@@ -553,7 +565,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "TrueNAS Debug Export Lab",
-    "category": "TrueNAS \u2022 Storage",
+    "category": "TrueNAS • Storage",
     "badge": "NAS",
     "accent": "#0b9ddd",
     "id": "truenas-debug",
@@ -565,7 +577,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "GCP Admin Exam Simulator",
-    "category": "Google Cloud \u2022 Exam Practice",
+    "category": "Google Cloud • Exam Practice",
     "badge": "GCP",
     "accent": "#4285f4",
     "id": "gcp-admin",
@@ -577,7 +589,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure Admin Exam Simulator",
-    "category": "Microsoft Azure \u2022 Exam Practice",
+    "category": "Microsoft Azure • Exam Practice",
     "badge": "AZ",
     "accent": "#087ed2",
     "id": "azure-admin",
@@ -589,7 +601,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHEL 10 Installation Lab",
-    "category": "Red Hat \u2022 Linux",
+    "category": "Red Hat • Linux",
     "badge": "RHEL",
     "accent": "#d71920",
     "id": "rhel-10-install",
@@ -613,7 +625,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "grep Text Search Mastery",
-    "category": "Linux \u2022 Text Processing",
+    "category": "Linux • Text Processing",
     "badge": "GREP",
     "accent": "#0ba8ee",
     "id": "grep-mastery",
@@ -625,7 +637,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "sed Stream Editing",
-    "category": "Linux \u2022 Text Processing",
+    "category": "Linux • Text Processing",
     "badge": "SED",
     "accent": "#0ba8ee",
     "id": "sed-editing",
@@ -637,7 +649,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "awk Text Processing",
-    "category": "Linux \u2022 Text Processing",
+    "category": "Linux • Text Processing",
     "badge": "AWK",
     "accent": "#0ba8ee",
     "id": "awk-processing",
@@ -649,7 +661,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "find File Search",
-    "category": "Linux \u2022 File Management",
+    "category": "Linux • File Management",
     "badge": "FIND",
     "accent": "#0ba8ee",
     "id": "find-files",
@@ -661,7 +673,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "tar Archive Management",
-    "category": "Linux \u2022 File Management",
+    "category": "Linux • File Management",
     "badge": "TAR",
     "accent": "#0ba8ee",
     "id": "tar-archives",
@@ -673,7 +685,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "gzip Compression",
-    "category": "Linux \u2022 File Management",
+    "category": "Linux • File Management",
     "badge": "GZIP",
     "accent": "#0ba8ee",
     "id": "gzip-compress",
@@ -685,7 +697,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "cron Job Scheduling",
-    "category": "Linux \u2022 Automation",
+    "category": "Linux • Automation",
     "badge": "CRON",
     "accent": "#0ba8ee",
     "id": "cron-jobs",
@@ -697,7 +709,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "at One-time Jobs",
-    "category": "Linux \u2022 Automation",
+    "category": "Linux • Automation",
     "badge": "AT",
     "accent": "#0ba8ee",
     "id": "at-jobs",
@@ -709,7 +721,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "User Management",
-    "category": "Linux \u2022 Users & Groups",
+    "category": "Linux • Users & Groups",
     "badge": "USER",
     "accent": "#0ba8ee",
     "id": "user-management",
@@ -721,7 +733,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Group Management",
-    "category": "Linux \u2022 Users & Groups",
+    "category": "Linux • Users & Groups",
     "badge": "GROUP",
     "accent": "#0ba8ee",
     "id": "group-management",
@@ -733,7 +745,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "File Permissions (chmod)",
-    "category": "Linux \u2022 Permissions",
+    "category": "Linux • Permissions",
     "badge": "CHMOD",
     "accent": "#0ba8ee",
     "id": "file-permissions",
@@ -745,7 +757,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "File Ownership (chown)",
-    "category": "Linux \u2022 Permissions",
+    "category": "Linux • Permissions",
     "badge": "CHOWN",
     "accent": "#0ba8ee",
     "id": "file-ownership",
@@ -757,7 +769,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Process Management",
-    "category": "Linux \u2022 System Admin",
+    "category": "Linux • System Admin",
     "badge": "PROC",
     "accent": "#0ba8ee",
     "id": "process-management",
@@ -769,7 +781,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "systemd Service Management",
-    "category": "Linux \u2022 System Admin",
+    "category": "Linux • System Admin",
     "badge": "SYSCTL",
     "accent": "#0ba8ee",
     "id": "systemd-services",
@@ -781,7 +793,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "journalctl Log Inspection",
-    "category": "Linux \u2022 System Admin",
+    "category": "Linux • System Admin",
     "badge": "LOG",
     "accent": "#0ba8ee",
     "id": "journalctl-logs",
@@ -793,7 +805,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "dnf Package Management",
-    "category": "Linux \u2022 Software",
+    "category": "Linux • Software",
     "badge": "DNF",
     "accent": "#d71920",
     "id": "dnf-packages",
@@ -805,7 +817,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "rpm Package Queries",
-    "category": "Linux \u2022 Software",
+    "category": "Linux • Software",
     "badge": "RPM",
     "accent": "#d71920",
     "id": "rpm-queries",
@@ -817,7 +829,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "SSH Key Setup",
-    "category": "Linux \u2022 Security",
+    "category": "Linux • Security",
     "badge": "SSH",
     "accent": "#0ba8ee",
     "id": "ssh-keygen",
@@ -829,7 +841,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "SSH Server Hardening",
-    "category": "Linux \u2022 Security",
+    "category": "Linux • Security",
     "badge": "SSHH",
     "accent": "#0ba8ee",
     "id": "ssh-hardening",
@@ -841,7 +853,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "firewalld Rule Management",
-    "category": "Linux \u2022 Security",
+    "category": "Linux • Security",
     "badge": "FW",
     "accent": "#d71920",
     "id": "firewall-rules",
@@ -853,7 +865,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "SELinux Context Management",
-    "category": "Linux \u2022 Security",
+    "category": "Linux • Security",
     "badge": "SELINUX",
     "accent": "#d71920",
     "id": "selinux-contexts",
@@ -865,7 +877,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "fdisk Partition Management",
-    "category": "Linux \u2022 Storage",
+    "category": "Linux • Storage",
     "badge": "FDISK",
     "accent": "#0ba8ee",
     "id": "fdisk-partitions",
@@ -877,7 +889,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Swap Management",
-    "category": "Linux \u2022 Storage",
+    "category": "Linux • Storage",
     "badge": "SWAP",
     "accent": "#0ba8ee",
     "id": "swap-management",
@@ -889,7 +901,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Mount & Filesystem Management",
-    "category": "Linux \u2022 Storage",
+    "category": "Linux • Storage",
     "badge": "MNT",
     "accent": "#0ba8ee",
     "id": "mount-filesystems",
@@ -901,7 +913,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Disk Usage (du)",
-    "category": "Linux \u2022 Storage",
+    "category": "Linux • Storage",
     "badge": "DU",
     "accent": "#0ba8ee",
     "id": "du-usage",
@@ -913,7 +925,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "nmcli Connection Management",
-    "category": "Networking \u2022 RHEL",
+    "category": "Networking • RHEL",
     "badge": "NMCLI",
     "accent": "#00bcd4",
     "id": "nmcli-connections",
@@ -925,7 +937,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "DNS Configuration",
-    "category": "Networking \u2022 DNS",
+    "category": "Networking • DNS",
     "badge": "DNS",
     "accent": "#00bcd4",
     "id": "dns-config",
@@ -937,7 +949,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Subnetting Practice",
-    "category": "Networking \u2022 Subnetting",
+    "category": "Networking • Subnetting",
     "badge": "SUBNET",
     "accent": "#00bcd4",
     "id": "subnetting-drill",
@@ -949,7 +961,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Port & Socket Inspection",
-    "category": "Networking \u2022 Troubleshooting",
+    "category": "Networking • Troubleshooting",
     "badge": "SS",
     "accent": "#00bcd4",
     "id": "port-scanning",
@@ -961,7 +973,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "iptables Basics",
-    "category": "Networking \u2022 Firewall",
+    "category": "Networking • Firewall",
     "badge": "IPT",
     "accent": "#00bcd4",
     "id": "iptables-basics",
@@ -973,7 +985,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Docker Image Management",
-    "category": "Containers \u2022 Docker",
+    "category": "Containers • Docker",
     "badge": "DKR",
     "accent": "#2496ed",
     "id": "docker-images",
@@ -985,7 +997,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Docker Networking",
-    "category": "Containers \u2022 Docker",
+    "category": "Containers • Docker",
     "badge": "DKR",
     "accent": "#2496ed",
     "id": "docker-networking",
@@ -997,7 +1009,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Docker Volumes",
-    "category": "Containers \u2022 Docker",
+    "category": "Containers • Docker",
     "badge": "DKR",
     "accent": "#2496ed",
     "id": "docker-volumes",
@@ -1009,7 +1021,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Docker Compose",
-    "category": "Containers \u2022 Docker",
+    "category": "Containers • Docker",
     "badge": "COMP",
     "accent": "#2496ed",
     "id": "docker-compose",
@@ -1069,7 +1081,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Helm Package Management",
-    "category": "Kubernetes \u2022 Helm",
+    "category": "Kubernetes • Helm",
     "badge": "HELM",
     "accent": "#326ce5",
     "id": "helm-basics",
@@ -1081,7 +1093,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "MySQL Basics",
-    "category": "Databases \u2022 MySQL",
+    "category": "Databases • MySQL",
     "badge": "SQL",
     "accent": "#e38c00",
     "id": "mysql-basics",
@@ -1093,7 +1105,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "MySQL Users & Grants",
-    "category": "Databases \u2022 MySQL",
+    "category": "Databases • MySQL",
     "badge": "SQL",
     "accent": "#e38c00",
     "id": "mysql-users",
@@ -1105,7 +1117,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "MySQL Backup & Restore",
-    "category": "Databases \u2022 MySQL",
+    "category": "Databases • MySQL",
     "badge": "SQL",
     "accent": "#e38c00",
     "id": "mysql-backup",
@@ -1117,7 +1129,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "PostgreSQL Basics",
-    "category": "Databases \u2022 PostgreSQL",
+    "category": "Databases • PostgreSQL",
     "badge": "PSQL",
     "accent": "#336791",
     "id": "postgresql-basics",
@@ -1129,7 +1141,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "PostgreSQL Queries",
-    "category": "Databases \u2022 PostgreSQL",
+    "category": "Databases • PostgreSQL",
     "badge": "PSQL",
     "accent": "#336791",
     "id": "postgresql-queries",
@@ -1141,7 +1153,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Redis Basics",
-    "category": "Databases \u2022 Redis",
+    "category": "Databases • Redis",
     "badge": "REDIS",
     "accent": "#d82c20",
     "id": "redis-basics",
@@ -1153,7 +1165,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS S3 CLI",
-    "category": "AWS \u2022 Storage",
+    "category": "AWS • Storage",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-s3-cli",
@@ -1165,7 +1177,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS EC2 CLI",
-    "category": "AWS \u2022 Compute",
+    "category": "AWS • Compute",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-ec2-cli",
@@ -1177,7 +1189,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS IAM CLI",
-    "category": "AWS \u2022 Identity",
+    "category": "AWS • Identity",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-iam-cli",
@@ -1189,7 +1201,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS VPC CLI",
-    "category": "AWS \u2022 Networking",
+    "category": "AWS • Networking",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-vpc-cli",
@@ -1201,7 +1213,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS Lambda CLI",
-    "category": "AWS \u2022 Serverless",
+    "category": "AWS • Serverless",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-lambda-cli",
@@ -1213,7 +1225,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS CloudFormation",
-    "category": "AWS \u2022 IaC",
+    "category": "AWS • IaC",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-cloudformation",
@@ -1225,7 +1237,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS RDS CLI",
-    "category": "AWS \u2022 Database",
+    "category": "AWS • Database",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-rds-cli",
@@ -1237,7 +1249,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "AWS Route 53",
-    "category": "AWS \u2022 DNS",
+    "category": "AWS • DNS",
     "badge": "AWS",
     "accent": "#ff9900",
     "id": "aws-route53",
@@ -1249,7 +1261,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure CLI Basics",
-    "category": "Azure \u2022 CLI",
+    "category": "Azure • CLI",
     "badge": "AZ",
     "accent": "#087ed2",
     "id": "azure-cli-basics",
@@ -1261,7 +1273,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure Virtual Machines",
-    "category": "Azure \u2022 Compute",
+    "category": "Azure • Compute",
     "badge": "AZ",
     "accent": "#087ed2",
     "id": "azure-vm",
@@ -1273,7 +1285,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure Storage",
-    "category": "Azure \u2022 Storage",
+    "category": "Azure • Storage",
     "badge": "AZ",
     "accent": "#087ed2",
     "id": "azure-storage",
@@ -1285,7 +1297,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure Kubernetes Service",
-    "category": "Azure \u2022 Kubernetes",
+    "category": "Azure • Kubernetes",
     "badge": "AZ",
     "accent": "#087ed2",
     "id": "azure-aks",
@@ -1297,7 +1309,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Azure Entra ID",
-    "category": "Azure \u2022 Identity",
+    "category": "Azure • Identity",
     "badge": "AZ",
     "accent": "#087ed2",
     "id": "azure-entra",
@@ -1309,7 +1321,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "gcloud CLI Basics",
-    "category": "GCP \u2022 CLI",
+    "category": "GCP • CLI",
     "badge": "GCP",
     "accent": "#4285f4",
     "id": "gcloud-basics",
@@ -1321,7 +1333,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "GCP Compute Engine",
-    "category": "GCP \u2022 Compute",
+    "category": "GCP • Compute",
     "badge": "GCP",
     "accent": "#4285f4",
     "id": "gcp-compute",
@@ -1333,7 +1345,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "GCP Cloud Storage",
-    "category": "GCP \u2022 Storage",
+    "category": "GCP • Storage",
     "badge": "GCP",
     "accent": "#4285f4",
     "id": "gcp-storage",
@@ -1345,7 +1357,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "GCP IAM",
-    "category": "GCP \u2022 Identity",
+    "category": "GCP • Identity",
     "badge": "GCP",
     "accent": "#4285f4",
     "id": "gcp-iam",
@@ -1357,7 +1369,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Terraform Basics",
-    "category": "DevOps \u2022 IaC",
+    "category": "DevOps • IaC",
     "badge": "TF",
     "accent": "#7b42bc",
     "id": "terraform-basics",
@@ -1369,7 +1381,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Terraform Plan & Apply",
-    "category": "DevOps \u2022 IaC",
+    "category": "DevOps • IaC",
     "badge": "TF",
     "accent": "#7b42bc",
     "id": "terraform-apply",
@@ -1381,7 +1393,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "rcwansible automation",
-    "category": "DevOps \u2022 Automation \u2022 AI-assisted",
+    "category": "DevOps • Automation • AI-assisted",
     "badge": "RCW",
     "accent": "#2563eb",
     "id": "rcwansible-automation",
@@ -1393,7 +1405,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Ansible Playbooks",
-    "category": "DevOps \u2022 Automation",
+    "category": "DevOps • Automation",
     "badge": "ANS",
     "accent": "#e00",
     "id": "ansible-playbook",
@@ -1405,7 +1417,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Ansible Inventory",
-    "category": "DevOps \u2022 Automation",
+    "category": "DevOps • Automation",
     "badge": "ANS",
     "accent": "#e00",
     "id": "ansible-inventory",
@@ -1417,7 +1429,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Git Rebase & History",
-    "category": "DevOps \u2022 Git",
+    "category": "DevOps • Git",
     "badge": "GIT",
     "accent": "#f05033",
     "id": "git-rebase",
@@ -1429,7 +1441,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Bash Scripting",
-    "category": "Programming \u2022 Bash",
+    "category": "Programming • Bash",
     "badge": "BASH",
     "accent": "#4eaa25",
     "id": "bash-scripting",
@@ -1441,7 +1453,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Bash Variables & Loops",
-    "category": "Programming \u2022 Bash",
+    "category": "Programming • Bash",
     "badge": "BASH",
     "accent": "#4eaa25",
     "id": "bash-variables",
@@ -1453,7 +1465,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Python Data Structures",
-    "category": "Programming \u2022 Python",
+    "category": "Programming • Python",
     "badge": "PY",
     "accent": "#ffd343",
     "id": "python-datastructures",
@@ -1465,7 +1477,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "System Log Analysis",
-    "category": "Security \u2022 Logs",
+    "category": "Security • Logs",
     "badge": "LOG",
     "accent": "#ef405b",
     "id": "log-analysis",
@@ -1477,7 +1489,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Password Policy Audit",
-    "category": "Security \u2022 Compliance",
+    "category": "Security • Compliance",
     "badge": "SEC",
     "accent": "#ef405b",
     "id": "password-policy",
@@ -1489,7 +1501,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "System Performance Analysis",
-    "category": "Linux \u2022 Monitoring",
+    "category": "Linux • Monitoring",
     "badge": "PERF",
     "accent": "#0ba8ee",
     "id": "performance-tuning",
@@ -1501,7 +1513,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Network Troubleshooting",
-    "category": "Linux \u2022 Monitoring",
+    "category": "Linux • Monitoring",
     "badge": "NET",
     "accent": "#00bcd4",
     "id": "network-troubleshooting",
@@ -1513,7 +1525,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Service Troubleshooting",
-    "category": "Linux \u2022 Monitoring",
+    "category": "Linux • Monitoring",
     "badge": "TROUBLE",
     "accent": "#0ba8ee",
     "id": "service-troubleshooting",
@@ -1525,7 +1537,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Vim Editor Basics",
-    "category": "Linux \u2022 Editors",
+    "category": "Linux • Editors",
     "badge": "VIM",
     "accent": "#0ba8ee",
     "id": "vim-basics",
@@ -1537,7 +1549,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Environment Variables",
-    "category": "Linux \u2022 Shell",
+    "category": "Linux • Shell",
     "badge": "ENV",
     "accent": "#0ba8ee",
     "id": "environment-vars",
@@ -1549,7 +1561,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Shell Aliases & History",
-    "category": "Linux \u2022 Shell",
+    "category": "Linux • Shell",
     "badge": "SH",
     "accent": "#0ba8ee",
     "id": "shell-aliases",
@@ -1561,7 +1573,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "rsync File Transfer",
-    "category": "Linux \u2022 File Management",
+    "category": "Linux • File Management",
     "badge": "RSYNC",
     "accent": "#0ba8ee",
     "id": "rsync-transfer",
@@ -1573,7 +1585,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "Symbolic Links Drill",
-    "category": "Linux \u2022 Filesystem",
+    "category": "Linux • Filesystem",
     "badge": "LNK",
     "accent": "#6366f1",
     "id": "softlink-drill",
@@ -1585,7 +1597,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "cron Syntax Drill",
-    "category": "Linux \u2022 Automation",
+    "category": "Linux • Automation",
     "badge": "CRON",
     "accent": "#0ba8ee",
     "id": "cron-drill",
@@ -1597,7 +1609,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 01: Shell Command Syntax",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Shell Fundamentals",
+    "category": "RHEL 10 • Essential Tools • Shell Fundamentals",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-01-shell-command-syntax",
@@ -1611,7 +1623,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 02: I/O Redirection and Pipelines",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Shell Fundamentals",
+    "category": "RHEL 10 • Essential Tools • Shell Fundamentals",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-02-io-redirection-pipelines",
@@ -1625,7 +1637,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 03: Grep and Regular Expressions",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Text Processing",
+    "category": "RHEL 10 • Essential Tools • Text Processing",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-03-grep-regular-expressions",
@@ -1639,7 +1651,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 04: Secure Shell Remote Access",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Remote Administration",
+    "category": "RHEL 10 • Essential Tools • Remote Administration",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-04-ssh-remote-access",
@@ -1653,7 +1665,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 05: Multi-user Login and Identity Switching",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Identity Operations",
+    "category": "RHEL 10 • Essential Tools • Identity Operations",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-05-multi-user-login-switch",
@@ -1667,7 +1679,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 06: Archive and Compression Operations",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Files and Archives",
+    "category": "RHEL 10 • Essential Tools • Files and Archives",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-06-archives-compression",
@@ -1681,7 +1693,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 07: Create and Edit Text Files",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Text Processing",
+    "category": "RHEL 10 • Essential Tools • Text Processing",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-07-create-edit-text-files",
@@ -1695,7 +1707,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 08: File and Directory Operations",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Files and Archives",
+    "category": "RHEL 10 • Essential Tools • Files and Archives",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-08-file-directory-operations",
@@ -1709,7 +1721,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 09: Hard and Symbolic Links",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Files and Archives",
+    "category": "RHEL 10 • Essential Tools • Files and Archives",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-09-hard-soft-links",
@@ -1723,7 +1735,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 10: Standard Linux Permissions",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Permissions",
+    "category": "RHEL 10 • Essential Tools • Permissions",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-10-standard-permissions",
@@ -1737,7 +1749,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 11: System Documentation Research",
-    "category": "RHEL 10 \u2022 Essential Tools \u2022 Documentation",
+    "category": "RHEL 10 • Essential Tools • Documentation",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-11-system-documentation",
@@ -1751,7 +1763,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 12: RPM Repository Configuration",
-    "category": "RHEL 10 \u2022 Software Management \u2022 RPM and DNF",
+    "category": "RHEL 10 • Software Management • RPM and DNF",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-12-rpm-repositories",
@@ -1765,7 +1777,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 13: RPM Package Lifecycle",
-    "category": "RHEL 10 \u2022 Software Management \u2022 RPM and DNF",
+    "category": "RHEL 10 • Software Management • RPM and DNF",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-13-rpm-package-lifecycle",
@@ -1779,7 +1791,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 14: Flatpak Repository Configuration",
-    "category": "RHEL 10 \u2022 Software Management \u2022 Flatpak",
+    "category": "RHEL 10 • Software Management • Flatpak",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-14-flatpak-repositories",
@@ -1793,7 +1805,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 15: Flatpak Application Lifecycle",
-    "category": "RHEL 10 \u2022 Software Management \u2022 Flatpak",
+    "category": "RHEL 10 • Software Management • Flatpak",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-15-flatpak-app-lifecycle",
@@ -1807,7 +1819,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 16: Shell Script Conditionals",
-    "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
+    "category": "RHEL 10 • Shell Scripting • Bash",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-16-script-conditionals",
@@ -1821,7 +1833,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 17: Shell Script Loops",
-    "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
+    "category": "RHEL 10 • Shell Scripting • Bash",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-17-script-loops",
@@ -1835,7 +1847,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 18: Shell Script Positional Inputs",
-    "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
+    "category": "RHEL 10 • Shell Scripting • Bash",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-18-script-inputs",
@@ -1849,7 +1861,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 19: Command Output in Shell Scripts",
-    "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
+    "category": "RHEL 10 • Shell Scripting • Bash",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-19-script-command-output",
@@ -1863,7 +1875,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 20: Normal Boot, Reboot and Shutdown",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 System Lifecycle",
+    "category": "RHEL 10 • Running Systems • System Lifecycle",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-20-normal-system-lifecycle",
@@ -1877,7 +1889,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 21: Manual Boot Targets",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Systemd",
+    "category": "RHEL 10 • Running Systems • Systemd",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-21-manual-boot-targets",
@@ -1891,7 +1903,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 22: Boot Interruption and Recovery",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Boot Recovery",
+    "category": "RHEL 10 • Running Systems • Boot Recovery",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-22-interrupt-boot-recovery",
@@ -1905,7 +1917,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 23: Process Identification and Control",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Process Management",
+    "category": "RHEL 10 • Running Systems • Process Management",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-23-process-identification-control",
@@ -1919,7 +1931,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 24: Process Scheduling Adjustment",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Process Management",
+    "category": "RHEL 10 • Running Systems • Process Management",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-24-process-scheduling",
@@ -1933,7 +1945,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 25: System Tuning Profiles",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Performance Tuning",
+    "category": "RHEL 10 • Running Systems • Performance Tuning",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-25-tuning-profiles",
@@ -1947,7 +1959,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 26: System Logs and Journal Analysis",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Logging",
+    "category": "RHEL 10 • Running Systems • Logging",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-26-logs-journals-analysis",
@@ -1961,7 +1973,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 27: Persistent System Journals",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Logging",
+    "category": "RHEL 10 • Running Systems • Logging",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-27-persistent-journals",
@@ -1975,7 +1987,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 28: Network Service Control",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Systemd",
+    "category": "RHEL 10 • Running Systems • Systemd",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-28-network-service-control",
@@ -1989,7 +2001,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 29: Secure File Transfer",
-    "category": "RHEL 10 \u2022 Running Systems \u2022 Remote Administration",
+    "category": "RHEL 10 • Running Systems • Remote Administration",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-29-secure-file-transfer",
@@ -2003,7 +2015,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 30: GPT Partition Management",
-    "category": "RHEL 10 \u2022 Local Storage \u2022 Partitions",
+    "category": "RHEL 10 • Local Storage • Partitions",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-30-gpt-partitions",
@@ -2017,7 +2029,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 31: LVM Physical Volumes",
-    "category": "RHEL 10 \u2022 Local Storage \u2022 LVM",
+    "category": "RHEL 10 • Local Storage • LVM",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-31-physical-volumes",
@@ -2031,7 +2043,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 32: LVM Volume Groups",
-    "category": "RHEL 10 \u2022 Local Storage \u2022 LVM",
+    "category": "RHEL 10 • Local Storage • LVM",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-32-volume-groups",
@@ -2045,7 +2057,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 33: LVM Logical Volume Lifecycle",
-    "category": "RHEL 10 \u2022 Local Storage \u2022 LVM",
+    "category": "RHEL 10 • Local Storage • LVM",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-33-logical-volumes",
@@ -2059,7 +2071,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 34: Persistent Mounts by UUID or Label",
-    "category": "RHEL 10 \u2022 Local Storage \u2022 Persistent Mounts",
+    "category": "RHEL 10 • Local Storage • Persistent Mounts",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-34-persistent-mount-identifiers",
@@ -2073,7 +2085,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 35: Non-destructive Storage and Swap",
-    "category": "RHEL 10 \u2022 Local Storage \u2022 LVM and Swap",
+    "category": "RHEL 10 • Local Storage • LVM and Swap",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-35-nondestructive-storage-swap",
@@ -2087,7 +2099,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 36: VFAT, ext4 and XFS File Systems",
-    "category": "RHEL 10 \u2022 File Systems \u2022 Local File Systems",
+    "category": "RHEL 10 • File Systems • Local File Systems",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-36-local-file-systems",
@@ -2101,7 +2113,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 37: NFS Network File Systems",
-    "category": "RHEL 10 \u2022 File Systems \u2022 NFS",
+    "category": "RHEL 10 • File Systems • NFS",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-37-nfs-mounts",
@@ -2115,7 +2127,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 38: Autofs Configuration",
-    "category": "RHEL 10 \u2022 File Systems \u2022 Autofs",
+    "category": "RHEL 10 • File Systems • Autofs",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-38-autofs-indirect-maps",
@@ -2129,7 +2141,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 39: Extend an Existing Logical Volume",
-    "category": "RHEL 10 \u2022 File Systems \u2022 LVM and File Systems",
+    "category": "RHEL 10 • File Systems • LVM and File Systems",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-39-extend-logical-volume",
@@ -2143,7 +2155,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 40: File Permission Troubleshooting",
-    "category": "RHEL 10 \u2022 File Systems \u2022 Permissions",
+    "category": "RHEL 10 • File Systems • Permissions",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-40-permission-troubleshooting",
@@ -2157,7 +2169,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 41: At, Cron and Systemd Timer Scheduling",
-    "category": "RHEL 10 \u2022 System Maintenance \u2022 Task Scheduling",
+    "category": "RHEL 10 • System Maintenance • Task Scheduling",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-41-task-scheduling",
@@ -2171,7 +2183,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 42: Service Startup and Boot Enablement",
-    "category": "RHEL 10 \u2022 System Maintenance \u2022 Systemd",
+    "category": "RHEL 10 • System Maintenance • Systemd",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-42-service-enable-boot",
@@ -2185,7 +2197,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 43: Default Boot Target",
-    "category": "RHEL 10 \u2022 System Maintenance \u2022 Systemd",
+    "category": "RHEL 10 • System Maintenance • Systemd",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-43-default-boot-target",
@@ -2199,7 +2211,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 44: Time Service Client",
-    "category": "RHEL 10 \u2022 System Maintenance \u2022 Time Synchronisation",
+    "category": "RHEL 10 • System Maintenance • Time Synchronisation",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-44-time-service-client",
@@ -2213,7 +2225,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 45: Software Installation and Updates",
-    "category": "RHEL 10 \u2022 System Maintenance \u2022 RPM and DNF",
+    "category": "RHEL 10 • System Maintenance • RPM and DNF",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-45-software-install-update-sources",
@@ -2227,7 +2239,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 46: Bootloader Configuration",
-    "category": "RHEL 10 \u2022 System Maintenance \u2022 Bootloader",
+    "category": "RHEL 10 • System Maintenance • Bootloader",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-46-bootloader-configuration",
@@ -2241,7 +2253,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 47: IPv4 and IPv6 Addressing",
-    "category": "RHEL 10 \u2022 Networking \u2022 NetworkManager",
+    "category": "RHEL 10 • Networking • NetworkManager",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-47-ipv4-ipv6-addressing",
@@ -2255,7 +2267,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 48: Hostname and Name Resolution",
-    "category": "RHEL 10 \u2022 Networking \u2022 DNS and Hostnames",
+    "category": "RHEL 10 • Networking • DNS and Hostnames",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-48-hostname-resolution",
@@ -2269,7 +2281,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 49: Network Service Autostart",
-    "category": "RHEL 10 \u2022 Networking \u2022 NetworkManager",
+    "category": "RHEL 10 • Networking • NetworkManager",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-49-network-autostart",
@@ -2283,7 +2295,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 50: Restrict Network Access",
-    "category": "RHEL 10 \u2022 Networking \u2022 Firewalld",
+    "category": "RHEL 10 • Networking • Firewalld",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-50-firewall-network-restriction",
@@ -2297,7 +2309,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 51: Local User Account Lifecycle",
-    "category": "RHEL 10 \u2022 Users and Groups \u2022 User Accounts",
+    "category": "RHEL 10 • Users and Groups • User Accounts",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-51-local-user-lifecycle",
@@ -2311,7 +2323,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 52: Passwords and Account Aging",
-    "category": "RHEL 10 \u2022 Users and Groups \u2022 Account Policy",
+    "category": "RHEL 10 • Users and Groups • Account Policy",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-52-password-aging",
@@ -2325,7 +2337,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 53: Local Groups and Memberships",
-    "category": "RHEL 10 \u2022 Users and Groups \u2022 Group Management",
+    "category": "RHEL 10 • Users and Groups • Group Management",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-53-local-groups-memberships",
@@ -2339,7 +2351,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 54: Controlled Privileged Access",
-    "category": "RHEL 10 \u2022 Users and Groups \u2022 Sudo",
+    "category": "RHEL 10 • Users and Groups • Sudo",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-54-privileged-access",
@@ -2353,7 +2365,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 55: Firewalld Service and Rich Rules",
-    "category": "RHEL 10 \u2022 Security \u2022 Firewalld",
+    "category": "RHEL 10 • Security • Firewalld",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-55-firewall-service-policy",
@@ -2367,7 +2379,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 56: Default File Permissions",
-    "category": "RHEL 10 \u2022 Security \u2022 Permissions",
+    "category": "RHEL 10 • Security • Permissions",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-56-default-file-permissions",
@@ -2381,7 +2393,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 57: SSH Key-based Authentication",
-    "category": "RHEL 10 \u2022 Security \u2022 SSH",
+    "category": "RHEL 10 • Security • SSH",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-57-ssh-key-authentication",
@@ -2395,7 +2407,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 58: SELinux Enforcement Modes",
-    "category": "RHEL 10 \u2022 Security \u2022 SELinux",
+    "category": "RHEL 10 • Security • SELinux",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-58-selinux-enforcement-modes",
@@ -2409,7 +2421,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 59: SELinux File and Process Contexts",
-    "category": "RHEL 10 \u2022 Security \u2022 SELinux",
+    "category": "RHEL 10 • Security • SELinux",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-59-selinux-context-identification",
@@ -2423,7 +2435,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 60: Restore Default SELinux Contexts",
-    "category": "RHEL 10 \u2022 Security \u2022 SELinux",
+    "category": "RHEL 10 • Security • SELinux",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-60-selinux-restore-contexts",
@@ -2437,7 +2449,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 61: SELinux Port Labels",
-    "category": "RHEL 10 \u2022 Security \u2022 SELinux",
+    "category": "RHEL 10 • Security • SELinux",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-61-selinux-port-labels",
@@ -2451,7 +2463,7 @@ window.RCW_CATALOGUE = Object.freeze([
   },
   {
     "title": "RHCSA Task 62: Persistent SELinux Booleans",
-    "category": "RHEL 10 \u2022 Security \u2022 SELinux",
+    "category": "RHEL 10 • Security • SELinux",
     "badge": "RHCSA",
     "accent": "#1261a6",
     "id": "rhcsa-practice-62-selinux-booleans",
@@ -2463,28 +2475,28 @@ window.RCW_CATALOGUE = Object.freeze([
     "seriesUrl": "https://www.rcwittraining.in/rhcsa-practice/",
     "taskNumber": 62
   },
-{
-  "title": "IT Admin vs Zombies - RCW Server Room Defense Game",
-  "category": "IT Operations \u2022 Gamified Learning \u2022 RCW Office",
-  "badge": "GAME",
-  "accent": "#4e9fff",
-  "id": "it-admin-zombie-game",
-  "targetUrl": "https://www.rcwittraining.in/it-admin-zombie-game/",
-  "contentType": "Game",
-  "technology": "IT Operations",
-  "subcategory": "Incident Response",
-  "group": "Technology Labs"
-},
-{
-  "title": "Kubernetes Cluster Deployer - Single App",
-  "category": "Kubernetes \u2022 DevOps \u2022 Cluster Operations",
-  "badge": "K8S",
-  "accent": "#326ce5",
-  "id": "k8s-cluster-deployer",
-  "targetUrl": "https://www.rcwittraining.in/k8s-cluster-deployer/",
-  "contentType": "Lab",
-  "technology": "Kubernetes",
-  "subcategory": "Cluster Operations",
-  "group": "Technology Labs"
-}
+  {
+    "title": "IT Admin vs Zombies - RCW Server Room Defense Game",
+    "category": "IT Operations • Gamified Learning • RCW Office",
+    "badge": "GAME",
+    "accent": "#4e9fff",
+    "id": "it-admin-zombie-game",
+    "targetUrl": "https://www.rcwittraining.in/it-admin-zombie-game/",
+    "contentType": "Game",
+    "technology": "IT Operations",
+    "subcategory": "Incident Response",
+    "group": "Technology Labs"
+  },
+  {
+    "title": "Kubernetes Cluster Deployer - Single App",
+    "category": "Kubernetes • DevOps • Cluster Operations",
+    "badge": "K8S",
+    "accent": "#326ce5",
+    "id": "k8s-cluster-deployer",
+    "targetUrl": "https://www.rcwittraining.in/k8s-cluster-deployer/",
+    "contentType": "Lab",
+    "technology": "Kubernetes",
+    "subcategory": "Cluster Operations",
+    "group": "Technology Labs"
+  }
 ]);
