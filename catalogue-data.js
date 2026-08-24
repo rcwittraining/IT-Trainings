@@ -48,6 +48,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
+    "title": "RCW-NixPriv — Sudo Privilege Delegation Manager",
+    "category": "Linux \u2022 Security \u2022 Offline",
+    "badge": "SUDO",
+    "accent": "#37b6ff",
+    "id": "rcw-nixpriv",
+    "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixpriv/",
+    "contentType": "Tool",
+    "technology": "Linux and RHEL",
+    "subcategory": "Security",
+    "group": "Tools"
+  },
+  {
     "title": "IT Incident Response Desk for Freshers",
     "category": "Incident Response \u2022 L1 Helpdesk \u2022 Freshers",
     "badge": "IR",
