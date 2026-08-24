@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-24T04:10:43Z",
+  "updatedAt": "2026-08-24T05:32:15Z",
   "simulators": [
     {
       "title": "Linux Auto-Fixer v2.0.0 — Official Download",
@@ -2464,6 +2464,17 @@
       "technology": "Kubernetes",
       "subcategory": "Cluster Operations",
       "group": "Technology Labs"
-    }
-  ]
+    },
+    {
+      "title": "RCW-NixFort — CIS Benchmark Linux Server Hardening",
+      "category": "Linux • CIS Benchmarks • Offline",
+      "badge": "CIS",
+      "accent": "#0e8345",
+      "id": "rcw-nixfort",
+      "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixfort/",
+      "contentType": "Tool",
+      "technology": "Cybersecurity",
+      "subcategory": "Compliance",
+      "group": "Tools"
+    }]
 }
