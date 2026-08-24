@@ -36,6 +36,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
+    "title": "RCW-NixDetect — Linux Log Root Cause Analyzer",
+    "category": "Linux \u2022 Log Analysis \u2022 Offline",
+    "badge": "RCA",
+    "accent": "#7c3aed",
+    "id": "rcw-nixdetect",
+    "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixdetect/",
+    "contentType": "Tool",
+    "technology": "Linux and RHEL",
+    "subcategory": "Troubleshooting",
+    "group": "Tools"
+  },
+  {
     "title": "IT Incident Response Desk for Freshers",
     "category": "Incident Response \u2022 L1 Helpdesk \u2022 Freshers",
     "badge": "IR",
