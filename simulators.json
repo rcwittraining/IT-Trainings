@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-24T07:20:07Z",
+  "updatedAt": "2026-08-24T11:18:21Z",
   "simulators": [
     {
       "title": "Linux Auto-Fixer v2.0.0 — Official Download",
@@ -59,6 +59,18 @@
       "contentType": "Tool",
       "technology": "Linux and RHEL",
       "subcategory": "Security",
+      "group": "Tools"
+    },
+    {
+      "title": "RCW-NixTrace — Linux Server Inventory & Docs",
+      "category": "Linux • Inventory • Offline",
+      "badge": "INV",
+      "accent": "#2bb673",
+      "id": "rcw-nixtrace",
+      "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixtrace/",
+      "contentType": "Tool",
+      "technology": "Linux and RHEL",
+      "subcategory": "Compliance",
       "group": "Tools"
     },
     {
