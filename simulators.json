@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-22T18:05:00Z",
+  "updatedAt": "2026-08-24T04:10:43Z",
   "simulators": [
     {
       "title": "Linux Auto-Fixer v2.0.0 — Official Download",
@@ -35,6 +35,18 @@
       "contentType": "Restricted Tool",
       "technology": "DevOps",
       "subcategory": "Kubernetes",
+      "group": "Tools"
+    },
+    {
+      "title": "RCW-NixDetect — Linux Log Root Cause Analyzer",
+      "category": "Linux \u2022 Log Analysis \u2022 Offline",
+      "badge": "RCA",
+      "accent": "#7c3aed",
+      "id": "rcw-nixdetect",
+      "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixdetect/",
+      "contentType": "Tool",
+      "technology": "Linux and RHEL",
+      "subcategory": "Troubleshooting",
       "group": "Tools"
     },
     {
