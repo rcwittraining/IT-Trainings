@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-08-24T05:32:15Z",
+  "updatedAt": "2026-08-24T07:20:07Z",
   "simulators": [
     {
       "title": "Linux Auto-Fixer v2.0.0 — Official Download",
-      "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
+      "category": "Linux • Troubleshooting • Admin-approved",
       "badge": "RCW",
       "accent": "#078be8",
       "id": "linux-autofixer",
@@ -39,7 +39,7 @@
     },
     {
       "title": "RCW-NixDetect — Linux Log Root Cause Analyzer",
-      "category": "Linux \u2022 Log Analysis \u2022 Offline",
+      "category": "Linux • Log Analysis • Offline",
       "badge": "RCA",
       "accent": "#7c3aed",
       "id": "rcw-nixdetect",
@@ -47,6 +47,18 @@
       "contentType": "Tool",
       "technology": "Linux and RHEL",
       "subcategory": "Troubleshooting",
+      "group": "Tools"
+    },
+    {
+      "title": "RCW-NixPriv — Sudo Privilege Delegation Manager",
+      "category": "Linux • Security • Offline",
+      "badge": "SUDO",
+      "accent": "#37b6ff",
+      "id": "rcw-nixpriv",
+      "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixpriv/",
+      "contentType": "Tool",
+      "technology": "Linux and RHEL",
+      "subcategory": "Security",
       "group": "Tools"
     },
     {
@@ -2476,5 +2488,6 @@
       "technology": "Cybersecurity",
       "subcategory": "Compliance",
       "group": "Tools"
-    }]
+    }
+  ]
 }
