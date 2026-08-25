@@ -1,0 +1,25 @@
+name: Publish weekly vendor technology intelligence
+on:
+  schedule:
+    # Wednesday 09:15 IST (03:45 UTC)
+    - cron: '45 3 * * 3'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Collect and publish weekly technology, certification and webinar roundup
+        run: python scripts/publish_vendor_intelligence.py
+      - name: Commit website update
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'RCW Vendor Intelligence Publisher'
+          git config user.email 'actions@github.com'
+          git add index.html data/vendor-intelligence-state.json vendor-tech-certification-webinar-roundup-*.html
+          git commit -m 'Publish weekly vendor technology roundup'
+          git push
