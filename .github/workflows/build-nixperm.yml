@@ -1,0 +1,47 @@
+name: Build RCW-NixPerm (Windows exe)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/rcw-nixperm/src/**'
+      - '.github/workflows/build-nixperm.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: tools/rcw-nixperm
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller==6.22.2 paramiko openpyxl
+
+      - name: Build executable
+        working-directory: tools/rcw-nixperm
+        run: |
+          python -m PyInstaller --noconfirm --clean --onefile --windowed `
+            --name RCW-NixPerm `
+            --icon src/rcw.ico `
+            --version-file src/version.txt `
+            --hidden-import paramiko `
+            --hidden-import openpyxl `
+            --collect-submodules paramiko `
+            --collect-submodules openpyxl `
+            --exclude-module numpy --exclude-module matplotlib --exclude-module PIL `
+            --distpath dist --workpath build `
+            src/rcw_nixperm.py
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: RCW-NixPerm-exe
+          path: tools/rcw-nixperm/dist/RCW-NixPerm.exe
