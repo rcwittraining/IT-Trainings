@@ -2,8 +2,8 @@
   "updatedAt": "2026-08-24T11:18:21Z",
   "simulators": [
     {
-      "title": "Linux Auto-Fixer v2.0.0 — Official Download",
-      "category": "Linux • Troubleshooting • Admin-approved",
+      "title": "Linux Auto-Fixer v2.0.0 \u2014 Official Download",
+      "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
       "badge": "RCW",
       "accent": "#078be8",
       "id": "linux-autofixer",
@@ -15,7 +15,7 @@
     },
     {
       "title": "RCW AI Log Analyzer",
-      "category": "IT Operations • Troubleshooting • Offline",
+      "category": "IT Operations \u2022 Troubleshooting \u2022 Offline",
       "badge": "LOG",
       "accent": "#0c9a62",
       "id": "rcw-ai-log-analyzer",
@@ -26,8 +26,8 @@
       "group": "Tools"
     },
     {
-      "title": "rcwansible automation desktop — Request access",
-      "category": "DevOps • Kubernetes • Admin-approved",
+      "title": "rcwansible automation desktop \u2014 Request access",
+      "category": "DevOps \u2022 Kubernetes \u2022 Admin-approved",
       "badge": "RCW",
       "accent": "#2563eb",
       "id": "rcwansible-desktop",
@@ -38,8 +38,8 @@
       "group": "Tools"
     },
     {
-      "title": "RCW-NixDetect — Linux Log Root Cause Analyzer",
-      "category": "Linux • Log Analysis • Offline",
+      "title": "RCW-NixDetect \u2014 Linux Log Root Cause Analyzer",
+      "category": "Linux \u2022 Log Analysis \u2022 Offline",
       "badge": "RCA",
       "accent": "#7c3aed",
       "id": "rcw-nixdetect",
@@ -50,8 +50,8 @@
       "group": "Tools"
     },
     {
-      "title": "RCW-NixPriv — Sudo Privilege Delegation Manager",
-      "category": "Linux • Security • Offline",
+      "title": "RCW-NixPriv \u2014 Sudo Privilege Delegation Manager",
+      "category": "Linux \u2022 Security \u2022 Offline",
       "badge": "SUDO",
       "accent": "#37b6ff",
       "id": "rcw-nixpriv",
@@ -62,8 +62,8 @@
       "group": "Tools"
     },
     {
-      "title": "RCW-NixTrace — Linux Server Inventory & Docs",
-      "category": "Linux • Inventory • Offline",
+      "title": "RCW-NixTrace \u2014 Linux Server Inventory & Docs",
+      "category": "Linux \u2022 Inventory \u2022 Offline",
       "badge": "INV",
       "accent": "#2bb673",
       "id": "rcw-nixtrace",
@@ -75,7 +75,7 @@
     },
     {
       "title": "IT Incident Response Desk for Freshers",
-      "category": "Incident Response • L1 Helpdesk • Freshers",
+      "category": "Incident Response \u2022 L1 Helpdesk \u2022 Freshers",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "incident-response-freshers",
@@ -86,8 +86,8 @@
       "group": "Incident Response"
     },
     {
-      "title": "Account lockout — user cannot log in",
-      "category": "Incident Response • Freshers • P3 identity",
+      "title": "Account lockout \u2014 user cannot log in",
+      "category": "Incident Response \u2022 Freshers \u2022 P3 identity",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1001-account-lockout",
@@ -99,7 +99,7 @@
     },
     {
       "title": "Website 502s / php-fpm saturation",
-      "category": "Incident Response • Freshers • P2 web",
+      "category": "Incident Response \u2022 Freshers \u2022 P2 web",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1002-website-502",
@@ -111,7 +111,7 @@
     },
     {
       "title": "Payroll mail not sending",
-      "category": "Incident Response • Freshers • P1 messaging",
+      "category": "Incident Response \u2022 Freshers \u2022 P1 messaging",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1003-mail-outage",
@@ -122,8 +122,8 @@
       "group": "Incident Response"
     },
     {
-      "title": "Database disk 92% — WAL buildup",
-      "category": "Incident Response • Freshers • P2 data",
+      "title": "Database disk 92% \u2014 WAL buildup",
+      "category": "Incident Response \u2022 Freshers \u2022 P2 data",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1004-database-disk",
@@ -135,7 +135,7 @@
     },
     {
       "title": "VPN handshake timeout from home",
-      "category": "Incident Response • Freshers • P3 network",
+      "category": "Incident Response \u2022 Freshers \u2022 P3 network",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1005-vpn-timeout",
@@ -147,7 +147,7 @@
     },
     {
       "title": "API TLS certificate expires in 3 days",
-      "category": "Incident Response • Freshers • P2 security",
+      "category": "Incident Response \u2022 Freshers \u2022 P2 security",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1006-tls-expiry",
@@ -158,8 +158,8 @@
       "group": "Incident Response"
     },
     {
-      "title": "Intern access — incident or request?",
-      "category": "Incident Response • Freshers • P4 process",
+      "title": "Intern access \u2014 incident or request?",
+      "category": "Incident Response \u2022 Freshers \u2022 P4 process",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1007-onboarding-vs-incident",
@@ -171,7 +171,7 @@
     },
     {
       "title": "Cryptominer on jump host",
-      "category": "Incident Response • Freshers • P1 security",
+      "category": "Incident Response \u2022 Freshers \u2022 P1 security",
       "badge": "IR",
       "accent": "#ff5d6c",
       "id": "inc-1008-jump-host-malware",
@@ -182,8 +182,8 @@
       "group": "Incident Response"
     },
     {
-      "title": "Raju Rishi Dev — Technical Quiz Agent",
-      "category": "Adaptive Quiz • Technical Skills",
+      "title": "Raju Rishi Dev \u2014 Technical Quiz Agent",
+      "category": "Adaptive Quiz \u2022 Technical Skills",
       "badge": "QUIZ",
       "accent": "#19a7ff",
       "id": "technical-quiz-agent",
@@ -195,7 +195,7 @@
     },
     {
       "title": "Amazon Bedrock End-to-End GUI Lab",
-      "category": "AWS • Generative AI • Responsible AI",
+      "category": "AWS \u2022 Generative AI \u2022 Responsible AI",
       "badge": "GENAI",
       "accent": "#ff9d1f",
       "id": "aws-bedrock-lab",
@@ -207,7 +207,7 @@
     },
     {
       "title": "Amazon ECS End-to-End GUI Lab",
-      "category": "AWS • Containers • Security & Compliance",
+      "category": "AWS \u2022 Containers \u2022 Security & Compliance",
       "badge": "ECS",
       "accent": "#ff9d1f",
       "id": "aws-ecs-gui-lab",
@@ -219,7 +219,7 @@
     },
     {
       "title": "On-Premises LLM Operations Automation Lab",
-      "category": "Private AI • Kubernetes • IT Operations",
+      "category": "Private AI \u2022 Kubernetes \u2022 IT Operations",
       "badge": "LLM",
       "accent": "#0f9f8f",
       "id": "onprem-llm-ops-lab",
@@ -231,7 +231,7 @@
     },
     {
       "title": "RHEL 10 .vimrc & .bashrc Configuration Lab",
-      "category": "RHEL 10 • Vim • Bash",
+      "category": "RHEL 10 \u2022 Vim \u2022 Bash",
       "badge": "RHEL",
       "accent": "#c91f37",
       "id": "rhel10-vimrc-bashrc-lab",
@@ -243,7 +243,7 @@
     },
     {
       "title": "Persistent Storage Build Challenge",
-      "category": "RHEL 10 • RHCSA • Storage",
+      "category": "RHEL 10 \u2022 RHCSA \u2022 Storage",
       "badge": "RHCSA",
       "accent": "#21b5f5",
       "id": "rhcsa-storage-build",
@@ -255,7 +255,7 @@
     },
     {
       "title": "Boot, Timers and Recovery Challenge",
-      "category": "RHEL 10 • RHCSA • System Operations",
+      "category": "RHEL 10 \u2022 RHCSA \u2022 System Operations",
       "badge": "RHCSA",
       "accent": "#21b5f5",
       "id": "rhcsa-system-operations",
@@ -267,7 +267,7 @@
     },
     {
       "title": "Network, SELinux and Privilege Challenge",
-      "category": "RHEL 10 • RHCSA • Security",
+      "category": "RHEL 10 \u2022 RHCSA \u2022 Security",
       "badge": "RHCSA",
       "accent": "#21b5f5",
       "id": "rhcsa-network-selinux",
@@ -279,7 +279,7 @@
     },
     {
       "title": "User Lifecycle and Orphaned Home Challenge",
-      "category": "RHEL 10 • RHCSA • User Management",
+      "category": "RHEL 10 \u2022 RHCSA \u2022 User Management",
       "badge": "RHCSA",
       "accent": "#21b5f5",
       "id": "rhcsa-user-lifecycle",
@@ -291,7 +291,7 @@
     },
     {
       "title": "Production Outage Game",
-      "category": "IT Architecture • Incident Response",
+      "category": "IT Architecture \u2022 Incident Response",
       "badge": "SEV-1",
       "accent": "#ef405b",
       "id": "production-outage-game",
@@ -303,7 +303,7 @@
     },
     {
       "title": "Linux Folder Challenge",
-      "category": "Linux • Command Line",
+      "category": "Linux \u2022 Command Line",
       "badge": "LINUX",
       "accent": "#09a7f5",
       "id": "linux-folder-challenge",
@@ -315,7 +315,7 @@
     },
     {
       "title": "Linux Server Crash Root-Cause Analysis",
-      "category": "Linux • Troubleshooting",
+      "category": "Linux \u2022 Troubleshooting",
       "badge": "RCA",
       "accent": "#12a9e9",
       "id": "linux-server-crash-rca",
@@ -327,7 +327,7 @@
     },
     {
       "title": "Linux Unauthorised Access Review",
-      "category": "Linux • Security",
+      "category": "Linux \u2022 Security",
       "badge": "SEC",
       "accent": "#12a9e9",
       "id": "linux-unauthorised-access-review",
@@ -339,7 +339,7 @@
     },
     {
       "title": "Linux Root Password Audit",
-      "category": "Linux • Authentication",
+      "category": "Linux \u2022 Authentication",
       "badge": "AUTH",
       "accent": "#12a9e9",
       "id": "linux-root-password-audit",
@@ -351,7 +351,7 @@
     },
     {
       "title": "Kubernetes Cluster Setup Challenge",
-      "category": "Linux • Kubernetes",
+      "category": "Linux \u2022 Kubernetes",
       "badge": "K8S",
       "accent": "#326ce5",
       "id": "kubernetes-cluster-setup",
@@ -363,7 +363,7 @@
     },
     {
       "title": "Nginx Reverse Proxy Challenge",
-      "category": "Linux • Web Server",
+      "category": "Linux \u2022 Web Server",
       "badge": "NGINX",
       "accent": "#0c9c51",
       "id": "nginx-reverse-proxy",
@@ -375,7 +375,7 @@
     },
     {
       "title": "LVM Extend Challenge",
-      "category": "Linux • Storage",
+      "category": "Linux \u2022 Storage",
       "badge": "LVM",
       "accent": "#f5a623",
       "id": "lvm-extend",
@@ -387,7 +387,7 @@
     },
     {
       "title": "Squid Web Proxy Challenge",
-      "category": "RHEL • Networking",
+      "category": "RHEL \u2022 Networking",
       "badge": "SQUID",
       "accent": "#d71920",
       "id": "squid-web-proxy",
@@ -399,7 +399,7 @@
     },
     {
       "title": "RHEL 10 Practice Terminal",
-      "category": "Red Hat • Open Sandbox • RHCSA",
+      "category": "Red Hat \u2022 Open Sandbox \u2022 RHCSA",
       "badge": "RHEL",
       "accent": "#d71920",
       "id": "rhel10-practice-terminal",
@@ -411,7 +411,7 @@
     },
     {
       "title": "Soft Links Challenge",
-      "category": "RHEL • Filesystem",
+      "category": "RHEL \u2022 Filesystem",
       "badge": "LINK",
       "accent": "#6366f1",
       "id": "soft-links",
@@ -423,7 +423,7 @@
     },
     {
       "title": "Hard Links Challenge",
-      "category": "RHEL • Filesystem",
+      "category": "RHEL \u2022 Filesystem",
       "badge": "HLNK",
       "accent": "#8b5cf6",
       "id": "hard-links",
@@ -435,7 +435,7 @@
     },
     {
       "title": "Docker Basics Challenge",
-      "category": "Containers • Docker",
+      "category": "Containers \u2022 Docker",
       "badge": "DKR",
       "accent": "#2496ed",
       "id": "docker-basics",
@@ -447,7 +447,7 @@
     },
     {
       "title": "Git & GitHub Challenge",
-      "category": "DevOps • Version Control",
+      "category": "DevOps \u2022 Version Control",
       "badge": "GIT",
       "accent": "#f05033",
       "id": "git-github",
@@ -459,7 +459,7 @@
     },
     {
       "title": "SQL Fundamentals Challenge",
-      "category": "Databases • SQL",
+      "category": "Databases \u2022 SQL",
       "badge": "SQL",
       "accent": "#e38c00",
       "id": "sql-fundamentals",
@@ -471,7 +471,7 @@
     },
     {
       "title": "Python Basics Challenge",
-      "category": "Programming • Python",
+      "category": "Programming \u2022 Python",
       "badge": "PY",
       "accent": "#ffd343",
       "id": "python-basics",
@@ -483,7 +483,7 @@
     },
     {
       "title": "Networking Fundamentals Challenge",
-      "category": "Networking • Troubleshooting",
+      "category": "Networking \u2022 Troubleshooting",
       "badge": "NET",
       "accent": "#00bcd4",
       "id": "networking-fundamentals",
@@ -495,7 +495,7 @@
     },
     {
       "title": "Cybersecurity Challenge",
-      "category": "Security • Incident Response",
+      "category": "Security \u2022 Incident Response",
       "badge": "SEC",
       "accent": "#ef405b",
       "id": "cybersecurity",
@@ -507,7 +507,7 @@
     },
     {
       "title": "AWS IAM Compromise Alert Challenge",
-      "category": "AWS • Identity Security",
+      "category": "AWS \u2022 Identity Security",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-iam-compromise-alert",
@@ -519,7 +519,7 @@
     },
     {
       "title": "Azure Virtual Desktop Lab",
-      "category": "Azure • Virtual Desktop",
+      "category": "Azure \u2022 Virtual Desktop",
       "badge": "AVD",
       "accent": "#086dcc",
       "id": "azure-virtual-desktop",
@@ -531,7 +531,7 @@
     },
     {
       "title": "AWS Control Tower Lab",
-      "category": "AWS • Governance",
+      "category": "AWS \u2022 Governance",
       "badge": "AWS",
       "accent": "#ff6b0b",
       "id": "aws-control-tower",
@@ -543,8 +543,8 @@
     },
     {
       "title": "VMware to Hyper-V Migration Lab",
-      "category": "VMware • Hyper-V • Veeam",
-      "badge": "V→H",
+      "category": "VMware \u2022 Hyper-V \u2022 Veeam",
+      "badge": "V\u2192H",
       "accent": "#42a62a",
       "id": "vmware-hyper-v",
       "targetUrl": "https://rcwittraining.github.io/VMware-to-Hyper-V-using-Veeam/",
@@ -555,8 +555,8 @@
     },
     {
       "title": "VMware to Azure Migration Lab",
-      "category": "VMware • Microsoft Azure",
-      "badge": "V→A",
+      "category": "VMware \u2022 Microsoft Azure",
+      "badge": "V\u2192A",
       "accent": "#0d97cf",
       "id": "vmware-azure",
       "targetUrl": "https://rcwittraining.github.io/VMware-to-Azure-Migrate/",
@@ -567,7 +567,7 @@
     },
     {
       "title": "TrueNAS Debug Export Lab",
-      "category": "TrueNAS • Storage",
+      "category": "TrueNAS \u2022 Storage",
       "badge": "NAS",
       "accent": "#0b9ddd",
       "id": "truenas-debug",
@@ -579,7 +579,7 @@
     },
     {
       "title": "GCP Admin Exam Simulator",
-      "category": "Google Cloud • Exam Practice",
+      "category": "Google Cloud \u2022 Exam Practice",
       "badge": "GCP",
       "accent": "#4285f4",
       "id": "gcp-admin",
@@ -591,7 +591,7 @@
     },
     {
       "title": "Azure Admin Exam Simulator",
-      "category": "Microsoft Azure • Exam Practice",
+      "category": "Microsoft Azure \u2022 Exam Practice",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-admin",
@@ -603,7 +603,7 @@
     },
     {
       "title": "RHEL 10 Installation Lab",
-      "category": "Red Hat • Linux",
+      "category": "Red Hat \u2022 Linux",
       "badge": "RHEL",
       "accent": "#d71920",
       "id": "rhel-10-install",
@@ -627,7 +627,7 @@
     },
     {
       "title": "grep Text Search Mastery",
-      "category": "Linux • Text Processing",
+      "category": "Linux \u2022 Text Processing",
       "badge": "GREP",
       "accent": "#0ba8ee",
       "id": "grep-mastery",
@@ -639,7 +639,7 @@
     },
     {
       "title": "sed Stream Editing",
-      "category": "Linux • Text Processing",
+      "category": "Linux \u2022 Text Processing",
       "badge": "SED",
       "accent": "#0ba8ee",
       "id": "sed-editing",
@@ -651,7 +651,7 @@
     },
     {
       "title": "awk Text Processing",
-      "category": "Linux • Text Processing",
+      "category": "Linux \u2022 Text Processing",
       "badge": "AWK",
       "accent": "#0ba8ee",
       "id": "awk-processing",
@@ -663,7 +663,7 @@
     },
     {
       "title": "find File Search",
-      "category": "Linux • File Management",
+      "category": "Linux \u2022 File Management",
       "badge": "FIND",
       "accent": "#0ba8ee",
       "id": "find-files",
@@ -675,7 +675,7 @@
     },
     {
       "title": "tar Archive Management",
-      "category": "Linux • File Management",
+      "category": "Linux \u2022 File Management",
       "badge": "TAR",
       "accent": "#0ba8ee",
       "id": "tar-archives",
@@ -687,7 +687,7 @@
     },
     {
       "title": "gzip Compression",
-      "category": "Linux • File Management",
+      "category": "Linux \u2022 File Management",
       "badge": "GZIP",
       "accent": "#0ba8ee",
       "id": "gzip-compress",
@@ -699,7 +699,7 @@
     },
     {
       "title": "cron Job Scheduling",
-      "category": "Linux • Automation",
+      "category": "Linux \u2022 Automation",
       "badge": "CRON",
       "accent": "#0ba8ee",
       "id": "cron-jobs",
@@ -711,7 +711,7 @@
     },
     {
       "title": "at One-time Jobs",
-      "category": "Linux • Automation",
+      "category": "Linux \u2022 Automation",
       "badge": "AT",
       "accent": "#0ba8ee",
       "id": "at-jobs",
@@ -723,7 +723,7 @@
     },
     {
       "title": "User Management",
-      "category": "Linux • Users & Groups",
+      "category": "Linux \u2022 Users & Groups",
       "badge": "USER",
       "accent": "#0ba8ee",
       "id": "user-management",
@@ -735,7 +735,7 @@
     },
     {
       "title": "Group Management",
-      "category": "Linux • Users & Groups",
+      "category": "Linux \u2022 Users & Groups",
       "badge": "GROUP",
       "accent": "#0ba8ee",
       "id": "group-management",
@@ -747,7 +747,7 @@
     },
     {
       "title": "File Permissions (chmod)",
-      "category": "Linux • Permissions",
+      "category": "Linux \u2022 Permissions",
       "badge": "CHMOD",
       "accent": "#0ba8ee",
       "id": "file-permissions",
@@ -759,7 +759,7 @@
     },
     {
       "title": "File Ownership (chown)",
-      "category": "Linux • Permissions",
+      "category": "Linux \u2022 Permissions",
       "badge": "CHOWN",
       "accent": "#0ba8ee",
       "id": "file-ownership",
@@ -771,7 +771,7 @@
     },
     {
       "title": "Process Management",
-      "category": "Linux • System Admin",
+      "category": "Linux \u2022 System Admin",
       "badge": "PROC",
       "accent": "#0ba8ee",
       "id": "process-management",
@@ -783,7 +783,7 @@
     },
     {
       "title": "systemd Service Management",
-      "category": "Linux • System Admin",
+      "category": "Linux \u2022 System Admin",
       "badge": "SYSCTL",
       "accent": "#0ba8ee",
       "id": "systemd-services",
@@ -795,7 +795,7 @@
     },
     {
       "title": "journalctl Log Inspection",
-      "category": "Linux • System Admin",
+      "category": "Linux \u2022 System Admin",
       "badge": "LOG",
       "accent": "#0ba8ee",
       "id": "journalctl-logs",
@@ -807,7 +807,7 @@
     },
     {
       "title": "dnf Package Management",
-      "category": "Linux • Software",
+      "category": "Linux \u2022 Software",
       "badge": "DNF",
       "accent": "#d71920",
       "id": "dnf-packages",
@@ -819,7 +819,7 @@
     },
     {
       "title": "rpm Package Queries",
-      "category": "Linux • Software",
+      "category": "Linux \u2022 Software",
       "badge": "RPM",
       "accent": "#d71920",
       "id": "rpm-queries",
@@ -831,7 +831,7 @@
     },
     {
       "title": "SSH Key Setup",
-      "category": "Linux • Security",
+      "category": "Linux \u2022 Security",
       "badge": "SSH",
       "accent": "#0ba8ee",
       "id": "ssh-keygen",
@@ -843,7 +843,7 @@
     },
     {
       "title": "SSH Server Hardening",
-      "category": "Linux • Security",
+      "category": "Linux \u2022 Security",
       "badge": "SSHH",
       "accent": "#0ba8ee",
       "id": "ssh-hardening",
@@ -855,7 +855,7 @@
     },
     {
       "title": "firewalld Rule Management",
-      "category": "Linux • Security",
+      "category": "Linux \u2022 Security",
       "badge": "FW",
       "accent": "#d71920",
       "id": "firewall-rules",
@@ -867,7 +867,7 @@
     },
     {
       "title": "SELinux Context Management",
-      "category": "Linux • Security",
+      "category": "Linux \u2022 Security",
       "badge": "SELINUX",
       "accent": "#d71920",
       "id": "selinux-contexts",
@@ -879,7 +879,7 @@
     },
     {
       "title": "fdisk Partition Management",
-      "category": "Linux • Storage",
+      "category": "Linux \u2022 Storage",
       "badge": "FDISK",
       "accent": "#0ba8ee",
       "id": "fdisk-partitions",
@@ -891,7 +891,7 @@
     },
     {
       "title": "Swap Management",
-      "category": "Linux • Storage",
+      "category": "Linux \u2022 Storage",
       "badge": "SWAP",
       "accent": "#0ba8ee",
       "id": "swap-management",
@@ -903,7 +903,7 @@
     },
     {
       "title": "Mount & Filesystem Management",
-      "category": "Linux • Storage",
+      "category": "Linux \u2022 Storage",
       "badge": "MNT",
       "accent": "#0ba8ee",
       "id": "mount-filesystems",
@@ -915,7 +915,7 @@
     },
     {
       "title": "Disk Usage (du)",
-      "category": "Linux • Storage",
+      "category": "Linux \u2022 Storage",
       "badge": "DU",
       "accent": "#0ba8ee",
       "id": "du-usage",
@@ -927,7 +927,7 @@
     },
     {
       "title": "nmcli Connection Management",
-      "category": "Networking • RHEL",
+      "category": "Networking \u2022 RHEL",
       "badge": "NMCLI",
       "accent": "#00bcd4",
       "id": "nmcli-connections",
@@ -939,7 +939,7 @@
     },
     {
       "title": "DNS Configuration",
-      "category": "Networking • DNS",
+      "category": "Networking \u2022 DNS",
       "badge": "DNS",
       "accent": "#00bcd4",
       "id": "dns-config",
@@ -951,7 +951,7 @@
     },
     {
       "title": "Subnetting Practice",
-      "category": "Networking • Subnetting",
+      "category": "Networking \u2022 Subnetting",
       "badge": "SUBNET",
       "accent": "#00bcd4",
       "id": "subnetting-drill",
@@ -963,7 +963,7 @@
     },
     {
       "title": "Port & Socket Inspection",
-      "category": "Networking • Troubleshooting",
+      "category": "Networking \u2022 Troubleshooting",
       "badge": "SS",
       "accent": "#00bcd4",
       "id": "port-scanning",
@@ -975,7 +975,7 @@
     },
     {
       "title": "iptables Basics",
-      "category": "Networking • Firewall",
+      "category": "Networking \u2022 Firewall",
       "badge": "IPT",
       "accent": "#00bcd4",
       "id": "iptables-basics",
@@ -987,7 +987,7 @@
     },
     {
       "title": "Docker Image Management",
-      "category": "Containers • Docker",
+      "category": "Containers \u2022 Docker",
       "badge": "DKR",
       "accent": "#2496ed",
       "id": "docker-images",
@@ -999,7 +999,7 @@
     },
     {
       "title": "Docker Networking",
-      "category": "Containers • Docker",
+      "category": "Containers \u2022 Docker",
       "badge": "DKR",
       "accent": "#2496ed",
       "id": "docker-networking",
@@ -1011,7 +1011,7 @@
     },
     {
       "title": "Docker Volumes",
-      "category": "Containers • Docker",
+      "category": "Containers \u2022 Docker",
       "badge": "DKR",
       "accent": "#2496ed",
       "id": "docker-volumes",
@@ -1023,7 +1023,7 @@
     },
     {
       "title": "Docker Compose",
-      "category": "Containers • Docker",
+      "category": "Containers \u2022 Docker",
       "badge": "COMP",
       "accent": "#2496ed",
       "id": "docker-compose",
@@ -1083,7 +1083,7 @@
     },
     {
       "title": "Helm Package Management",
-      "category": "Kubernetes • Helm",
+      "category": "Kubernetes \u2022 Helm",
       "badge": "HELM",
       "accent": "#326ce5",
       "id": "helm-basics",
@@ -1095,7 +1095,7 @@
     },
     {
       "title": "MySQL Basics",
-      "category": "Databases • MySQL",
+      "category": "Databases \u2022 MySQL",
       "badge": "SQL",
       "accent": "#e38c00",
       "id": "mysql-basics",
@@ -1107,7 +1107,7 @@
     },
     {
       "title": "MySQL Users & Grants",
-      "category": "Databases • MySQL",
+      "category": "Databases \u2022 MySQL",
       "badge": "SQL",
       "accent": "#e38c00",
       "id": "mysql-users",
@@ -1119,7 +1119,7 @@
     },
     {
       "title": "MySQL Backup & Restore",
-      "category": "Databases • MySQL",
+      "category": "Databases \u2022 MySQL",
       "badge": "SQL",
       "accent": "#e38c00",
       "id": "mysql-backup",
@@ -1131,7 +1131,7 @@
     },
     {
       "title": "PostgreSQL Basics",
-      "category": "Databases • PostgreSQL",
+      "category": "Databases \u2022 PostgreSQL",
       "badge": "PSQL",
       "accent": "#336791",
       "id": "postgresql-basics",
@@ -1143,7 +1143,7 @@
     },
     {
       "title": "PostgreSQL Queries",
-      "category": "Databases • PostgreSQL",
+      "category": "Databases \u2022 PostgreSQL",
       "badge": "PSQL",
       "accent": "#336791",
       "id": "postgresql-queries",
@@ -1155,7 +1155,7 @@
     },
     {
       "title": "Redis Basics",
-      "category": "Databases • Redis",
+      "category": "Databases \u2022 Redis",
       "badge": "REDIS",
       "accent": "#d82c20",
       "id": "redis-basics",
@@ -1167,7 +1167,7 @@
     },
     {
       "title": "AWS S3 CLI",
-      "category": "AWS • Storage",
+      "category": "AWS \u2022 Storage",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-s3-cli",
@@ -1179,7 +1179,7 @@
     },
     {
       "title": "AWS EC2 CLI",
-      "category": "AWS • Compute",
+      "category": "AWS \u2022 Compute",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-ec2-cli",
@@ -1191,7 +1191,7 @@
     },
     {
       "title": "AWS IAM CLI",
-      "category": "AWS • Identity",
+      "category": "AWS \u2022 Identity",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-iam-cli",
@@ -1203,7 +1203,7 @@
     },
     {
       "title": "AWS VPC CLI",
-      "category": "AWS • Networking",
+      "category": "AWS \u2022 Networking",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-vpc-cli",
@@ -1215,7 +1215,7 @@
     },
     {
       "title": "AWS Lambda CLI",
-      "category": "AWS • Serverless",
+      "category": "AWS \u2022 Serverless",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-lambda-cli",
@@ -1227,7 +1227,7 @@
     },
     {
       "title": "AWS CloudFormation",
-      "category": "AWS • IaC",
+      "category": "AWS \u2022 IaC",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-cloudformation",
@@ -1239,7 +1239,7 @@
     },
     {
       "title": "AWS RDS CLI",
-      "category": "AWS • Database",
+      "category": "AWS \u2022 Database",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-rds-cli",
@@ -1251,7 +1251,7 @@
     },
     {
       "title": "AWS Route 53",
-      "category": "AWS • DNS",
+      "category": "AWS \u2022 DNS",
       "badge": "AWS",
       "accent": "#ff9900",
       "id": "aws-route53",
@@ -1263,7 +1263,7 @@
     },
     {
       "title": "Azure CLI Basics",
-      "category": "Azure • CLI",
+      "category": "Azure \u2022 CLI",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-cli-basics",
@@ -1275,7 +1275,7 @@
     },
     {
       "title": "Azure Virtual Machines",
-      "category": "Azure • Compute",
+      "category": "Azure \u2022 Compute",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-vm",
@@ -1287,7 +1287,7 @@
     },
     {
       "title": "Azure Storage",
-      "category": "Azure • Storage",
+      "category": "Azure \u2022 Storage",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-storage",
@@ -1299,7 +1299,7 @@
     },
     {
       "title": "Azure Kubernetes Service",
-      "category": "Azure • Kubernetes",
+      "category": "Azure \u2022 Kubernetes",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-aks",
@@ -1311,7 +1311,7 @@
     },
     {
       "title": "Azure Entra ID",
-      "category": "Azure • Identity",
+      "category": "Azure \u2022 Identity",
       "badge": "AZ",
       "accent": "#087ed2",
       "id": "azure-entra",
@@ -1323,7 +1323,7 @@
     },
     {
       "title": "gcloud CLI Basics",
-      "category": "GCP • CLI",
+      "category": "GCP \u2022 CLI",
       "badge": "GCP",
       "accent": "#4285f4",
       "id": "gcloud-basics",
@@ -1335,7 +1335,7 @@
     },
     {
       "title": "GCP Compute Engine",
-      "category": "GCP • Compute",
+      "category": "GCP \u2022 Compute",
       "badge": "GCP",
       "accent": "#4285f4",
       "id": "gcp-compute",
@@ -1347,7 +1347,7 @@
     },
     {
       "title": "GCP Cloud Storage",
-      "category": "GCP • Storage",
+      "category": "GCP \u2022 Storage",
       "badge": "GCP",
       "accent": "#4285f4",
       "id": "gcp-storage",
@@ -1359,7 +1359,7 @@
     },
     {
       "title": "GCP IAM",
-      "category": "GCP • Identity",
+      "category": "GCP \u2022 Identity",
       "badge": "GCP",
       "accent": "#4285f4",
       "id": "gcp-iam",
@@ -1371,7 +1371,7 @@
     },
     {
       "title": "Terraform Basics",
-      "category": "DevOps • IaC",
+      "category": "DevOps \u2022 IaC",
       "badge": "TF",
       "accent": "#7b42bc",
       "id": "terraform-basics",
@@ -1383,7 +1383,7 @@
     },
     {
       "title": "Terraform Plan & Apply",
-      "category": "DevOps • IaC",
+      "category": "DevOps \u2022 IaC",
       "badge": "TF",
       "accent": "#7b42bc",
       "id": "terraform-apply",
@@ -1395,7 +1395,7 @@
     },
     {
       "title": "Ansible Playbooks",
-      "category": "DevOps • Automation",
+      "category": "DevOps \u2022 Automation",
       "badge": "ANS",
       "accent": "#e00",
       "id": "ansible-playbook",
@@ -1407,7 +1407,7 @@
     },
     {
       "title": "Ansible Inventory",
-      "category": "DevOps • Automation",
+      "category": "DevOps \u2022 Automation",
       "badge": "ANS",
       "accent": "#e00",
       "id": "ansible-inventory",
@@ -1419,7 +1419,7 @@
     },
     {
       "title": "Git Rebase & History",
-      "category": "DevOps • Git",
+      "category": "DevOps \u2022 Git",
       "badge": "GIT",
       "accent": "#f05033",
       "id": "git-rebase",
@@ -1431,7 +1431,7 @@
     },
     {
       "title": "Bash Scripting",
-      "category": "Programming • Bash",
+      "category": "Programming \u2022 Bash",
       "badge": "BASH",
       "accent": "#4eaa25",
       "id": "bash-scripting",
@@ -1443,7 +1443,7 @@
     },
     {
       "title": "Bash Variables & Loops",
-      "category": "Programming • Bash",
+      "category": "Programming \u2022 Bash",
       "badge": "BASH",
       "accent": "#4eaa25",
       "id": "bash-variables",
@@ -1455,7 +1455,7 @@
     },
     {
       "title": "Python Data Structures",
-      "category": "Programming • Python",
+      "category": "Programming \u2022 Python",
       "badge": "PY",
       "accent": "#ffd343",
       "id": "python-datastructures",
@@ -1467,7 +1467,7 @@
     },
     {
       "title": "System Log Analysis",
-      "category": "Security • Logs",
+      "category": "Security \u2022 Logs",
       "badge": "LOG",
       "accent": "#ef405b",
       "id": "log-analysis",
@@ -1479,7 +1479,7 @@
     },
     {
       "title": "Password Policy Audit",
-      "category": "Security • Compliance",
+      "category": "Security \u2022 Compliance",
       "badge": "SEC",
       "accent": "#ef405b",
       "id": "password-policy",
@@ -1491,7 +1491,7 @@
     },
     {
       "title": "System Performance Analysis",
-      "category": "Linux • Monitoring",
+      "category": "Linux \u2022 Monitoring",
       "badge": "PERF",
       "accent": "#0ba8ee",
       "id": "performance-tuning",
@@ -1503,7 +1503,7 @@
     },
     {
       "title": "Network Troubleshooting",
-      "category": "Linux • Monitoring",
+      "category": "Linux \u2022 Monitoring",
       "badge": "NET",
       "accent": "#00bcd4",
       "id": "network-troubleshooting",
@@ -1515,7 +1515,7 @@
     },
     {
       "title": "Service Troubleshooting",
-      "category": "Linux • Monitoring",
+      "category": "Linux \u2022 Monitoring",
       "badge": "TROUBLE",
       "accent": "#0ba8ee",
       "id": "service-troubleshooting",
@@ -1527,7 +1527,7 @@
     },
     {
       "title": "Vim Editor Basics",
-      "category": "Linux • Editors",
+      "category": "Linux \u2022 Editors",
       "badge": "VIM",
       "accent": "#0ba8ee",
       "id": "vim-basics",
@@ -1539,7 +1539,7 @@
     },
     {
       "title": "Environment Variables",
-      "category": "Linux • Shell",
+      "category": "Linux \u2022 Shell",
       "badge": "ENV",
       "accent": "#0ba8ee",
       "id": "environment-vars",
@@ -1551,7 +1551,7 @@
     },
     {
       "title": "Shell Aliases & History",
-      "category": "Linux • Shell",
+      "category": "Linux \u2022 Shell",
       "badge": "SH",
       "accent": "#0ba8ee",
       "id": "shell-aliases",
@@ -1563,7 +1563,7 @@
     },
     {
       "title": "rsync File Transfer",
-      "category": "Linux • File Management",
+      "category": "Linux \u2022 File Management",
       "badge": "RSYNC",
       "accent": "#0ba8ee",
       "id": "rsync-transfer",
@@ -1575,7 +1575,7 @@
     },
     {
       "title": "Symbolic Links Drill",
-      "category": "Linux • Filesystem",
+      "category": "Linux \u2022 Filesystem",
       "badge": "LNK",
       "accent": "#6366f1",
       "id": "softlink-drill",
@@ -1587,7 +1587,7 @@
     },
     {
       "title": "cron Syntax Drill",
-      "category": "Linux • Automation",
+      "category": "Linux \u2022 Automation",
       "badge": "CRON",
       "accent": "#0ba8ee",
       "id": "cron-drill",
@@ -1599,7 +1599,7 @@
     },
     {
       "title": "RHCSA Task 01: Shell Command Syntax",
-      "category": "RHEL 10 • Essential Tools • Shell Fundamentals",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Shell Fundamentals",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-01-shell-command-syntax",
@@ -1613,7 +1613,7 @@
     },
     {
       "title": "RHCSA Task 02: I/O Redirection and Pipelines",
-      "category": "RHEL 10 • Essential Tools • Shell Fundamentals",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Shell Fundamentals",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-02-io-redirection-pipelines",
@@ -1627,7 +1627,7 @@
     },
     {
       "title": "RHCSA Task 03: Grep and Regular Expressions",
-      "category": "RHEL 10 • Essential Tools • Text Processing",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Text Processing",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-03-grep-regular-expressions",
@@ -1641,7 +1641,7 @@
     },
     {
       "title": "RHCSA Task 04: Secure Shell Remote Access",
-      "category": "RHEL 10 • Essential Tools • Remote Administration",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Remote Administration",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-04-ssh-remote-access",
@@ -1655,7 +1655,7 @@
     },
     {
       "title": "RHCSA Task 05: Multi-user Login and Identity Switching",
-      "category": "RHEL 10 • Essential Tools • Identity Operations",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Identity Operations",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-05-multi-user-login-switch",
@@ -1669,7 +1669,7 @@
     },
     {
       "title": "RHCSA Task 06: Archive and Compression Operations",
-      "category": "RHEL 10 • Essential Tools • Files and Archives",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Files and Archives",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-06-archives-compression",
@@ -1683,7 +1683,7 @@
     },
     {
       "title": "RHCSA Task 07: Create and Edit Text Files",
-      "category": "RHEL 10 • Essential Tools • Text Processing",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Text Processing",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-07-create-edit-text-files",
@@ -1697,7 +1697,7 @@
     },
     {
       "title": "RHCSA Task 08: File and Directory Operations",
-      "category": "RHEL 10 • Essential Tools • Files and Archives",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Files and Archives",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-08-file-directory-operations",
@@ -1711,7 +1711,7 @@
     },
     {
       "title": "RHCSA Task 09: Hard and Symbolic Links",
-      "category": "RHEL 10 • Essential Tools • Files and Archives",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Files and Archives",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-09-hard-soft-links",
@@ -1725,7 +1725,7 @@
     },
     {
       "title": "RHCSA Task 10: Standard Linux Permissions",
-      "category": "RHEL 10 • Essential Tools • Permissions",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Permissions",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-10-standard-permissions",
@@ -1739,7 +1739,7 @@
     },
     {
       "title": "RHCSA Task 11: System Documentation Research",
-      "category": "RHEL 10 • Essential Tools • Documentation",
+      "category": "RHEL 10 \u2022 Essential Tools \u2022 Documentation",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-11-system-documentation",
@@ -1753,7 +1753,7 @@
     },
     {
       "title": "RHCSA Task 12: RPM Repository Configuration",
-      "category": "RHEL 10 • Software Management • RPM and DNF",
+      "category": "RHEL 10 \u2022 Software Management \u2022 RPM and DNF",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-12-rpm-repositories",
@@ -1767,7 +1767,7 @@
     },
     {
       "title": "RHCSA Task 13: RPM Package Lifecycle",
-      "category": "RHEL 10 • Software Management • RPM and DNF",
+      "category": "RHEL 10 \u2022 Software Management \u2022 RPM and DNF",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-13-rpm-package-lifecycle",
@@ -1781,7 +1781,7 @@
     },
     {
       "title": "RHCSA Task 14: Flatpak Repository Configuration",
-      "category": "RHEL 10 • Software Management • Flatpak",
+      "category": "RHEL 10 \u2022 Software Management \u2022 Flatpak",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-14-flatpak-repositories",
@@ -1795,7 +1795,7 @@
     },
     {
       "title": "RHCSA Task 15: Flatpak Application Lifecycle",
-      "category": "RHEL 10 • Software Management • Flatpak",
+      "category": "RHEL 10 \u2022 Software Management \u2022 Flatpak",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-15-flatpak-app-lifecycle",
@@ -1809,7 +1809,7 @@
     },
     {
       "title": "RHCSA Task 16: Shell Script Conditionals",
-      "category": "RHEL 10 • Shell Scripting • Bash",
+      "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-16-script-conditionals",
@@ -1823,7 +1823,7 @@
     },
     {
       "title": "RHCSA Task 17: Shell Script Loops",
-      "category": "RHEL 10 • Shell Scripting • Bash",
+      "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-17-script-loops",
@@ -1837,7 +1837,7 @@
     },
     {
       "title": "RHCSA Task 18: Shell Script Positional Inputs",
-      "category": "RHEL 10 • Shell Scripting • Bash",
+      "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-18-script-inputs",
@@ -1851,7 +1851,7 @@
     },
     {
       "title": "RHCSA Task 19: Command Output in Shell Scripts",
-      "category": "RHEL 10 • Shell Scripting • Bash",
+      "category": "RHEL 10 \u2022 Shell Scripting \u2022 Bash",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-19-script-command-output",
@@ -1865,7 +1865,7 @@
     },
     {
       "title": "RHCSA Task 20: Normal Boot, Reboot and Shutdown",
-      "category": "RHEL 10 • Running Systems • System Lifecycle",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 System Lifecycle",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-20-normal-system-lifecycle",
@@ -1879,7 +1879,7 @@
     },
     {
       "title": "RHCSA Task 21: Manual Boot Targets",
-      "category": "RHEL 10 • Running Systems • Systemd",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Systemd",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-21-manual-boot-targets",
@@ -1893,7 +1893,7 @@
     },
     {
       "title": "RHCSA Task 22: Boot Interruption and Recovery",
-      "category": "RHEL 10 • Running Systems • Boot Recovery",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Boot Recovery",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-22-interrupt-boot-recovery",
@@ -1907,7 +1907,7 @@
     },
     {
       "title": "RHCSA Task 23: Process Identification and Control",
-      "category": "RHEL 10 • Running Systems • Process Management",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Process Management",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-23-process-identification-control",
@@ -1921,7 +1921,7 @@
     },
     {
       "title": "RHCSA Task 24: Process Scheduling Adjustment",
-      "category": "RHEL 10 • Running Systems • Process Management",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Process Management",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-24-process-scheduling",
@@ -1935,7 +1935,7 @@
     },
     {
       "title": "RHCSA Task 25: System Tuning Profiles",
-      "category": "RHEL 10 • Running Systems • Performance Tuning",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Performance Tuning",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-25-tuning-profiles",
@@ -1949,7 +1949,7 @@
     },
     {
       "title": "RHCSA Task 26: System Logs and Journal Analysis",
-      "category": "RHEL 10 • Running Systems • Logging",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Logging",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-26-logs-journals-analysis",
@@ -1963,7 +1963,7 @@
     },
     {
       "title": "RHCSA Task 27: Persistent System Journals",
-      "category": "RHEL 10 • Running Systems • Logging",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Logging",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-27-persistent-journals",
@@ -1977,7 +1977,7 @@
     },
     {
       "title": "RHCSA Task 28: Network Service Control",
-      "category": "RHEL 10 • Running Systems • Systemd",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Systemd",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-28-network-service-control",
@@ -1991,7 +1991,7 @@
     },
     {
       "title": "RHCSA Task 29: Secure File Transfer",
-      "category": "RHEL 10 • Running Systems • Remote Administration",
+      "category": "RHEL 10 \u2022 Running Systems \u2022 Remote Administration",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-29-secure-file-transfer",
@@ -2005,7 +2005,7 @@
     },
     {
       "title": "RHCSA Task 30: GPT Partition Management",
-      "category": "RHEL 10 • Local Storage • Partitions",
+      "category": "RHEL 10 \u2022 Local Storage \u2022 Partitions",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-30-gpt-partitions",
@@ -2019,7 +2019,7 @@
     },
     {
       "title": "RHCSA Task 31: LVM Physical Volumes",
-      "category": "RHEL 10 • Local Storage • LVM",
+      "category": "RHEL 10 \u2022 Local Storage \u2022 LVM",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-31-physical-volumes",
@@ -2033,7 +2033,7 @@
     },
     {
       "title": "RHCSA Task 32: LVM Volume Groups",
-      "category": "RHEL 10 • Local Storage • LVM",
+      "category": "RHEL 10 \u2022 Local Storage \u2022 LVM",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-32-volume-groups",
@@ -2047,7 +2047,7 @@
     },
     {
       "title": "RHCSA Task 33: LVM Logical Volume Lifecycle",
-      "category": "RHEL 10 • Local Storage • LVM",
+      "category": "RHEL 10 \u2022 Local Storage \u2022 LVM",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-33-logical-volumes",
@@ -2061,7 +2061,7 @@
     },
     {
       "title": "RHCSA Task 34: Persistent Mounts by UUID or Label",
-      "category": "RHEL 10 • Local Storage • Persistent Mounts",
+      "category": "RHEL 10 \u2022 Local Storage \u2022 Persistent Mounts",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-34-persistent-mount-identifiers",
@@ -2075,7 +2075,7 @@
     },
     {
       "title": "RHCSA Task 35: Non-destructive Storage and Swap",
-      "category": "RHEL 10 • Local Storage • LVM and Swap",
+      "category": "RHEL 10 \u2022 Local Storage \u2022 LVM and Swap",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-35-nondestructive-storage-swap",
@@ -2089,7 +2089,7 @@
     },
     {
       "title": "RHCSA Task 36: VFAT, ext4 and XFS File Systems",
-      "category": "RHEL 10 • File Systems • Local File Systems",
+      "category": "RHEL 10 \u2022 File Systems \u2022 Local File Systems",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-36-local-file-systems",
@@ -2103,7 +2103,7 @@
     },
     {
       "title": "RHCSA Task 37: NFS Network File Systems",
-      "category": "RHEL 10 • File Systems • NFS",
+      "category": "RHEL 10 \u2022 File Systems \u2022 NFS",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-37-nfs-mounts",
@@ -2117,7 +2117,7 @@
     },
     {
       "title": "RHCSA Task 38: Autofs Configuration",
-      "category": "RHEL 10 • File Systems • Autofs",
+      "category": "RHEL 10 \u2022 File Systems \u2022 Autofs",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-38-autofs-indirect-maps",
@@ -2131,7 +2131,7 @@
     },
     {
       "title": "RHCSA Task 39: Extend an Existing Logical Volume",
-      "category": "RHEL 10 • File Systems • LVM and File Systems",
+      "category": "RHEL 10 \u2022 File Systems \u2022 LVM and File Systems",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-39-extend-logical-volume",
@@ -2145,7 +2145,7 @@
     },
     {
       "title": "RHCSA Task 40: File Permission Troubleshooting",
-      "category": "RHEL 10 • File Systems • Permissions",
+      "category": "RHEL 10 \u2022 File Systems \u2022 Permissions",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-40-permission-troubleshooting",
@@ -2159,7 +2159,7 @@
     },
     {
       "title": "RHCSA Task 41: At, Cron and Systemd Timer Scheduling",
-      "category": "RHEL 10 • System Maintenance • Task Scheduling",
+      "category": "RHEL 10 \u2022 System Maintenance \u2022 Task Scheduling",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-41-task-scheduling",
@@ -2173,7 +2173,7 @@
     },
     {
       "title": "RHCSA Task 42: Service Startup and Boot Enablement",
-      "category": "RHEL 10 • System Maintenance • Systemd",
+      "category": "RHEL 10 \u2022 System Maintenance \u2022 Systemd",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-42-service-enable-boot",
@@ -2187,7 +2187,7 @@
     },
     {
       "title": "RHCSA Task 43: Default Boot Target",
-      "category": "RHEL 10 • System Maintenance • Systemd",
+      "category": "RHEL 10 \u2022 System Maintenance \u2022 Systemd",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-43-default-boot-target",
@@ -2201,7 +2201,7 @@
     },
     {
       "title": "RHCSA Task 44: Time Service Client",
-      "category": "RHEL 10 • System Maintenance • Time Synchronisation",
+      "category": "RHEL 10 \u2022 System Maintenance \u2022 Time Synchronisation",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-44-time-service-client",
@@ -2215,7 +2215,7 @@
     },
     {
       "title": "RHCSA Task 45: Software Installation and Updates",
-      "category": "RHEL 10 • System Maintenance • RPM and DNF",
+      "category": "RHEL 10 \u2022 System Maintenance \u2022 RPM and DNF",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-45-software-install-update-sources",
@@ -2229,7 +2229,7 @@
     },
     {
       "title": "RHCSA Task 46: Bootloader Configuration",
-      "category": "RHEL 10 • System Maintenance • Bootloader",
+      "category": "RHEL 10 \u2022 System Maintenance \u2022 Bootloader",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-46-bootloader-configuration",
@@ -2243,7 +2243,7 @@
     },
     {
       "title": "RHCSA Task 47: IPv4 and IPv6 Addressing",
-      "category": "RHEL 10 • Networking • NetworkManager",
+      "category": "RHEL 10 \u2022 Networking \u2022 NetworkManager",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-47-ipv4-ipv6-addressing",
@@ -2257,7 +2257,7 @@
     },
     {
       "title": "RHCSA Task 48: Hostname and Name Resolution",
-      "category": "RHEL 10 • Networking • DNS and Hostnames",
+      "category": "RHEL 10 \u2022 Networking \u2022 DNS and Hostnames",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-48-hostname-resolution",
@@ -2271,7 +2271,7 @@
     },
     {
       "title": "RHCSA Task 49: Network Service Autostart",
-      "category": "RHEL 10 • Networking • NetworkManager",
+      "category": "RHEL 10 \u2022 Networking \u2022 NetworkManager",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-49-network-autostart",
@@ -2285,7 +2285,7 @@
     },
     {
       "title": "RHCSA Task 50: Restrict Network Access",
-      "category": "RHEL 10 • Networking • Firewalld",
+      "category": "RHEL 10 \u2022 Networking \u2022 Firewalld",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-50-firewall-network-restriction",
@@ -2299,7 +2299,7 @@
     },
     {
       "title": "RHCSA Task 51: Local User Account Lifecycle",
-      "category": "RHEL 10 • Users and Groups • User Accounts",
+      "category": "RHEL 10 \u2022 Users and Groups \u2022 User Accounts",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-51-local-user-lifecycle",
@@ -2313,7 +2313,7 @@
     },
     {
       "title": "RHCSA Task 52: Passwords and Account Aging",
-      "category": "RHEL 10 • Users and Groups • Account Policy",
+      "category": "RHEL 10 \u2022 Users and Groups \u2022 Account Policy",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-52-password-aging",
@@ -2327,7 +2327,7 @@
     },
     {
       "title": "RHCSA Task 53: Local Groups and Memberships",
-      "category": "RHEL 10 • Users and Groups • Group Management",
+      "category": "RHEL 10 \u2022 Users and Groups \u2022 Group Management",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-53-local-groups-memberships",
@@ -2341,7 +2341,7 @@
     },
     {
       "title": "RHCSA Task 54: Controlled Privileged Access",
-      "category": "RHEL 10 • Users and Groups • Sudo",
+      "category": "RHEL 10 \u2022 Users and Groups \u2022 Sudo",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-54-privileged-access",
@@ -2355,7 +2355,7 @@
     },
     {
       "title": "RHCSA Task 55: Firewalld Service and Rich Rules",
-      "category": "RHEL 10 • Security • Firewalld",
+      "category": "RHEL 10 \u2022 Security \u2022 Firewalld",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-55-firewall-service-policy",
@@ -2369,7 +2369,7 @@
     },
     {
       "title": "RHCSA Task 56: Default File Permissions",
-      "category": "RHEL 10 • Security • Permissions",
+      "category": "RHEL 10 \u2022 Security \u2022 Permissions",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-56-default-file-permissions",
@@ -2383,7 +2383,7 @@
     },
     {
       "title": "RHCSA Task 57: SSH Key-based Authentication",
-      "category": "RHEL 10 • Security • SSH",
+      "category": "RHEL 10 \u2022 Security \u2022 SSH",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-57-ssh-key-authentication",
@@ -2397,7 +2397,7 @@
     },
     {
       "title": "RHCSA Task 58: SELinux Enforcement Modes",
-      "category": "RHEL 10 • Security • SELinux",
+      "category": "RHEL 10 \u2022 Security \u2022 SELinux",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-58-selinux-enforcement-modes",
@@ -2411,7 +2411,7 @@
     },
     {
       "title": "RHCSA Task 59: SELinux File and Process Contexts",
-      "category": "RHEL 10 • Security • SELinux",
+      "category": "RHEL 10 \u2022 Security \u2022 SELinux",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-59-selinux-context-identification",
@@ -2425,7 +2425,7 @@
     },
     {
       "title": "RHCSA Task 60: Restore Default SELinux Contexts",
-      "category": "RHEL 10 • Security • SELinux",
+      "category": "RHEL 10 \u2022 Security \u2022 SELinux",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-60-selinux-restore-contexts",
@@ -2439,7 +2439,7 @@
     },
     {
       "title": "RHCSA Task 61: SELinux Port Labels",
-      "category": "RHEL 10 • Security • SELinux",
+      "category": "RHEL 10 \u2022 Security \u2022 SELinux",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-61-selinux-port-labels",
@@ -2453,7 +2453,7 @@
     },
     {
       "title": "RHCSA Task 62: Persistent SELinux Booleans",
-      "category": "RHEL 10 • Security • SELinux",
+      "category": "RHEL 10 \u2022 Security \u2022 SELinux",
       "badge": "RHCSA",
       "accent": "#1261a6",
       "id": "rhcsa-practice-62-selinux-booleans",
@@ -2467,7 +2467,7 @@
     },
     {
       "title": "IT Admin vs Zombies - RCW Server Room Defense Game",
-      "category": "IT Operations • Gamified Learning • RCW Office",
+      "category": "IT Operations \u2022 Gamified Learning \u2022 RCW Office",
       "badge": "GAME",
       "accent": "#4e9fff",
       "id": "it-admin-zombie-game",
@@ -2479,7 +2479,7 @@
     },
     {
       "title": "Kubernetes Cluster Deployer - Single App",
-      "category": "Kubernetes • DevOps • Cluster Operations",
+      "category": "Kubernetes \u2022 DevOps \u2022 Cluster Operations",
       "badge": "K8S",
       "accent": "#326ce5",
       "id": "k8s-cluster-deployer",
@@ -2490,8 +2490,8 @@
       "group": "Technology Labs"
     },
     {
-      "title": "RCW-NixFort — CIS Benchmark Linux Server Hardening",
-      "category": "Linux • CIS Benchmarks • Offline",
+      "title": "RCW-NixFort \u2014 CIS Benchmark Linux Server Hardening",
+      "category": "Linux \u2022 CIS Benchmarks \u2022 Offline",
       "badge": "CIS",
       "accent": "#0e8345",
       "id": "rcw-nixfort",
@@ -2499,6 +2499,18 @@
       "contentType": "Tool",
       "technology": "Cybersecurity",
       "subcategory": "Compliance",
+      "group": "Tools"
+    },
+    {
+      "title": "RCW-NixPerm \u2014 Linux File & Folder Permission Manager",
+      "category": "Linux \u2022 Permissions \u2022 Offline",
+      "badge": "PERM",
+      "accent": "#e85d04",
+      "id": "rcw-nixperm",
+      "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixperm/",
+      "contentType": "Tool",
+      "technology": "Linux and RHEL",
+      "subcategory": "Permissions",
       "group": "Tools"
     }
   ]

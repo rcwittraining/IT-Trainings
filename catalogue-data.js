@@ -72,6 +72,30 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
+    "title": "RCW-NixFort — CIS Benchmark Linux Server Hardening",
+    "category": "Linux • CIS Benchmarks • Offline",
+    "badge": "CIS",
+    "accent": "#0e8345",
+    "id": "rcw-nixfort",
+    "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixfort/",
+    "contentType": "Tool",
+    "technology": "Cybersecurity",
+    "subcategory": "Compliance",
+    "group": "Tools"
+  },
+  {
+    "title": "RCW-NixPerm — Linux File & Folder Permission Manager",
+    "category": "Linux • Permissions • Offline",
+    "badge": "PERM",
+    "accent": "#e85d04",
+    "id": "rcw-nixperm",
+    "targetUrl": "https://www.rcwittraining.in/tools/rcw-nixperm/",
+    "contentType": "Tool",
+    "technology": "Linux and RHEL",
+    "subcategory": "Permissions",
+    "group": "Tools"
+  },
+  {
     "title": "IT Incident Response Desk for Freshers",
     "category": "Incident Response • L1 Helpdesk • Freshers",
     "badge": "IR",
