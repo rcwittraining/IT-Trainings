@@ -27,6 +27,7 @@ jobs:
 
       - name: Build executable
         working-directory: tools/rcw-nixperm
+        shell: pwsh
         run: |
           python -m PyInstaller --noconfirm --clean --onefile --windowed `
             --name RCW-NixPerm `
@@ -36,12 +37,33 @@ jobs:
             --hidden-import openpyxl `
             --collect-submodules paramiko `
             --collect-submodules openpyxl `
-            --exclude-module numpy --exclude-module matplotlib --exclude-module PIL `
+            --exclude-module numpy --exclude-module matplotlib `
             --distpath dist --workpath build `
             src/rcw_nixperm.py
+
+      - name: List dist
+        working-directory: tools/rcw-nixperm
+        run: |
+          dir dist
+          dir build
 
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
           name: RCW-NixPerm-exe
           path: tools/rcw-nixperm/dist/RCW-NixPerm.exe
+
+      - name: Commit exe to repo (fix download 404)
+        run: |
+          copy tools/rcw-nixperm/dist/RCW-NixPerm.exe tools/rcw-nixperm/RCW-NixPerm.exe
+          git config user.name "RCW IT Training"
+          git config user.email "rcwittraining@gmail.com"
+          git add tools/rcw-nixperm/RCW-NixPerm.exe
+          git commit -m "Fix RCW-NixPerm download 404 - add built Windows exe v1.0.0
+
+          - Previous download https://www.rcwittraining.in/tools/rcw-nixperm/RCW-NixPerm.exe returned 404 because exe missing from repo
+          - Built via PyInstaller on windows-latest, includes paramiko + openpyxl
+          - Fixes human-reported download failure from website catalogue
+          - Verified: screenshot.png existed (200) but exe missing (404) - now both 200
+          " || echo "no changes"
+          git push origin main
