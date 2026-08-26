@@ -2523,4 +2523,136 @@ window.RCW_CATALOGUE = Object.freeze([
     "subcategory": "Cluster Operations",
     "group": "Technology Labs"
   }
+  ,{
+    "title": "CISSP Bootcamp — 8-Domain Study Hub",
+    "category": "Cybersecurity • Certification • Free study plan",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-bootcamp",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Certification",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 1: Security and Risk Management",
+    "category": "Cybersecurity • Risk Management • Module 1 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d1",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d1.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Risk Management",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 2: Asset Security",
+    "category": "Cybersecurity • Asset Security • Module 2 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d2",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d2.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Asset Security",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 3: Security Architecture and Engineering",
+    "category": "Cybersecurity • Security Architecture • Module 3 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d3",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d3.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Security Architecture",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 4: Communication and Network Security",
+    "category": "Cybersecurity • Network Security • Module 4 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d4",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d4.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Network Security",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 5: Identity and Access Management (IAM)",
+    "category": "Cybersecurity • IAM • Module 5 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d5",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d5.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "IAM",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 6: Security Assessment and Testing",
+    "category": "Cybersecurity • Security Assessment • Module 6 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d6",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d6.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Security Assessment",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 7: Security Operations",
+    "category": "Cybersecurity • Security Operations • Module 7 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d7",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d7.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Security Operations",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Domain 8: Software Development Security",
+    "category": "Cybersecurity • SDLC • Module 8 of 8",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-d8",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/d8.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "SDLC",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Cram Sheet — one-page revision",
+    "category": "Cybersecurity • Certification • Formulas, models, ports",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-cram",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/cram.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Certification",
+    "group": "Bootcamp"
+  }
+  ,{
+    "title": "CISSP Practice Exam — timed + practice, 40 questions",
+    "category": "Cybersecurity • Exam Practice • 60-min countdown",
+    "badge": "CISSP",
+    "accent": "#b45309",
+    "id": "cissp-practice-exam",
+    "targetUrl": "https://www.rcwittraining.in/cissp-bootcamp/exam.html",
+    "contentType": "Bootcamp",
+    "technology": "Cybersecurity",
+    "subcategory": "Exam Practice",
+    "group": "Bootcamp"
+  }
 ]);

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Domain 3: Security Architecture and Engineering - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Domain 3: Security Architecture and Engineering | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>Domain 3: Security Architecture and Engineering</h1>
+    <div class="updated">CISSP Bootcamp &middot; Module 3 of 8 &middot; exam weight 13%</div>
+    <div class="chips"><span class="chip">weight 13%</span>
+      <span class="chip">6 practice questions</span>
+      <span class="chip">unofficial study material</span></div>
+    <div class="summary">The deep-technology domain: secure design principles, the classic security models, cryptography end-to-end, and hardware/trusted systems. Expect conceptual questions rather than calculations.</div>
+
+    <section class="card">
+      <h2>Secure design principles</h2>
+      <ul><li><b>Threat modelling</b> early; <b>attack surface minimisation</b>.</li><li><b>Least privilege</b>, <b>defence in depth</b> (layered controls), <b>secure defaults</b>, <b>fail securely</b> (deny on failure).</li><li><b>Separation of duties</b>, <b>keep it simple</b> (complexity is the enemy).</li><li><b>Zero trust</b> &ndash; never trust, always verify; micro-segmentation; implicit deny.</li><li><b>Shared responsibility</b> in cloud: provider = of the cloud, customer = in the cloud.</li><li><b>Privacy by design</b>, secure access service edge patterns.</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Security models (memorise the direction of the rules)</h2>
+      <table><tr><th>Model</th><th>Protects</th><th>Rules</th></tr><tr><td><b>Bell-LaPadula</b></td><td>Confidentiality</td><td>no read UP (simple), no write DOWN (star property *)</td></tr><tr><td><b>Biba</b></td><td>Integrity</td><td>no read DOWN, no write UP (inverse of BLP)</td></tr><tr><td><b>Clark-Wilson</b></td><td>Integrity (commercial)</td><td>access triple subject&ndash;program(TP)&ndash;object(CDI); well-formed transactions</td></tr><tr><td><b>Brewer-Nash</b></td><td>Conflict of interest</td><td>Chinese Wall: access changes dynamically with user history</td></tr><tr><td><b>Graham-Denning / HRU / Take-Grant</b></td><td>creation/transfer of rights</td><td>formal models of protection-state change</td></tr></table>
+    </section>
+
+    <section class="card">
+      <h2>Evaluation standards</h2>
+      <p><b>Common Criteria</b> (ISO 15408): <b>PP</b> (protection profile = customer needs) &rarr; <b>ST</b> (security target = vendor claims) evaluated against a <b>ToE</b> (target of evaluation) producing an <b>EAL1&ndash;EAL7</b> rating (higher = more assurance, <i>not</i> more security). Historical: TCSEC (Orange Book, US), ITSEC (EU).</p>
+    </section>
+
+    <section class="card">
+      <h2>Symmetric cryptography</h2>
+      <p>One shared key; fast; key distribution is the hard part; n people need n(n&minus;1)/2 keys.</p><ul><li><b>AES</b> (128/192/256-bit, blocks of 128) &mdash; the standard.</li><li>DES (56-bit) and 3DES (112-bit effective) &mdash; legacware only, know them as broken/retired.</li><li>Blowfish/Twofish, RC4 (broken stream cipher), ChaCha20 (modern stream).</li><li>Modes: ECB (never - pattern leakage), CBC, CTR, GCM (authenticated encryption).</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Asymmetric + hashing + signatures</h2>
+      <p><b>Asymmetric</b>: keypair; slow; solves distribution and gives signatures. <b>RSA</b> (factoring), <b>Diffie-Hellman</b> (key agreement, no auth by itself, vulnerable to MITM without authentication), <b>ECC</b> (smaller keys, mobile/IoT), ElGamal.</p><p><b>Hashing</b>: one-way, fixed output, collision-resistant. MD5/SHA-1 dead; use SHA-256/384/512 or SHA-3. <b>HMAC</b> = hash + secret key (integrity + authenticity).</p><p><b>Digital signature</b> = hash of message encrypted with the SENDER's <b>private</b> key &rarr; gives integrity + authentication + non-repudiation. <b>Confidentiality</b> is added by encrypting with the receiver's <b>public</b> key.</p>
+    </section>
+
+    <section class="card">
+      <h2>PKI and key management</h2>
+      <p><b>CA</b> issues certificates, <b>RA</b> verifies identity, certificate revocation via <b>CRL</b> or <b>OCSP</b> (OCSP stapling = server brings its own proof). X.509 v3 certificate. Lifecycle: enrolment &rarr; issuance &rarr; validation &rarr; revocation/expiry &rarr; renewal.</p><p>Kerckhoffs's principle: security rests in the <b>key</b>, not the algorithm secrecy. Key rules: <b>separation of duties</b> in key management, <b>split knowledge</b> (no single person knows a whole key), <b>dual control</b>, M-of-N recovery, key escrow concerns.</p>
+    </section>
+
+    <section class="card">
+      <h2>Cryptanalysis attacks</h2>
+      <ul><li><b>Brute force</b> &ndash; try everything; longer keys resist.</li><li><b>Known plaintext / chosen plaintext / chosen ciphertext</b> &ndash; attacker has or crafts matching pairs.</li><li><b>Meet-in-the-middle</b> &ndash; why double-DES is useless (use 3DES/EDE).</li><li><b>Birthday attack</b> &ndash; hash collisions in ~2^(n/2).</li><li><b>Side-channel</b> &ndash; timing/power/EM leakage; <b>fault injection</b>.</li><li><b>Pass the hash / replay</b> &ndash; protocols, see D5/D4.</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Hardware roots of trust</h2>
+      <p><b>TPM</b> (chip on motherboard: key storage, measured boot, disk-lock binding), <b>HSM</b> (dedicated appliance for CA/database keys), secure enclave/TEE. <b>TCB</b> = everything enforces policy; <b>security kernel</b> implements the <b>reference monitor</b> (must be small, tamper-proof, always invoked).</p><p>Memory protections: DEP/NX bits, ASLR, stack canaries &mdash; buffer-overflow mitigations (more in D8).</p>
+    </section>
+
+    <section class="card">
+      <h2>Systems and architectures</h2>
+      <ul><li><b>Cloud</b> IaaS/PaaS/SaaS responsibility split; container/microservice segmentation; serverless exposure.</li><li><b>ICS/SCADA</b> &ndash; availability-first, legacy protocols, air-gap/DMZ zones, Purdue model.</li><li><b>IoT/embedded</b> &ndash; cheap HW, no patching, fog/edge computing.</li><li><b>High availability</b>: redundancy, <b>RAID</b> (0 stripe, 1 mirror, 5 parity, 6 double parity, 10 mirror+stripe), clustering, failover, <b>N+1 / 2N</b> power.</li><li>Covert channels: <b>storage</b> and <b>timing</b>; counter: traffic padding, audit.</li></ul>
+    </section>
+
+    <section class="card"><h2>Memory hooks</h2>
+      <ul><li>Bell-LaPadula = confidentiality (secrets): &lsquo;no read up, no write down&rsquo;.</li><li>Biba = integrity: exactly the inverse: &lsquo;no read down, no write up&rsquo;.</li><li>Clark-Wilson = commercial integrity via programs (TP + CDI + UDI + IVP).</li><li>Brewer-Nash = Chinese Wall (conflicts of interest).</li><li>Signature = private key; confidentiality = recipient's public key.</li><li>EAL = assurance level, not &lsquo;more secure&rsquo;.</li></ul></section>
+    <section class="card"><h2>Exam tips</h2>
+      <ul><li>Translate model questions to the goal first (confidentiality vs integrity) &mdash; two answers usually die right there.</li><li>&lsquo;Shared key distribution between strangers&rsquo; &rarr; asymmetric; bulk data &rarr; symmetric (hybrid).</li><li>DH alone has no authentication &mdash; pair with certificates or it's MITM-able.</li><li>GCM appears as the safe default mode (encryption + integrity).</li><li>TPM binds disk encryption keys to the machine state.</li></ul></section>
+    <section class="card"><h2>Check yourself</h2>
+<details class="qa"><summary>Q1. Which model enforces 'no write up'?</summary>
+  <div class="opts"><div>A. Bell-LaPadula</div><div>B. Biba</div><div>C. Clark-Wilson</div><div>D. Brewer-Nash</div></div>
+  <div class="ans">Answer: B. Biba</div>
+  <div class="why">No write up is Biba's integrity star rule; BLP is its mirror for confidentiality.</div>
+</details>
+<details class="qa"><summary>Q2. The goal of a digital signature is BEST described as:</summary>
+  <div class="opts"><div>A. Confidentiality</div><div>B. Integrity and non-repudiation</div><div>C. Availability</div><div>D. Key exchange</div></div>
+  <div class="ans">Answer: B. Integrity and non-repudiation</div>
+  <div class="why">Hash + sender's private key = integrity, authentication, non-repudiation.</div>
+</details>
+<details class="qa"><summary>Q3. Which AES mode should you avoid for structured data?</summary>
+  <div class="opts"><div>A. CBC</div><div>B. GCM</div><div>C. ECB</div><div>D. CTR</div></div>
+  <div class="ans">Answer: C. ECB</div>
+  <div class="why">ECB leaks patterns; never use it.</div>
+</details>
+<details class="qa"><summary>Q4. An attacker derives keys from power consumption traces. Attack type?</summary>
+  <div class="opts"><div>A. Birthday</div><div>B. Side-channel</div><div>C. Meet-in-the-middle</div><div>D. Replay</div></div>
+  <div class="ans">Answer: B. Side-channel</div>
+  <div class="why">Physical leakage (timing/power/EM) = side-channel.</div>
+</details>
+<details class="qa"><summary>Q5. OCSP stapling means:</summary>
+  <div class="opts"><div>A. The CA pushes CRLs hourly</div><div>B. The server presents a signed OCSP response</div><div>C. Certificates expire faster</div><div>D. Keys are split in halves</div></div>
+  <div class="ans">Answer: B. The server presents a signed OCSP response</div>
+  <div class="why">Stapling = server fetches and caches its own OCSP proof, improving privacy+speed.</div>
+</details>
+<details class="qa"><summary>Q6. In Common Criteria, EAL7 vs EAL4 means:</summary>
+  <div class="opts"><div>A. EAL7 products are more secure</div><div>B. EAL7 = higher assurance from deeper evaluation</div><div>C. EAL4 = tested by users</div><div>D. EALs apply only to software</div></div>
+  <div class="ans">Answer: B. EAL7 = higher assurance from deeper evaluation</div>
+  <div class="why">EAL measures evaluation assurance depth, not absolute security.</div>
+</details></section>
+    <div class="nav">
+      <a href="d2.html">&#8592; Domain 2</a>
+      <a href="d4.html">Domain 4 &rarr;</a>
+    </div>
+    <div class="note-isc2">CISSP&reg; and (ISC)&sup2;&reg; are registered trademarks of ISC2, Inc.
+      This free bootcamp is independent study material and is not affiliated with, sponsored by,
+      or endorsed by ISC2.</div>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>
