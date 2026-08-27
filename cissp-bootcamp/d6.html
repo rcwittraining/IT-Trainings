@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Domain 6: Security Assessment and Testing - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Domain 6: Security Assessment and Testing | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>Domain 6: Security Assessment and Testing</h1>
+    <div class="updated">CISSP Bootcamp &middot; Module 6 of 8 &middot; exam weight 12%</div>
+    <div class="chips"><span class="chip">weight 12%</span>
+      <span class="chip">6 practice questions</span>
+      <span class="chip">unofficial study material</span></div>
+    <div class="summary">Building confidence that controls actually work: vulnerability management, penetration testing, code review, continuous monitoring and the audit/report world (SOC 2, ISO, PCI DSS).</div>
+
+    <section class="card">
+      <h2>Vocabulary first</h2>
+      <p><b>Testing</b> = execute and observe (e.g., pen test, scan). <b>Assessment</b> = broader judgement incl. risk and process review. <b>Audit</b> = independent, evidence-based opinion against a standard/criteria. <b>Verification</b> = building the system right (matches design); <b>Validation</b> = building the right system (meets the need).</p>
+    </section>
+
+    <section class="card">
+      <h2>Vulnerability scanning</h2>
+      <ul><li>Types: network discovery, network vulnerability, web application, database scans.</li><li>Intrusive vs non-intrusive; authenticated (credentialed) scans see far more.</li><li>Output hygiene: false positives need verification; track with a risk-based SLA (critical &lt; 7 days style).</li><li>Coding the findings: <b>CVE</b> (identifier), <b>CVSS</b> (0&ndash;10 severity score, v3.1 base metrics = AV/AC/PR/UI + C/I/A), <b>CPE</b> (product naming), <b>CCE</b> (configuration), <b>XCCDF/OVAL</b> (SCAP languages for automatable checks).</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Penetration testing</h2>
+      <p>Non-negotiable first step: <b>written authorisation and scope</b> (rules of engagement, windows, escalation contacts).</p><p>Phases: <b>recon</b> (passive OSINT / active scanning) &rarr; <b>scanning &amp; enumeration</b> &rarr; <b>exploitation</b> &rarr; <b>persistence/lateral movement</b> &rarr; <b>covering tracks</b> (within scope) &rarr; <b>reporting</b> (exec summary + technical detail + remediation).</p><p>Knowledge levels: black box (no info), grey box (partial), white box (full). <b>Red team</b> = adversary emulation vs blue team (defence); <b>purple teaming</b> = collaborative improvement.</p>
+    </section>
+
+    <section class="card">
+      <h2>Software testing toolbox (see D8 for depth)</h2>
+      <ul><li><b>SAST</b> static/white-box source analysis; <b>DAST</b> dynamic/black-box running app; <b>IAST</b> runtime instrumentation; <b>RASP</b> self-protecting app.</li><li><b>Fuzzing</b>: mutational (mutate existing inputs) vs generative (build from grammar); great for parsers/protocols.</li><li>Misuse-case testing, test coverage analysis, regression on every change; <b>SCA</b> (software composition) for third-party components; SBOM tracking.</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>OWASP Top 10 (2021) &mdash; be able to match names</h2>
+      <ol><li>Broken Access Control</li><li>Cryptographic Failures</li><li>Injection</li><li>Insecure Design</li><li>Security Misconfiguration</li><li>Vulnerable and Outdated Components</li><li>Identification and Authentication Failures</li><li>Software and Data Integrity Failures</li><li>Security Logging and Monitoring Failures</li><li>Server-Side Request Forgery (SSRF)</li></ol>
+    </section>
+
+    <section class="card">
+      <h2>Operational testing and monitoring data</h2>
+      <p>Synthetic transactions (robot users), <b>RUM</b> real-user monitoring, log reviews, <b>account management reviews</b> (are leavers gone? who approved access?), <b>management reviews</b> of risk, <b>KPIs</b> (performance) vs <b>KRIs</b> (early-warning risk indicators), <b>agreement/supply-chain reviews</b>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Audits, attestations, and reports</h2>
+      <table><tr><th>Thing</th><th>Know this</th></tr><tr><td><b>SOC 1</b></td><td>controls at financial-statement relevant processes</td></tr><tr><td><b>SOC 2</b></td><td>security/availability/confidentiality/processing/privacy trust criteria; <b>Type I</b> = design at a point in time, <b>Type II</b> = design + operating effectiveness over a period</td></tr><tr><td><b>SOC 3</b></td><td>public summary, no details</td></tr><tr><td><b>ISO 27001/27002</b></td><td>ISMS certifiable standard / control catalogue</td></tr><tr><td><b>ISO 27701</b></td><td>privacy extension (PIMS)</td></tr><tr><td><b>PCI DSS</b></td><td>12 requirements for card data; SAQ/ROC by volume</td></tr><tr><td><b>FedRAMP / FISMA</b></td><td>US federal authorisations</td></tr><tr><td><b>CSA STAR</b></td><td>cloud controls registry</td></tr></table><p>Auditor independence is mandatory for external audits; internal audit reports to the board/audit committee, not to the CISO it audits.</p>
+    </section>
+
+    <section class="card"><h2>Memory hooks</h2>
+      <ul><li>Pen test sequence: authorisation &rarr; recon &rarr; scan &rarr; exploit &rarr; report.</li><li>SOC 2 Type II = &lsquo;over a period of time, tested&rsquo;; Type I = point-in-time design.</li><li>CVSS &ge; 9.0 = Critical band (9.0&ndash;10), High 7&ndash;8.9, Medium 4&ndash;6.9, Low 0.1&ndash;3.9.</li><li>SAST = source, DAST = running app, SCA = dependencies.</li><li>SCAP family: XCCDF + OVAL + CCE + CPE + CVE.</li></ul></section>
+    <section class="card"><h2>Exam tips</h2>
+      <ul><li>&lsquo;What comes FIRST in a pen test?&rsquo; &rarr; permission/scope. Always.</li><li>False positive = tool cried wolf; false negative = tool missed a real issue (worse).</li><li>Authenticated scans find more; intranet-only scanning misses shadow IT.</li><li>For cloud: customer still gets assessed for what they configure (shared responsibility).</li></ul></section>
+    <section class="card"><h2>Check yourself</h2>
+<details class="qa"><summary>Q1. A SOC 2 Type II report differs from Type I because it:</summary>
+  <div class="opts"><div>A. Covers financial auditing</div><div>B. Tests operating effectiveness over a period</div><div>C. Is always public</div><div>D. Replaces a pen test</div></div>
+  <div class="ans">Answer: B. Tests operating effectiveness over a period</div>
+  <div class="why">Type II = design + effectiveness over time with evidence.</div>
+</details>
+<details class="qa"><summary>Q2. First step of any penetration engagement?</summary>
+  <div class="opts"><div>A. Port scanning</div><div>B. Written authorisation and scope</div><div>C. Exploitation</div><div>D. Report</div></div>
+  <div class="ans">Answer: B. Written authorisation and scope</div>
+  <div class="why">No authorisation = illegal activity, not a pen test.</div>
+</details>
+<details class="qa"><summary>Q3. Analysing source code BEFORE deployment is:</summary>
+  <div class="opts"><div>A. DAST</div><div>B. SAST</div><div>C. RASP</div><div>D. Fuzzing</div></div>
+  <div class="ans">Answer: B. SAST</div>
+  <div class="why">Static analysis reviews code without running it.</div>
+</details>
+<details class="qa"><summary>Q4. CVSS base score 9.4 lands in which band?</summary>
+  <div class="opts"><div>A. Low</div><div>B. Medium</div><div>C. High</div><div>D. Critical</div></div>
+  <div class="ans">Answer: D. Critical</div>
+  <div class="why">9.0-10.0 = Critical.</div>
+</details>
+<details class="qa"><summary>Q5. Which SCAP component names products/platforms?</summary>
+  <div class="opts"><div>A. CCE</div><div>B. CPE</div><div>C. OVAL</div><div>D. XCCDF</div></div>
+  <div class="ans">Answer: B. CPE</div>
+  <div class="why">Common Platform Enumeration identifies products.</div>
+</details>
+<details class="qa"><summary>Q6. KPI vs KRI: which warns that risk is INCREASING?</summary>
+  <div class="opts"><div>A. KPI</div><div>B. KRI</div><div>C. Both equally</div><div>D. Neither</div></div>
+  <div class="ans">Answer: B. KRI</div>
+  <div class="why">Key Risk Indicator = leading risk signal.</div>
+</details></section>
+    <div class="nav">
+      <a href="d5.html">&#8592; Domain 5</a>
+      <a href="d7.html">Domain 7 &rarr;</a>
+    </div>
+    <div class="note-isc2">CISSP&reg; and (ISC)&sup2;&reg; are registered trademarks of ISC2, Inc.
+      This free bootcamp is independent study material and is not affiliated with, sponsored by,
+      or endorsed by ISC2.</div>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>

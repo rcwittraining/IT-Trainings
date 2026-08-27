@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Domain 8: Software Development Security - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Domain 8: Software Development Security | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>Domain 8: Software Development Security</h1>
+    <div class="updated">CISSP Bootcamp &middot; Module 8 of 8 &middot; exam weight 10%</div>
+    <div class="chips"><span class="chip">weight 10%</span>
+      <span class="chip">6 practice questions</span>
+      <span class="chip">unofficial study material</span></div>
+    <div class="summary">Security across the SDLC plus the web-attack playbook. Small domain, very predictable: models, secure-coding defences, and database concepts.</div>
+
+    <section class="card">
+      <h2>Lifecycle models</h2>
+      <table><tr><th>Model</th><th>Signature</th></tr><tr><td><b>Waterfall</b></td><td>linear phases, requirements frozen early</td></tr><tr><td><b>Spiral</b></td><td>iterative loops, <b>risk-driven</b></td></tr><tr><td><b>Agile</b></td><td>sprints, evolving requirements, working software</td></tr><tr><td><b>RAD</b></td><td>rapid prototyping, user feedback</td></tr><tr><td><b>DevSecOps</b></td><td>CI/CD + security shifted left, automation in pipelines</td></tr></table><p>DevSecOps essentials: pipeline SAST/DAST/SCA gates, IaC and container image scanning, secret scanning, SBOM generation, signed artefacts.</p>
+    </section>
+
+    <section class="card">
+      <h2>Secure SDLC stages</h2>
+      <p><b>Requirements</b> (security + privacy requirements, misuse cases) &rarr; <b>Design</b> (threat modelling, attack surface reduction, architecture review) &rarr; <b>Development</b> (coding standards e.g., SEI CERT; peer review; static analysis in IDE) &rarr; <b>Testing</b> (dynamic, fuzz, regression) &rarr; <b>Release</b> (signing, change approval) &rarr; <b>Maintenance</b> (patching, dependency updates, bug bounty). Maturity models: <b>OWASP SAMM</b>, BSIMM; <b>CMM/CMMI</b> levels 1&ndash;5.</p>
+    </section>
+
+    <section class="card">
+      <h2>Programming fundamentals worth points</h2>
+      <ul><li>Compiled vs interpreted; strong vs weak typing; managed runtimes.</li><li>OOP: <b>encapsulation</b>, inheritance, polymorphism; <b>high cohesion good, tight coupling bad</b>.</li><li>Memory safety: buffer overflows &rarr; bounds checking, DEP/NX, ASLR, stack canaries, safe languages.</li><li>Input handling: <b>allow-list validation</b> &gt; block-list; canonicalisation; output encoding.</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>The web attack playbook (attack &rarr; defence)</h2>
+      <table><tr><th>Attack</th><th>Defence</th></tr><tr><td><b>SQL injection</b></td><td>parameterised queries/prepared statements, least-privilege DB accounts, ORM</td></tr><tr><td><b>XSS</b> (reflected/stored/DOM)</td><td>output encoding, CSP, HttpOnly+Secure cookies, sanitisation</td></tr><tr><td><b>CSRF</b></td><td>anti-CSRF tokens, SameSite cookies, re-auth for sensitive actions</td></tr><tr><td><b>SSRF</b></td><td>allow-list egress, disable redirect follow, metadata-service blocking</td></tr><tr><td><b>Insecure deserialisation</b></td><td>never deserialize untrusted data; signed/integrity-checked payloads</td></tr><tr><td><b>API abuse</b></td><td>per-endpoint authorisation, rate limiting, schema validation (REST/GraphQL)</td></tr></table>
+    </section>
+
+    <section class="card">
+      <h2>Databases</h2>
+      <p><b>ACID</b>: Atomicity (all-or-nothing), Consistency (valid states), Isolation (concurrent tx don't clash), Durability (committed = survives crash). Normalisation removes redundancy; views restrict column/row exposure. Threats: <b>aggregation</b> and <b>inference</b> from combined harmless rows &rarr; counter with <b>polyinstantiation</b>, noise, access controls. Connections via ODBC/JDBC; NoSQL and DW/big-data variants exist.</p>
+    </section>
+
+    <section class="card">
+      <h2>Software supply chain &amp; third parties</h2>
+      <ul><li><b>Software escrow</b> for vendor bankruptcy protection.</li><li>Third-party libraries: SCA, pin versions, review licenses, SBOM (CycloneDX/SPDX).</li><li>Code repositories: protected branches, signed commits, secret scanning; never hardcode keys &mdash; vault + rotation.</li><li>COTS vs custom: vendor patches vs your SDLC; both need inventory.</li><li><b>Malware</b> concepts: virus/worm/trojan/ransomware/logic bomb; antimalware + application allow-listing (the stronger control).</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Effectiveness measurement</h2>
+      <p>Track: defect density, escape rate, % builds passing security gates, time-to-remediate, coverage of critical paths. Independent testing (external pen test or audit) validates internal claims; separation between dev, test and prod environments (no prod data in test!).</p>
+    </section>
+
+    <section class="card"><h2>Memory hooks</h2>
+      <ul><li>Spiral = risk-driven; Agile = sprint-driven; Waterfall = document-driven.</li><li>SQLi &rarr; prepared statements; XSS &rarr; output encoding + CSP; CSRF &rarr; tokens + SameSite.</li><li>ACID = Atomicity, Consistency, Isolation, Durability.</li><li>Shift left = find bugs earlier = cheaper.</li><li>Aggregation/inference &rarr; polyinstantiation &amp; tight views.</li></ul></section>
+    <section class="card"><h2>Exam tips</h2>
+      <ul><li>Pick defences by attack name &mdash; the pairing is nearly always the tested point.</li><li>&lsquo;Best input validation approach&rsquo; = allow-list (deny by default).</li><li>Dev vs test vs prod separation: developers must not push unreviewed code to prod.</li><li>Maturity/model questions: SAMM/BSIMM = software assurance maturity; CMMI = process.</li></ul></section>
+    <section class="card"><h2>Check yourself</h2>
+<details class="qa"><summary>Q1. Which SDLC model is explicitly RISK-driven?</summary>
+  <div class="opts"><div>A. Waterfall</div><div>B. Spiral</div><div>C. Agile</div><div>D. RAD</div></div>
+  <div class="ans">Answer: B. Spiral</div>
+  <div class="why">Spiral iterations are organised around risk analysis.</div>
+</details>
+<details class="qa"><summary>Q2. Primary defence against SQL injection?</summary>
+  <div class="opts"><div>A. Input block-listing</div><div>B. Parameterised queries</div><div>C. HTTPS</div><div>D. WAF only</div></div>
+  <div class="ans">Answer: B. Parameterised queries</div>
+  <div class="why">Prepared statements separate code from data.</div>
+</details>
+<details class="qa"><summary>Q3. CSRF is best mitigated by:</summary>
+  <div class="opts"><div>A. Output encoding</div><div>B. Anti-CSRF tokens with SameSite cookies</div><div>C. Salting</div><div>D. RAID</div></div>
+  <div class="ans">Answer: B. Anti-CSRF tokens with SameSite cookies</div>
+  <div class="why">Tokens prove the request came from your page.</div>
+</details>
+<details class="qa"><summary>Q4. In ACID, 'committed transactions survive a crash' is:</summary>
+  <div class="opts"><div>A. Atomicity</div><div>B. Consistency</div><div>C. Isolation</div><div>D. Durability</div></div>
+  <div class="ans">Answer: D. Durability</div>
+  <div class="why">Durability = persisted once committed.</div>
+</details>
+<details class="qa"><summary>Q5. Polyinstantiation counters which database threat?</summary>
+  <div class="opts"><div>A. SQL injection</div><div>B. Inference via aggregation</div><div>C. Deadlocks</div><div>D. Replication lag</div></div>
+  <div class="ans">Answer: B. Inference via aggregation</div>
+  <div class="why">Two rows, same key, different classifications break inference.</div>
+</details>
+<details class="qa"><summary>Q6. &lsquo;Shift left&rsquo; means:</summary>
+  <div class="opts"><div>A. Move workloads offshore</div><div>B. Apply security earlier in the SDLC</div><div>C. Prioritise operations</div><div>D. Outsource testing</div></div>
+  <div class="ans">Answer: B. Apply security earlier in the SDLC</div>
+  <div class="why">Earlier (leftward on the timeline) security = cheaper defect fixing.</div>
+</details></section>
+    <div class="nav">
+      <a href="d7.html">&#8592; Domain 7</a>
+      <a href="exam.html">Practice exam &rarr;</a>
+    </div>
+    <div class="note-isc2">CISSP&reg; and (ISC)&sup2;&reg; are registered trademarks of ISC2, Inc.
+      This free bootcamp is independent study material and is not affiliated with, sponsored by,
+      or endorsed by ISC2.</div>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>

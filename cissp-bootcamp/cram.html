@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Cram Sheet - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Cram Sheet | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>CISSP Cram Sheet</h1>
+    <div class="updated">Print me. Everything examinable and forgettable, one page.</div>
+    <section class="card"><h2>Formulas</h2>
+      <ul><li>SLE = AV &times; EF &nbsp;&middot;&nbsp; ALE = SLE &times; ARO</li>
+      <li>Control value = ALE(before) &minus; ALE(after) &minus; annual control cost</li>
+      <li>RTO + WRT &le; MTD/MAO</li></ul></section>
+    <section class="card"><h2>Models</h2>
+      <ul><li>Bell-LaPadula (confidentiality): no read UP / no write DOWN</li>
+      <li>Biba (integrity): no read DOWN / no write UP</li>
+      <li>Clark-Wilson: TP + CDI + UDI + IVP (commercial integrity)</li>
+      <li>Brewer-Nash: Chinese Wall (conflict of interest)</li></ul></section>
+    <section class="card"><h2>Crypto</h2>
+      <ul><li>AES-128/192/256 symmetric; RSA/DH/ECC asymmetric; SHA-2/3 hashing; HMAC keyed hash</li>
+      <li>Signature = sender's PRIVATE key; confidentiality = receiver's PUBLIC key</li>
+      <li>WEP dead &rarr; TKIP dead &rarr; CCMP (WPA2) &rarr; SAE (WPA3)</li>
+      <li>ECB never; GCM default (auth'd); IPsec ESP encrypts, AH authenticates</li></ul></section>
+    <section class="card"><h2>Ports</h2>
+      <ul><li>20/21 FTP &middot; 22 SSH &middot; 23 Telnet &middot; 25 SMTP &middot; 53 DNS &middot; 67/68 DHCP &middot; 69 TFTP</li>
+      <li>80 HTTP &middot; 88 Kerberos &middot; 110/143 POP/IMAP &middot; 161/162 SNMP &middot; 389/636 LDAP(S)</li>
+      <li>443 HTTPS &middot; 445 SMB &middot; 514 syslog &middot; 993/995 IMAPS/POP3S &middot; 3389 RDP</li></ul></section>
+    <section class="card"><h2>Biometrics &amp; IAM</h2>
+      <ul><li>FRR = Type I (real user rejected) &middot; FAR = Type II (impostor accepted) &middot; CER = crossover</li>
+      <li>Kerberos: KDC(AS+TGS) &rarr; TGT &rarr; ST, port 88, time-sensitive, KDC = SPOF</li>
+      <li>SAML SSO &middot; OAuth2 authorisation &middot; OIDC authn &middot; FIDO2 phishing-resistant</li>
+      <li>MAC labels &middot; DAC owner &middot; RBAC roles &middot; ABAC attributes</li></ul></section>
+    <section class="card"><h2>Operations</h2>
+      <ul><li>IR: Preparation &rarr; Detection &rarr; Containment &rarr; Eradication &rarr; Recovery &rarr; Lessons</li>
+      <li>Volatility: registers &rarr; RAM &rarr; disk &rarr; remote logs &rarr; archives</li>
+      <li>Differential = since last FULL; incremental = since last backup; 3-2-1 rule</li>
+      <li>SOC2 Type II = period + effectiveness &middot; pen test starts with AUTHORISATION</li></ul></section>
+    <section class="card"><h2>Software</h2>
+      <ul><li>SQLi &rarr; prepared statements &middot; XSS &rarr; output encoding+CSP &middot; CSRF &rarr; tokens+SameSite</li>
+      <li>ACID = atomicity, consistency, isolation, durability</li>
+      <li>Spiral = risk-driven &middot; Agile = sprints &middot; DevSecOps = shift left</li></ul></section>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>

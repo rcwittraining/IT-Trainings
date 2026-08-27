@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Domain 5: Identity and Access Management (IAM) - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Domain 5: Identity and Access Management (IAM) | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>Domain 5: Identity and Access Management (IAM)</h1>
+    <div class="updated">CISSP Bootcamp &middot; Module 5 of 8 &middot; exam weight 13%</div>
+    <div class="chips"><span class="chip">weight 13%</span>
+      <span class="chip">6 practice questions</span>
+      <span class="chip">unofficial study material</span></div>
+    <div class="summary">Who are you, prove it, what may you do, and how do we hold you accountable. Kerberos, federation and biometric error rates are guaranteed points.</div>
+
+    <section class="card">
+      <h2>The IAA chain</h2>
+      <p><b>Identification</b> (claim: username) &rarr; <b>Authentication</b> (prove it) &rarr; <b>Authorisation</b> (what you may do) &rarr; <b>Accounting/Auditing</b> (log what you did). Authorisation should follow <b>least privilege</b> and <b>need to know</b>.</p>
+    </section>
+
+    <section class="card">
+      <h2>Authentication factors</h2>
+      <table><tr><th>Type</th><th>Something you&hellip;</th><th>Examples</th></tr><tr><td>1</td><td>know</td><td>password, PIN, security question</td></tr><tr><td>2</td><td>have</td><td>smart card, TOTP app, key, phone (SMS-OTP)</td></tr><tr><td>3</td><td>are</td><td>fingerprint, iris, face, retina, voice</td></tr></table><p>MFA = two DIFFERENT factor types (password + PIN is still single-factor). Tokens: <b>HOTP</b> (counter-based), <b>TOTP</b> (time-based, 30s window). Smart cards = private key on tamper-resistant chip + PIN (2 factors).</p>
+    </section>
+
+    <section class="card">
+      <h2>Biometric errors</h2>
+      <table><tr><th>Error</th><th>Meaning</th><th>Also called</th></tr><tr><td><b>FRR</b></td><td>legitimate user rejected</td><td>Type I / false rejection</td></tr><tr><td><b>FAR</b></td><td>impostor accepted</td><td>Type II / false acceptance &mdash; usually considered worse</td></tr></table><p><b>CER/EER</b> = the sensitivity setting where FRR = FAR; lower is better. Accuracy ranking (rough): retina &gt; iris &gt; fingerprint &gt; hand geometry &gt; face/voice. Also consider enrollment time, throughput, acceptance.</p>
+    </section>
+
+    <section class="card">
+      <h2>Kerberos (the exam's favourite protocol)</h2>
+      <ul><li>KDC = AS + TGS; everything relies on <b>symmetric keys shared with the KDC</b> plus time-stamped tickets (typical lifetime 8&ndash;10 h).</li><li>Flow: pre-auth &rarr; <b>TGT</b> (ticket-granting ticket) &rarr; use TGT to get a <b>service ticket (ST)</b> &rarr; access service. Port 88.</li><li>Weaknesses: KDC is single point of failure; clocks must be synced; secret keys temporarily on clients; golden/silver ticket attacks forge tickets (KRBTGT account compromise).</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Federation and SSO web standards</h2>
+      <table><tr><th>Standard</th><th>Purpose</th><th>Shape</th></tr><tr><td><b>SAML 2.0</b></td><td>enterprise SSO / authn+authz assertions</td><td>XML, IdP &rarr; SP</td></tr><tr><td><b>OAuth 2.0</b></td><td>authorisation delegation (scoped access)</td><td>tokens (bearer), REST/JSON</td></tr><tr><td><b>OIDC</b></td><td>authentication layer on OAuth2</td><td>ID token (JWT)</td></tr></table><p>Identity Provider (IdP) asserts; Service Provider (SP) consumes. <b>IDaaS</b> = cloud identity (e.g., Entra ID, Okta). Directory terms: forest &gt; domain tree &gt; domain &gt; OU. LDAP/LDAPS (389/636) queries directories.</p>
+    </section>
+
+    <section class="card">
+      <h2>Access control models</h2>
+      <table><tr><th>Model</th><th>Who decides</th><th>Signature idea</th></tr><tr><td><b>DAC</b></td><td>data owner</td><td>ACLs; owner passes rights on (flexible, weakest)</td></tr><tr><td><b>MAC</b></td><td>admin/security policy</td><td>labels (hierarchical, compartmented, lattice); military</td></tr><tr><td><b>RBAC</b></td><td>role assignment</td><td>rights via job roles; best for low turnover / clear structure</td></tr><tr><td><b>Rule / ABAC</b></td><td>policy engine</td><td>attributes of user, resource, environment; most granular</td></tr><tr><td><b>Risk-based</b></td><td>context</td><td>step-up MFA on odd logins</td></tr></table>
+    </section>
+
+    <section class="card">
+      <h2>Credential attacks and defences</h2>
+      <ul><li>Dictionary / brute force / hybrid &rarr; lockouts, rate limits, length-first passwords, <b>salting</b> + slow hashes (bcrypt, PBKDF2, Argon2).</li><li>Rainbow tables &rarr; defeated by unique salts.</li><li><b>Pass-the-hash</b>, Kerberoasting, golden ticket &rarr; PAM vaulting, tiered admin, EDR detections, rotating KRBTGT twice.</li><li>Phishing / spear-phishing / whaling / vishing / smishing &rarr; FIDO2 phishing-resistant MFA beats OTP.</li></ul>
+    </section>
+
+    <section class="card">
+      <h2>Identity lifecycle and privileged access</h2>
+      <p>Provision (least privilege, approvals) &rarr; periodic <b>access reviews</b> &rarr; change with transfers (move = often privilege creep!) &rarr; disable on notice (grace period for return kit) &rarr; deprovision. <b>PAM</b>: credential vault, session recording, just-in-time elevation, no shared admin accounts, break-glass accounts audited.</p>
+    </section>
+
+    <section class="card"><h2>Memory hooks</h2>
+      <ul><li>FAR = Type II = impostor got in (the worse one). FRR = Type I = real user locked out.</li><li>CER/EER = where the two curves cross; smaller = better biometric.</li><li>Kerberos: KDC(AS+TGS) &rarr; TGT &rarr; ST; port 88; time-sensitive tickets.</li><li>SAML = enterprise SSO; OAuth2 = authorisation delegation; OIDC = authn on OAuth2.</li><li>MAC = labels by admin; DAC = owner's ACLs; RBAC = roles; ABAC = attributes.</li></ul></section>
+    <section class="card"><h2>Exam tips</h2>
+      <ul><li>Password + smart-card PIN = two factors only if the PIN protects the card, not another &lsquo;know&rsquo; item.</li><li>&lsquo;Phishing-resistant&rsquo; answer = FIDO2/WebAuthn or certificate-based.</li><li>Provisioning questions: think lifecycle &mdash; leaver disablement is the most time-critical step.</li><li>Kerberos questions: &lsquo;single point of failure&rsquo; = KDC; &lsquo;time skew&rsquo; = ticket validity.</li></ul></section>
+    <section class="card"><h2>Check yourself</h2>
+<details class="qa"><summary>Q1. A valid user is rejected by the fingerprint scanner. This is:</summary>
+  <div class="opts"><div>A. False acceptance (Type II)</div><div>B. False rejection (Type I)</div><div>C. CER</div><div>D. Throughput issue</div></div>
+  <div class="ans">Answer: B. False rejection (Type I)</div>
+  <div class="why">Rejection of a legitimate user = FRR = Type I.</div>
+</details>
+<details class="qa"><summary>Q2. Which token changes code every 30 seconds?</summary>
+  <div class="opts"><div>A. HOTP</div><div>B. TOTP</div><div>C. Smart card</div><div>D. CAC</div></div>
+  <div class="ans">Answer: B. TOTP</div>
+  <div class="why">Time-based one-time password = TOTP.</div>
+</details>
+<details class="qa"><summary>Q3. Kerberos tickets are encrypted with keys known to:</summary>
+  <div class="opts"><div>A. The service only</div><div>B. The user and KDC (and target service)</div><div>C. Everyone on the domain</div><div>D. The CA</div></div>
+  <div class="ans">Answer: B. The user and KDC (and target service)</div>
+  <div class="why">Symmetric keys shared with the KDC secure the ticket exchange.</div>
+</details>
+<details class="qa"><summary>Q4. Which model uses security labels assigned by administrators?</summary>
+  <div class="opts"><div>A. DAC</div><div>B. MAC</div><div>C. RBAC</div><div>D. ABAC</div></div>
+  <div class="ans">Answer: B. MAC</div>
+  <div class="why">Mandatory Access Control = centrally assigned labels.</div>
+</details>
+<details class="qa"><summary>Q5. Best defence against rainbow tables?</summary>
+  <div class="opts"><div>A. Longer passwords only</div><div>B. Unique salts per hash</div><div>C. HTTPS</div><div>D. Account lockout</div></div>
+  <div class="ans">Answer: B. Unique salts per hash</div>
+  <div class="why">Salts make precomputed tables useless.</div>
+</details>
+<details class="qa"><summary>Q6. OAuth 2.0 is primarily for:</summary>
+  <div class="opts"><div>A. Authentication</div><div>B. Authorisation delegation</div><div>C. Ticketing</div><div>D. Encryption</div></div>
+  <div class="ans">Answer: B. Authorisation delegation</div>
+  <div class="why">OAuth grants scoped access; OIDC adds authentication.</div>
+</details></section>
+    <div class="nav">
+      <a href="d4.html">&#8592; Domain 4</a>
+      <a href="d6.html">Domain 6 &rarr;</a>
+    </div>
+    <div class="note-isc2">CISSP&reg; and (ISC)&sup2;&reg; are registered trademarks of ISC2, Inc.
+      This free bootcamp is independent study material and is not affiliated with, sponsored by,
+      or endorsed by ISC2.</div>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>

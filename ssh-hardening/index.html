@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>SSH Server Hardening · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "ssh-hardening", "title": "SSH Server Hardening", "category": "Linux • Security", "badge": "SSHH", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "ssh-node-01", "user": "student", "intro": ["Harden the SSH daemon by editing sshd_config settings."], "files": {"/etc/ssh/sshd_config": "# $OpenBSD: sshd_config\nPort 22\nPermitRootLogin yes\nPasswordAuthentication yes\nX11Forwarding yes\n"}, "objectives": [{"name": "Disable root login", "desc": "Set PermitRootLogin no.", "points": 25, "match": ["PermitRootLogin\\s+no|sed.*PermitRootLogin.*no"], "success": "✓ Root login disabled."}, {"name": "Change port", "desc": "Set Port 2222.", "points": 25, "match": ["Port\\s+2222|sed.*Port.*2222"], "success": "✓ Port changed."}, {"name": "Disable password auth", "desc": "Set PasswordAuthentication no.", "points": 25, "match": ["PasswordAuthentication\\s+no|sed.*PasswordAuthentication.*no"], "success": "✓ Password auth disabled."}, {"name": "Reload sshd", "desc": "Restart sshd with systemctl.", "points": 25, "match": ["systemctl\\s+restart\\s+sshd"], "success": "✓ sshd restarted."}], "hint": ["sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config", "sed -i 's/#Port 22/Port 2222/' /etc/ssh/sshd_config", "systemctl restart sshd"], "help": "Edit /etc/ssh/sshd_config then systemctl restart sshd", "certTitle": "SSH Hardening Champion", "certDesc1": "for hardening the SSH server", "certDesc2": "with root-login and password controls.", "certChallenge": "SSH hardening", "certFooter": "Linux Security • Challenge", "headline": "SSH Server Hardening", "lead": "Harden the SSH daemon by editing sshd_config settings.", "brief": "SSH Server Hardening", "briefCopy": "Harden the SSH daemon by editing sshd_config settings.", "incident": "SSH-HARDENING · ssh-node-01 · hands-on practice", "resultCopy": "You completed all objectives for SSH Server Hardening.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SSHH", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

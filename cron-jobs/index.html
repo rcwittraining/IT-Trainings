@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>cron Job Scheduling · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "cron-jobs", "title": "cron Job Scheduling", "category": "Linux • Automation", "badge": "CRON", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "cron-node-01", "user": "student", "intro": ["Schedule recurring jobs with cron and inspect existing entries."], "files": {"/etc/crontab": "SHELL=/bin/bash\nPATH=/sbin:/bin:/usr/sbin:/usr/bin\n30 2 * * * root /usr/local/bin/backup.sh\n0 6 * * 1 root /usr/local/bin/weekly-report.sh\n"}, "objectives": [{"name": "View cron jobs", "desc": "List current cron jobs with crontab -l.", "points": 25, "match": ["crontab\\s+-l"], "success": "✓ Cron jobs listed."}, {"name": "View system crontab", "desc": "Read /etc/crontab.", "points": 25, "match": ["cat\\s+/etc/crontab"], "success": "✓ System crontab read."}, {"name": "Schedule a job", "desc": "Add a job with crontab -e.", "points": 25, "match": ["crontab\\s+-e"], "success": "✓ Job scheduled."}, {"name": "Understand syntax", "desc": "Show the cron syntax with help.", "points": 25, "match": ["man\\s+crontab|crontab\\s+--help"], "success": "✓ Cron syntax reviewed."}], "hint": ["crontab -l", "cat /etc/crontab", "crontab -e", "man crontab"], "help": "crontab -l (list) · crontab -e (edit) · format: MIN HOUR DOM MON DOW CMD", "certTitle": "cron Scheduling Champion", "certDesc1": "for mastering cron job scheduling", "certDesc2": "with listing, editing, and syntax.", "certChallenge": "cron scheduling", "certFooter": "Linux Automation • Challenge", "headline": "cron Job Scheduling", "lead": "Schedule recurring jobs with cron and inspect existing entries.", "brief": "cron Job Scheduling", "briefCopy": "Schedule recurring jobs with cron and inspect existing entries.", "incident": "CRON-JOBS · cron-node-01 · hands-on practice", "resultCopy": "You completed all objectives for cron Job Scheduling.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "CRON", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

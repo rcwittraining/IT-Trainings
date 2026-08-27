@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>AWS IAM Compromise Alert · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="RCW IT Training home">
+      <span class="brand-mark" aria-hidden="true"><span>&gt;_</span></span>
+      <span class="brand-copy"><strong>RCW</strong><small>IT TRAINING</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="secure-chip"><span class="status-dot"></span> Private lab session</span>
+      <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter focus mode" title="Focus mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen welcome-screen is-active" id="welcomeScreen" aria-labelledby="welcomeTitle">
+      <div class="welcome-grid">
+        <div class="welcome-copy">
+          <span class="eyebrow"><span class="eyebrow-icon">☁</span> AWS security · Cloud Challenge 01</span>
+          <h1 id="welcomeTitle">Detect the compromise.<br><span>Alert the security team.</span></h1>
+          <p class="lead">An IAM user shows repeated failed console sign-ins followed by a successful login from an unfamiliar address. Investigate the activity, build a threshold-based detector, and deliver an email notification to the security team.</p>
+          <div class="incident-chip">SEC-AWS-0816 · account 4821-9360-7715 · authorised simulation</div>
+          <div class="feature-row" aria-label="Challenge highlights">
+            <div><strong>4</strong><span>objectives</span></div>
+            <div><strong>20</strong><span>minute target</span></div>
+            <div><strong>100</strong><span>points</span></div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-card-top">
+            <span class="terminal-mini"><i></i><i></i><i></i></span>
+            <span>Cloud security lab setup</span>
+          </div>
+          <div class="entry-card-body">
+            <div class="challenge-emblem" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><path d="M19 45h29a10 10 0 0 0 1-20 16 16 0 0 0-30-4A12 12 0 0 0 19 45Z"/><path d="M25 34h16M33 27v14"/></svg>
+            </div>
+            <h2>AWS Cloud Challenge 1 · Challenge Lab 1</h2>
+            <p>Enter your name exactly as it should appear on your certificate.</p>
+            <form id="startForm" novalidate>
+              <label for="learnerName">Full name</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <input id="learnerName" name="learnerName" type="text" autocomplete="name" maxlength="60" placeholder="e.g. Ananya Kumar" required>
+              </div>
+              <p class="field-error" id="nameError" role="alert"></p>
+              <button class="primary-button" type="submit">
+                Start cloud challenge
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </form>
+            <p class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Your lab runs entirely in this browser. No cloud account is required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen lab-screen" id="labScreen" aria-labelledby="labTitle">
+      <div class="lab-topline">
+        <div>
+          <span class="eyebrow">AWS IAM security assessment</span>
+          <h1 id="labTitle">Compromised IAM Account Notification</h1>
+        </div>
+        <div class="session-metrics" aria-label="Session metrics">
+          <div><span>TIME</span><strong id="timer">00:00</strong></div>
+          <div><span>SCORE</span><strong><b id="score">0</b>/100</strong></div>
+        </div>
+      </div>
+
+      <div class="cloud-console" aria-label="Simulated cloud management console">
+        <header class="console-toolbar">
+          <div class="console-product">
+            <span class="console-cloud-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6.2 8.5 4.5 4.5 0 0 0 7 18Z"/></svg>
+            </span>
+            <strong>Cloud Console</strong>
+          </div>
+          <button class="services-menu" type="button" data-console-target="cloudtrail"><span aria-hidden="true">☷</span> Services</button>
+          <div class="console-search" aria-label="Console search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <span>Search services and resources</span>
+            <kbd>/</kbd>
+          </div>
+          <div class="console-context"><span>us-east-1</span><span>CloudSecurityLab</span></div>
+        </header>
+
+        <div class="console-body">
+          <aside class="console-sidebar">
+            <div class="case-summary">
+              <span class="panel-kicker">Incident</span>
+              <strong>SEC-AWS-0816</strong>
+              <small>Account 4821-9360-7715</small>
+              <span class="case-status"><i></i> Investigation active</span>
+            </div>
+
+            <nav class="console-nav" aria-label="Challenge services">
+              <button class="is-active" type="button" data-console-target="cloudtrail">
+                <span class="service-icon trail-icon" aria-hidden="true">CT</span><span><strong>CloudTrail</strong><small>Event history</small></span>
+              </button>
+              <button type="button" data-console-target="sns">
+                <span class="service-icon sns-icon" aria-hidden="true">N</span><span><strong>Notification service</strong><small>Topics &amp; subscriptions</small></span>
+              </button>
+              <button type="button" data-console-target="logs">
+                <span class="service-icon logs-icon" aria-hidden="true">L</span><span><strong>CloudWatch Logs</strong><small>Metric filters</small></span>
+              </button>
+              <button type="button" data-console-target="alarms">
+                <span class="service-icon alarm-icon" aria-hidden="true">A</span><span><strong>CloudWatch Alarms</strong><small>Threshold alerting</small></span>
+              </button>
+              <button type="button" data-console-target="mailbox">
+                <span class="service-icon mail-icon" aria-hidden="true">M</span><span><strong>Security mailbox</strong><small>Simulated email</small></span><b class="mail-count" id="mailCount">0</b>
+              </button>
+              <button type="button" data-console-target="findings">
+                <span class="service-icon finding-icon" aria-hidden="true">F</span><span><strong>Submit finding</strong><small>Incident report</small></span>
+              </button>
+            </nav>
+
+            <div class="objective-compact">
+              <div class="objective-heading"><span>Challenge progress</span><strong id="progressText">0 of 4 complete</strong></div>
+              <div class="progress-track"><span id="progressBar"></span></div>
+              <ol class="task-list">
+                <li id="taskEvidence"><span class="task-state"><span>1</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><div><strong>Investigate activity</strong><p>20 points</p></div></li>
+                <li id="taskNotify"><span class="task-state"><span>2</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><div><strong>Prepare notification</strong><p>25 points</p></div></li>
+                <li id="taskDetect"><span class="task-state"><span>3</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><div><strong>Build detection</strong><p>35 points</p></div></li>
+                <li id="taskVerify"><span class="task-state"><span>4</span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><div><strong>Verify alert</strong><p>20 points</p></div></li>
+              </ol>
+            </div>
+          </aside>
+
+          <div class="console-workspace">
+            <section class="console-page is-active" id="cloudtrailPage" data-console-page="cloudtrail">
+              <div class="service-breadcrumb">CloudTrail <span>›</span> Event history</div>
+              <div class="service-title-row">
+                <div><h2>Event history</h2><p>Review management events recorded in the last 90 days.</p></div>
+                <span class="simulation-badge">SIMULATED DATA</span>
+              </div>
+              <div class="info-callout"><strong>Investigation brief</strong><p>Repeated password failures were followed by a successful console login. Filter by <code>ConsoleLogin</code>, inspect the sequence, and identify the affected IAM identity and source.</p></div>
+              <div class="console-card filter-card">
+                <div class="card-heading"><div><h3>Lookup attributes</h3><p>Narrow the event history to authentication activity.</p></div></div>
+                <div class="form-grid trail-filter-grid">
+                  <label><span>Lookup attribute</span><select id="trailAttribute"><option>Event name</option></select></label>
+                  <label><span>Attribute value</span><input id="trailValue" value="ConsoleLogin" autocomplete="off"></label>
+                  <button class="console-primary" id="lookupEventsButton" type="button">Look up events</button>
+                </div>
+              </div>
+              <div class="console-card event-card" id="eventResults" hidden>
+                <div class="card-heading"><div><h3>Event results</h3><p>6 matching events · 16 August 2026</p></div><span class="result-pill danger">5 failures</span></div>
+                <div class="table-scroll">
+                  <table class="console-table">
+                    <thead><tr><th>Event time (UTC)</th><th>User name</th><th>Result</th><th>Source IP</th><th>MFA</th></tr></thead>
+                    <tbody>
+                      <tr><td>03:56:12</td><td><button class="table-link" type="button">finance-ops</button></td><td><span class="status-label failed">Failure</span></td><td>198.51.100.84</td><td>No</td></tr>
+                      <tr><td>03:56:49</td><td>finance-ops</td><td><span class="status-label failed">Failure</span></td><td>198.51.100.84</td><td>No</td></tr>
+                      <tr><td>03:57:31</td><td>finance-ops</td><td><span class="status-label failed">Failure</span></td><td>198.51.100.84</td><td>No</td></tr>
+                      <tr><td>03:58:06</td><td>finance-ops</td><td><span class="status-label failed">Failure</span></td><td>198.51.100.84</td><td>No</td></tr>
+                      <tr><td>03:59:18</td><td>finance-ops</td><td><span class="status-label failed">Failure</span></td><td>198.51.100.84</td><td>No</td></tr>
+                      <tr class="success-row"><td>04:00:03</td><td>finance-ops</td><td><span class="status-label success">Success</span></td><td>198.51.100.84</td><td>No</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="finding-callout"><span aria-hidden="true">!</span><div><strong>Suspicious sequence detected</strong><p>Five failures were followed by a successful non-MFA login from the same unfamiliar address.</p></div><button class="console-primary" type="button" data-console-target="sns">Configure notification</button></div>
+              </div>
+            </section>
+
+            <section class="console-page" id="snsPage" data-console-page="sns">
+              <div class="service-breadcrumb">Notification service <span>›</span> Topics</div>
+              <div class="service-title-row"><div><h2>Topics and subscriptions</h2><p>Create an email delivery path for the security team.</p></div><span class="simulation-badge">EMAIL SIMULATION</span></div>
+              <div class="console-card">
+                <div class="step-heading"><span>1</span><div><h3>Create topic</h3><p>Use the approved standard topic name.</p></div><b id="topicStepStatus">Not created</b></div>
+                <div class="form-grid two-column-form">
+                  <label><span>Type</span><select disabled><option>Standard</option></select></label>
+                  <label><span>Topic name</span><input id="topicNameInput" value="iam-security-alerts" autocomplete="off"></label>
+                </div>
+                <div class="form-actions"><button class="console-primary" id="createTopicButton" type="button">Create topic</button></div>
+              </div>
+              <div class="console-card gated-card" id="subscriptionCard">
+                <div class="step-heading"><span>2</span><div><h3>Create subscription</h3><p>Email subscriptions remain pending until the recipient confirms them.</p></div><b id="subscriptionStepStatus">Waiting for topic</b></div>
+                <div class="form-grid two-column-form">
+                  <label><span>Protocol</span><select id="subscriptionProtocol"><option>Email</option></select></label>
+                  <label><span>Endpoint</span><input id="subscriptionEmailInput" value="security-team@rcwittraining.in" autocomplete="off"></label>
+                </div>
+                <div class="form-actions"><button class="console-primary" id="createSubscriptionButton" type="button">Create subscription</button></div>
+              </div>
+              <div class="page-notice" id="snsNotice" role="status" hidden></div>
+            </section>
+
+            <section class="console-page" id="logsPage" data-console-page="logs">
+              <div class="service-breadcrumb">CloudWatch <span>›</span> Log groups <span>›</span> Metric filters</div>
+              <div class="service-title-row"><div><h2>Create metric filter</h2><p>Turn failed CloudTrail console logins into a countable security metric.</p></div></div>
+              <div class="console-card">
+                <div class="form-section"><h3>Filter selection</h3><p>Match failed console authentication events in the management-event log group.</p></div>
+                <div class="form-grid two-column-form">
+                  <label><span>Log group</span><select id="filterLogGroup"><option>/aws/cloudtrail/management-events</option></select></label>
+                  <label><span>Filter name</span><input id="filterName" value="FailedConsoleLogins" autocomplete="off"></label>
+                  <label class="full-field"><span>Filter pattern</span><textarea id="filterPattern" rows="3" spellcheck="false">{ ($.eventName = "ConsoleLogin") &amp;&amp; ($.errorMessage = "Failed authentication") }</textarea><small>Match both the console event and failed-authentication response.</small></label>
+                </div>
+                <div class="form-section divided"><h3>Metric transformation</h3></div>
+                <div class="form-grid three-column-form">
+                  <label><span>Metric namespace</span><input id="metricNamespace" value="RCW/Security" autocomplete="off"></label>
+                  <label><span>Metric name</span><input id="metricName" value="FailedConsoleLoginCount" autocomplete="off"></label>
+                  <label><span>Metric value</span><input id="metricValue" value="1" inputmode="numeric"></label>
+                </div>
+                <div class="form-actions"><button class="console-primary" id="createFilterButton" type="button">Create metric filter</button></div>
+              </div>
+              <div class="page-notice" id="logsNotice" role="status" hidden></div>
+            </section>
+
+            <section class="console-page" id="alarmsPage" data-console-page="alarms">
+              <div class="service-breadcrumb">CloudWatch <span>›</span> Alarms <span>›</span> Create alarm</div>
+              <div class="service-title-row"><div><h2>Configure alarm</h2><p>Alert when the failed-login threshold is reached within five minutes.</p></div><span class="alarm-state insufficient" id="alarmStateValue">INSUFFICIENT_DATA</span></div>
+              <div class="console-card">
+                <div class="form-grid two-column-form">
+                  <label><span>Alarm name</span><input id="alarmName" value="MultipleFailedConsoleLogins" autocomplete="off"></label>
+                  <label><span>Metric</span><select id="alarmMetric"><option>FailedConsoleLoginCount</option></select></label>
+                  <label><span>Statistic</span><select id="alarmStatistic"><option>Sum</option><option>Average</option></select></label>
+                  <label><span>Period</span><select id="alarmPeriod"><option value="300">5 minutes</option><option value="60">1 minute</option></select></label>
+                  <label><span>Threshold</span><input id="alarmThreshold" value="3" type="number" min="1"></label>
+                  <label><span>Notification action</span><select id="alarmAction"><option value="">Select an SNS topic</option><option value="iam-security-alerts">iam-security-alerts</option></select></label>
+                </div>
+                <div class="condition-preview">Whenever <strong>FailedConsoleLoginCount</strong> is <strong>greater than or equal to 3</strong> for 1 datapoint within <strong>5 minutes</strong></div>
+                <div class="form-actions"><button class="console-primary" id="createAlarmButton" type="button">Create alarm</button></div>
+              </div>
+              <div class="console-card test-card">
+                <div class="step-heading"><span aria-hidden="true">✓</span><div><h3>Authorised detector test</h3><p>Replay synthetic failed-login events after the filter, alarm, and notification path are ready.</p></div></div>
+                <div class="form-grid test-grid">
+                  <label><span>IAM user</span><input id="testUserInput" value="finance-ops" autocomplete="off"></label>
+                  <label><span>Failure count</span><input id="testCountInput" value="5" type="number" min="1"></label>
+                  <button class="console-danger" id="runTestButton" type="button">Run authorised test</button>
+                </div>
+              </div>
+              <div class="page-notice" id="alarmNotice" role="status" hidden></div>
+            </section>
+
+            <section class="console-page" id="mailboxPage" data-console-page="mailbox">
+              <div class="service-breadcrumb">Security mailbox <span>›</span> security-team@rcwittraining.in</div>
+              <div class="service-title-row"><div><h2>Simulated inbox</h2><p>Messages generated by the challenge appear here. No real email is sent.</p></div><span class="simulation-badge">BROWSER LOCAL</span></div>
+              <div class="empty-state" id="emptyMailbox"><span class="empty-mail-icon" aria-hidden="true">✉</span><h3>No messages</h3><p>Create an email subscription to receive its confirmation request.</p><button class="console-secondary" type="button" data-console-target="sns">Go to subscriptions</button></div>
+              <article class="mail-message" id="confirmationMessage" hidden>
+                <header><span class="sender-mark">N</span><div><strong>AWS Notifications</strong><small>no-reply@notification.local</small></div><time>Just now</time></header>
+                <div class="mail-subject"><span class="unread-dot"></span><h3>Confirm subscription</h3></div>
+                <div class="mail-content"><p>You requested an email subscription for the following topic:</p><code>arn:aws:sns:us-east-1:482193607715:iam-security-alerts</code><p>Confirm this training subscription to allow security alerts to be delivered.</p><button class="console-primary" id="confirmSubscriptionButton" type="button">Confirm subscription</button><small>Training token: LAB-CONFIRM-2026</small></div>
+              </article>
+              <article class="mail-message alert-message" id="alertEmailMessage" hidden>
+                <header><span class="sender-mark danger">!</span><div><strong>Cloud Security Alerts</strong><small>iam-security-alerts@notification.local</small></div><time>Just now</time></header>
+                <div class="mail-subject"><span class="unread-dot danger"></span><h3>ALARM: MultipleFailedConsoleLogins</h3></div>
+                <div class="mail-content"><div class="email-alarm-banner">Alarm state: <strong>ALARM</strong></div><dl class="email-details"><div><dt>Account</dt><dd>4821-9360-7715</dd></div><div><dt>IAM user</dt><dd>finance-ops</dd></div><div><dt>Source IP</dt><dd>198.51.100.84</dd></div><div><dt>Failed attempts</dt><dd>5 within 5 minutes</dd></div></dl><p><strong>Recommended action:</strong> Disable credentials, revoke active sessions, investigate the successful login, and require MFA.</p><button class="console-primary" type="button" data-console-target="findings">Submit incident finding</button></div>
+              </article>
+              <div class="page-notice" id="mailNotice" role="status" hidden></div>
+            </section>
+
+            <section class="console-page" id="findingsPage" data-console-page="findings">
+              <div class="service-breadcrumb">Incident response <span>›</span> Submit finding</div>
+              <div class="service-title-row"><div><h2>Security finding</h2><p>Record the compromised identity, suspicious source, and notification destination.</p></div></div>
+              <div class="console-card finding-form-card">
+                <div class="form-grid two-column-form">
+                  <label><span>Affected IAM user</span><input id="findingUser" placeholder="Enter user name" autocomplete="off"></label>
+                  <label><span>Suspicious source IP</span><input id="findingSource" placeholder="Enter source address" autocomplete="off"></label>
+                  <label class="full-field"><span>Notification destination</span><input id="findingEmail" value="security-team@rcwittraining.in" autocomplete="off"></label>
+                </div>
+                <div class="submission-readiness" id="submissionReadiness"><strong>Submission readiness</strong><ul><li data-ready="evidence">CloudTrail evidence reviewed</li><li data-ready="notify">Email subscription confirmed</li><li data-ready="detect">Metric filter and alarm active</li><li data-ready="email">Alert email received</li></ul></div>
+                <div class="form-actions"><button class="console-primary" id="submitFindingButton" type="button">Submit finding</button></div>
+              </div>
+              <div class="page-notice" id="findingNotice" role="status" hidden></div>
+            </section>
+          </div>
+        </div>
+
+        <footer class="console-footer">
+          <span><i></i> Authorised isolated simulation</span>
+          <button class="console-link" id="resetButton" type="button">Reset challenge</button>
+        </footer>
+      </div>
+
+      <details class="cli-drawer" id="cliDrawer">
+        <summary><span><b>&gt;_</b> Optional CloudShell</span><small>Use AWS-style commands instead of the GUI</small></summary>
+        <div class="terminal-card">
+          <div class="terminal-bar"><div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div><div class="terminal-title">cloudsec@aws-lab — optional security shell</div><div class="terminal-status"><span></span>ISOLATED</div></div>
+          <div class="terminal-body" id="terminalBody" role="log" aria-live="polite" aria-label="Optional cloud security terminal output">
+            <div class="terminal-welcome"><p>RCW optional CloudShell</p><small>GUI and CLI actions share the same challenge state. Enter <b>help</b> for commands.</small></div>
+            <div id="terminalOutput"></div>
+            <form class="terminal-input-line" id="terminalForm" autocomplete="off"><label for="commandInput"><span class="prompt-user">cloudsec@aws-lab</span><span class="prompt-path">:~$</span></label><input id="commandInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="CloudShell command" enterkeyhint="send"></form>
+          </div>
+          <div class="terminal-footer"><span><kbd>Enter</kbd> run command</span><span><kbd>↑</kbd><kbd>↓</kbd> history</span><span class="footer-safe">Optional advanced path</span></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen" aria-labelledby="resultTitle">
+      <div class="result-header">
+        <div class="success-orbit" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span></div>
+        <span class="eyebrow">Security notification delivered</span>
+        <h1 id="resultTitle">Excellent response, <span id="resultName">Learner</span>!</h1>
+        <p>You identified the compromised IAM user, detected repeated failed console sign-ins, and delivered the threshold alert to <code>security-team@rcwittraining.in</code>.</p>
+      </div>
+
+      <div class="result-grid">
+        <div class="score-card">
+          <span class="panel-kicker">Final score</span>
+          <div class="score-ring" style="--score: 100">
+            <div><strong>100</strong><span>/ 100</span></div>
+          </div>
+          <div class="score-verdict"><span>PERFECT SCORE</span><p>IAM compromise alert successfully validated</p></div>
+          <dl>
+            <div><dt>Objectives</dt><dd>4 / 4</dd></div>
+            <div><dt>Completion time</dt><dd id="finalTime">00:00</dd></div>
+            <div><dt>Console actions</dt><dd id="commandCount">7</dd></div>
+          </dl>
+        </div>
+
+        <div class="certificate-card">
+          <div class="certificate-card-head">
+            <div><span class="panel-kicker">Your achievement</span><h2>Certificate ready</h2></div>
+            <span class="pdf-chip">PDF</span>
+          </div>
+          <div class="certificate-preview-wrap">
+            <canvas id="certificateCanvas" width="1400" height="990" aria-label="Certificate preview"></canvas>
+          </div>
+          <div class="certificate-actions">
+            <button class="primary-button" id="downloadPdfButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+              Download certificate PDF
+            </button>
+            <button class="secondary-button" id="downloadPngButton" type="button">Save image</button>
+          </div>
+          <p class="certificate-note"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Issued by RCW IT Training and signed by Pradeep Raju.</p>
+        </div>
+      </div>
+
+      <button class="text-button replay-button" id="replayButton" type="button">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>
+        Run the IAM security challenge again
+      </button>
+
+      <a class="primary-button passport-link" href="../skill-passport.html" style="display:flex;align-items:center;justify-content:center;gap:8px;max-width:340px;margin:18px auto 0;text-decoration:none">🎖️ View your Skill Passport</a>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span></span><p></p></div>
+  <img id="instructorImage" src="assets/pradeep-raju.jpg" alt="" hidden>
+  <script src="../passport.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

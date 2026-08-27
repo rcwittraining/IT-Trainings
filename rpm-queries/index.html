@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>rpm Package Queries · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "rpm-queries", "title": "rpm Package Queries", "category": "Linux • Software", "badge": "RPM", "accent": "#d71920", "difficulty": "BEGINNER", "host": "pkg-node-01", "user": "student", "intro": ["Query installed RPM packages with rpm -q options."], "objectives": [{"name": "Query a package", "desc": "Check if httpd is installed with rpm -q.", "points": 25, "match": ["rpm\\s+-q\\s+httpd"], "success": "✓ Package queried."}, {"name": "List all packages", "desc": "List all with rpm -qa.", "points": 25, "match": ["rpm\\s+-qa"], "success": "✓ All packages listed."}, {"name": "Package info", "desc": "Show info with rpm -qi.", "points": 25, "match": ["rpm\\s+-qi\\s+\\S+"], "success": "✓ Info shown."}, {"name": "List files", "desc": "List files in a package with rpm -ql.", "points": 25, "match": ["rpm\\s+-ql\\s+\\S+"], "success": "✓ Files listed."}], "hint": ["rpm -q httpd", "rpm -qa", "rpm -qi httpd", "rpm -ql httpd"], "help": "rpm -q PKG · -qa · -qi PKG · -ql PKG · -qf FILE", "certTitle": "rpm Query Champion", "certDesc1": "for mastering rpm queries", "certDesc2": "with -q, -qi, and -ql.", "certChallenge": "rpm queries", "certFooter": "Linux Software • Challenge", "headline": "rpm Package Queries", "lead": "Query installed RPM packages with rpm -q options.", "brief": "rpm Package Queries", "briefCopy": "Query installed RPM packages with rpm -q options.", "incident": "RPM-QUERIES · pkg-node-01 · hands-on practice", "resultCopy": "You completed all objectives for rpm Package Queries.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "RPM", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

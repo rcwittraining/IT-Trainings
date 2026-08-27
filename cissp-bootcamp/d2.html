@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Domain 2: Asset Security - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Domain 2: Asset Security | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>Domain 2: Asset Security</h1>
+    <div class="updated">CISSP Bootcamp &middot; Module 2 of 8 &middot; exam weight 10%</div>
+    <div class="chips"><span class="chip">weight 10%</span>
+      <span class="chip">6 practice questions</span>
+      <span class="chip">unofficial study material</span></div>
+    <div class="summary">A short, high-yield domain: classify data and assets, then protect them through their whole lifecycle &mdash; including the way they die (sanitisation).</div>
+
+    <section class="card">
+      <h2>Classification levels</h2>
+      <p>Commercial: <b>Public &rarr; Internal &rarr; Confidential &rarr; Restricted</b> (increasing sensitivity). Government: <b>Unclassified &rarr; Sensitive but Unclassified (SBU) &rarr; Confidential &rarr; Secret &rarr; Top Secret</b>.</p><p>Classification criteria = the <b>impact</b> if the data is disclosed, altered or destroyed. The <b>data owner</b> classifies; handling rules follow the label.
+    </section>
+
+    <section class="card">
+      <h2>Sensitive data types</h2>
+      <ul><li><b>PII</b> &ndash; identifies a person (name + email/Aadhaar/passport).</li><li><b>PHI</b> &ndash; health information (think HIPAA).</li><li><b>NPI</b> &ndash; financial/credit data.</li><li><b>Proprietary</b> &ndash; business-advantage data (trade secret).</li></ul><p><b>Privacy by design</b>: proactive, privacy as the default, embedded in design, full lifecycle protection, visibility, user-centric.</p>
+    </section>
+
+    <section class="card">
+      <h2>Data states and protections</h2>
+      <table><tr><th>State</th><th>Example protection</th></tr><tr><td>At rest</td><td>AES-256 full-disk encryption, TDE for databases, key vault</td></tr><tr><td>In transit</td><td>TLS 1.2+/1.3, IPsec VPN, SSH</td></tr><tr><td>In use</td><td>homomorphic encryption, secure enclaves/TEE, memory protection</td></tr></table><p>Supporting tools: <b>DLP</b> (endpoint/network/email), <b>CASB</b> for cloud, <b>DRM</b> for documents, <b>tokenisation/masking</b> for test data.</p>
+    </section>
+
+    <section class="card">
+      <h2>The data lifecycle</h2>
+      <p><b>Create &rarr; Store &rarr; Use &rarr; Share &rarr; Archive &rarr; Destroy.</b> At each step know: who owns it, what label it carries, what handling rules apply (labelling, encryption, logging), and how retention is enforced.</p>
+    </section>
+
+    <section class="card">
+      <h2>Retention, legal hold, eDiscovery</h2>
+      <p>Keep records for the <b>longest applicable</b> requirement (regulation, contract, business need) &mdash; not &ldquo;forever&rdquo; (over-retention is liability). A <b>legal hold</b> suspends destruction when litigation is expected. <b>eDiscovery</b> = finding and producing electronically stored information.</p>
+    </section>
+
+    <section class="card">
+      <h2>Media sanitisation (NIST SP 800-88)</h2>
+      <table><tr><th>Method</th><th>What it does</th><th>Use when</th></tr><tr><td><b>Clear</b></td><td>overwrite / block erase</td><td>media stays in-house</td></tr><tr><td><b>Purge</b></td><td>degauss, cryptographic erase</td><td>media leaves trust but is reused</td></tr><tr><td><b>Destroy</b></td><td>shred, disintegrate, incinerate</td><td>highly sensitive or damaged media</td></tr></table><p><b>Data remanence</b> = recoverable residue after deletion. SSDs make overwriting unreliable &mdash; prefer cryptographic erase (destroy the key) or physical destruction. Verify sanitisation and keep certificates of destruction.</p>
+    </section>
+
+    <section class="card">
+      <h2>Asset & hardware lifecycle</h2>
+      <p>Inventory (CMDB), track ownership, patch/upgrade until <b>end-of-life</b>, then sanitise and dispose. <b>EOL</b> = no more sales; <b>EOS</b> = no more support/patches &mdash; unsupported assets are an accept-risk decision owned by management, not by IT quietly forgetting them.</p>
+    </section>
+
+    <section class="card"><h2>Memory hooks</h2>
+      <ul><li>Government order: Unclassified &rarr; SBU &rarr; Confidential &rarr; Secret &rarr; Top Secret.</li><li>Clear (reuse in-house) &rarr; Purge (reuse elsewhere) &rarr; Destroy (highest sensitivity).</li><li>RPO feels like an asset/data question &mdash; it belongs to backup design (see D7).</li><li>Salting defeats pre-computed rainbow tables (ties into D5 hashing).</li></ul></section>
+    <section class="card"><h2>Exam tips</h2>
+      <ul><li>Classification is decided by impact of compromise, and by the data owner &mdash; not by IT convenience.</li><li>SSD + &lsquo;overwrite&rsquo; = wrong answer; use crypto-erase or destroy.</li><li>Data in use = processing; the exam loves TEE/secure enclave for this state.</li><li>Masking/tokenisation for non-production data beats encrypting copies.</li></ul></section>
+    <section class="card"><h2>Check yourself</h2>
+<details class="qa"><summary>Q1. A laptop with Restricted data will be donated to a school. Best action?</summary>
+  <div class="opts"><div>A. Quick format</div><div>B. Degauss or crypto-erase (purge), verify, then donate</div><div>C. Delete the files</div><div>D. Nothing - full disk encryption is enough</div></div>
+  <div class="ans">Answer: B. Degauss or crypto-erase (purge), verify, then donate</div>
+  <div class="why">Purge + verify before reuse outside trust; encryption keys must not survive with the device.</div>
+</details>
+<details class="qa"><summary>Q2. Which is the MOST sensitive commercial classification (typical scheme)?</summary>
+  <div class="opts"><div>A. Internal</div><div>B. Public</div><div>C. Confidential</div><div>D. Restricted</div></div>
+  <div class="ans">Answer: D. Restricted</div>
+  <div class="why">Restricted is the top label in the common four-level commercial scheme.</div>
+</details>
+<details class="qa"><summary>Q3. Data being processed in memory is said to be:</summary>
+  <div class="opts"><div>A. at rest</div><div>B. in transit</div><div>C. in use</div><div>D. archived</div></div>
+  <div class="ans">Answer: C. in use</div>
+  <div class="why">In use = being processed by CPU/memory.</div>
+</details>
+<details class="qa"><summary>Q4. Rainbow-table attacks are neutralised mainly by:</summary>
+  <div class="opts"><div>A. longer passwords only</div><div>B. salting hashes</div><div>C. TLS</div><div>D. RAID</div></div>
+  <div class="ans">Answer: B. salting hashes</div>
+  <div class="why">Salt makes precomputed tables useless because each hash uses a unique salt.</div>
+</details>
+<details class="qa"><summary>Q5. A litigation notice arrives. What happens to the retention schedule?</summary>
+  <div class="opts"><div>A. Destroy on schedule</div><div>B. Legal hold - suspend destruction</div><div>C. Encrypt and delete</div><div>D. Compress archives</div></div>
+  <div class="ans">Answer: B. Legal hold - suspend destruction</div>
+  <div class="why">Legal hold overrides normal destruction until released.</div>
+</details>
+<details class="qa"><summary>Q6. Who assigns the classification of a data set?</summary>
+  <div class="opts"><div>A. Data custodian</div><div>B. Data owner</div><div>C. DBA</div><div>D. Auditor</div></div>
+  <div class="ans">Answer: B. Data owner</div>
+  <div class="why">The business owner decides; custodians implement handling.</div>
+</details></section>
+    <div class="nav">
+      <a href="d1.html">&#8592; Domain 1</a>
+      <a href="d3.html">Domain 3 &rarr;</a>
+    </div>
+    <div class="note-isc2">CISSP&reg; and (ISC)&sup2;&reg; are registered trademarks of ISC2, Inc.
+      This free bootcamp is independent study material and is not affiliated with, sponsored by,
+      or endorsed by ISC2.</div>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>
