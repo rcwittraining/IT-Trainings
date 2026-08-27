@@ -1,5 +1,17 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "AWS Server Migration Tool v1.0.0 \u2014 Official Download",
+    "category": "AWS \u2022 Migration \u2022 Offline",
+    "badge": "MIG",
+    "accent": "#e07b1a",
+    "id": "aws-server-migration-tool",
+    "targetUrl": "https://www.rcwittraining.in/aws-server-migration-tool/",
+    "contentType": "Tool",
+    "technology": "AWS",
+    "subcategory": "Migration",
+    "group": "Tools"
+  },
+  {
     "title": "RCW AI Log Analyzer",
     "category": "IT Operations • Troubleshooting • Offline",
     "badge": "LOG",
