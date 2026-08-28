@@ -83,17 +83,13 @@
   /* ---- AdSense: injected only on full consent ------------------------------- */
   var adsLoaded = false;
   function loadAdsense() {
-    if (adsLoaded || !ADSENSE_CLIENT) return;
-    /* The informational pages now carry the AdSense loader statically in <head>
-       so Google can verify ads.txt without a consent click. Skip injection when
-       it is already present; lab pages, which stay ad-free, still reach here. */
-    if (document.querySelector('script[src*="adsbygoogle.js"]')) { adsLoaded = true; return; }
+    /* Intentionally a no-op since 29 Aug 2026.
+       The AdSense loader lives statically in <head> of the approved
+       informational pages only. It must never be injected dynamically:
+       with Auto ads enabled, any page that loads the script receives
+       injected ads — including labs, challenges, admin and certificate
+       flows, which this site keeps ad-free by design. */
     adsLoaded = true;
-    var s = document.createElement("script");
-    s.async = true;
-    s.crossOrigin = "anonymous";
-    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + ADSENSE_CLIENT;
-    document.head.appendChild(s);
   }
 
   /* ---- YouTube: click-to-load placeholders ---------------------------------- */

@@ -95,6 +95,8 @@ In **Ads → Edit site → Page exclusions**, add these safeguards if Auto ads i
 
 The current repository does not include the AdSense tag on the launcher, admin, or interactive challenge pages. The dashboard exclusions provide defense in depth if site-wide code is added later.
 
+*29 August 2026:* `rcw-consent.js` no longer injects the AdSense script at all. Only the approved informational pages carry the static loader, so with Auto ads enabled, ads can only ever appear on those pages; labs, challenges, admin and certificate flows cannot receive injected ads regardless of dashboard settings.
+
 ## Post-deployment checks
 
 - [ ] `https://www.rcwittraining.in/ads.txt` returns HTTP 200 and the exact publisher line.
