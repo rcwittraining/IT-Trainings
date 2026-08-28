@@ -1,6 +1,18 @@
 {
   "simulators": [
     {
+      "title": "AWS Server Migration Tool v1.0.0 — Official Download",
+      "category": "AWS • Migration • Offline",
+      "badge": "MIG",
+      "accent": "#e07b1a",
+      "id": "aws-server-migration-tool",
+      "targetUrl": "https://www.rcwittraining.in/aws-server-migration-tool/",
+      "contentType": "Tool",
+      "technology": "AWS",
+      "subcategory": "Migration",
+      "group": "Tools"
+    },
+    {
       "title": "Linux Auto-Fixer v2.0.0 — Official Download",
       "category": "Linux • Troubleshooting • Admin-approved",
       "badge": "RCW",
@@ -2644,5 +2656,6 @@
       "subcategory": "Exam Practice",
       "group": "Bootcamp"
     }
-  ]
+  ],
+  "updatedAt": "2026-08-28T01:45:00.000Z"
 }
