@@ -176,6 +176,21 @@
         <p class="dlmeta">SHA-256 (portable): <span class="mono sha">cdd6b31e428a1a9e7561d61615e30bac05c0233dd00ee770ce1d6fc97c5cdbc3</span><br>
         SHA-256 (source): <span class="mono sha">73cf0016fba16f969a322bb8eb104bb3035297e08805c45b32d27332775242d8</span><br>
         Verify on Windows: <span class="mono">certutil -hashfile &lt;file&gt; SHA256</span></p>
+        <div class="dlhelp" style="margin-top:12px;padding:12px 14px;border-radius:10px;background:#eef6ff;border:1px solid #c7def6;font-size:13.5px;color:#2c3a58">
+          <b>Download not starting or stuck at 0%?</b>
+          <ul style="margin:8px 0 0;padding-left:20px;line-height:1.7">
+            <li>Open this page in a <b>real browser</b> (Chrome/Edge/Safari), not the in-app browser inside Gmail, WhatsApp, Instagram or LinkedIn &mdash; those often block file downloads. Tap the <b>menu &#8943; &#8594; Open in Chrome/Safari</b>.</li>
+            <li>On a phone, <b>long-press</b> the Download button and choose <b>&ldquo;Download link&rdquo; / &ldquo;Save link&rdquo;</b>; on a computer, <b>right-click &#8594; Save link as&hellip;</b>.</li>
+            <li>If it stalls on a slow/office network, copy the direct link below and use it on a strong Wi-Fi or mobile data (the link supports resume).</li>
+          </ul>
+          <p style="margin:10px 0 6px"><b>Direct links</b> (right-click/long-press to save, or copy into a download manager):</p>
+          <p style="margin:0;word-break:break-all" class="mono" id="dl-link-portable" data-rel></p>
+          <p style="margin:6px 0 0;word-break:break-all" class="mono" id="dl-link-source" data-rel></p>
+          <p style="margin:10px 0 0">
+            <button class="btn ghost small" type="button" id="copy-link-portable">&#128279; Copy portable link</button>
+            <button class="btn ghost small" type="button" id="copy-link-source">&#128279; Copy source link</button>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -385,8 +400,24 @@ function openGate(){
   u.className="unlocked show";
   document.getElementById("dl-portable").href=dlUrl(DL_PORTABLE);
   document.getElementById("dl-source").href=dlUrl(DL_SOURCE);
+  /* absolute direct links (so they can be copied / used in a download manager) */
+  var base=(location.origin||"https://www.rcwittraining.in")+location.pathname.replace(/[^/]*$/,"");
+  var absP=new URL(dlUrl(DL_PORTABLE), base).href, absS=new URL(dlUrl(DL_SOURCE), base).href;
+  var lp=document.getElementById("dl-link-portable"), ls=document.getElementById("dl-link-source");
+  if(lp) lp.textContent=absP;
+  if(ls) ls.textContent=absS;
   u.scrollIntoView({behavior:"smooth", block:"center"});
 }
+function copyText(text,btn){
+  function done(){ if(btn){var o=btn.textContent;btn.textContent="Copied \u2713";setTimeout(function(){btn.textContent=o;},1600);} }
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done);
+  else { var t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand("copy");done();}catch(e){} document.body.removeChild(t); }
+}
+["portable","source"].forEach(function(k){
+  var btn=document.getElementById("copy-link-"+k);
+  var link=document.getElementById("dl-link-"+k);
+  if(btn) btn.addEventListener("click",function(){ copyText(link?link.textContent:"", this); });
+});
 
 document.getElementById("unlock-btn").addEventListener("click", tryUnlock);
 document.getElementById("code-in").addEventListener("keydown", function(e){
