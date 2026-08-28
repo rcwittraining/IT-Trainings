@@ -251,6 +251,37 @@ var VALID_CODE_HASHES = [
   "9d048c58a889e0418e2a47b84bf8721af0b7e3cc847a4e9a3cf0854d44bc2b11"
 ];
 
+/* Live code list (admin-editable Gist, no deploy needed).
+   Admin issues/revokes codes at /admin/code-issuer.html.
+   The baked-in VALID_CODE_HASHES above remain an offline fallback. */
+var CODES_GIST_URL = "https://gist.githubusercontent.com/rcwittraining/8510a29fd5f0b7b1423ada54eb9689a0/raw/rcw-access-codes.txt";
+var TOOL_KEY = "AWNIXOPS";
+var _liveHashes = null, _liveTried = false;
+function fetchLiveHashes() {
+  if (_liveHashes) return Promise.resolve(_liveHashes);
+  if (_liveTried) return Promise.resolve([]);
+  _liveTried = true;
+  var bust = Math.floor(Date.now() / 120000);
+  return fetch(CODES_GIST_URL + "?_=" + bust, { cache: "no-store" })
+    .then(function (r) { return r.ok ? r.text() : ""; })
+    .then(function (txt) {
+      var out = [];
+      String(txt).split(/\r?\n/).forEach(function (line) {
+        var m = line.trim().match(/^([A-Z0-9]+):([a-f0-9]{64})$/i);
+        if (m) { var k = m[1].toUpperCase();
+          if (k === TOOL_KEY || k === "ALL") out.push(m[2].toLowerCase()); }
+      });
+      _liveHashes = out;
+      return out;
+    })
+    .catch(function () { return []; });
+}
+function codeIsValid(codeHash) {
+  if (VALID_CODE_HASHES.indexOf(codeHash) !== -1) return true;
+  if (_liveHashes && _liveHashes.indexOf(codeHash) !== -1) return true;
+  return false;
+}
+
 // Hidden downloads folder (obfuscated) + file names.
 var DL_SECRET = "YWVkNjk5NjNhYmFmLWxkL3NkYW9sbndvZA==";
 var DL_PORTABLE = "RCW-AWSNixOps-1.1-portable.zip";
@@ -333,8 +364,9 @@ async function tryUnlock(){
   var code=document.getElementById("code-in").value.trim().toUpperCase();
   if(!code){ setStatus("err","✖ Enter the access code you received by e-mail."); return; }
   setStatus("wait","Checking code…");
+  await fetchLiveHashes();
   var h=await sha256Hex(code);
-  if(VALID_CODE_HASHES.indexOf(h)!==-1){
+  if(codeIsValid(h)){
     try{ sessionStorage.setItem("awsnixops_ok","1"); }catch(e){}
     openGate();
     setStatus("ok","✔ Access granted. Your downloads are unlocked below. Enjoy — and please don't share the code.");
@@ -360,6 +392,9 @@ document.getElementById("unlock-btn").addEventListener("click", tryUnlock);
 document.getElementById("code-in").addEventListener("keydown", function(e){
   if(e.key==="Enter"){ tryUnlock(); }
 });
+
+/* Pre-load the live code list so unlock is instant. */
+fetchLiveHashes();
 
 try{ if(sessionStorage.getItem("awsnixops_ok")==="1"){ openGate();
   setStatus("ok","✔ Unlocked for this session."); } }catch(e){}
