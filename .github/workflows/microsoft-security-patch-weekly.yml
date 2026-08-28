@@ -1,8 +1,8 @@
 name: Publish weekly Microsoft security patch roundup
 on:
   schedule:
-    # Wednesday 09:00 India Standard Time (03:30 UTC)
-    - cron: '30 3 * * 3'
+    # Daily at 09:00 India Standard Time (03:30 UTC)
+    - cron: '30 3 * * *'
   workflow_dispatch:
 permissions:
   contents: write

@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /open.html
-Disallow: /awsnixops.html
-Disallow: /downloads/
-
-Sitemap: https://www.rcwittraining.in/sitemap.xml

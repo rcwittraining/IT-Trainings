@@ -1,2 +1,0 @@
-704afd6a06e99400585fa44394f3dc16fb743bded0acb7fae5d45f1bbc04aa9c  AWS-Server-Migration-Tool.exe
-419ff3145e95794a0cae2ca24c7c865119445c8b278e33f01fa4e4a73ae06543  aws-server-migration-tool_linux-x86_64
