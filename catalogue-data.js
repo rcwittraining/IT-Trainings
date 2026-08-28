@@ -1,5 +1,17 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "Linux Auto-Fixer v3.0.0 \u2014 Prompt-driven Linux Admin (no AI) \u2014 Official Download",
+    "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
+    "badge": "RCW",
+    "accent": "#078be8",
+    "id": "linux-autofixer-v3",
+    "targetUrl": "https://www.rcwittraining.in/linux-autofixer-v3/",
+    "contentType": "Restricted Tool",
+    "technology": "Linux and RHEL",
+    "subcategory": "Troubleshooting",
+    "group": "Tools"
+  },
+  {
     "title": "AWS Server Migration Tool v1.0.0 \u2014 Official Download",
     "category": "AWS \u2022 Migration \u2022 Offline",
     "badge": "MIG",

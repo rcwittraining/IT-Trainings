@@ -1,6 +1,18 @@
 {
   "simulators": [
     {
+      "title": "Linux Auto-Fixer v3.0.0 — Prompt-driven Linux Admin (no AI) — Official Download",
+      "category": "Linux • Troubleshooting • Admin-approved",
+      "badge": "RCW",
+      "accent": "#078be8",
+      "id": "linux-autofixer-v3",
+      "targetUrl": "https://www.rcwittraining.in/linux-autofixer-v3/",
+      "contentType": "Restricted Tool",
+      "technology": "Linux and RHEL",
+      "subcategory": "Troubleshooting",
+      "group": "Tools"
+    },
+    {
       "title": "AWS Server Migration Tool v1.0.0 — Official Download",
       "category": "AWS • Migration • Offline",
       "badge": "MIG",
@@ -2657,5 +2669,5 @@
       "group": "Bootcamp"
     }
   ],
-  "updatedAt": "2026-08-28T01:45:00.000Z"
+  "updatedAt": "2026-08-28T02:20:00.000Z"
 }

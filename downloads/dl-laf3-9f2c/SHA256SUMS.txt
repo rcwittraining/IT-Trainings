@@ -1,0 +1,2 @@
+4d160b1778b3107c11e1887fd72b07fa4f2a6757fdce4e120e048baf446901ad  RCW-Linux-AutoFixer-3.0.0-Setup.exe
+7b313ed44d86306a5d07ef5d6ec31b4935f6a46779af311034f001b86c7fb530  RCW-Linux-Auto-Fixer-portable.exe
