@@ -4,15 +4,40 @@ Publisher: `ca-pub-8225059092422989`
 
 Site: `https://www.rcwittraining.in/`
 
-Last updated: 16 August 2026
+Last updated: 28 August 2026
 
 ## Website implementation
 
-- [x] Add the supplied AdSense code to the public catalogue homepage.
-- [x] Add the code to the RHCSA informational content page.
-- [x] Add the code to the privacy page so the Google consent-revocation API can be opened there.
+- [x] Add the AdSense loader to the public catalogue homepage (`index.html`).
+- [x] Add the loader to all informational content pages (troubleshooting guides,
+      design guides, RHCSA pages, and the technology/patch roundups).
 - [x] Do not add AdSense to `open.html`, `/admin/`, timed challenges, lab interfaces, or certificate views.
 - [x] Publish root `/ads.txt` with the exact publisher ID.
+- [x] Add the 21 previously unlisted informational pages to `sitemap.xml`.
+
+### Correction, 28 August 2026
+
+The checklist previously claimed the AdSense code was already present on the
+homepage, the RHCSA page, and the privacy page. **It was not present in any HTML
+file in this repository.** The script was only injected at runtime by
+`rcw-consent.js`, and only after a visitor clicked *Accept all*:
+
+```js
+if (choice === "accepted") { loadAdsense(); }
+```
+
+A crawler never clicks *Accept all*, so `adsbygoogle.js` was never requested, the
+site generated no ad requests, and Google never crawled `ads.txt` — which is why
+AdSense reported *"ads.txt not found / last crawled: not applicable"*.
+
+The loader is now a static `<head>` tag on the informational pages, so Google can
+verify `ads.txt` regardless of consent. Ad **personalisation** remains gated by
+Consent Mode v2 in `rcw-consent.js`. `loadAdsense()` is now idempotent and will
+not inject a second copy where the static tag already exists.
+
+Note on `privacy.html`: the loader is deliberately **not** placed there, matching
+the Auto ads exclusion table below. Google's consent-revocation link comes from
+the certified CMP, not from the ad script, so nothing is lost.
 - [x] Publish a dedicated privacy and cookie policy.
 - [x] Add persistent Privacy and cookie settings links.
 - [x] Correct the older disclaimer wording that said no information was collected.

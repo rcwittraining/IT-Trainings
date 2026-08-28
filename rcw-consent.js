@@ -84,6 +84,10 @@
   var adsLoaded = false;
   function loadAdsense() {
     if (adsLoaded || !ADSENSE_CLIENT) return;
+    /* The informational pages now carry the AdSense loader statically in <head>
+       so Google can verify ads.txt without a consent click. Skip injection when
+       it is already present; lab pages, which stay ad-free, still reach here. */
+    if (document.querySelector('script[src*="adsbygoogle.js"]')) { adsLoaded = true; return; }
     adsLoaded = true;
     var s = document.createElement("script");
     s.async = true;

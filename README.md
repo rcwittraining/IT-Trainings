@@ -33,7 +33,7 @@ The public page contains no link to `/admin/`, and the admin page has `noindex`/
 
 ## Google AdSense and privacy
 
-The public catalogue, RHCSA videos page, and privacy page contain the public AdSense publisher tag for `ca-pub-8225059092422989`. Interactive labs, the secure launcher, the admin page, and certificate workflows intentionally do not contain the tag.
+The public catalogue and all informational content pages contain the public AdSense publisher tag for `ca-pub-8225059092422989`. Interactive labs, the secure launcher, the admin page, legal pages, and certificate workflows intentionally do not contain the tag. Ad personalisation stays gated by the consent layer in `rcw-consent.js`.
 
 Before enabling Auto ads, complete the Google-certified CMP, Consent Mode, and page-exclusion steps in [`ADSENSE_SETUP.md`](ADSENSE_SETUP.md). The account owner must perform those settings in the AdSense dashboard; no password, payment information, or private credential belongs in this repository.
 

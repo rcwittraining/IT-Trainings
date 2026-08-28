@@ -22,6 +22,28 @@
   <url><loc>https://www.rcwittraining.in/aws-resilience-disaster-recovery-patterns.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-intune-zero-touch-windows.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-intune-compliance-conditional-access.html</loc><priority>0.5</priority></url>
+  <!-- Troubleshooting guides and technology roundups (added 28 Aug 2026) -->
+  <url><loc>https://www.rcwittraining.in/ad-replication-dns-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/ad-trust-kerberos-gpo-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/aws-ec2-s3-ebs-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/azure-vm-identity-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/commvault-jobs-clients-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/dell-poweredge-idrac-perc-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/gcp-access-iam-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-enrollment-apps-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/linux-boot-filesystem-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/linux-performance-ssh-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-25.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-26.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-28.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/pure-flasharray-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/san-multipath-latency-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/veeam-jobs-restore-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-25.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-26.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-28.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/vmware-snapshot-datastore-troubleshooting.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/vmware-vcenter-network-troubleshooting.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d1.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d2.html</loc><priority>0.8</priority></url>
