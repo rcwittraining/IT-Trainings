@@ -21,7 +21,7 @@
 
   /* ---- configuration ------------------------------------------------------ */
   var ADSENSE_CLIENT = "ca-pub-8225059092422989";   /* your AdSense client id  */
-  var GA_MEASUREMENT_ID = "";                        /* GA4 id, e.g. G-ABC123  */
+  var GA_MEASUREMENT_ID = "G-RF1CNB7G98";          /* GA4 measurement id      */
   var STORAGE_KEY = "rcw_consent_v1";               /* accepted | essential    */
   var POLICY_URL = "/privacy.html#privacy-choices";
 
