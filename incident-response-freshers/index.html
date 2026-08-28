@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#061633">
+  <title>IT Incident Response for Freshers · RCW IT Training</title>
+  <link rel="canonical" href="https://www.rcwittraining.in/incident-response-freshers/">
+  <style>
+    :root {
+      --navy: #061633;
+      --navy-2: #0a234a;
+      --card: #0d2a52;
+      --line: #1c4a7a;
+      --mist: #9cc9e8;
+      --paper: #eef6ff;
+      --blue: #078be8;
+      --cyan: #4bd7ff;
+      --yellow: #ffd51d;
+      --ok: #9fe53e;
+      --bad: #ff5d6c;
+      --p1: #ff5d6c;
+      --p2: #ffb020;
+      --p3: #4bd7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      background: radial-gradient(900px 400px at 10% -10%, rgba(7,139,232,.18), transparent 50%), var(--navy);
+      color: var(--paper);
+      min-height: 100vh;
+    }
+    a { color: var(--cyan); }
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 18px; border-bottom: 1px solid var(--line); background: #071b38;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .brand strong { letter-spacing: .12em; }
+    .brand small { display: block; color: var(--mist); font-size: 10px; letter-spacing: .16em; }
+    .chip { font-size: 12px; color: var(--mist); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; }
+    main { max-width: 1100px; margin: 0 auto; padding: 22px 16px 48px; }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 38px); letter-spacing: -1px; }
+    .lead { color: var(--mist); max-width: 720px; line-height: 1.55; }
+    .layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; margin-top: 22px; }
+    @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+    .queue, .desk { background: rgba(10,35,74,.78); border: 1px solid var(--line); border-radius: 18px; }
+    .queue h2, .desk-head { margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+    .ticket {
+      width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line);
+      color: inherit; padding: 12px 16px; cursor: pointer;
+    }
+    .ticket:hover, .ticket.on { background: rgba(7,139,232,.12); }
+    .ticket .id { font-family: ui-monospace, monospace; font-size: 11px; color: var(--cyan); }
+    .pri { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 999px; margin-right: 6px; }
+    .P1 { background: rgba(255,93,108,.18); color: var(--p1); }
+    .P2 { background: rgba(255,176,32,.16); color: var(--p2); }
+    .P3 { background: rgba(75,215,255,.14); color: var(--p3); }
+    .P4 { background: rgba(159,229,62,.14); color: var(--ok); }
+    .done-tag { float: right; font-size: 11px; color: var(--ok); }
+    .desk { min-height: 520px; }
+    .desk-body { padding: 16px 18px 22px; }
+    .meta { color: var(--mist); font-size: 13px; margin-bottom: 12px; }
+    .evidence {
+      background: #071427; border: 1px solid var(--line); border-radius: 12px;
+      padding: 12px; font-family: ui-monospace, Consolas, monospace; font-size: 12px;
+      color: #b7e4ff; white-space: pre-wrap; margin: 12px 0 16px; line-height: 1.45;
+    }
+    .q { margin: 14px 0; }
+    .q p { margin: 0 0 8px; font-weight: 650; }
+    label.opt {
+      display: block; margin: 6px 0; padding: 9px 10px; border: 1px solid var(--line);
+      border-radius: 10px; cursor: pointer; color: var(--mist);
+    }
+    label.opt:hover { border-color: var(--blue); }
+    input[type=radio] { margin-right: 8px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    button.primary, a.primary {
+      background: linear-gradient(115deg, #078be8, #0758c8); color: #fff; border: 0;
+      border-radius: 999px; padding: 10px 16px; font-weight: 800; cursor: pointer; text-decoration: none;
+    }
+    button.ghost { background: none; color: var(--mist); border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; cursor: pointer; }
+    .result { margin-top: 12px; font-size: 14px; }
+    .result.ok { color: var(--ok); }
+    .result.bad { color: var(--bad); }
+    .scorebar { display: flex; gap: 14px; color: var(--mist); font-size: 13px; margin-top: 10px; }
+    .intro-card {
+      background: rgba(10,35,74,.78); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin-top: 16px;
+    }
+    .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 12px; }
+    @media (max-width: 700px) { .steps { grid-template-columns: 1fr 1fr; } }
+    .steps div { background: #071427; border: 1px solid var(--line); border-radius: 12px; padding: 10px; font-size: 12px; color: var(--mist); }
+    .steps b { display: block; color: var(--yellow); margin-bottom: 4px; }
+    .complete { text-align: center; padding: 28px 12px; }
+    .complete h2 { color: var(--yellow); }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="https://www.rcwittraining.in/">
+      <span><strong>RCW</strong><small>IT TRAINING</small></span>
+    </a>
+    <span class="chip">Fresher track · simulated tickets</span>
+  </header>
+  <main>
+    <p class="chip">New category · Incident Response</p>
+    <h1>IT Incident Response Desk</h1>
+    <p class="lead">You are the on-call fresher at RCW Practice Desk. Tickets arrive the way they do in a real IT team. Read the request, inspect the evidence, pick the right next action. This is training — no production systems are touched.</p>
+    <div class="scorebar"><span>Score: <b id="score">0</b>/100</span><span>Closed: <b id="closed">0</b>/8</span></div>
+
+    <div class="intro-card" id="intro">
+      <h2 style="margin:0 0 8px;font-size:18px;">How freshers handle an incident</h2>
+      <div class="steps">
+        <div><b>1. Identify</b>Is this an incident or a service request?</div>
+        <div><b>2. Protect</b>Stop the bleeding. Don’t guess-reboot everything.</div>
+        <div><b>3. Diagnose</b>Use logs, metrics, and the user’s words.</div>
+        <div><b>4. Fix</b>Take the smallest safe action. Record it.</div>
+        <div><b>5. Communicate</b>Tell the user what changed and what to try.</div>
+      </div>
+      <div class="actions"><button class="primary" id="startBtn" type="button">Open the ticket queue</button></div>
+    </div>
+
+    <div class="layout" id="desk" hidden>
+      <aside class="queue">
+        <h2>Incoming tickets</h2>
+        <div id="queue"></div>
+      </aside>
+      <section class="desk">
+        <h2 class="desk-head" id="deskTitle">Select a ticket</h2>
+        <div class="desk-body" id="deskBody"><p class="lead">Pick a ticket on the left. Work it like a real L1 analyst.</p></div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const INCIDENTS = [
+      {
+        id: "INC-1001", pri: "P3", title: "Cannot log in to email / laptop",
+        from: "Priya Nair · Finance",
+        body: "I keep getting ‘account locked’. I did not change my password. Payroll file is due in 40 minutes.",
+        evidence: "LDAP: priya.nair  status=locked  failedBinds=6 from 10.12.20.44 (finance VLAN)\\nLast success: 3 days ago\\nMFA: enrolled\\nNo malware alert on endpoint",
+        questions: [
+          { q: "What kind of ticket is this?", options: ["Security breach — wipe the laptop", "Account lockout after failed logins", "Mailbox full", "VPN certificate expired"], answer: 1 },
+          { q: "Safest L1 action?", options: ["Delete and recreate the AD account", "Unlock the account, confirm identity, ask her to sign in", "Disable MFA", "Share a colleague’s password"], answer: 1 },
+          { q: "What do you tell Priya?", options: ["Try again now; if it fails, we reset with MFA kept on", "The domain is down, wait until Monday", "Use the CEO’s login", "Ignore, it will unlock itself in a year"], answer: 0 }
+        ]
+      },
+      {
+        id: "INC-1002", pri: "P2", title: "Website intermittent 502 errors",
+        from: "Suresh Iyer · Finance Lead",
+        body: "The public site and /api/reports/export are timing out. Customers are complaining.",
+        evidence: "web-prod-01 CPU 94%\\nphp-fpm pool www: reached max_children (18)\\nnginx: upstream timed out, 128 502s / 5m\\nweb-prod-02 healthy, CPU 31%",
+        questions: [
+          { q: "Where is the problem?", options: ["DNS is wrong", "php-fpm workers on web-prod-01 are saturated", "The database has no disk", "SSL expired"], answer: 1 },
+          { q: "First safe step?", options: ["Reboot both web servers together", "Take the VIP down permanently", "Drain web-prod-01 and recycle php-fpm; keep web-prod-02 in service", "Delete nginx"], answer: 2 },
+          { q: "How do you prevent a repeat?", options: ["Ignore it", "Raise max_children blindly to 500", "Fix the slow export query and add an alert on php-fpm utilisation", "Turn off monitoring"], answer: 2 }
+        ]
+      },
+      {
+        id: "INC-1003", pri: "P1", title: "Payroll emails not sending",
+        from: "Nisha Thomas · HR",
+        body: "Nobody received payroll notices. This is blocking salary communication.",
+        evidence: "mail-relay-01 postfix.service: failed\\nmailq: 847 deferred messages\\nfatal: inet_interfaces — no local interface for 10.12.5.51 after netplan change",
+        questions: [
+          { q: "Priority reason?", options: ["It is only spam", "Business-critical mail is queued; treat as P1", "A single laptop issue", "Printer jam"], answer: 1 },
+          { q: "Root cause?", options: ["User typed the wrong To: address", "Postfix down after a network/IP change", "Gmail blocked us forever", "Outlook theme"], answer: 1 },
+          { q: "Correct fix path?", options: ["Correct inet_interfaces, start postfix, flush the queue, confirm a test mail", "Delete the 847 messages", "Ask HR to WhatsApp payslips", "Reinstall Windows on the mail server"], answer: 0 }
+        ]
+      },
+      {
+        id: "INC-1004", pri: "P2", title: "Database disk 92%",
+        from: "Monitoring · Prometheus",
+        body: "Alert: /var/lib/postgresql on db-primary-01 will hit 95% in ~4 hours.",
+        evidence: "df: 184/200GB used (92%)\\npg_wal: 41GB\\nNAS WAL archive failed earlier (NFS stale)\\nautovacuum lag on orders_2024",
+        questions: [
+          { q: "Biggest risk if ignored?", options: ["Slightly slower Wi-Fi", "PostgreSQL goes read-only / outage", "A font mismatch", "DHCP pool empty"], answer: 1 },
+          { q: "Best first action?", options: ["DROP DATABASE production", "Archive/reclaim WAL, fix the archive destination, then vacuum", "Add a wallpaper", "Reboot the laptop of the DBA"], answer: 1 },
+          { q: "What must you not do on a primary without a plan?", options: ["Read df -h", "Check pg_wal size", "Uncontrolled DELETE FROM without backup/window", "Page the DBA"], answer: 2 }
+        ]
+      },
+      {
+        id: "INC-1005", pri: "P3", title: "VPN will not connect from home",
+        from: "Rohan Pillai · Engineering",
+        body: "WireGuard client stuck on ‘handshake timeout’. Office Wi-Fi works.",
+        evidence: "vpn-gw-01: 64 peers, 11 active, service running\\nRohan last handshake: never from this session\\nISP: UDP 51820 may be blocked on hotel Wi-Fi\\nMFA: ok",
+        questions: [
+          { q: "Is the gateway down?", options: ["Yes, reboot the internet for India", "No — gateway is healthy; path/firewall from his network is likely", "DNS of Google is gone", "Yes, because one user failed"], answer: 1 },
+          { q: "L1 advice?", options: ["Give him the datacenter root password", "Try phone hotspot; if it works, hotel UDP is blocked — use TCP/SSL fallback if you have it", "Disable everyone’s VPN", "Format the laptop"], answer: 1 },
+          { q: "Ticket type if only he is affected and gateway is up?", options: ["P1 major incident", "P3 user access / connectivity", "Security wipe", "New project request"], answer: 1 }
+        ]
+      },
+      {
+        id: "INC-1006", pri: "P2", title: "API TLS certificate expires in 3 days",
+        from: "cert-exporter",
+        body: "api.rcwittraining.in NotAfter in 3 days. Clients will fail after expiry.",
+        evidence: "CN=api.rcwittraining.in\\nIssuer: RCW Internal CA\\nDays left: 3\\napi-prod-01 nginx / cbe-api running",
+        questions: [
+          { q: "Why act before expiry day?", options: ["Certificates look prettier when new", "After expiry, TLS handshakes fail — outage", "Google ranking", "Disk space"], answer: 1 },
+          { q: "Correct process?", options: ["Delete the cert and hope", "Issue/renew cert, reload the service, verify chain, document", "Ignore until users shout", "Change the system date backward"], answer: 1 },
+          { q: "What monitoring should exist?", options: ["None", "Alert at 30/14/7 days before NotAfter", "Ping only", "A printed calendar"], answer: 1 }
+        ]
+      },
+      {
+        id: "INC-1007", pri: "P4", title: "New intern needs Grafana + laptop",
+        from: "Arjun Menon · Engineering Manager",
+        body: "Karthik Raman joins today. Please create account, VPN, Grafana read access and raise a laptop request.",
+        evidence: "No outage. No alert. HR onboarding form attached.\\nThis is planned access, not a break-fix.",
+        questions: [
+          { q: "Incident or request?", options: ["P1 incident — production is down", "Service request / onboarding, not an incident", "Security incident", "Network loop"], answer: 1 },
+          { q: "Right workflow?", options: ["Page the CEO", "Follow onboarding playbook: account, groups, VPN, ticket for laptop, least privilege", "Give domain admin on day 1", "Skip MFA for interns"], answer: 1 },
+          { q: "Why not treat it as INC?", options: ["Because interns are not humans", "Nothing is broken; SLA is fulfilment, not restore-from-outage", "Grafana is illegal", "Laptops cannot be requested"], answer: 1 }
+        ]
+      },
+      {
+        id: "INC-1008", pri: "P1", title: "CPU 100% on jump host after ‘urgent patch’",
+        from: "Fatima Begum · Security",
+        body: "Someone ran an unofficial installer on jump-bastion-01. Load average is 40. SSH is painful.",
+        evidence: "top: unknown process kinsing  980% CPU\\ncrontab: * * * * * /tmp/.x/k\\nNot in the approved patch list\\njump-bastion-01 is the SSH entry point to prod",
+        questions: [
+          { q: "What is this?", options: ["Normal Windows Update", "Likely cryptominer/malware on a tier-0 jump host", "A slow mouse", "Printer driver"], answer: 1 },
+          { q: "First priority?", options: ["Tweet the password", "Isolate the host from prod, preserve evidence, follow security IR, do not just kill and forget", "Leave it mining", "Unplug the entire company"], answer: 1 },
+          { q: "Who else must be involved?", options: ["Nobody", "Security + platform; rotate any credentials that lived on that bastion", "Only the intern", "Marketing"], answer: 1 }
+        ]
+      }
+    ];
+
+    const POINTS = Math.round(100 / INCIDENTS.reduce((n, i) => n + i.questions.length, 0));
+    let score = 0, closed = new Set(), current = null, submitted = {};
+
+    const $ = (id) => document.getElementById(id);
+
+    function renderQueue() {
+      $("queue").innerHTML = INCIDENTS.map((i) => `
+        <button class="ticket ${current === i.id ? "on" : ""}" data-id="${i.id}">
+          <div class="id">${i.id} <span class="pri ${i.pri}">${i.pri}</span>${closed.has(i.id) ? '<span class="done-tag">closed</span>' : ""}</div>
+          <div>${i.title}</div>
+          <div class="id">${i.from}</div>
+        </button>`).join("");
+      $("queue").querySelectorAll(".ticket").forEach((b) => b.onclick = () => openTicket(b.dataset.id));
+      $("closed").textContent = closed.size;
+      $("score").textContent = score;
+    }
+
+    function openTicket(id) {
+      current = id;
+      const i = INCIDENTS.find((x) => x.id === id);
+      $("deskTitle").textContent = i.id + " · " + i.title;
+      const done = submitted[id];
+      $("deskBody").innerHTML = `
+        <div class="meta"><span class="pri ${i.pri}">${i.pri}</span> From ${i.from}</div>
+        <p>${i.body}</p>
+        <div class="evidence">${i.evidence}</div>
+        ${i.questions.map((qq, qi) => `
+          <div class="q" id="q-${id}-${qi}">
+            <p>${qi + 1}. ${qq.q}</p>
+            ${qq.options.map((op, oi) => `
+              <label class="opt"><input type="radio" name="q-${id}-${qi}" value="${oi}" ${done ? "disabled" : ""} ${done && Number(done[qi]) === oi ? "checked" : ""}> ${op}</label>
+            `).join("")}
+          </div>`).join("")}
+        <div class="actions">
+          ${done ? '<span class="result ok">Already scored. Open another ticket.</span>' : `<button class="primary" id="submitBtn" type="button">Submit diagnosis</button>`}
+        </div>
+        <div class="result" id="ticketResult"></div>`;
+      const btn = $("submitBtn");
+      if (btn) btn.onclick = () => grade(i);
+      renderQueue();
+    }
+
+    function grade(inc) {
+      const picks = inc.questions.map((_, qi) => {
+        const el = document.querySelector(`input[name="q-${inc.id}-${qi}"]:checked`);
+        return el ? Number(el.value) : -1;
+      });
+      if (picks.some((p) => p < 0)) {
+        $("ticketResult").className = "result bad";
+        $("ticketResult").textContent = "Answer every question before you close the ticket.";
+        return;
+      }
+      let gained = 0;
+      inc.questions.forEach((qq, qi) => {
+        if (picks[qi] === qq.answer) { score += POINTS; gained += POINTS; }
+      });
+      submitted[inc.id] = picks;
+      closed.add(inc.id);
+      const ok = picks.every((p, i) => p === inc.questions[i].answer);
+      $("ticketResult").className = "result " + (ok ? "ok" : "bad");
+      $("ticketResult").textContent = ok
+        ? `Solid work. +${gained} points. Ticket closed with the right L1 path.`
+        : `Some answers were off. Review the evidence again. +${gained} points. Ticket still marked complete for practice.`;
+      document.querySelectorAll(`#deskBody input`).forEach((el) => el.disabled = true);
+      $("submitBtn")?.remove();
+      renderQueue();
+      if (closed.size === INCIDENTS.length) showComplete();
+    }
+
+    function showComplete() {
+      $("deskBody").innerHTML = `
+        <div class="complete">
+          <h2>Queue clear</h2>
+          <p>You worked 8 live-style tickets. Score <b>${score}</b>/100.</p>
+          <p class="lead">You practiced lockouts, web 502s, mail outage, disk pressure, VPN, certificates, onboarding vs incident, and a compromised jump host.</p>
+          <p><a class="primary" href="https://www.rcwittraining.in/">Back to RCW catalogue</a></p>
+        </div>`;
+    }
+
+    $("startBtn").onclick = () => {
+      $("intro").hidden = true;
+      $("desk").hidden = false;
+      renderQueue();
+      openTicket(INCIDENTS[0].id);
+    };
+  </script>
+</body>
+</html>

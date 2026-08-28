@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Production Outage Game · RCW IT Architect Challenge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to challenge</a>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="RCW IT Training challenge home">
+      <span class="brand-mark" aria-hidden="true">RCW</span>
+      <span class="brand-copy"><strong>IT ARCHITECT</strong><small>PRODUCTION OUTAGE GAME</small></span>
+    </a>
+    <div class="header-actions">
+      <span class="session-chip"><i></i> Isolated simulation</span>
+      <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter focus mode" title="Focus mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="screen welcome-screen is-active" id="welcomeScreen" aria-labelledby="welcomeTitle">
+      <div class="welcome-grid">
+        <div class="welcome-copy">
+          <span class="eyebrow"><span aria-hidden="true">!</span> RCW IT Architect Challenge</span>
+          <h1 id="welcomeTitle">Production is down.<br><em>You own the recovery.</em></h1>
+          <p class="lead">Lead a vendor-neutral response across a hybrid cloud and on-premises application stack. Gather evidence, identify the root cause, execute the approved recovery, and prove that production is healthy.</p>
+
+          <div class="incident-preview" aria-label="Production incident summary">
+            <div class="preview-alert" aria-hidden="true">!</div>
+            <div>
+              <span>🚨 PRODUCTION INCIDENT</span>
+              <strong>Application unavailable</strong>
+            </div>
+            <dl>
+              <div><dt>Users affected</dt><dd>2,400</dd></div>
+              <div><dt>Revenue impact</dt><dd>$18,000/hour</dd></div>
+            </dl>
+          </div>
+
+          <div class="feature-row" aria-label="Challenge features">
+            <div><strong>30:00</strong><span>real countdown</span></div>
+            <div><strong>4</strong><span>random incidents</span></div>
+            <div><strong>100</strong><span>score potential</span></div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-card-top"><span>INC-PRD-2400</span><b>SEV-1</b></div>
+          <div class="entry-card-body">
+            <div class="architect-emblem" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><path d="M9 17h46v30H9z"/><path d="M17 26h10v12H17zM37 26h10v12H37zM27 32h10M32 17V9M26 9h12"/></svg>
+            </div>
+            <h2>Enter the incident bridge</h2>
+            <p>A random outage is assigned when you start. Your name remains in this browser and is used only for the completion certificate.</p>
+            <form id="startForm" novalidate>
+              <label for="learnerName">Incident commander name</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <input id="learnerName" name="learnerName" type="text" autocomplete="name" maxlength="60" placeholder="e.g. Ananya Kumar" required>
+              </div>
+              <p class="field-error" id="nameError" role="alert"></p>
+              <button class="primary-button" type="submit">Start 30-minute incident <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </form>
+            <div class="alignment-note">
+              <span>CONTROL ALIGNMENT</span>
+              <p>NIST SP 800-61 Rev. 3 / CSF 2.0 and ISO/IEC 27001:2022 / 27002:2022 incident-management principles.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen" aria-labelledby="gameTitle">
+      <div class="incident-banner">
+        <div class="incident-banner-copy">
+          <span class="alarm-pulse" aria-hidden="true">!</span>
+          <div><small>🚨 PRODUCTION INCIDENT · SEV-1</small><h1 id="gameTitle">Application unavailable</h1></div>
+        </div>
+        <div class="countdown-card" id="countdownCard">
+          <span>TIME TO RECOVER</span>
+          <time id="countdown" datetime="PT30M">30:00</time>
+        </div>
+      </div>
+
+      <div class="impact-grid" aria-label="Current incident impact">
+        <div class="impact-card danger"><span>Users affected</span><strong id="usersAffected">2,400</strong><small id="usersTrend">active impact</small></div>
+        <div class="impact-card warning"><span>Revenue impact</span><strong id="revenueImpact">$18,000/hr</strong><small id="revenueTrend">current hourly exposure</small></div>
+        <div class="impact-card"><span>Score potential</span><strong><b id="scorePotential">100</b>/100</strong><small id="decisionCount">0 wrong decisions</small></div>
+        <div class="impact-card"><span>Response phase</span><strong id="currentPhase">Detect</strong><small id="phaseHint">Collect production evidence</small></div>
+      </div>
+
+      <div class="game-layout">
+        <div class="operations-column">
+          <section class="panel topology-panel" aria-labelledby="topologyTitle">
+            <div class="panel-heading">
+              <div><span class="panel-kicker">Hybrid service map</span><h2 id="topologyTitle">Production request path</h2></div>
+              <span class="status-pill critical" id="productionStatus"><i></i> OUTAGE</span>
+            </div>
+            <div class="topology" aria-label="Users connect through DNS and a cloud load balancer to application servers, which use a private link to an on-premises database">
+              <div class="topology-node users-node is-healthy" id="nodeUsers"><span class="node-icon" aria-hidden="true">U</span><strong>2,400 users</strong><small>External</small></div>
+              <span class="topology-link" aria-hidden="true"></span>
+              <div class="topology-node" id="nodeDns"><span class="node-icon" aria-hidden="true">D</span><strong>DNS</strong><small>Cloud edge</small></div>
+              <span class="topology-link" aria-hidden="true"></span>
+              <div class="topology-node" id="nodeBalancer"><span class="node-icon" aria-hidden="true">B</span><strong>Load balancer</strong><small>Cloud</small></div>
+              <span class="topology-link" aria-hidden="true"></span>
+              <div class="topology-node" id="nodeServer"><span class="node-icon" aria-hidden="true">A</span><strong>App servers</strong><small>Cloud</small></div>
+              <span class="topology-link private-link" aria-hidden="true"><b>private link</b></span>
+              <div class="topology-node" id="nodeDatabase"><span class="node-icon" aria-hidden="true">DB</span><strong>Data cluster</strong><small>On premises</small></div>
+            </div>
+            <div class="zone-labels"><span>CLOUD INFRASTRUCTURE</span><span>ON-PREMISES INFRASTRUCTURE</span></div>
+          </section>
+
+          <section class="panel actions-panel" aria-labelledby="actionsTitle">
+            <div class="panel-heading">
+              <div><span class="panel-kicker">Commander console</span><h2 id="actionsTitle">Choose your next action</h2></div>
+              <span class="read-only-chip">Diagnostics are read-only</span>
+            </div>
+            <p class="panel-copy">Checks are safe. Repeated checks, unsupported diagnoses, and blind restarts consume time, reduce your score, and increase business impact.</p>
+            <div class="action-grid" id="actionGrid">
+              <button class="action-button" type="button" data-action="dns"><span class="action-icon">D</span><span><strong>Check DNS</strong><small>Records and resolution</small></span><b>›</b></button>
+              <button class="action-button" type="button" data-action="balancer"><span class="action-icon">B</span><span><strong>Check Load Balancer</strong><small>Health and routing</small></span><b>›</b></button>
+              <button class="action-button" type="button" data-action="server"><span class="action-icon">A</span><span><strong>Check Server</strong><small>Compute and service</small></span><b>›</b></button>
+              <button class="action-button" type="button" data-action="logs"><span class="action-icon">L</span><span><strong>Check Logs</strong><small>Correlated events</small></span><b>›</b></button>
+              <button class="action-button" type="button" data-action="database"><span class="action-icon">DB</span><span><strong>Check Database</strong><small>On-premises health</small></span><b>›</b></button>
+              <button class="action-button restart-action" id="restartButton" type="button" data-action="restart"><span class="action-icon">R</span><span><strong>Restart Service</strong><small>Controlled recovery</small></span><b>›</b></button>
+            </div>
+            <div class="action-message" id="actionMessage" role="status" aria-live="polite"><span></span><p>Select a diagnostic action to begin.</p></div>
+          </section>
+        </div>
+
+        <aside class="response-column">
+          <section class="panel phase-panel" aria-labelledby="phaseTitle">
+            <div class="panel-heading compact"><div><span class="panel-kicker">Response lifecycle</span><h2 id="phaseTitle">Incident objectives</h2></div><span id="objectiveText">0/5</span></div>
+            <ol class="phase-list">
+              <li id="phaseDetect" class="is-current"><span>1</span><div><strong>Detect &amp; triage</strong><small>Confirm the outage path</small></div><b>20</b></li>
+              <li id="phaseAnalyze"><span>2</span><div><strong>Analyze evidence</strong><small>Collect required signals</small></div><b>25</b></li>
+              <li id="phaseRespond"><span>3</span><div><strong>Authorize response</strong><small>Record the root cause</small></div><b>20</b></li>
+              <li id="phaseRecover"><span>4</span><div><strong>Recover service</strong><small>Use the approved runbook</small></div><b>20</b></li>
+              <li id="phaseVerify"><span>5</span><div><strong>Verify &amp; close</strong><small>Prove production health</small></div><b>15</b></li>
+            </ol>
+          </section>
+
+          <section class="panel evidence-panel" aria-labelledby="evidenceTitle">
+            <div class="panel-heading compact"><div><span class="panel-kicker">Immutable session record</span><h2 id="evidenceTitle">Evidence &amp; audit trail</h2></div><span class="live-chip"><i></i> LIVE</span></div>
+            <div class="evidence-log" id="evidenceLog" role="log" aria-live="polite" aria-relevant="additions">
+              <div class="evidence-empty" id="evidenceEmpty"><span>+</span><p>Your actions and findings will be recorded here.</p></div>
+            </div>
+          </section>
+
+          <section class="panel diagnosis-panel" aria-labelledby="diagnosisTitle">
+            <div class="panel-heading compact"><div><span class="panel-kicker">Decision gate</span><h2 id="diagnosisTitle">Record the root cause</h2></div></div>
+            <form id="diagnosisForm">
+              <fieldset>
+                <legend>Choose the cause supported by the evidence:</legend>
+                <div class="diagnosis-options" id="diagnosisOptions"></div>
+              </fieldset>
+              <button class="decision-button" type="submit">Submit diagnosis</button>
+            </form>
+            <div class="recovery-readiness" id="recoveryReadiness">
+              <span>Recovery authorization</span>
+              <ul>
+                <li id="readyEvidence"><i></i>Required evidence collected</li>
+                <li id="readyCause"><i></i>Root cause recorded</li>
+                <li id="readyApproval"><i></i>Approved runbook selected</li>
+              </ul>
+            </div>
+          </section>
+
+          <details class="panel compliance-panel">
+            <summary><span><b>Control alignment</b><small>Why evidence comes before change</small></span><i>+</i></summary>
+            <div>
+              <p><strong>NIST-aligned:</strong> NIST SP 800-61 Rev. 3 and CSF 2.0 practices for detection, response, recovery, verification, and continuous improvement.</p>
+              <p><strong>ISO-aligned:</strong> ISO/IEC 27001:2022 and 27002:2022 principles for authorized action, event evidence, controlled change, recovery validation, and post-incident learning.</p>
+              <p>This independent training simulation demonstrates aligned practices; it does not provide certification or legal assurance.</p>
+            </div>
+          </details>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen" aria-labelledby="resultTitle">
+      <div class="result-hero">
+        <div class="success-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div>
+        <span class="eyebrow">PRODUCTION RESTORED</span>
+        <h1 id="resultTitle">Incident resolved, <span id="resultName">Architect</span>.</h1>
+        <p id="resultSummary">You used production evidence to identify the failure, recovered the application with an approved runbook, and verified service health.</p>
+      </div>
+
+      <div class="result-grid">
+        <section class="result-card score-card" aria-labelledby="finalScoreTitle">
+          <span class="panel-kicker">Final assessment</span>
+          <h2 id="finalScoreTitle">Incident commander score</h2>
+          <div class="score-ring" id="scoreRing" style="--score:100"><div><strong id="finalScore">100</strong><span>/100</span></div></div>
+          <div class="grade-chip" id="gradeChip">ARCHITECT LEVEL</div>
+          <dl>
+            <div><dt>Recovery time</dt><dd id="finalTime">00:00</dd></div>
+            <div><dt>Actions taken</dt><dd id="finalActions">0</dd></div>
+            <div><dt>Wrong decisions</dt><dd id="finalMistakes">0</dd></div>
+            <div><dt>Peak users affected</dt><dd id="finalUsers">2,400</dd></div>
+            <div><dt>Peak revenue risk</dt><dd id="finalRevenue">$18,000/hr</dd></div>
+          </dl>
+        </section>
+
+        <section class="result-card report-card" aria-labelledby="reportTitle">
+          <div class="panel-heading"><div><span class="panel-kicker">Incident record</span><h2 id="reportTitle">Executive closure report</h2></div><span class="status-pill healthy"><i></i> HEALTHY</span></div>
+          <div class="report-grid">
+            <div><span>Incident</span><strong>INC-PRD-2400</strong></div>
+            <div><span>Architecture</span><strong>Hybrid cloud / on premises</strong></div>
+            <div class="wide"><span>Confirmed root cause</span><strong id="finalCause">—</strong></div>
+            <div class="wide"><span>Recovery action</span><strong id="finalRecovery">Controlled application service restart and health validation</strong></div>
+          </div>
+          <div class="lessons-box">
+            <span>LESSONS &amp; CONTROL IMPROVEMENT</span>
+            <p id="lessonsText">—</p>
+          </div>
+          <button class="secondary-button" id="downloadRecordButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download incident record</button>
+        </section>
+      </div>
+
+      <section class="result-card certificate-card" aria-labelledby="certificateTitle">
+        <div class="certificate-card-head">
+          <div><span class="panel-kicker">RCW IT Training achievement</span><h2 id="certificateTitle">RCW IT Architect certificate</h2></div>
+          <span class="pdf-chip">PDF + PNG</span>
+        </div>
+        <div class="certificate-layout">
+          <div class="certificate-preview-wrap"><canvas id="certificateCanvas" width="1400" height="990" aria-label="Certificate preview"></canvas></div>
+          <div class="certificate-copy">
+            <h3>Production Incident Architect</h3>
+            <p>Your certificate records the final score and successful recovery of the hybrid production service.</p>
+            <button class="primary-button" id="downloadPdfButton" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download certificate PDF</button>
+            <button class="secondary-button" id="downloadPngButton" type="button">Save certificate image</button>
+            <small>Issued by RCW IT Training and signed by Pradeep Raju.</small>
+          </div>
+        </div>
+      </section>
+
+      <button class="replay-button" id="replayButton" type="button"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Play another random incident</button>
+
+      <a class="primary-button passport-link" href="../skill-passport.html" style="display:flex;align-items:center;justify-content:center;gap:8px;max-width:340px;margin:18px auto 0;text-decoration:none">🎖️ View your Skill Passport</a>
+    </section>
+
+    <section class="screen timeout-screen" id="timeoutScreen" aria-labelledby="timeoutTitle">
+      <div class="timeout-card">
+        <div class="timeout-mark" aria-hidden="true">!</div>
+        <span class="eyebrow">RECOVERY WINDOW EXPIRED</span>
+        <h1 id="timeoutTitle">The incident exceeded 30 minutes.</h1>
+        <p>Production remains unavailable. Review the evidence path, avoid unsupported changes, and try a new incident.</p>
+        <div class="timeout-score"><span>FINAL SCORE</span><strong id="timeoutScore">0/100</strong></div>
+        <button class="primary-button" id="timeoutReplayButton" type="button">Retry the challenge</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Independent, vendor-neutral training simulation by RCW IT Training. Synthetic data only; no production systems are contacted.</p>
+    <p>Standards alignment describes training practices and does not constitute certification, endorsement, or legal assurance.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><span></span><p></p></div>
+  <img id="instructorImage" src="assets/pradeep-raju.jpg" alt="" hidden>
+  <script src="../passport.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Helm Package Management · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "helm-basics", "title": "Helm Package Management", "category": "Kubernetes • Helm", "badge": "HELM", "accent": "#326ce5", "difficulty": "INTERMEDIATE", "host": "k8s-master-01", "user": "admin", "intro": ["Install and manage apps with Helm charts."], "objectives": [{"name": "Add repo", "desc": "Add a repo with helm repo add.", "points": 25, "match": ["helm\\s+repo\\s+add\\s+\\S+"], "success": "✓ Repo added."}, {"name": "Update repos", "desc": "Update with helm repo update.", "points": 25, "match": ["helm\\s+repo\\s+update"], "success": "✓ Repos updated."}, {"name": "Install chart", "desc": "Install with helm install.", "points": 25, "match": ["helm\\s+install\\s+\\S+"], "success": "✓ Chart installed."}, {"name": "List releases", "desc": "List with helm list.", "points": 25, "match": ["helm\\s+list"], "success": "✓ Releases listed."}], "hint": ["helm repo add bitnami https://charts.bitnami.com/bitnami", "helm repo update", "helm install myapp bitnami/nginx", "helm list"], "help": "helm repo add NAME URL · repo update · install · list · uninstall", "certTitle": "Helm Champion", "certDesc1": "for mastering Helm", "certDesc2": "with repos and charts.", "certChallenge": "Helm packages", "certFooter": "Kubernetes • Challenge", "headline": "Helm Package Management", "lead": "Install and manage apps with Helm charts.", "brief": "Helm Package Management", "briefCopy": "Install and manage apps with Helm charts.", "incident": "HELM-BASICS · k8s-master-01 · hands-on practice", "resultCopy": "You completed all objectives for Helm Package Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "HELM", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

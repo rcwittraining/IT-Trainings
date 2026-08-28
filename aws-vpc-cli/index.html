@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>AWS VPC CLI · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "aws-vpc-cli", "title": "AWS VPC CLI", "category": "AWS • Networking", "badge": "AWS", "accent": "#ff9900", "difficulty": "INTERMEDIATE", "host": "aws-cli-01", "user": "clouduser", "intro": ["Manage VPCs, subnets, and security groups with the AWS CLI."], "objectives": [{"name": "Describe VPCs", "desc": "List VPCs with describe-vpcs.", "points": 25, "match": ["aws\\s+ec2\\s+describe-vpcs"], "success": "✓ VPCs listed."}, {"name": "Describe subnets", "desc": "List subnets with describe-subnets.", "points": 25, "match": ["aws\\s+ec2\\s+describe-subnets"], "success": "✓ Subnets listed."}, {"name": "Security groups", "desc": "List SGs with describe-security-groups.", "points": 25, "match": ["aws\\s+ec2\\s+describe-security-groups"], "success": "✓ SGs listed."}, {"name": "Create VPC", "desc": "Create with aws ec2 create-vpc.", "points": 25, "match": ["aws\\s+ec2\\s+create-vpc"], "success": "✓ VPC created."}], "hint": ["aws ec2 describe-vpcs", "aws ec2 describe-subnets", "aws ec2 describe-security-groups", "aws ec2 create-vpc --cidr-block 10.0.0.0/16"], "help": "aws ec2 describe-vpcs · describe-subnets · describe-security-groups · create-vpc --cidr-block", "certTitle": "AWS VPC Champion", "certDesc1": "for mastering VPC networking", "certDesc2": "with subnets and security groups.", "certChallenge": "AWS VPC", "certFooter": "AWS • Challenge", "headline": "AWS VPC CLI", "lead": "Manage VPCs, subnets, and security groups with the AWS CLI.", "brief": "AWS VPC CLI", "briefCopy": "Manage VPCs, subnets, and security groups with the AWS CLI.", "incident": "AWS-VPC-CLI · aws-cli-01 · hands-on practice", "resultCopy": "You completed all objectives for AWS VPC CLI.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "AWS", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>

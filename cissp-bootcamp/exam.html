@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CISSP Practice Exam - free CISSP bootcamp study material from RCW IT Training (unofficial).">
+  <title>CISSP Practice Exam | RCW IT Training</title>
+<style>
+    :root {
+      --navy:#061633; --ink:#101b3b; --blue:#078be8; --cyan:#4bd7ff; --yellow:#ffd51d;
+      --paper:#f4f7fb; --muted:#5f6c84; --line:#dce5f1; --shadow:0 10px 28px rgba(8,31,69,.10);
+      --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height:1.65; }
+    .topbar { background:linear-gradient(112deg,#020a18 0%,#06142c 50%,#031027 100%); color:#fff;
+      padding:16px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:4px solid var(--blue); }
+    .brand { width:40px; height:40px; border:1px solid var(--cyan); border-radius:10px;
+      display:grid; place-items:center; font-weight:950; font-size:11px; color:var(--cyan); }
+    .title { font-size:18px; font-weight:800; }
+    .subtitle { display:block; font-size:11px; color:#8faed1; letter-spacing:.6px; text-transform:uppercase; }
+    .home { margin-left:auto; color:var(--cyan); text-decoration:none; font-size:13px; font-weight:600; }
+    .home:hover, .home:focus-visible { text-decoration:underline; }
+    .wrap { max-width:900px; margin:0 auto; padding:30px 22px 60px; }
+    h1 { font-size:clamp(27px,4vw,36px); letter-spacing:-.6px; margin:8px 0 6px; }
+    .updated { color:var(--muted); font-size:13px; margin-bottom:24px; }
+    .summary { background:#eaf7ff; border:1px solid #a7dfff; border-radius:14px; padding:15px 18px;
+      color:#153b61; font-size:14px; margin-bottom:20px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px; margin:0 0 18px; }
+    h2 { font-size:19px; margin:0 0 8px; }
+    h3 { font-size:15px; margin:18px 0 5px; color:#0a234a; }
+    p, li { font-size:14.5px; color:#2c3a58; }
+    ul { padding-left:20px; }
+    li { margin:6px 0; }
+    a { color:#076dc9; }
+    .choice-button { display:inline-flex; align-items:center; justify-content:center; padding:11px 16px;
+      border-radius:10px; background:#0758c8; color:#fff; text-decoration:none; font-weight:750; font-size:14px; }
+    .choice-button:hover, .choice-button:focus-visible { background:#0647a7; }
+    .status { margin-top:12px; padding:11px 13px; border:1px solid #ffe082; border-radius:10px;
+      background:#fff8e1; color:#655400; font-size:13px; }
+    .small { font-size:12.5px; color:var(--muted); }
+    .footer { text-align:center; color:var(--muted); font-size:12.5px; padding:18px 20px 28px; }
+    .footer a { color:var(--blue); text-decoration:none; margin:0 5px; }
+    .footer a:hover, .footer a:focus-visible { text-decoration:underline; }
+  </style>
+
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{display:inline-block;background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;
+        border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:600}
+  .card table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .card th{background:#0a234a;color:#fff;text-align:left;padding:7px 10px;font-size:13px}
+  .card td{border:1px solid #cfe6f8;padding:6px 10px;vertical-align:top}
+  .card tr:nth-child(even) td{background:#f4fafe}
+  .card p{margin:8px 0}
+  .card ul,.card ol{margin:8px 0 8px 20px}
+  .card li{margin:4px 0}
+  details.qa{background:#eaf7ff;border:1px solid #b7dcf5;border-radius:8px;
+             padding:8px 14px;margin:8px 0}
+  details.qa summary{cursor:pointer;font-weight:600;color:#0a234a}
+  details.qa .opts{margin:8px 0 4px 0}
+  details.qa .opts div{margin:3px 0}
+  .ans{color:#076dc9;font-weight:700}
+  .why{font-size:13.5px;color:#2c3a58;margin-top:4px}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:26px}
+  .nav a{background:#eaf7ff;border:1px solid #b7dcf5;color:#076dc9;border-radius:8px;
+         padding:9px 16px;font-weight:700;text-decoration:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
+  .module-card{display:block;background:#eaf7ff;border:1px solid #b7dcf5;border-radius:12px;
+               padding:14px 16px;text-decoration:none;color:#2c3a58}
+  .module-card:hover{border-color:#076dc9}
+  .module-card b{color:#0a234a;display:block;margin-bottom:2px}
+  .module-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .module-card span.d{font-size:13px;color:#2c3a58}
+  .facts{background:#fff8e1;border:1px solid #e6cf8f;border-radius:10px;padding:12px 16px}
+  .note-isc2{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .exam label{display:block;background:#f4fafe;border:1px solid #cfe6f8;border-radius:8px;
+              padding:8px 12px;margin:6px 0;cursor:pointer}
+  .exam label:hover{border-color:#076dc9}
+  .exam .q{font-weight:600;color:#0a234a;margin-top:18px}
+  .exam .dom{color:#076dc9;font-size:12.5px;font-weight:700}
+  .result{background:#eaf7ff;border:2px solid #076dc9;border-radius:12px;padding:16px 20px;margin:16px 0}
+  button.primary{background:#076dc9;color:#fff;border:0;border-radius:8px;padding:12px 24px;
+                 font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+  .expgood{border-color:#2e9e5b;background:#e9f9ef}
+  .expbad{border-color:#d33;background:#fdeaea}
+  /* timed exam mode */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+  .mode-card{display:block;background:#eaf7ff;border:2px solid #b7dcf5;border-radius:12px;
+             padding:16px 18px;text-decoration:none;color:#2c3a58}
+  .mode-card:hover{border-color:#076dc9}
+  .mode-card b{color:#0a234a;font-size:16px}
+  .mode-card .w{color:#076dc9;font-weight:700;font-size:13px}
+  .mode-card span.d{font-size:13px}
+  .timerbar{position:sticky;top:0;z-index:50;background:#0a234a;color:#fff;border-radius:10px;
+            padding:10px 18px;font-family:Consolas,monospace;font-size:22px;font-weight:700;
+            text-align:center;letter-spacing:2px;margin-bottom:14px}
+  .timerbar small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;
+                  font-weight:400;letter-spacing:0;color:#9cc9f5}
+  .timerbar.warn{background:#8a6100}
+  .timerbar.crit{background:#a02020;animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.75}}
+  .navgrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .navgrid button{width:38px;height:30px;border:1px solid #b7dcf5;background:#f4fafe;color:#0a234a;
+                  border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+  .navgrid button.answered{background:#076dc9;color:#fff;border-color:#076dc9}
+  .navgrid button.flagged{outline:3px solid #f5b301}
+  .flagbtn{background:#fff;border:1px solid #b7dcf5;color:#655400;border-radius:8px;
+           padding:5px 12px;font-size:12.5px;font-weight:700;cursor:pointer;margin-top:6px}
+  .flagbtn.on{background:#f5b301;color:#3d2e00;border-color:#f5b301}
+  .timenote{font-size:13px;color:#655400;background:#fff8e1;border-radius:8px;padding:8px 12px;margin-top:8px}
+</style>
+
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">RCW</span>
+    <div><span class="title">RCW IT Training</span><span class="subtitle">CISSP Bootcamp</span></div>
+    <a class="home" href="..">&#8592; Back to all labs</a>
+  </div>
+  <main class="wrap">
+    <h1>CISSP Practice Exam</h1>
+    <div class="updated">40 questions &middot; all 8 domains &middot; timed exam mode + practice mode</div>
+    <div class="summary">Two ways to train: <b>Timed exam mode</b> simulates exam pressure
+    (60-minute countdown, auto-submit, flag-for-review, question navigator) or
+    <b>Practice mode</b> for relaxed drilling. Both score instantly and explain every answer.
+    Aim for 70%+ &mdash; treat that as your readiness signal. Everything runs in your
+    browser; nothing is sent anywhere.</div>
+
+    <section class="card" id="modePicker"><h2>Choose your mode</h2>
+      <div class="modes">
+        <a class="mode-card" href="#" id="startTimed"><span class="w">&#9201; 60:00 countdown</span>
+          <b>Timed exam mode</b><span class="d">Real exam feel: clock, auto-submit at 0:00,
+          flag questions for review, jump grid. One sitting.</span></a>
+        <a class="mode-card" href="#" id="startPractice"><span class="w">&#128218; no clock</span>
+          <b>Practice mode</b><span class="d">Take your time; score whenever you like.</span></a>
+      </div>
+    </section>
+
+    <section class="card exam" id="examArea" hidden>
+      <div class="timerbar" id="timerbar" hidden><span id="timeLeft">60:00</span>
+        <small>timed exam mode &middot; auto-submits at 0:00</small></div>
+      <div class="navgrid" id="navgrid"></div>
+      <div class="timenote" id="timenote" hidden>Flagged questions show an amber outline in the
+        grid. Unanswered questions cost you marks &mdash; never leave blanks.</div>
+      <h2>Questions</h2><div id="quiz"></div>
+      <button class="primary" id="scoreBtn" type="button">Submit exam</button>
+      <div id="result"></div>
+    </section>
+<script>
+var QUESTIONS = [{"q": "Which term describes risk remaining AFTER controls are applied?", "o": ["Inherent risk", "Residual risk", "Control risk", "Aggregate risk"], "a": 1, "w": "D1", "e": "Residual risk remains after mitigation; acceptance decisions are made about it."}, {"q": "A company decides to stop offering an online service because of fraud risk. Response?", "o": ["Mitigate", "Transfer", "Accept", "Avoid"], "a": 3, "w": "D1", "e": "Eliminating the activity eliminates the risk = avoid."}, {"q": "Annualised Loss Expectancy is calculated as:", "o": ["AV x EF", "SLE x ARO", "AV x ARO", "EF x ARO"], "a": 1, "w": "D1", "e": "ALE = SLE x ARO (and SLE = AV x EF)."}, {"q": "Which is the correct document hierarchy (most to least mandatory)?", "o": ["Guidelines, policies, standards, procedures", "Policies, standards, procedures, guidelines", "Procedures, baselines, policies, guidelines", "Standards, policies, guidelines, procedures"], "a": 1, "w": "D1", "e": "Policies > standards > procedures are mandatory; guidelines are advice."}, {"q": "What is the FIRST step of a business continuity programme?", "o": ["Implement controls", "Business impact analysis", "Senior management support and project scope", "Choose a hot site"], "a": 2, "w": "D1", "e": "BCP starts with executive sponsorship and scoping; the BIA comes next."}, {"q": "Due diligence differs from due care because it:", "o": ["Acts to prevent harm", "Investigates and verifies facts", "Buys insurance", "Writes policies"], "a": 1, "w": "D1", "e": "Due diligence = the investigation/verification side of legal duty."}, {"q": "Protecting data while it is being processed is called protecting data:", "o": ["at rest", "in transit", "in use", "in archive"], "a": 2, "w": "D2", "e": "In use = in CPU/memory (TEE, enclave)."}, {"q": "For media that will LEAVE the organisation but be reused, NIST 800-88 recommends:", "o": ["Clear", "Purge", "Degauss only", "No action"], "a": 1, "w": "D2", "e": "Purge (degauss/crypto-erase) + verification before reuse outside trust."}, {"q": "Which classification scheme is used by governments?", "o": ["Public, Internal, Confidential", "Unclassified, SBU, Confidential, Secret, Top Secret", "Low, Medium, High", "Bronze, Silver, Gold"], "a": 1, "w": "D2", "e": "That is the standard government ladder."}, {"q": "Tokenisation replaces sensitive data with:", "o": ["A longer encrypted blob", "A non-sensitive surrogate value", "A hash", "A compressed string"], "a": 1, "w": "D2", "e": "Surrogate tokens keep format; original stored in a vault."}, {"q": "Which security model uses access triples of subject, program, object?", "o": ["Bell-LaPadula", "Biba", "Clark-Wilson", "Take-Grant"], "a": 2, "w": "D3", "e": "Clark-Wilson enforces well-formed transactions via TPs."}, {"q": "Bell-LaPadula's star (*) property states:", "o": ["No read up", "No write down", "No read down", "No write up"], "a": 1, "w": "D3", "e": "* property = no write down (confidentiality)."}, {"q": "Which symmetric algorithm is the current worldwide standard?", "o": ["RSA", "AES", "SHA-256", "ElGamal"], "a": 1, "w": "D3", "e": "AES (Rijndael) is the standard block cipher."}, {"q": "ECC's main advantage over RSA is:", "o": ["Stronger security per bit-length", "It is symmetric", "No key management", "Built-in hashing"], "a": 0, "w": "D3", "e": "Smaller keys for equivalent strength - ideal for IoT/mobile."}, {"q": "A TPM is BEST described as:", "o": ["A network encryption device", "A motherboard chip for keys and measured boot", "A backup appliance", "A firewall module"], "a": 1, "w": "D3", "e": "Trusted Platform Module anchors device identity/keys."}, {"q": "The 'security kernel' implements:", "o": ["The reference monitor concept", "The DMZ", "The OSI model", "The CRL"], "a": 0, "w": "D3", "e": "It must be small, tamper-proof, and always invoked."}, {"q": "Which protocol operates at OSI Layer 4?", "o": ["IP", "TCP", "Ethernet", "HTTP"], "a": 1, "w": "D4", "e": "TCP is transport (L4)."}, {"q": "Syslog uses which port?", "o": ["162", "514", "389", "443"], "a": 1, "w": "D4", "e": "Syslog = UDP/TCP 514."}, {"q": "Which is the MOST secure against eavesdropping on the link?", "o": ["UTP copper", "Fibre optic", "WiFi 6", "Bluetooth"], "a": 1, "w": "D4", "e": "Fibre emits no EMI - hardest to tap passively."}, {"q": "Stateful inspection firewalls improve on packet filters by:", "o": ["Encrypting all traffic", "Tracking connection state", "Working at L7 only", "Replacing antivirus"], "a": 1, "w": "D4", "e": "They maintain session state tables."}, {"q": "An evil twin attack involves:", "o": ["A rogue AP impersonating a legitimate one", "MAC flooding", "ARP cache poisoning", "DNS tunneling"], "a": 0, "w": "D4", "e": "Evil twin = attacker's AP with same SSID to capture traffic."}, {"q": "In IPsec, which mode encapsulates the ENTIRE original packet?", "o": ["Transport", "Tunnel", "Aggressive", "Main"], "a": 1, "w": "D4", "e": "Tunnel mode adds a new outer header - site-to-site standard."}, {"q": "A password and a fingerprint together form:", "o": ["Single-factor", "Two-factor authentication", "SSO", "Federation"], "a": 1, "w": "D5", "e": "Different factor types (know + are) = multi-factor."}, {"q": "In biometrics, the point where FAR equals FRR is:", "o": ["MTBF", "CER", "ROC", "SLE"], "a": 1, "w": "D5", "e": "Crossover Error Rate - lower is better."}, {"q": "Which attack forges a TGT using the KRBTGT account's key?", "o": ["Golden ticket", "Silver ticket", "Pass-the-hash", "Kerberoasting"], "a": 0, "w": "D5", "e": "Golden ticket = forged TGT via KRBTGT compromise."}, {"q": "Which access model is the MOST granular?", "o": ["DAC", "MAC", "RBAC", "ABAC"], "a": 3, "w": "D5", "e": "Attribute-based evaluates user+resource+context per request."}, {"q": "SAML is MOST appropriate for:", "o": ["Delegating API access to a mobile app", "Enterprise web SSO with an IdP", "Disk encryption", "Ticket-based Windows logins"], "a": 1, "w": "D5", "e": "SAML 2.0 assertions are the enterprise SSO standard."}, {"q": "CVSS v3.1 score 5.3 falls in which band?", "o": ["Low", "Medium", "High", "Critical"], "a": 1, "w": "D6", "e": "4.0-6.9 = Medium."}, {"q": "Which testing method executes the running application?", "o": ["SAST", "DAST", "Code review", "SBOM scan"], "a": 1, "w": "D6", "e": "Dynamic analysis probes the live app."}, {"q": "Independent auditors MUST have:", "o": ["Root access to production", "No conflicts of interest", "Developer roles", "Shares in the vendor"], "a": 1, "w": "D6", "e": "Independence underpins audit credibility."}, {"q": "Which report covers controls over a PERIOD of time?", "o": ["SOC 2 Type I", "SOC 2 Type II", "SOC 3 summary", "Pen test report"], "a": 1, "w": "D6", "e": "Type II tests operating effectiveness across a window."}, {"q": "The correct incident response sequence is:", "o": ["Detection, preparation, recovery, containment", "Preparation, detection, containment, eradication, recovery, lessons", "Containment, detection, preparation", "Recovery, detection, eradication"], "a": 1, "w": "D7", "e": "NIST 800-61 order."}, {"q": "Which is the MOST volatile data source?", "o": ["Archival tape", "Disk sectors", "RAM", "Config prints"], "a": 2, "w": "D7", "e": "RAM vanishes at power-off."}, {"q": "An incremental backup scheme (Sunday full) needs which set for Friday's restore?", "o": ["Full + Friday incremental", "Full + all incrementals Mon-Fri", "All fulls", "Full + differential"], "a": 1, "w": "D7", "e": "Incrementals chain: every one since the last full is required."}, {"q": "A tabletop exercise is which type of DR test?", "o": ["Full interruption", "Discussion-based walkthrough", "Parallel run", "Simulation at alternate site"], "a": 1, "w": "D7", "e": "Tabletop = team discusses scenario step by step."}, {"q": "Configuration management starts with:", "o": ["A golden image", "A documented baseline", "A firewall rule", "Pen testing"], "a": 1, "w": "D7", "e": "You cannot manage what is not baselined."}, {"q": "Buffer overflow mitigations include all EXCEPT:", "o": ["ASLR", "DEP/NX", "Stack canaries", "Salting"], "a": 3, "w": "D8", "e": "Salting protects stored passwords, not memory safety."}, {"q": "Which defends against reflected XSS?", "o": ["Anti-CSRF token", "Output encoding + CSP", "Prepared statements", "RAID"], "a": 1, "w": "D8", "e": "XSS is an output-trust problem; encode + CSP."}, {"q": "Keeping vendor source code with a neutral third party is:", "o": ["Code signing", "Software escrow", "SBOM", "Fuzzing"], "a": 1, "w": "D8", "e": "Escrow protects buyers if the vendor fails."}, {"q": "Separate development, test and production environments primarily reduce:", "o": ["Cost", "Unauthorised/untested change reaching production", "Network latency", "Licensing risk"], "a": 1, "w": "D8", "e": "Environment separation enforces controlled promotion."}];
+var mode = null, timerId = null, endTime = 0, flags = {};
+
+function pad(n){ return (n < 10 ? "0" : "") + n; }
+function fmt(s){ return pad(Math.floor(s / 60)) + ":" + pad(s % 60); }
+
+function buildQuiz(){
+  var quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
+  QUESTIONS.forEach(function (q, i) {
+    var html = '<div class="q" id="q' + i + '">' + (i + 1) + ". " + q.q +
+               '</div><div class="dom">' + q.w + "</div>";
+    q.o.forEach(function (opt, j) {
+      html += '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' +
+              String.fromCharCode(65 + j) + ". " + opt + "</label>";
+    });
+    html += '<button class="flagbtn" type="button" data-flag="' + i + '">&#9873; Flag for review</button>';
+    quiz.innerHTML += html;
+  });
+  var nav = document.getElementById("navgrid");
+  nav.innerHTML = "";
+  QUESTIONS.forEach(function (q, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.textContent = i + 1; b.id = "nav" + i;
+    b.addEventListener("click", function () {
+      document.getElementById("q" + i).scrollIntoView({behavior: "smooth", block: "center"});
+    });
+    nav.appendChild(b);
+  });
+  quiz.addEventListener("change", function (e) {
+    if (e.target && e.target.type === "radio") refreshNav();
+  });
+  quiz.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-flag]") : null;
+    if (!b) return;
+    var i = b.getAttribute("data-flag");
+    flags[i] = !flags[i];
+    b.className = flags[i] ? "flagbtn on" : "flagbtn";
+    b.innerHTML = flags[i] ? "&#9873; Flagged" : "&#9873; Flag for review";
+    refreshNav();
+  });
+}
+
+function answered(i){
+  return !!document.querySelector('input[name="q' + i + '"]:checked');
+}
+function refreshNav(){
+  QUESTIONS.forEach(function (q, i) {
+    var b = document.getElementById("nav" + i);
+    b.className = (answered(i) ? "answered" : "") + (flags[i] ? " flagged" : "");
+  });
+}
+
+function tick(){
+  var left = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+  document.getElementById("timeLeft").textContent = fmt(left);
+  document.getElementById("timerbar").className =
+    "timerbar" + (left <= 300 ? " crit" : left <= 600 ? " warn" : "");
+  if (left <= 0) { clearInterval(timerId); score(true); }
+}
+
+function startMode(m){
+  mode = m;
+  document.getElementById("modePicker").hidden = true;
+  document.getElementById("examArea").hidden = false;
+  buildQuiz();
+  if (m === "timed") {
+    document.getElementById("timerbar").hidden = false;
+    document.getElementById("timenote").hidden = false;
+    endTime = Date.now() + 60 * 60 * 1000;
+    timerId = setInterval(tick, 400);
+    tick();
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+  document.getElementById("scoreBtn").textContent =
+    m === "timed" ? "Submit exam" : "Score my exam";
+}
+
+function score(auto){
+  if (!mode) return;
+  if (timerId) { clearInterval(timerId); timerId = null; }
+  var total = QUESTIONS.length, correct = 0, byDomain = {}, out = "", unanswered = 0;
+  var usedSec = mode === "timed"
+    ? 3600 - Math.max(0, Math.floor((endTime - Date.now()) / 1000)) : null;
+  QUESTIONS.forEach(function (q, i) {
+    var sel = document.querySelector('input[name="q' + i + '"]:checked');
+    var picked = sel ? parseInt(sel.value, 10) : -1;
+    if (picked === -1) unanswered++;
+    var good = picked === q.a;
+    if (good) correct++;
+    byDomain[q.w] = byDomain[q.w] || [0, 0];
+    byDomain[q.w][0] += good ? 1 : 0;
+    byDomain[q.w][1] += 1;
+    var labels = document.querySelectorAll('input[name="q' + i + ']');
+    labels.forEach(function (inp, j) {
+      var lab = inp.parentNode;
+      if (j === q.a) lab.className = "expgood";
+      else if (inp.checked) lab.className = "expbad";
+    });
+    out += '<p style="margin:10px 0 2px"><b>Q' + (i + 1) + "</b> &mdash; correct: " +
+           String.fromCharCode(65 + q.a) + ". " + q.o[q.a] + '<br><span class="why">' +
+           q.e + "</span></p>";
+  });
+  var pct = Math.round(correct * 100 / total);
+  var verdict = pct >= 70 ? "PASS zone - keep drilling weak domains" :
+                "Below 70% - revisit the modules, then retake";
+  var html = '<div class="result"><b style="font-size:18px">' + correct + " / " + total +
+             " (" + pct + "%)</b><br>" + verdict + "<br>";
+  if (mode === "timed") {
+    html += "Time used: <b>" + fmt(usedSec) + "</b> of 60:00" +
+            (auto ? " &mdash; <b>auto-submitted at 0:00</b>" : "") + "<br>";
+  }
+  if (unanswered) html += unanswered + " unanswered - never leave blanks<br>";
+  html += "<small>";
+  Object.keys(byDomain).sort().forEach(function (d) {
+    html += d + ": " + byDomain[d][0] + "/" + byDomain[d][1] + " &nbsp; ";
+  });
+  html += "</small></div>" +
+    '<button class="primary" type="button" onclick="location.reload()">Retake / change mode</button>' +
+    '<section class="card"><h2>Explanations</h2>' + out + "</section>";
+  var res = document.getElementById("result");
+  res.innerHTML = html;
+  document.getElementById("scoreBtn").hidden = true;
+  res.scrollIntoView({behavior: "smooth"});
+}
+
+document.getElementById("startTimed").addEventListener("click", function (e) {
+  e.preventDefault(); startMode("timed");
+});
+document.getElementById("startPractice").addEventListener("click", function (e) {
+  e.preventDefault(); startMode("practice");
+});
+document.getElementById("scoreBtn").addEventListener("click", function () {
+  if (mode === "timed") {
+    var left = QUESTIONS.filter(function (q, i) { return !answered(i); }).length;
+    if (left && !confirm(left + " question(s) unanswered. Submit anyway?")) return;
+  }
+  score(false);
+});
+</script>
+
+  </main>
+  <div class="footer">
+    &copy; 2026 RCW IT Training &middot;
+    <a href="../">All labs</a> &middot;
+    <a href="../privacy.html">Privacy</a> &middot;
+    <a href="../terms-of-use.html">Terms</a> &middot;
+    <a href="../disclaimer.html">Disclaimer</a> &middot;
+    <a href="mailto:info@rcwittraining.in">Contact</a>
+  </div>
+  <script src="../privacy-settings.js"></script>
+</body>
+</html>

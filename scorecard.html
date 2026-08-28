@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Download and share your RCW IT Training lab scorecard.">
+<meta name="theme-color" content="#061633">
+<link rel="canonical" href="https://www.rcwittraining.in/scorecard.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RCW IT Training — Practice Scorecard">
+<meta property="og:description" content="Score your free hands-on IT lab and challenge your friends. Can you beat me?">
+<meta property="og:url" content="https://www.rcwittraining.in/scorecard.html">
+<meta property="og:image" content="https://www.rcwittraining.in/og-scorecard.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Your Scorecard | RCW IT Training</title>
+<style>
+  :root{--navy:#061633;--navy-2:#0a234a;--ink:#101b3b;--blue:#078be8;--blue-2:#0758c8;--cyan:#4bd7ff;
+    --yellow:#ffd51d;--green:#9ee636;--paper:#f4f7fb;--white:#fff;--muted:#5f6c84;--line:#dce5f1;
+    --shadow:0 10px 28px rgba(8,31,69,.10);--radius:18px}
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background:linear-gradient(#fff,#f5f8fc 40%,#eef4fb);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5;min-height:100vh;padding:28px 18px 80px}
+  .container{width:min(860px,100%);margin-inline:auto}
+  .crumb{font-size:14px;color:var(--muted);margin-bottom:18px}
+  .crumb a{color:var(--blue);text-decoration:none;font-weight:600}
+  .crumb a:hover{text-decoration:underline}
+  h1{margin:0 0 6px;font-size:clamp(24px,4vw,32px);color:var(--navy);letter-spacing:-.5px}
+  .sub{color:var(--muted);margin:0 0 26px;font-size:16px}
+  .meta{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;
+    margin-bottom:20px;font-size:14px;color:var(--muted);line-height:1.7;box-shadow:var(--shadow)}
+  .meta b{color:var(--ink)}
+  .card-frame{width:100%;border-radius:16px;display:block;box-shadow:0 20px 50px rgba(8,31,69,.28);border:1px solid #123}
+  .toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .btn{border:none;border-radius:12px;padding:13px 20px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center}
+  .btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff}
+  .btn.primary:hover{filter:brightness(1.1)}
+  .btn.ghost{background:var(--white);border:1px solid var(--line);color:var(--ink)}
+  .btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--navy);
+    color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:2000;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .note{font-size:13px;color:var(--muted);line-height:1.6;margin-top:24px;background:var(--white);
+    border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+  .note code{color:var(--blue);font-size:12px;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="crumb"><a href="https://www.rcwittraining.in">← Back to all labs</a></div>
+  <h1>Your Scorecard</h1>
+  <p class="sub">Download your share card and post it — let everyone try to beat you.</p>
+
+  <div class="meta" id="meta"></div>
+
+  <img id="preview" class="card-frame" alt="Your scorecard preview">
+
+  <div class="toolbar">
+    <button class="btn primary" id="dl">⬇ Download image</button>
+    <button class="btn primary" id="shareimg" style="background:linear-gradient(135deg,#0a66c2,#004182)">📤 Share image</button>
+    <button class="btn ghost" id="linkedin" style="display:inline-flex">in&nbsp; Open LinkedIn</button>
+    <button class="btn ghost" id="sh">🔗 Copy text</button>
+    <button class="btn ghost" id="save">📥 Save to my passport</button>
+    <a class="btn ghost" id="goto" href="skill-passport.html" style="display:none">View passport →</a>
+  </div>
+
+  <div class="note">
+    <b>To post the card:</b> tap <b>📤 Share image</b> (on phone, choose LinkedIn — the image goes with it),
+    or <b>⬇ Download image</b> then attach it to a post. 👌
+  </div>
+
+  <div class="note">
+    <b>Integration:</b> link to this page from any lab-completion screen with query parameters, e.g.<br>
+    <code>scorecard.html?lab=Linux+Server+Crash+RCA&tag=LINUX+·+Troubleshooting&score=8&total=10&time=04:32&rank=Top+12%25</code><br>
+    If no parameters are given, demo values are shown.
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var data = {
+    lab:   q.get('lab')   || 'Linux Server Crash Root-Cause Analysis',
+    tag:   q.get('tag')   || 'LINUX · Troubleshooting',
+    score: q.get('score') || 8,
+    total: q.get('total') || 10,
+    time:  q.get('time')  || '04:32',
+    rank:  q.get('rank')  || 'Top 12% this week'
+  };
+  data.score = parseInt(data.score,10)||0; data.total = parseInt(data.total,10)||0;
+
+  document.getElementById('meta').innerHTML =
+    'Lab: <b>'+data.lab+'</b> &nbsp;·&nbsp; Score: <b>'+data.score+'/'+data.total+'</b> &nbsp;·&nbsp; '+
+    'Time: <b>'+data.time+'</b> &nbsp;·&nbsp; Rank: <b>'+data.rank+'</b>';
+
+  function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+    clearTimeout(t._x);t._x=setTimeout(function(){t.classList.remove('show');},2200);}
+
+  function copy(text){function ok(){toast('Copied to clipboard!');}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok).catch(fb);}else fb();
+    function fb(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');ok();}catch(e){toast('Copy failed — select manually');}document.body.removeChild(ta);}
+  }
+
+  function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+
+  function drawCard(ctx,W,H){
+    // ---------- paper ----------
+    ctx.fillStyle='#f6f2e7';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(6,22,51,.03)';ctx.lineWidth=1;
+    for(var x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    // double border
+    ctx.strokeStyle='#0a234a';ctx.lineWidth=6;ctx.strokeRect(24,24,W-48,H-48);
+    ctx.strokeStyle='#0a234a';ctx.lineWidth=2;ctx.strokeRect(36,36,W-72,H-72);
+
+    // ---------- crest (gold circular emblem) ----------
+    var cx0=W/2, cy0=116, cr=46;
+    ctx.save();ctx.translate(cx0,cy0);
+    ctx.beginPath();ctx.arc(0,0,cr,0,Math.PI*2);ctx.strokeStyle='#b8860b';ctx.lineWidth=4.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(0,0,cr-7,0,Math.PI*2);ctx.strokeStyle='#b8860b';ctx.lineWidth=1.5;ctx.stroke();
+    for(var i=0;i<24;i++){var a=i*Math.PI/12;ctx.beginPath();ctx.moveTo(Math.cos(a)*(cr-3),Math.sin(a)*(cr-3));ctx.lineTo(Math.cos(a)*(cr+5),Math.sin(a)*(cr+5));ctx.lineWidth=2.5;ctx.strokeStyle='#b8860b';ctx.stroke();}
+    ctx.fillStyle='#0a234a';ctx.font='900 30px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('RCW',0,2);
+    ctx.restore();
+
+    // ---------- header ----------
+    ctx.fillStyle='#0a234a';ctx.textAlign='center';
+    ctx.font='900 40px Georgia,serif';ctx.fillText('RCW IT TRAINING',W/2,196);
+    ctx.fillStyle='#b8860b';ctx.font='700 20px Georgia,serif';ctx.fillText('ACADEMIC SCORECARD',W/2,228);
+    ctx.fillStyle='#5f6c84';ctx.font='600 14px Inter,Arial,sans-serif';ctx.fillText('Statement of Result · Hands-on Lab Assessment',W/2,252);
+    ctx.strokeStyle='#0a234a';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(80,272);ctx.lineTo(W-80,272);ctx.stroke();
+
+    // ---------- candidate info ----------
+    var pid=String(Math.abs((data.lab+data.score+data.total).split('').reduce(function(a,c){return a+c.charCodeAt(0);},0))).padStart(5,'0');
+    ctx.textAlign='left';ctx.fillStyle='#101b3b';ctx.font='700 16px Inter,Arial,sans-serif';
+    ctx.fillText('Candidate:', 90, 308); ctx.fillStyle='#5f6c84';ctx.font='600 16px Inter,Arial,sans-serif';ctx.fillText('Learner', 190, 308);
+    ctx.fillStyle='#101b3b';ctx.font='700 16px Inter,Arial,sans-serif';
+    ctx.fillText('Roll No:', 520, 308); ctx.fillStyle='#5f6c84';ctx.font='600 16px Inter,Arial,sans-serif';ctx.fillText('RCW-'+pid, 600, 308);
+    ctx.fillStyle='#101b3b';ctx.font='700 16px Inter,Arial,sans-serif';
+    ctx.fillText('Examination:', 90, 336); ctx.fillStyle='#5f6c84';ctx.font='600 16px Inter,Arial,sans-serif';ctx.fillText(data.lab, 205, 336);
+
+    // ---------- marks table ----------
+    var tx=90, ty=360, tw=W-180, th=108;
+    ctx.fillStyle='#0a234a';ctx.fillRect(tx,ty,tw,th);
+    ctx.fillStyle='#f6f2e7';
+    ctx.font='700 15px Inter,Arial,sans-serif';
+    ctx.textAlign='left';ctx.fillText('Subject / Module',tx+20,ty+28);
+    ctx.fillText('Obtained',tx+tw*0.55,ty+28);
+    ctx.fillText('Maximum',tx+tw*0.72,ty+28);
+    ctx.fillText('Grade',tx+tw*0.9,ty+28);
+    ctx.strokeStyle='rgba(246,242,231,.4)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(tx,ty+40);ctx.lineTo(tx+tw,ty+40);ctx.stroke();
+    var pct=Math.round(data.score/Math.max(1,data.total)*100);
+    var grade=pct>=90?'A+':pct>=80?'A':pct>=70?'B+':pct>=60?'B':pct>=50?'C':'D';
+    ctx.fillStyle='#ffffff';ctx.font='700 22px Inter,Arial,sans-serif';
+    ctx.fillText(data.tag,tx+20,ty+84);
+    ctx.fillText(String(data.score),tx+tw*0.55,ty+84);
+    ctx.fillText(String(data.total),tx+tw*0.72,ty+84);
+    ctx.fillStyle='#9ee636';ctx.font='900 22px Inter,Arial,sans-serif';
+    ctx.fillText(grade,tx+tw*0.9,ty+84);
+
+    // ---------- summary ----------
+    ctx.textAlign='left';
+    ctx.fillStyle='#101b3b';ctx.font='700 16px Inter,Arial,sans-serif';
+    ctx.fillText('Percentage:',90,506);
+    ctx.fillText('Result:',360,506);
+    ctx.fillText('Rank:',620,506);
+    ctx.fillText('Time:',860,506);
+    ctx.fillStyle='#0a234a';ctx.font='900 20px Inter,Arial,sans-serif';
+    ctx.fillText(pct+'%',200,506);
+    ctx.fillStyle=pct>=50?'#0a6e2e':'#b3261e';ctx.fillText(pct>=50?'PASS':'NEEDS PRACTICE',450,506);
+    ctx.fillStyle='#0a234a';ctx.fillText(data.rank,680,506);
+    ctx.fillStyle='#0a234a';ctx.fillText(data.time,920,506);
+
+    // ---------- signature + stamp ----------
+    ctx.strokeStyle='#5f6c84';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(120,560);ctx.lineTo(340,560);ctx.stroke();
+    if (sigImg && sigImg.complete && sigImg.naturalWidth) {
+      var sw=220, sh=sw*(sigImg.naturalHeight/sigImg.naturalWidth);
+      ctx.drawImage(sigImg, 230-sw/2, 560-sh+6, sw, sh);
+    }
+    ctx.fillStyle='#5f6c84';ctx.font='600 13px Inter,Arial,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Founder',230,578);
+
+    ctx.save();ctx.translate(880,540);ctx.rotate(-0.12);
+    ctx.strokeStyle='#b3261e';ctx.lineWidth=3.5;
+    ctx.beginPath();ctx.arc(0,0,44,0,Math.PI*2);ctx.stroke();
+    ctx.strokeStyle='#b3261e';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(0,0,35,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle='#b3261e';ctx.font='900 18px Inter,Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('RCW',0,-4);
+    ctx.font='700 9px Inter,Arial,sans-serif';
+    ctx.fillText('VERIFIED',0,15);
+    ctx.restore();
+
+    // footer
+    ctx.fillStyle='#5f6c84';ctx.font='600 14px Inter,Arial,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Learn. Practice. Grow.  ·  rcwittraining.in',W/2,H-40);
+  }
+
+  function render(W,H){var cv=document.createElement('canvas');cv.width=W;cv.height=H;drawCard(cv.getContext('2d'),W,H);return cv;}
+  var sigImg=new Image();sigImg.src='signature.png';
+  sigImg.onload=function(){ document.getElementById('preview').src=render(1200,630).toDataURL('image/png'); };
+  var cv=render(1200,630);
+  document.getElementById('preview').src=cv.toDataURL('image/png');
+
+  document.getElementById('dl').onclick=function(){
+    var a=document.createElement('a');a.download='rcwittraining-scorecard.png';a.href=render(1200,630).toDataURL('image/png');a.click();
+    toast('Scorecard downloaded!');
+  };
+  document.getElementById('sh').onclick=function(){
+    copy('I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" at RCW IT Training 🏆 Can you beat me? Try it free: https://www.rcwittraining.in');
+  };
+
+  // Share on LinkedIn — opens the post composer with the caption pre-filled.
+  // (LinkedIn doesn't allow auto-attaching an image, so the user attaches the
+  //  downloaded PNG themselves.)
+  document.getElementById('linkedin').onclick=function(){
+    var text = 'I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" at RCW IT Training 🏆\nCan you beat me? Try it free: https://www.rcwittraining.in';
+    var url = 'https://www.linkedin.com/feed/?shareActive=true&text=' + encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener');
+  };
+
+  // Share the actual scorecard IMAGE via the native share sheet.
+  // On phones the user can pick LinkedIn and the image goes with the post.
+  document.getElementById('shareimg').onclick=async function(){
+    var cv = render(1200, 630);
+    var blob;
+    if (cv.toBlob) {
+      blob = await new Promise(function(res){ cv.toBlob(function(b){ res(b); }, 'image/png'); });
+    } else {
+      var r = await fetch(cv.toDataURL('image/png'));
+      blob = await r.blob();
+    }
+    var file = new File([blob], 'rcwittraining-scorecard.png', { type: 'image/png' });
+    var shareData = {
+      files: [file],
+      title: 'My RCW IT Training scorecard',
+      text: 'I just scored '+data.score+'/'+data.total+' on "'+data.lab+'" 🏆 Can you beat me? https://www.rcwittraining.in'
+    };
+
+    // Can the browser share files directly?
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share(shareData);
+        return; // shared successfully (user picked the app, e.g. LinkedIn)
+      } catch (e) {
+        if (e && e.name === 'AbortError') return; // user cancelled — do nothing
+        // otherwise fall through to fallback
+      }
+    }
+    // Fallback: download the image and hint the user to attach it
+    var a=document.createElement('a');a.download='rcwittraining-scorecard.png';a.href=cv.toDataURL('image/png');a.click();
+    toast('This browser can\'t share files directly — image downloaded. Attach it to your post!');
+  };
+
+  // Save this score to the Skill Passport (same localStorage key as skill-passport.html)
+  var PK='rcw_passport';
+  document.getElementById('save').onclick=function(){
+    var S=null;
+    try{ S=JSON.parse(localStorage.getItem(PK)); }catch(e){}
+    if(!S || !S.act){
+      S={name:'Student', xp:0, labs:0, qs:0, streak:0, act:{}, badges:{first:0,five:0,quiz:0,streak7:0,streak14:0,beat:0,elite:0}};
+    }
+    S.labs++; S.xp+=40;
+    var k=new Date().toISOString().slice(0,10); S.act[k]=(S.act[k]||0)+3;
+    var d=new Date(), st=0;
+    while(S.act[d.toISOString().slice(0,10)]){ st++; d.setDate(d.getDate()-1); }
+    S.streak=st;
+    S.badges.first = S.labs>=1?1:S.badges.first;
+    S.badges.five  = S.labs>=5?1:S.badges.five;
+    try{ localStorage.setItem(PK,JSON.stringify(S)); }catch(e){}
+    toast('Saved to your Skill Passport! (+40 XP)');
+    document.getElementById('goto').style.display='inline-flex';
+  };
+})();
+</script>
+</body>
+</html>

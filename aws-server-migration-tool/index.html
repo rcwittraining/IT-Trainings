@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS Server Migration Tool v1.0.0 | RCW IT Training</title>
+<meta name="description" content="Free GUI tool to migrate on-premises physical and virtual servers to AWS using MGN and EC2 VM Import/Export. Single-file Windows executable - no Python, no installs.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#172d47;background:#f2f6fb}
+a{color:#1261a6}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* top bar */
+.topbar{background:#061633;color:#fff;padding:14px 0}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{font:700 18px Georgia,serif;color:#fff;text-decoration:none;letter-spacing:-.01em}
+.brand span{color:#ffd51d}
+.topbar a.back{color:#9fc3e6;font-size:12px;font-weight:800;text-decoration:none}
+
+/* hero */
+.hero{color:#fff;background:radial-gradient(circle at 87% 0,rgba(75,215,255,.2),transparent 30rem),linear-gradient(125deg,#061633,#0b3264);padding:clamp(44px,7vw,84px) 0 clamp(40px,6vw,72px)}
+.kicker{color:#55d5ff;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-family:Georgia,serif;font-size:clamp(34px,5vw,58px);line-height:1.05;letter-spacing:-.04em;max-width:820px}
+.hero h1 span{color:#ffd51d}
+.hero p.lede{max-width:760px;margin:20px 0 0;color:#bdd2e9;font-size:16px;line-height:1.65}
+.dlrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:14px 22px;border-radius:8px;font-size:14px;font-weight:850;text-decoration:none;border:1px solid transparent}
+.btn.primary{color:#fff;background:#1261a6;border-color:#1261a6;box-shadow:0 10px 26px rgba(6,45,90,.35)}
+.btn.primary:hover{background:#1676c9}
+.btn.alt{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(139,199,239,.35)}
+.btn.alt:hover{background:rgba(255,255,255,.14)}
+.btn small{display:block;font-size:10.5px;font-weight:700;opacity:.85}
+.meta{margin-top:22px;color:#8fb0cf;font-size:12px;line-height:1.7}
+.meta code{color:#cfe4f7;background:rgba(255,255,255,.08);padding:2px 7px;border-radius:5px;font-size:11px;word-break:break-all}
+
+/* sections */
+section{padding:clamp(38px,5vw,64px) 0}
+.eyebrow{color:#1261a6;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+h2{font:700 clamp(24px,3.4vw,34px) Georgia,serif;color:#0a294e;margin:8px 0 14px;letter-spacing:-.02em}
+.sub{color:#5d7086;font-size:14.5px;line-height:1.65;max-width:780px}
+
+/* feature cards */
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px}
+.card{background:#fff;border:1px solid #dce5ee;border-radius:12px;padding:20px;box-shadow:0 6px 18px rgba(7,30,67,.045)}
+.card .ic{width:38px;height:38px;display:grid;place-items:center;background:linear-gradient(135deg,#0b3264,#1261a6);color:#ffd51d;border-radius:9px;font-size:17px;margin-bottom:12px}
+.card h3{font-size:15px;color:#172d47;margin-bottom:6px}
+.card p{color:#5d7086;font-size:12.5px;line-height:1.6}
+
+/* steps */
+.steps{counter-reset:s;display:grid;gap:12px;margin-top:26px;max-width:820px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:16px;background:#fff;border:1px solid #dce5ee;border-radius:10px;padding:18px 20px}
+.step:before{counter-increment:s;content:counter(s);width:34px;height:34px;display:grid;place-items:center;color:#fff;background:#0b315d;border:3px solid #d6a720;border-radius:50%;font:900 14px Georgia,serif}
+.step b{display:block;font-size:14px;margin-bottom:3px}
+.step p{color:#5d7086;font-size:12.5px;line-height:1.6}
+
+/* screenshots */
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:26px}
+.shot{background:#fff;border:1px solid #dce5ee;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(7,30,67,.045)}
+.shot img{width:100%;display:block}
+.shot figcaption{padding:10px 14px;color:#526a82;font-size:11.5px;font-weight:750;border-top:1px solid #e2e9f0}
+
+/* security strip */
+.sec{background:linear-gradient(105deg,#eff8ff,#f7fbfe);border:1px solid #bddbf0;border-left:5px solid #1261a6;border-radius:10px;padding:24px 26px;margin-top:26px}
+.sec h3{font:700 18px Georgia,serif;color:#0a294e;margin-bottom:8px}
+.sec ul{margin:8px 0 0 18px;color:#5d7086;font-size:13px;line-height:1.8}
+
+footer{background:#061633;color:#8fb0cf;padding:26px 0;font-size:12px}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:860px){.cards,.shots{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="/">RCW <span>IT Training</span></a>
+    <a class="back" href="/">← Back to catalogue</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">FREE DOWNLOADABLE TOOL · AWS · MIGRATION</div>
+    <h1>AWS Server Migration Tool <span>v1.0.0</span></h1>
+    <p class="lede">A desktop GUI that migrates on-premises <b>physical and virtual servers to AWS</b> —
+    via AWS Application Migration Service (MGN), EC2 VM Import/Export, or rebuild-as-new EC2 —
+    with live discovery, right-sizing, and a real-time migration monitor.
+    One file. Double-click. <b>No Python, no installs.</b></p>
+
+    <div class="dlrow">
+      <a class="btn primary" href="AWS-Server-Migration-Tool.exe" download>⬇ Download for Windows
+        <small>.exe · 11 MB · Windows 10/11 x64</small></a>
+      <a class="btn alt" href="aws-server-migration-tool_linux-x86_64" download>⬇ Download for Linux
+        <small>ELF · 27 MB · x86_64</small></a>
+    </div>
+
+    <p class="meta">
+      SHA-256 (Windows): <code>704afd6a06e99400585fa44394f3dc16fb743bded0acb7fae5d45f1bbc04aa9c</code><br>
+      SHA-256 (Linux): <code>419ff3145e95794a0cae2ca24c7c865119445c8b278e33f01fa4e4a73ae06543</code>
+    </p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">What it does</div>
+    <h2>Full P2V / V2V migration workflow, in a desktop app</h2>
+    <p class="sub">Designed for consultants and admins moving fleets of on-premises servers into AWS — without scripting, without agents to deploy by hand, and with a safe simulated mode for rehearsal.</p>
+    <div class="cards">
+      <div class="card"><div class="ic">⇄</div><h3>Three migration engines</h3><p>Per-server choice of AWS MGN (agent-based, block-level replication), EC2 VM Import/Export (export → S3 → AMI), or rebuild-as-new EC2 for non-x86 / unsupported hosts.</p></div>
+      <div class="card"><div class="ic">☁</div><h3>Simulated &amp; live AWS</h3><p>Rehearse entire migrations end-to-end in the built-in simulator (zero cost, zero risk), then switch to your real account with access key, secret key and session token.</p></div>
+      <div class="card"><div class="ic">🖥</div><h3>Live inventory &amp; discovery</h3><p>Add servers manually or import CSV, or scan your network over SSH / WinRM to auto-detect OS, CPU, RAM, disks and build the fleet automatically.</p></div>
+      <div class="card"><div class="ic">📐</div><h3>Right-sizing &amp; cost plan</h3><p>Maps each source to a target EC2 instance type, estimates the monthly bill per server, and shows the plan before anything touches AWS.</p></div>
+      <div class="card"><div class="ic">📊</div><h3>Real-time monitor</h3><p>Watch replication progress, launches and cutovers live; logs every API call so you can audit exactly what the tool did.</p></div>
+      <div class="card"><div class="ic">🔐</div><h3>Security first</h3><p>Credentials are only stored locally (AES-encrypted when available) and are used solely to call AWS APIs. Nothing is ever sent anywhere else.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;border-top:1px solid #dce5ee;border-bottom:1px solid #dce5ee">
+  <div class="wrap">
+    <div class="eyebrow">Screenshots</div>
+    <h2>See the workflow</h2>
+    <div class="shots">
+      <figure class="shot"><img src="1-connection.png" alt="AWS connection settings"><figcaption>1 · AWS connection &amp; mode</figcaption></figure>
+      <figure class="shot"><img src="2-inventory.png" alt="Server inventory"><figcaption>2 · Server inventory</figcaption></figure>
+      <figure class="shot"><img src="3-target.png" alt="Target configuration"><figcaption>3 · Target AWS configuration</figcaption></figure>
+      <figure class="shot"><img src="4-plan.png" alt="Migration plan"><figcaption>4 · Right-sized migration plan</figcaption></figure>
+      <figure class="shot"><img src="5-monitor-running.png" alt="Monitor running"><figcaption>5 · Live migration monitor</figcaption></figure>
+      <figure class="shot"><img src="6-monitor-finished.png" alt="Monitor finished"><figcaption>6 · Completed migrations</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Getting started</div>
+    <h2>From download to first migration in minutes</h2>
+    <div class="steps">
+      <div class="step"><div><b>Download &amp; run</b><p>Save the single file and double-click it — the GUI opens directly. Nothing to install; Python and all dependencies are bundled inside the executable.</p></div></div>
+      <div class="step"><div><b>Rehearse in Simulated mode</b><p>The tool starts in “Simulated AWS (no cost)”. Load the sample fleet, review the right-sizing plan, and run 10 end-to-end demo migrations to learn every screen safely.</p></div></div>
+      <div class="step"><div><b>Connect your account</b><p>Switch to “Live AWS (real account)” and enter your access key ID, secret access key and session token (temporary STS credentials). Test connection validates them instantly.</p></div></div>
+      <div class="step"><div><b>Build your inventory</b><p>Add servers by hand, import a CSV, or scan live hosts over SSH/WinRM. Choose MGN, VM Import/Export, or rebuild-as-new for each machine.</p></div></div>
+      <div class="step"><div><b>Plan, launch, monitor</b><p>Validate the plan, start migrations, and watch replication, launches and cutovers in the live monitor with a full API-call log.</p></div></div>
+    </div>
+
+    <div class="sec">
+      <h3>Good to know before you run it</h3>
+      <ul>
+        <li><b>Windows SmartScreen:</b> the exe is unsigned, so on first launch Windows may show “Windows protected your PC”. Click <i>More info → Run anyway</i>. That is normal for any freshly built, unsigned tool.</li>
+        <li><b>Least-privilege IAM:</b> create a dedicated user/role with only MGN, EC2, S3 and STS permissions; the tool works fully with temporary session-token credentials.</li>
+        <li><b>Costs:</b> simulated mode costs nothing. Live migrations create real AWS resources (MGN replication servers, S3 buckets, EC2 instances) — review the plan screen before launching.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© RCW IT Training — free tools &amp; labs for IT professionals.</div>
+    <div>Tool provided “as is”. AWS trademarks belong to Amazon Web Services.</div>
+  </div>
+</footer>
+
+</body>
+</html>

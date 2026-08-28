@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a35">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Ansible Inventory · RCW IT Training</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="labRoot"></div>
+  <script>window.RCW_LAB = {"id": "ansible-inventory", "title": "Ansible Inventory", "category": "DevOps • Automation", "badge": "ANS", "accent": "#e00", "difficulty": "INTERMEDIATE", "host": "iac-node-01", "user": "devops", "intro": ["Manage Ansible inventory and ad-hoc commands."], "files": {"/etc/ansible/hosts": "[webservers]\nweb1 ansible_host=192.168.1.10\nweb2 ansible_host=192.168.1.11\n\n[dbservers]\ndb1 ansible_host=192.168.1.20\n"}, "objectives": [{"name": "View inventory", "desc": "Read the inventory file.", "points": 25, "match": ["cat\\s+/etc/ansible/hosts"], "success": "✓ Inventory read."}, {"name": "List hosts", "desc": "List with ansible --list-hosts.", "points": 25, "match": ["ansible\\s+.*--list-hosts"], "success": "✓ Hosts listed."}, {"name": "Ping", "desc": "Ping with ansible all -m ping.", "points": 25, "match": ["ansible\\s+all\\s+-m\\s+ping"], "success": "✓ Pinged."}, {"name": "Ad-hoc command", "desc": "Run a command with ansible -m command.", "points": 25, "match": ["ansible\\s+\\S+\\s+-m\\s+command"], "success": "✓ Ad-hoc command run."}], "hint": ["cat /etc/ansible/hosts", "ansible all --list-hosts -i /etc/ansible/hosts", "ansible all -m ping", "ansible webservers -m command -a 'uptime'"], "help": "ansible GROUP -m MODULE -a 'ARGS' · --list-hosts · all -m ping", "certTitle": "Ansible Inventory Champion", "certDesc1": "for mastering Ansible inventory", "certDesc2": "with hosts and ad-hoc commands.", "certChallenge": "Ansible inventory", "certFooter": "DevOps • Challenge", "headline": "Ansible Inventory", "lead": "Manage Ansible inventory and ad-hoc commands.", "brief": "Ansible Inventory", "briefCopy": "Manage Ansible inventory and ad-hoc commands.", "incident": "ANSIBLE-INVENTORY · iac-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Ansible Inventory.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "ANS", "minutes": 10};</script>
+  <script src="../passport.js"></script>
+  <script src="../lab-engine.js"></script>
+</body>
+</html>
