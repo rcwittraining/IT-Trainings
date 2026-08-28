@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: publish-articles
+  cancel-in-progress: false
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -17,9 +20,14 @@ jobs:
         run: python scripts/publish_vendor_intelligence.py
       - name: Commit website update
         run: |
-          if git diff --quiet; then exit 0; fi
           git config user.name 'RCW Vendor Intelligence Publisher'
           git config user.email 'actions@github.com'
           git add index.html data/vendor-intelligence-state.json vendor-tech-certification-webinar-roundup-*.html
+          if git diff --cached --quiet; then echo 'No new vendor items to publish.'; exit 0; fi
           git commit -m 'Publish weekly vendor technology roundup'
+          for attempt in 1 2 3 4 5; do
+            git push && exit 0
+            echo "Push rejected (remote moved); rebasing and retrying (attempt $attempt)..."
+            git pull --rebase origin main
+          done
           git push

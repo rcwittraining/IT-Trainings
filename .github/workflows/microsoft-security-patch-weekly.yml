@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: publish-articles
+  cancel-in-progress: false
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -20,12 +23,17 @@ jobs:
         run: python scripts/publish_microsoft_patch_digest.py
       - name: Commit and publish when there is new advisory content
         run: |
-          if git diff --quiet; then
-            echo 'No new Microsoft security updates to publish.'
-            exit 0
-          fi
           git config user.name 'RCW Patch Publisher'
           git config user.email 'actions@github.com'
           git add index.html data/ microsoft-security-patch-roundup-*.html
+          if git diff --cached --quiet; then
+            echo 'No new Microsoft security updates to publish.'
+            exit 0
+          fi
           git commit -m 'Publish weekly Microsoft security patch roundup'
+          for attempt in 1 2 3 4 5; do
+            git push && exit 0
+            echo "Push rejected (remote moved); rebasing and retrying (attempt $attempt)..."
+            git pull --rebase origin main
+          done
           git push
