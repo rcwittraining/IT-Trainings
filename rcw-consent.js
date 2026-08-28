@@ -1,24 +1,74 @@
 /* ==========================================================================
-   RCW IT Training - consent layer (rcw-consent.js)  v1.0
+   RCW IT Training - consent + analytics layer (rcw-consent.js)  v1.1
    --------------------------------------------------------------------------
-   Drop-in cookie/consent gate for the static site (GitHub Pages friendly).
-     1) Google AdSense  - the ad script is injected ONLY after "Accept all".
-     2) YouTube embeds  - click-to-load placeholders + youtube-nocookie.com.
+   Drop-in privacy layer for the static site (GitHub Pages friendly).
+     1) Google Analytics 4 - loaded on every page via Google Consent Mode v2.
+        Traffic measurement (analytics) runs cookieless/anonymised by default;
+        advertising cookies are held back until "Accept all".
+     2) Google AdSense      - the ad script is injected ONLY after "Accept all".
+     3) YouTube embeds      - click-to-load placeholders + youtube-nocookie.com.
 
-   INSTALL (see COMPLIANCE-REPORT.md):
-     1) REMOVE the current adsbygoogle <script> tag from the page <head>.
-     2) ADD   <script src="rcw-consent.js"></script>  in the <head>
-        (on every page that shows ads or an embedded video - or site-wide).
-     3) Done. The banner appears until a choice is made; a small gear button
-        re-opens the choice afterwards.
+   INSTALL:
+     Add this single tag as the FIRST script inside <head> on every page
+     (an automated injection script handles relative paths by depth):
+        <script src="/rcw-consent.js"></script>
+        ...or, for a nested folder page, use the correct ../ depth.
+
+   CONFIG: set GA_MEASUREMENT_ID to your GA4 id, e.g. "G-ABC123XYZ9".
    =========================================================================== */
 (function () {
   "use strict";
 
   /* ---- configuration ------------------------------------------------------ */
-  var ADSENSE_CLIENT = "ca-pub-8225059092422989";  /* your AdSense client id  */
-  var STORAGE_KEY = "rcw_consent_v1";              /* accepted | essential    */
-  var POLICY_URL = "privacy.html#privacy-choices";
+  var ADSENSE_CLIENT = "ca-pub-8225059092422989";   /* your AdSense client id  */
+  var GA_MEASUREMENT_ID = "";                        /* GA4 id, e.g. G-ABC123  */
+  var STORAGE_KEY = "rcw_consent_v1";               /* accepted | essential    */
+  var POLICY_URL = "/privacy.html#privacy-choices";
+
+  /* ==========================================================================
+     GOOGLE ANALYTICS 4  +  CONSENT MODE v2
+     --------------------------------------------------------------------------
+     Defaults are set BEFORE gtag.js loads (Google requirement).
+       - analytics_storage 'granted' by default => traffic is measured even
+         before a choice, using cookieless pings (no advertising cookies);
+         this is what powers the daily-traffic dashboard.
+       - ad_storage / ad_user_data / ad_personalization stay 'denied' until
+         the visitor clicks "Accept all".
+     ========================================================================== */
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  window.gtag = gtag;
+
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted",
+    wait_for_update: 500
+  });
+  gtag("js", new Date());
+
+  var gaLoaded = false;
+  function loadGoogleAnalytics() {
+    if (gaLoaded || !/^G-[A-Z0-9]+$/i.test(GA_MEASUREMENT_ID || "")) return;
+    gaLoaded = true;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_MEASUREMENT_ID;
+    document.head.appendChild(s);
+    gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  /* push the current consent choice into Google Consent Mode */
+  function syncGoogleConsent(choice) {
+    var accepted = (choice === "accepted");
+    gtag("consent", "update", {
+      ad_storage: accepted ? "granted" : "denied",
+      ad_user_data: accepted ? "granted" : "denied",
+      ad_personalization: accepted ? "granted" : "denied",
+      analytics_storage: "granted"
+    });
+  }
 
   /* ---- consent state ------------------------------------------------------- */
   function getConsent() {
@@ -105,8 +155,8 @@
       "flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;";
     var text = document.createElement("div");
     text.style.cssText = "flex:1 1 380px;line-height:1.5;";
-    text.innerHTML = "We use cookies for the embedded YouTube player and, with your " +
-      "consent, Google AdSense advertising. See our " +
+    text.innerHTML = "We use privacy-friendly analytics to understand site traffic, plus the " +
+      "embedded YouTube player and, with your consent, Google AdSense advertising. See our " +
       '<a href="' + POLICY_URL + '" style="color:#9cc9f5;">privacy &amp; cookie policy</a>.';
     var actions = document.createElement("div");
     actions.style.cssText = "flex:0 0 auto;display:flex;gap:8px;";
@@ -156,14 +206,17 @@
   /* ---- apply + init ----------------------------------------------------------- */
   function applyConsent() {
     wrapVideos();
-    if (getConsent() === "accepted") {
+    var choice = getConsent();
+    syncGoogleConsent(choice);                 /* tell GA the current consent mode */
+    if (choice === "accepted") {
       loadAdsense();
       revealAll();
     }
-    if (getConsent()) hideBanner();
+    if (choice) hideBanner();
   }
 
   function init() {
+    loadGoogleAnalytics();                    /* GA4 loads immediately (consent mode set) */
     function ready() {
       applyConsent();
       if (!getConsent()) buildBanner();
@@ -175,7 +228,7 @@
     }
   }
 
-  window.rcwConsent = { get: getConsent };   /* public hook for your own code */
+  window.rcwConsent = { get: getConsent, gtag: gtag };   /* public hook */
 
   init();
 })();
