@@ -4,241 +4,301 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Access Code Issuer (Admin) | RCW IT Training</title>
+  <title>Approval Console (Admin) | RCW IT Training</title>
   <script src="../rcw-consent.js"></script>
   <style>
-    :root{--n:#061633;--i:#101b3b;--b:#078be8;--b2:#0758c8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1;--ok:#159a62;--warn:#b7791f}
+    :root{--n:#061633;--i:#101b3b;--b:#078be8;--b2:#0758c8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1;--ok:#0f7b4d;--warn:#b7791f;--red:#c0392b}
     *{box-sizing:border-box}
     body{margin:0;background:var(--p);color:var(--i);font:15.5px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
     .top{background:linear-gradient(112deg,#020a18,#06142c);border-bottom:4px solid var(--b);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}
     .mark{border:1px solid var(--c);border-radius:10px;color:var(--c);font-size:11px;font-weight:900;padding:10px 7px}
     .brand{font-weight:800}.brand small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.6px;text-transform:uppercase}
     .home{margin-left:auto;color:var(--c);font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}
-    .wrap{max-width:920px;margin:auto;padding:36px 20px 70px}
+    .wrap{max-width:940px;margin:auto;padding:34px 20px 70px}
     .ey{color:#0769be;font-size:12px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase}
-    h1{font-size:clamp(26px,4vw,36px);margin:6px 0 4px}
-    .lead{color:#42516b;margin:0 0 18px}
-    .card{background:#fff;border:1px solid var(--l);border-radius:16px;padding:24px 26px;box-shadow:0 8px 22px #081f4512;margin:16px 0}
-    .card h2{font-size:19px;margin:0 0 12px}
-    label{display:block;font-weight:700;font-size:13.5px;margin:14px 0 5px}
-    select,input{font:inherit;padding:10px 12px;border:1px solid #c4d2e6;border-radius:9px;width:100%;background:#fff}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row>div{flex:1;min-width:200px}
-    .btn{display:inline-block;border:0;border-radius:9px;padding:11px 18px;font-weight:800;font-size:14px;cursor:pointer;text-decoration:none}
+    h1{font-size:clamp(24px,3.6vw,33px);margin:6px 0 4px}
+    .lead{color:#42516e;margin:0 0 16px}
+    .card{background:#fff;border:1px solid var(--l);border-radius:16px;padding:22px 24px;box-shadow:0 8px 22px #081f4512;margin:16px 0}
+    .card h2{font-size:18px;margin:0 0 6px}
+    label{display:block;font-weight:700;font-size:13.5px;margin:12px 0 5px}
+    select,input{font:inherit;padding:11px 12px;border:1px solid #c4d2e6;border-radius:9px;width:100%;background:#fff}
+    .row{display:flex;gap:10px;flex-wrap:wrap}.row>div{flex:1;min-width:200px}
+    .btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:9px;padding:12px 20px;font-weight:800;font-size:14.5px;cursor:pointer;text-decoration:none}
     .btn.primary{background:linear-gradient(115deg,#078be8,#0758c8);color:#fff;box-shadow:0 6px 16px rgba(7,88,200,.28)}
     .btn.ghost{background:#fff;color:var(--b2);border:1.5px solid #b9d6f5}
-    .btn.warn{background:#b7791f;color:#fff}
-    .out{margin-top:16px;display:none}
-    .field{margin:12px 0}
-    .field .lab{font-size:12px;font-weight:800;color:var(--m);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-    .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#0b1f3d;color:#9fe6ff;border-radius:9px;padding:12px 14px;word-break:break-all;font-size:14px;white-space:pre-wrap}
-    .code-big{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eafaf1;border:1.5px solid #7fd8a4;color:#0b6b3a;border-radius:9px;padding:14px 16px;font-size:22px;font-weight:800;letter-spacing:1px;text-align:center}
+    .btn.small{padding:8px 13px;font-size:13px}
+    .btn.red{background:#fdecea;color:var(--red);border:1px solid #f5b7b1}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
     .small{font-size:13px;color:var(--m)}
-    .ok{color:var(--ok);font-weight:700}.err{color:#c0392b;font-weight:700}
-    .note{border-left:4px solid var(--warn);background:#fff8e8;border-radius:6px;padding:12px 15px;color:#694e12;font-size:13.5px;margin:14px 0}
-    .oknote{border-left:4px solid var(--ok);background:#eafaf1;border-radius:6px;padding:12px 15px;color:#0b5c34;font-size:13.5px;margin:14px 0}
+    .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+    .ok{color:var(--ok);font-weight:700}.err{color:var(--red);font-weight:700}
+    .note{border-left:4px solid var(--warn);background:#fff8e8;border-radius:6px;padding:12px 15px;color:#694e12;font-size:13.5px;margin:12px 0}
+    .oknote{border-left:4px solid var(--ok);background:#eafaf1;border-radius:6px;padding:12px 15px;color:#0b5c34;font-size:13.5px;margin:12px 0}
+    .statusline{font-size:13.5px;padding:8px 0;min-height:20px}
+    .code-big{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eafaf1;border:1.5px solid #7fd8a4;color:#0b6b3a;border-radius:9px;padding:15px 16px;font-size:clamp(20px,5vw,27px);font-weight:800;letter-spacing:1px;text-align:center;margin:10px 0}
     table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
-    th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--l)}
+    th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--l);vertical-align:top}
     th{color:var(--m);font-size:12px;text-transform:uppercase;letter-spacing:.4px}
-    a.lnk{color:var(--b2);font-weight:700}
-    textarea{width:100%;min-height:150px;font:13.5px/1.5 ui-monospace,Consolas,monospace;border:1px solid #c4d2e6;border-radius:9px;padding:12px}
+    .codecell{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#374151;word-break:break-all}
+    .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800}
+    .badge.a{background:#e7f0ff;color:#1e52c0}.badge.l{background:#f0ebff;color:#6d28d9}
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    details{margin-top:10px}summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--b2)}
+    ol{color:#42516e;padding-left:22px}ol li{margin:6px 0}
+    .tokbox{display:none;margin-top:10px}
   </style>
 </head>
 <body>
   <header class="top">
     <span class="mark">RCW</span>
-    <span class="brand">RCW IT Training<small>Admin &middot; Restricted tools</small></span>
+    <span class="brand">RCW IT Training<small>Admin approval console</small></span>
     <a class="home" href="/">&larr; Back to site</a>
   </header>
 
   <main class="wrap">
     <div class="ey">Private &middot; administrator only</div>
-    <h1>Access-code issuer</h1>
-    <p class="lead">When you approve a request, generate a personal code here, add the hash line to the live code list (a browser-editable note), and e-mail the code to the person. No website deploy or GitHub push is needed &mdash; codes go live within ~2&ndash;5 minutes and are revoked by deleting a line.</p>
+    <h1>Restricted-download approvals</h1>
+    <p class="lead">When someone asks for a restricted tool, approve them here in <b>one click</b>: the code is created and activated automatically, then just e-mail it. Revoke a code with one click too. Nothing to edit by hand.</p>
 
-    <div class="card">
-      <h2>1 &middot; Generate a code for an approved request</h2>
+    <!-- CONNECTION -->
+    <section class="card">
+      <h2>1 &middot; Connect this console <span class="small">(one time, on this browser)</span></h2>
+      <div id="connStatus" class="statusline">Checking connection&hellip;</div>
+      <div class="tokbox" id="tokBox">
+        <label for="token">GitHub token (stored only in this browser, used to update your code list)</label>
+        <input id="token" type="password" placeholder="ghp_... or github_pat_..." autocomplete="off" spellcheck="false">
+        <p class="small" style="margin:8px 0 4px">Create a free gist-only token:
+          open <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a>
+          &rarr; <b>Generate new token (fine-grained)</b> &rarr; under <i>Account permissions</i> set <b>Gists = Read and write</b> &rarr; Generate &rarr; paste it here.
+          This token only edits your code list; it is never saved in the website &mdash; only in this browser on this device.</p>
+        <div style="margin-top:10px">
+          <button class="btn primary" id="saveToken" type="button">Save &amp; connect</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ISSUE -->
+    <section class="card" id="issueCard">
+      <h2>2 &middot; Approve a request</h2>
       <div class="row">
         <div>
-          <label for="tool">Tool</label>
+          <label for="tool">Which tool?</label>
           <select id="tool">
             <option value="AWNIXOPS">RCW AWSNixOps (awsnixops.html)</option>
             <option value="LAF3">Linux Auto-Fixer v3 (linux-autofixer-v3)</option>
           </select>
         </div>
         <div>
-          <label for="who">Requester name / e-mail (for your notes, optional)</label>
-          <input id="who" type="text" placeholder="e.g. Ravi Kumar / ravi@example.com">
+          <label for="who">Requester (name or e-mail &mdash; for your records, optional)</label>
+          <input id="who" type="text" placeholder="e.g. Ravi / ravi@example.com">
         </div>
       </div>
-      <p style="margin-top:16px">
-        <button class="btn primary" id="gen" type="button">&#128274; Generate access code</button>
-        <button class="btn ghost" id="verifyall" type="button">Refresh live code list</button>
+      <p style="margin-top:14px">
+        <button class="btn primary" id="issueBtn" type="button">&#9989; Approve &amp; create code</button>
       </p>
-
-      <div class="out" id="out">
-        <div class="field">
-          <div class="lab">Access code &mdash; send this to the approved person</div>
-          <div class="code-big" id="codeOut">&mdash;</div>
-          <p class="small" style="margin:8px 0 0">Codes are single-use-per-person; tell them not to share it. Codes can be revoked instantly from the list.</p>
-        </div>
-        <div class="field">
-          <div class="lab">Line to add to the live code list (contains only a hash &mdash; safe to paste)</div>
-          <div class="mono" id="hashLine">&mdash;</div>
-        </div>
+      <div id="issueResult" style="display:none">
+        <div class="oknote"><b>Approved &amp; activated.</b> Send this code to the requester (works within ~2&ndash;5 minutes):</div>
+        <div class="code-big mono" id="codeOut">&mdash;</div>
         <div class="row">
-          <button class="btn ghost" id="copyCode" type="button">Copy code</button>
-          <button class="btn ghost" id="copyLine" type="button">Copy hash line</button>
-          <button class="btn warn" id="copyEmail" type="button">Copy approval e-mail</button>
-          <a class="btn primary" id="editGist" href="https://gist.github.com/rcwittraining/8510a29fd5f0b7b1423ada54eb9689a0" target="_blank" rel="noopener">Open code list to add the line &#8599;</a>
+          <button class="btn ghost" id="copyCode" type="button">&#128203; Copy code</button>
+          <button class="btn primary" id="emailBtn" type="button">&#9993;&#65039; Copy ready-to-send approval e-mail</button>
+          <a class="btn ghost" id="mailtoBtn" href="#" target="_blank" rel="noopener">&#9993; Open in e-mail app</a>
         </div>
-    </div>
-    </div>
-
-    <div class="card">
-      <h2>2 &middot; How to activate (one minute)</h2>
-      <ol style="color:#42516e;padding-left:22px">
-        <li>Click <strong>Generate access code</strong> above.</li>
-        <li>Click <strong>Copy hash line</strong>, then <strong>Open code list</strong> (the GitHub note). Sign in as <code>rcwittraining</code> if asked.</li>
-        <li>In the note, click the <strong>Edit</strong> (pencil) button, paste the line under the existing codes, then <strong>Update public gist</strong>.</li>
-        <li>Click <strong>Copy approval e-mail</strong> and send it (add the requester's address) &mdash; it contains their code and the download page link.</li>
-        <li>To <strong>revoke</strong>: delete that line from the note and save. The code stops working within ~5 minutes.</li>
-      </ol>
-      <div class="note"><strong>Security note:</strong> this unlocks the download buttons on a GitHub&nbsp;Pages site. The files in <code>/downloads/</code> are on a public host and the gate is an obfuscation/access layer, not true server-side security. For tools that must not be publicly reachable at all, keep the installers in your <strong>private</strong> GitHub repository and share them privately (as described on <a class="lnk" href="/admin-restricted-tools/">the admin area</a>). This issuer is ideal for the &ldquo;approve, then give a personal code&rdquo; flow for your public-page tools.</div>
-    </div>
-
-    <div class="card">
-      <h2>3 &middot; Live code list &amp; tester</h2>
-      <p class="small" id="listStatus">Loading live list&hellip;</p>
-      <table id="codeTable" hidden>
-        <thead><tr><th>Tool</th><th>Active codes (hashes)</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <label for="testcode" style="margin-top:16px">Verify a code works (type any code to see which tool it unlocks)</label>
-      <div class="row">
-        <input id="testcode" type="text" placeholder="e.g. AWSNIXOPS-AB12-CD34" autocomplete="off">
-        <button class="btn ghost" id="testBtn" type="button" style="flex:0 0 auto">Test code</button>
+        <p class="small" id="issueMeta" style="margin-top:10px"></p>
       </div>
-      <p id="testResult" class="small" style="margin-top:8px"></p>
-    </div>
+    </section>
+
+    <!-- ACTIVE CODES -->
+    <section class="card">
+      <h2>3 &middot; Active codes</h2>
+      <div id="listStatus" class="statusline">Loading&hellip;</div>
+      <table id="codeTable" hidden>
+        <thead><tr><th>Tool</th><th>Code hash &amp; note</th><th style="width:110px">Action</th></tr></thead>
+        <tbody id="codeBody"></tbody>
+      </table>
+      <p style="margin-top:12px"><button class="btn ghost small" id="refreshBtn" type="button">&#128260; Refresh</button></p>
+    </section>
+
+    <details class="card" style="padding-top:14px;padding-bottom:14px">
+      <summary>How this works &amp; security notes</summary>
+      <ol>
+        <li><b>Approve</b> chooses the tool and (optionally) records the requester; the console generates a unique code and writes it to your private-ish code list automatically.</li>
+        <li><b>Send</b> the code using the ready-made e-mail button. The requester pastes it on the tool page and the download unlocks.</li>
+        <li><b>Revoke</b> removes the code with one click; it stops working within ~5 minutes.</li>
+        <li>Your GitHub token is stored only in this browser (<code>localStorage</code>), never in the website files. Clear it anytime with the button below. Use this console only on your own device.</li>
+        <li>This gate unlocks downloads on a public GitHub Pages host &mdash; it is an approval/access layer, not server-side security. For tools that must never be publicly reachable, keep them in the <a href="/admin-restricted-tools/">private repository flow</a>.</li>
+      </ol>
+      <p><button class="btn red small" id="clearToken" type="button">Forget token on this browser</button></p>
+    </details>
   </main>
 
 <script>
 (function(){
   "use strict";
-  var GIST_RAW = "https://gist.githubusercontent.com/rcwittraining/8510a29fd5f0b7b1423ada54eb9689a0/raw/rcw-access-codes.txt";
+  var GIST_ID = "8510a29fd5f0b7b1423ada54eb9689a0";
+  var FNAME   = "rcw-access-codes.txt";
+  var RAW = "https://gist.githubusercontent.com/rcwittraining/" + GIST_ID + "/raw/" + FNAME;
+  var TOKEN_KEY = "rcw_gist_token";
   var TOOLS = {
-    AWNIXOPS: { prefix: "AWSNIXOPS", page: "https://www.rcwittraining.in/awsnixops.html", name: "RCW AWSNixOps v1.1" },
-    LAF3:     { prefix: "LINUXFIXER", page: "https://www.rcwittraining.in/linux-autofixer-v3/", name: "Linux Auto-Fixer v3.0.0" }
+    AWNIXOPS: { prefix:"AWSNIXOPS", name:"RCW AWSNixOps v1.1", page:"https://www.rcwittraining.in/awsnixops.html", cls:"a" },
+    LAF3:     { prefix:"LINUXFIXER", name:"Linux Auto-Fixer v3.0.0", page:"https://www.rcwittraining.in/linux-autofixer-v3/", cls:"l" }
   };
-  var ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no O/0, I/1 to avoid confusion
-  var lastCode = "", lastTool = "AWNIXOPS";
+  var ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  var lastCode="", lastTool="AWNIXOPS", lastWho="";
 
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
   function rnd(n){ var s=""; for(var i=0;i<n;i++) s+=ALPHABET[Math.floor(Math.random()*ALPHABET.length)]; return s; }
-
   async function sha256Hex(text){
-    var buf = new TextEncoder().encode(text);
-    var dig = await crypto.subtle.digest("SHA-256", buf);
+    var buf=new TextEncoder().encode(text);
+    var dig=await crypto.subtle.digest("SHA-256",buf);
     return Array.from(new Uint8Array(dig)).map(function(b){return ("0"+b.toString(16)).slice(-2);}).join("");
   }
-
+  function getToken(){ try{ return localStorage.getItem(TOKEN_KEY)||""; }catch(e){ return ""; } }
+  function setToken(t){ try{ localStorage.setItem(TOKEN_KEY,t); }catch(e){} }
+  function clearToken(){ try{ localStorage.removeItem(TOKEN_KEY); }catch(e){} }
   function copy(text, btn){
-    function done(){ if(btn){ var o=btn.textContent; btn.textContent="Copied \u2713"; setTimeout(function(){btn.textContent=o;},1500);} }
-    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done); }
+    function done(){ if(btn){ var o=btn.textContent; btn.textContent="Copied \u2713"; setTimeout(function(){btn.textContent=o;},1600);} }
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done);
     else { var t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); try{document.execCommand("copy");done();}catch(e){} document.body.removeChild(t); }
   }
-
-  async function fetchList(){
-    var url = GIST_RAW + "?_=" + Math.floor(Date.now()/120000);
-    var res = await fetch(url, {cache:"no-store"});
+  async function api(method, body){
+    var res = await fetch("https://api.github.com/gists/"+GIST_ID, {
+      method: method,
+      headers: { "Authorization":"token "+getToken(), "Content-Type":"application/json", "Accept":"application/vnd.github+json" },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if(res.status===401||res.status===403) throw new Error("AUTH");
     if(!res.ok) throw new Error("HTTP "+res.status);
-    var text = await res.text();
-    var byTool = {AWNIXOPS:[], LAF3:[], ALL:[]};
-    text.split(/\r?\n/).forEach(function(line){
-      var m = line.trim().match(/^([A-Z0-9]+):([a-f0-9]{64})$/i);
-      if(m){ var k=m[1].toUpperCase(); if(byTool[k]) byTool[k].push(m[2].toLowerCase()); }
-    });
-    return byTool;
+    return res.json();
   }
-
-  function renderList(byTool){
-    document.getElementById("listStatus").innerHTML =
-      '<span class="ok">Live list loaded.</span> Active codes &mdash; AWSNixOps: <b>'+
-      (byTool.AWNIXOPS.length + byTool.ALL.length)+'</b> &middot; Linux Auto-Fixer v3: <b>'+
-      (byTool.LAF3.length + byTool.ALL.length)+'</b>.';
-    var tb = document.querySelector("#codeTable tbody"); tb.innerHTML="";
-    Object.keys(TOOLS).forEach(function(k){
-      var hashes = byTool[k].concat(byTool.ALL);
-      var tr = document.createElement("tr");
-      tr.innerHTML = "<td><b>"+TOOLS[k].name+"</b><br><span class='small'>"+k+"</span></td><td class='small mono' style='white-space:normal'>"+
-        (hashes.length ? hashes.join("<br>") : "<i>none</i>")+"</td>";
-      tb.appendChild(tr);
-    });
-    document.getElementById("codeTable").hidden = false;
-  }
-
-  function refreshList(){
-    document.getElementById("listStatus").textContent = "Loading live list\u2026";
-    fetchList().then(renderList).catch(function(e){
-      document.getElementById("listStatus").innerHTML = '<span class="err">Could not load the live list ('+e.message+'). Check your connection / the gist URL. Codes already in the browser gates still work from cache.</span>';
-    });
-  }
-
-  document.getElementById("gen").addEventListener("click", async function(){
-    var tool = document.getElementById("tool").value;
-    lastTool = tool;
-    var code = TOOLS[tool].prefix + "-" + rnd(4) + "-" + rnd(4);
-    lastCode = code;
-    var hash = await sha256Hex(code.toUpperCase());
-    var line = tool + ":" + hash;
-    document.getElementById("codeOut").textContent = code;
-    document.getElementById("hashLine").textContent = line;
-    document.getElementById("out").style.display = "block";
-    document.getElementById("out").scrollIntoView({behavior:"smooth", block:"nearest"});
-  });
-
-  document.getElementById("copyCode").addEventListener("click", function(){ copy(lastCode, this); });
-  document.getElementById("copyLine").addEventListener("click", function(){ copy(document.getElementById("hashLine").textContent, this); });
-  document.getElementById("copyEmail").addEventListener("click", function(){
-    var who = document.getElementById("who").value.trim();
-    var t = TOOLS[lastTool];
-    var body =
-      "Hello " + (who || "there") + ",\n\n" +
-      "Your request for " + t.name + " has been approved.\n\n" +
-      "Your personal access code is:\n\n" +
-      "    " + lastCode + "\n\n" +
-      "How to download:\n" +
-      "1) Open the download page: " + t.page + "\n" +
-      "2) Enter the access code in the 'Enter your access code' box and click Unlock.\n" +
-      "3) Download links appear immediately.\n\n" +
-      "This code is personal - please do not share it publicly. It can be revoked at any time.\n\n" +
-      "Thank you for learning with RCW IT Training.\n" +
-      "https://www.rcwittraining.in";
-    copy(body, this);
-  });
-  document.getElementById("verifyall").addEventListener("click", refreshList);
-
-  document.getElementById("testBtn").addEventListener("click", async function(){
-    var code = document.getElementById("testcode").value.trim();
-    var res = document.getElementById("testResult");
-    if(!code){ res.innerHTML='<span class="err">Enter a code first.</span>'; return; }
+  async function readGist(){
+    // Prefer raw (fast, public); fall back to API if needed.
     try{
-      var byTool = await fetchList();
-      var up = code.toUpperCase();
-      var hUp = await sha256Hex(up);
-      var hRaw = await sha256Hex(code);
-      var matches = [];
-      Object.keys(TOOLS).forEach(function(k){
-        var set = byTool[k].concat(byTool.ALL);
-        if(set.indexOf(hUp)!==-1 || set.indexOf(hRaw)!==-1) matches.push(TOOLS[k].name);
-      });
-      res.innerHTML = matches.length
-        ? '<span class="ok">\u2713 Valid</span> &mdash; this code unlocks: <b>'+matches.join(", ")+"</b>."
-        : '<span class="err">\u2717 Not found</span> in the live list. If you just added it, wait ~2-5 minutes and refresh.';
-    }catch(e){ res.innerHTML='<span class="err">Could not check: '+e.message+'</span>'; }
-  });
+      var r=await fetch(RAW+"?_="+Date.now(),{cache:"no-store"});
+      if(r.ok) return await r.text();
+    }catch(e){}
+    var g=await api("GET");
+    return g.files[FNAME].content;
+  }
+  function parseLines(text){
+    return text.split(/\r?\n/).map(function(raw){
+      var m=raw.trim().match(/^([A-Z0-9]+):([a-f0-9]{64})(\s+#?\s*(.*))?$/i);
+      if(!m) return null;
+      return { key:m[1].toUpperCase(), hash:m[2].toLowerCase(), note:(m[4]||"").trim(), raw:raw };
+    }).filter(Boolean);
+  }
+  function connectionUI(connected){
+    if(connected){
+      $("connStatus").innerHTML='<span class="ok">\u2713 Connected.</span> This console can issue and revoke codes automatically.';
+      $("tokBox").style.display="none";
+      $("issueBtn").disabled=false;
+    } else {
+      $("connStatus").innerHTML='<span class="err">Not connected yet.</span> Add a gist token below to enable one-click approve/revoke. You can still view active codes.';
+      $("tokBox").style.display="block";
+      $("issueBtn").disabled=true;
+    }
+  }
+  async function checkConnection(){
+    $("connStatus").textContent="Checking connection\u2026";
+    if(!getToken()){ connectionUI(false); refreshList(); return; }
+    try{ await api("GET"); connectionUI(true); refreshList(); }
+    catch(e){ clearToken(); connectionUI(false); refreshList(); }
+  }
 
-  refreshList();
+  async function refreshList(){
+    $("listStatus").textContent="Loading active codes\u2026";
+    try{
+      var content=await readGist();
+      var rows=parseLines(content);
+      var body=$("codeBody"); body.innerHTML="";
+      if(!rows.length){ $("listStatus").innerHTML='<span class="small">No active codes.</span>'; $("codeTable").hidden=true; return; }
+      $("listStatus").innerHTML='<span class="ok">'+rows.length+' active code(s).</span>';
+      rows.forEach(function(r,idx){
+        var t=TOOLS[r.key];
+        var label = r.key==="ALL" ? "All tools" : (t? t.name : r.key);
+        var badgeCls = r.key==="ALL" ? "a" : (t?t.cls:"a");
+        var tr=document.createElement("tr");
+        tr.innerHTML='<td><span class="badge '+badgeCls+'">'+esc(label)+'</span></td>'+
+          '<td class="codecell">'+esc(r.hash.slice(0,20))+'&hellip;'+(r.note?'<br><span class="small">'+esc(r.note)+'</span>':'')+'</td>'+
+          '<td><button class="btn red small" data-idx="'+idx+'" '+(getToken()?'':'disabled')+'>Revoke</button></td>';
+        body.appendChild(tr);
+      });
+      body.querySelectorAll("button[data-idx]").forEach(function(btn){
+        btn.addEventListener("click", function(){ revoke(rows[+btn.getAttribute("data-idx")]); });
+      });
+      $("codeTable").hidden=false;
+    }catch(e){
+      $("listStatus").innerHTML='<span class="err">Could not load codes: '+esc(e.message==="AUTH"?"token problem":e.message)+'</span>';
+    }
+  }
+
+  async function issue(){
+    var tool=$("tool").value, who=$("who").value.trim();
+    lastTool=tool; lastWho=who;
+    var btn=$("issueBtn"); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Creating\u2026';
+    try{
+      var code=TOOLS[tool].prefix+"-"+rnd(4)+"-"+rnd(4);
+      lastCode=code;
+      var hash=await sha256Hex(code.toUpperCase());
+      var date=new Date().toISOString().slice(0,10);
+      var note=(who? who+" \u00b7 ":"")+date;
+      var newLine=tool+":"+hash+"   # "+note;
+      var g=await api("GET");
+      var content=g.files[FNAME].content.replace(/\s*$/,"\n");
+      content=content+newLine+"\n";
+      await api("PATCH",{ files: (function(){var o={};o[FNAME]={content:content};return o;})() });
+      $("codeOut").textContent=code;
+      $("issueMeta").textContent="Activated for "+TOOLS[tool].name+(who?" \u00b7 "+who:"")+". It unlocks the download within ~2\u20135 minutes.";
+      var mailto="mailto:?subject="+encodeURIComponent("Your access code \u2014 "+TOOLS[tool].name)+"&body="+encodeURIComponent(emailBody());
+      $("mailtoBtn").href=mailto;
+      $("issueResult").style.display="block";
+      $("issueResult").scrollIntoView({behavior:"smooth",block:"nearest"});
+      refreshList();
+    }catch(e){
+      alert(e.message==="AUTH" ? "Token is not valid or expired. Re-enter it in step 1." : "Could not create code: "+e.message);
+      checkConnection();
+    }finally{ btn.disabled=false; btn.innerHTML="\u2705 Approve &amp; create code"; btn.textContent="✅ Approve & create code"; }
+  }
+
+  async function revoke(row){
+    if(!confirm("Revoke this code? It will stop working within ~5 minutes."+(row.note?"\n\n"+row.note:""))) return;
+    try{
+      var g=await api("GET");
+      var lines=g.files[FNAME].content.split(/\r?\n/);
+      var out=lines.filter(function(l){ return l.trim()!==row.raw.trim(); });
+      if(out.length===lines.length){ alert("Line not found (list may have changed). Refreshing."); refreshList(); return; }
+      await api("PATCH",{ files:(function(){var o={};o[FNAME]={content:out.join("\n")};return o;})() });
+      refreshList();
+    }catch(e){ alert(e.message==="AUTH"?"Token problem.":"Could not revoke: "+e.message); checkConnection(); }
+  }
+
+  function emailBody(){
+    var t=TOOLS[lastTool];
+    return "Hello "+(lastWho||"there")+",\n\n"+
+      "Your request for "+t.name+" has been approved.\n\n"+
+      "Your personal access code is:\n\n    "+lastCode+"\n\n"+
+      "How to download:\n"+
+      "1) Open: "+t.page+"\n"+
+      "2) Enter the code in the access-code box and click Unlock.\n"+
+      "3) The download links appear immediately.\n\n"+
+      "This code is personal \u2014 please don't share it publicly. It can be revoked at any time.\n\n"+
+      "Thank you for learning with RCW IT Training.\nhttps://www.rcwittraining.in";
+  }
+
+  $("saveToken").addEventListener("click", function(){
+    var v=$("token").value.trim();
+    if(!v){ alert("Paste a token first."); return; }
+    setToken(v); checkConnection();
+  });
+  $("issueBtn").addEventListener("click", issue);
+  $("copyCode").addEventListener("click", function(){ copy(lastCode, this); });
+  $("emailBtn").addEventListener("click", function(){ copy(emailBody(), this); });
+  $("refreshBtn").addEventListener("click", refreshList);
+  $("clearToken").addEventListener("click", function(){ clearToken(); $("token").value=""; checkConnection(); alert("Token forgotten on this browser."); });
+
+  checkConnection();
 })();
 </script>
 </body>

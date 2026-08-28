@@ -267,7 +267,7 @@ function fetchLiveHashes() {
     .then(function (txt) {
       var out = [];
       String(txt).split(/\r?\n/).forEach(function (line) {
-        var m = line.trim().match(/^([A-Z0-9]+):([a-f0-9]{64})$/i);
+        var m = line.trim().match(/^([A-Z0-9]+):([a-f0-9]{64})(\s|$|#)/i);
         if (m) { var k = m[1].toUpperCase();
           if (k === TOOL_KEY || k === "ALL") out.push(m[2].toLowerCase()); }
       });
