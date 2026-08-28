@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Site Traffic Dashboard | RCW IT Training</title>
+  <script src="rcw-consent.js"></script>
+  <style>
+    :root{--n:#061633;--i:#101b3b;--b:#078be8;--b2:#0758c8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--p);color:var(--i);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:inherit}
+    .top{background:linear-gradient(112deg,#020a18,#06142c);border-bottom:4px solid var(--b);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px;max-width:100%;overflow:hidden}
+    .mark{border:1px solid var(--c);border-radius:10px;color:var(--c);font-size:11px;font-weight:900;padding:10px 7px}
+    .brand{font-weight:800}
+    .brand small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.6px;text-transform:uppercase}
+    .home{margin-left:auto;color:var(--c);font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}
+    .wrap{max-width:1080px;margin:auto;padding:38px 22px 70px}
+    .ey{color:#0769be;font-size:12px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase}
+    h1{font-size:clamp(28px,4.5vw,42px);line-height:1.15;letter-spacing:-.5px;margin:8px 0 12px}
+    .lead{font-size:18px;color:#42516b;margin:0 0 8px}
+    .card{background:#fff;border:1px solid var(--l);border-radius:20px;padding:26px 28px;box-shadow:0 10px 28px #081f4515;margin:18px 0}
+    .card h2{font-size:21px;margin:0 0 10px}
+    .card p{margin:8px 0;color:#48566e}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .btn{display:inline-block;border-radius:10px;padding:11px 20px;font-weight:800;font-size:14.5px;text-decoration:none}
+    .btn.primary{background:linear-gradient(115deg,#078be8,#0758c8);color:#fff;box-shadow:0 8px 20px rgba(7,88,200,.3)}
+    .btn.ghost{background:#fff;color:#0758c8;border:1.5px solid #b9d6f5}
+    .note{font-size:13.5px;color:var(--m)}
+    .dash-frame{position:relative;width:100%;border:1px solid var(--l);border-radius:16px;overflow:hidden;background:#fff;margin-top:6px}
+    .dash-frame iframe{display:block;width:100%;height:min(78vh,1100px);border:0}
+    .placeholder{padding:48px 26px;text-align:center;color:var(--m)}
+    .placeholder .big{font-size:40px;margin-bottom:10px}
+    ol.steps{margin:10px 0 4px;padding-left:22px;color:#48566e}
+    ol.steps li{margin:7px 0}
+    code{background:#eef3fa;border:1px solid #dce5f1;border-radius:6px;padding:1px 7px;font:0.9em ui-monospace,SFMono-Regular,Consolas,monospace;word-break:break-all}
+    .priv{background:#fff7e7;border:1px solid #f4d694;color:#705315;border-radius:12px;padding:14px 18px;font-size:13.5px;margin-top:16px}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <span class="mark">RCW</span>
+    <span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span>
+    <a class="home" href="/">&larr; Back to home</a>
+  </header>
+
+  <main class="wrap">
+    <div class="ey">Internal &middot; Free analytics (Google Analytics 4)</div>
+    <h1>Site traffic dashboard</h1>
+    <p class="lead">Daily visitors, page views, traffic sources, countries and devices for www.rcwittraining.in &mdash; collected free via Google Analytics 4 and displayed here from Google Looker Studio.</p>
+    <p class="note">Tracking started 28 August 2026. Charts need ~24&ndash;48 hours of data to look meaningful; the Realtime report in Google Analytics shows live visitors immediately.</p>
+
+    <div class="btns">
+      <a class="btn primary" href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener noreferrer">Open Google Analytics (private, full data)</a>
+      <a class="btn ghost" href="https://lookerstudio.google.com/" target="_blank" rel="noopener noreferrer">Open Looker Studio</a>
+    </div>
+
+    <section class="card">
+      <h2>Embedded dashboard</h2>
+      <div class="dash-frame">
+        <!-- After the Looker Studio report is created and embedding enabled,
+             replace the src below with the embed URL, e.g.
+             https://lookerstudio.google.com/embed/reporting/XXXXXXXXXXXX -->
+        <iframe id="traffic-dash" title="RCW site traffic dashboard" src="" data-pending="1"></iframe>
+        <div class="placeholder" id="dash-placeholder">
+          <div class="big">&#128202;</div>
+          <strong style="color:var(--i);font-size:17px;">Your embedded dashboard is one free 5-minute setup away.</strong>
+          <p>Create a free <strong>Looker Studio</strong> report from your Google Analytics data, enable embedding, and paste the embed link to RCW IT Training. Steps are below.</p>
+          <ol class="steps" style="text-align:left;max-width:720px;margin:14px auto;">
+            <li>Go to <a href="https://lookerstudio.google.com/" target="_blank" rel="noopener noreferrer"><strong>lookerstudio.google.com</strong></a> and sign in with the same Google account used for Analytics.</li>
+            <li><strong>Create &rarr; Report</strong>, then in &ldquo;Add data to report&rdquo; choose the <strong>Google Analytics</strong> connector and select the <code>rcwittraining.in</code> property / web stream.</li>
+            <li>Add a few charts (menu <strong>Add a chart</strong>): a <strong>scorecard</strong> for Users, a <strong>time series</strong> of Users by date (daily traffic), a <strong>table</strong> of Page paths by Views, and optionally device/country breakdowns.</li>
+            <li><strong>Share</strong> (top right) &rarr; set link access to <strong>&ldquo;Anyone on the internet with the link can view&rdquo;</strong>.</li>
+            <li><strong>File &rarr; Embed report</strong> &rarr; tick <strong>Enable embedding</strong> &rarr; copy the embed URL (it starts with <code>https://lookerstudio.google.com/embed/reporting/</code>).</li>
+            <li>Send that link to RCW IT Training to finish wiring this page, or paste it into the <code>&lt;iframe src=&quot;&quot;&gt;</code> in <code>dashboard.html</code>.</li>
+          </ol>
+          <p class="note">Tip: set the report date control to &ldquo;Last 30 days&rdquo; so the dashboard always shows current daily traffic.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Quick links to your live data</h2>
+      <div class="btns">
+        <a class="btn ghost" href="https://analytics.google.com/analytics/web/#/realtime" target="_blank" rel="noopener noreferrer">Realtime visitors (works now)</a>
+        <a class="btn ghost" href="https://analytics.google.com/analytics/web/#/report/engagement-pages-and-screens" target="_blank" rel="noopener noreferrer">Top pages</a>
+        <a class="btn ghost" href="https://analytics.google.com/analytics/web/#/report/trafficsource-acquisition-channels" target="_blank" rel="noopener noreferrer">Traffic sources</a>
+      </div>
+      <p class="note" style="margin-top:14px;">These links open inside Google Analytics and are visible only when you are logged in to your Google account.</p>
+    </section>
+
+    <div class="priv">
+      <strong>Privacy note:</strong> this page is not linked anywhere on the site, is blocked from search engines (<code>noindex</code>), and is not in the sitemap. However, GitHub Pages has no login &mdash; anyone with the direct URL <code>/dashboard.html</code> can open it, and an embedded Looker Studio report requires link-sharing (&ldquo;anyone with the link can view&rdquo;). For strictly private traffic data, use the Google Analytics links above instead.
+    </div>
+  </main>
+
+  <script>
+    /* If an embed URL is configured below, reveal the dashboard. */
+    (function () {
+      var EMBED_URL = ""; /* e.g. https://lookerstudio.google.com/embed/reporting/xxxx */
+      var frame = document.getElementById("traffic-dash");
+      var ph = document.getElementById("dash-placeholder");
+      if (EMBED_URL) {
+        frame.src = EMBED_URL;
+        if (ph) ph.style.display = "none";
+      } else {
+        frame.style.display = "none";
+      }
+    })();
+  </script>
+</body>
+</html>
