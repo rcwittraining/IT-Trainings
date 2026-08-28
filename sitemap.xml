@@ -44,6 +44,15 @@
   <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-28.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/vmware-snapshot-datastore-troubleshooting.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/vmware-vcenter-network-troubleshooting.html</loc><priority>0.6</priority></url>
+  <!-- Detailed troubleshooting guides (added 29 Aug 2026) -->
+  <url><loc>https://www.rcwittraining.in/kubernetes-workload-failures-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/nginx-502-504-upstream-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/postgresql-locks-deadlocks-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/terraform-state-drift-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/ansible-playbook-failures-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/dns-name-resolution-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/nfs-smb-mount-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/redis-latency-eviction-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d1.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d2.html</loc><priority>0.8</priority></url>
