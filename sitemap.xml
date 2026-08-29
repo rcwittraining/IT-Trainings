@@ -53,6 +53,11 @@
   <url><loc>https://www.rcwittraining.in/dns-name-resolution-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/nfs-smb-mount-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/redis-latency-eviction-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/gcp-vm-ssh-connectivity-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/iscsi-multipath-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/linux-backup-rsync-restic-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/linux-disk-space-inode-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/vmware-vmotion-failures-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d1.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d2.html</loc><priority>0.8</priority></url>
