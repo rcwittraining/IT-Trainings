@@ -648,6 +648,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Exam Simulators"
   },
   {
+    "title": "Azure Agentic AI Foundation Exam Simulator",
+    "category": "Microsoft Azure \u2022 Timed Exam Practice \u2022 AI-901 style",
+    "badge": "AI",
+    "accent": "#4b32c3",
+    "id": "azure-agentic-ai-exam",
+    "targetUrl": "https://www.rcwittraining.in/azure-agentic-ai-exam/",
+    "contentType": "Simulator",
+    "technology": "Microsoft Azure AI Foundry",
+    "subcategory": "Exam Practice",
+    "group": "Exam Simulators"
+  },
+  {
     "title": "RHEL 10 Installation Lab",
     "category": "Red Hat • Linux",
     "badge": "RHEL",

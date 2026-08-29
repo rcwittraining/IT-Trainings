@@ -1,0 +1,399 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azure Agentic AI Foundation — Timed Exam Simulator (AI-901 Style) | RCW IT Training</title><meta name="description" content="Free timed exam simulator for Azure AI Fundamentals (AI-901): 50 questions, 50 minutes, 700 pass mark — Azure AI concepts, responsible AI, Microsoft Foundry, generative AI and agents, with full explanations."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/azure-agentic-ai-exam/"><style>
+:root{--n:#061633;--i:#101b3b;--b:#078be8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1;--ok:#0b7a3a;--bad:#b3261e;--amber:#e07b1a}
+*{box-sizing:border-box}body{margin:0;background:var(--p);color:var(--i);font:16px/1.68 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.top{background:linear-gradient(112deg,#020a18,#06142c);border-bottom:4px solid var(--b);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}
+.mark{border:1px solid var(--c);border-radius:10px;color:var(--c);font-size:11px;font-weight:900;padding:10px 7px}
+.brand{font-weight:800}.brand small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.6px;text-transform:uppercase}
+.home{margin-left:auto;color:var(--c);font-size:14px;font-weight:700;text-decoration:none}
+.wrap{max-width:880px;margin:auto;padding:42px 22px 70px}
+.hero{background:#fff;border:1px solid var(--l);border-radius:20px;padding:34px;box-shadow:0 10px 28px #081f4515}
+.ey{color:#0769be;font-size:12px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase}
+h1{font-size:clamp(28px,4.6vw,42px);line-height:1.12;letter-spacing:-1px;margin:10px 0 14px}
+h2{font-size:22px;line-height:1.25;margin:34px 0 12px}
+.lead{font-size:18px;color:#42516b}
+.meta{color:var(--m);font-size:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+.fact{background:#eef4fd;border:1px solid var(--l);border-radius:14px;padding:14px 16px}
+.fact b{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#0769be;margin-bottom:4px}
+.fact span{font-size:22px;font-weight:850}
+.fact small{display:block;color:var(--m);font-size:12.5px;margin-top:2px}
+.note{border-left:5px solid var(--c);background:#eaf7ff;border-radius:14px;padding:14px 18px;margin:18px 0;font-size:15px;color:#123}
+.note strong{color:#075a92}
+.btn{display:inline-block;border:0;border-radius:99px;padding:14px 30px;font:800 16px/1 Inter,system-ui,sans-serif;cursor:pointer;text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-p{background:var(--b);color:#fff;box-shadow:0 8px 20px #078be855}
+.btn-n{background:var(--n);color:var(--c)}
+.btn-g{background:#e8eef7;color:#33507a}
+.btn-r{background:#fdecea;color:#b3261e}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+/* exam screen */
+.exam-head{position:sticky;top:0;z-index:50;background:linear-gradient(112deg,#020a18,#06142c);color:#fff;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:3px solid var(--b);box-shadow:0 6px 18px #081f4522}
+.exam-head .t{font-weight:800;font-size:14px}.exam-head .t small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+.timer{margin-left:auto;display:flex;align-items:center;gap:10px}
+.clock{background:#0a2a5e;border:1px solid #25539c;border-radius:12px;padding:8px 14px;font:800 18px/1 ui-monospace,Consolas,monospace;color:var(--c);min-width:86px;text-align:center}
+.clock.warn{color:#ffd76a;border-color:#8a5a12;background:#3a2c07;animation:pul 1s infinite}
+.clock.danger{color:#ff8a80;border-color:#a12c22;background:#3d0f0b;animation:pul .8s infinite}
+@keyframes pul{50%{opacity:.55}}
+.quiz{background:#fff;border:1px solid var(--l);border-radius:20px;padding:28px 30px;margin:22px 0;box-shadow:0 10px 28px #081f4515}
+.qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.qnum{background:var(--n);color:var(--c);border-radius:10px;padding:7px 13px;font:800 14px/1 ui-monospace,Consolas,monospace}
+.qdom{margin-left:auto;background:#e6f5ff;color:#0758c8;border-radius:99px;padding:6px 13px;font:700 12px/1.2 Inter,sans-serif}
+.flagbtn{border:1px solid #e3b048;background:#fff7e6;color:#8a5a12;border-radius:99px;padding:8px 15px;font:700 13px/1 Inter,sans-serif;cursor:pointer}
+.flagbtn.on{background:#e3b048;color:#fff}
+.qtext{font-size:19px;font-weight:700;margin:18px 0 6px;line-height:1.45}
+.qsub{color:var(--m);font-size:14.5px;margin:0 0 14px}
+.opt{display:block;border:2px solid var(--l);border-radius:14px;padding:14px 16px;margin:10px 0;cursor:pointer;transition:border-color .12s,background .12s;background:#fff}
+.opt:hover{border-color:#a9c6ea}
+.opt.sel{border-color:var(--b);background:#eaf4ff}
+.opt .letter{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--n);color:var(--c);font:800 12.5px/1 ui-monospace,Consolas,monospace;margin-right:10px;vertical-align:middle}
+.opt.sel .letter{background:var(--b);color:#fff}
+.opt.cor{border-color:var(--ok);background:#e9f7ee}.opt.cor .letter{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:#fdecea}.opt.wrong .letter{background:var(--bad);color:#fff}
+.opt.off{opacity:.55}
+.explain{background:#f4f7fb;border:1px solid var(--l);border-radius:14px;padding:16px 18px;margin-top:16px;font-size:15px;color:#2c3b55}
+.explain b{color:#075a92}
+.review-opt{display:block;border:1px solid var(--l);border-radius:12px;padding:11px 14px;margin:8px 0;font-size:15.5px}
+.r-corr{border-left:5px solid var(--ok);background:#e9f7ee}
+.r-wrong{border-left:5px solid var(--bad);background:#fdecea}
+.r-none{border-left:5px solid var(--m);background:#f4f7fb;color:var(--m)}
+.dombar{display:flex;align-items:center;gap:12px;margin:10px 0}
+.dombar .lbl{width:220px;font-size:13.5px;font-weight:700;color:#33455f}
+.bar{flex:1;height:14px;background:#e7edf6;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#078be8,#4bd7ff)}
+.bar i.mid{background:linear-gradient(90deg,#e07b1a,#f2b054)}
+.bar i.low{background:linear-gradient(90deg,#c62828,#ef7a6b)}
+.bar span{position:absolute}
+.dombar .pct{width:46px;text-align:right;font:800 13px/1 ui-monospace,Consolas,monospace;color:#33455f}
+.navpad{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+.ncell{width:42px;height:42px;border-radius:11px;border:2px solid var(--l);background:#fff;font:800 14px/1 ui-monospace,Consolas,monospace;color:#33455f;cursor:pointer}
+.ncell.marked::after{content:"";display:block;width:8px;height:8px;margin:-11px auto 2px;border-radius:50%;background:#e3b048}
+.ncell.done{background:#dff1ff;border-color:#9ecbf2;color:#0758c8}
+.ncell.cur{border-color:var(--b);box-shadow:0 0 0 3px #078be833}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--m);margin:10px 0 4px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px;border:2px solid var(--l);background:#fff}
+.legend i.d{background:#dff1ff;border-color:#9ecbf2}
+.legend i.f{background:#fff7e6;border-color:#e3b048}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.progress{height:6px;background:#e7edf6;border-radius:99px;margin:14px 0 4px;overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,#078be8,#4bd7ff);transition:width .3s}
+/* modal */
+.overlay{position:fixed;inset:0;background:#061633cc;display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+.overlay.on{display:flex}
+.modal{background:#fff;border-radius:20px;padding:30px;max-width:520px;width:100%;box-shadow:0 24px 60px #0008}
+.modal h3{margin:0 0 10px}
+.result-hero{text-align:center;padding:34px 20px 26px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#061633,#0a2a5e)}
+.result-hero.pass{background:linear-gradient(135deg,#04301c,#0b7a3a)}
+.result-hero.fail{background:linear-gradient(135deg,#3d0f0b,#b3261e)}
+.score-ring{width:170px;height:170px;border-radius:50%;margin:6px auto;display:grid;place-items:center;background:conic-gradient(#fff var(--pct,0%),#ffffff33 0);position:relative}
+.score-ring::before{content:"";position:absolute;inset:12px;border-radius:50%;background:#061633}
+.result-hero.pass .score-ring::before{background:#04301c}
+.result-hero.fail .score-ring::before{background:#3d0f0b}
+.score-ring b{position:relative;font-size:34px}
+.score-ring b small{display:block;font-size:12px;font-weight:600;color:#ffffffb0;letter-spacing:1px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.chip{border:2px solid var(--l);border-radius:99px;padding:9px 18px;font:700 13.5px/1 Inter,sans-serif;cursor:pointer;background:#fff;color:#33455f}
+.chip.on{background:var(--n);border-color:var(--n);color:var(--c)}
+.hidden{display:none}
+footer{margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif}
+footer nav{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+footer a{color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600}
+footer p{margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8}
+@media(max-width:640px){.wrap{padding:26px 14px 50px}.hero,.quiz{padding:20px}.grid2{grid-template-columns:1fr}.dombar .lbl{width:150px}.actions .btn{flex:1;text-align:center}}
+</style></head><body>
+<header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header>
+<main class="wrap">
+
+<!-- ============ START SCREEN ============ -->
+<section id="scr-start">
+  <div class="hero">
+    <div class="ey">Microsoft Azure · Timed Exam Simulator · Free practice</div>
+    <h1>Azure Agentic AI Foundation — Exam Simulator</h1>
+    <p class="lead">Practice the Microsoft Azure AI Fundamentals certification (exam AI-901, 2026) under real exam pressure. The bank is weighted like the real blueprint: <strong>60% Microsoft Foundry — generative AI and agents</strong>, 40% AI concepts and responsible AI.</p>
+    <p class="meta" id="stat-line">questions · minutes · pass mark 700/1000 · instant scoring · full explanations</p>
+    <div class="grid2">
+      <div class="fact"><b>Questions</b><span id="fq">—</span><small>Single choice, exam style, weights per domain</small></div>
+      <div class="fact"><b>Duration</b><span id="fm">—</span><small>Countdown timer — auto submits at zero</small></div>
+      <div class="fact"><b>Pass mark</b><span>700</span><small>Out of 1000, like the real exam</small></div>
+      <div class="fact"><b>Domain 2 weight</b><span id="fw">—</span><small>Foundry · generative AI · agents</small></div>
+    </div>
+    <h2>Domain breakdown</h2>
+    <div class="dombar"><span class="lbl">1 · AI concepts &amp; responsible AI</span><span class="bar"><i id="bd1" style="width:37%"></i></span><span class="pct" id="pd1">37%</span></div>
+    <div class="dombar"><span class="lbl">2 · Foundry: gen AI apps &amp; agents</span><span class="bar"><i id="bd2" style="width:63%"></i></span><span class="pct" id="pd2">63%</span></div>
+    <h2>Exam rules (like the real thing)</h2>
+    <div class="note">
+      <strong>Instructions:</strong> choose the best answer for each question. You may navigate freely, change answers, and mark questions for review. The timer starts when you begin and <strong>the exam submits automatically when time expires</strong>. Answer every question — there is no penalty for guessing. Upon submission you get a score, a domain-by-domain breakdown, and a full review with the correct answer and explanation for every question.
+    </div>
+    <button class="btn btn-p" id="btn-start" type="button">▶ Start the exam — 50:00 on the clock</button>
+    <p class="meta" style="margin-top:14px">This is an independent practice simulator by RCW IT Training. Not affiliated with Microsoft. AI-901 is a live certification; always verify the current official skills outline at Microsoft Learn.</p>
+  </div>
+</section>
+
+<!-- ============ EXAM SCREEN ============ -->
+<section id="scr-exam" class="hidden">
+  <div class="exam-head">
+    <div class="t">Azure Agentic AI Foundation<small>Timed simulator · AI-901 style</small></div>
+    <div class="timer"><span class="clock" id="clock">50:00</span><button class="btn btn-r" id="btn-quit" type="button" style="padding:9px 16px;font-size:13px">End exam</button></div>
+  </div>
+  <div class="quiz">
+    <div class="qhead">
+      <span class="qnum" id="qnum">Q 1 / 50</span>
+      <span class="qdom" id="qdom">Domain 1</span>
+      <button class="flagbtn" id="btn-flag" type="button">⚑ Mark for review</button>
+    </div>
+    <p class="qtext" id="qtext"></p>
+    <div id="opts"></div>
+    <div class="progress"><i id="bar" style="width:0%"></i></div>
+    <div class="legend"><span><i></i>Not answered</span><span><i class="d"></i>Answered</span><span><i class="f"></i>Marked</span><span><i style="border-color:#078be8"></i>Current</span></div>
+    <div class="navpad" id="navpad"></div>
+    <div class="actions">
+      <button class="btn btn-g" id="btn-prev" type="button">← Previous</button>
+      <button class="btn btn-n" id="btn-next" type="button">Next →</button>
+      <button class="btn btn-p" id="btn-submit" type="button">Submit exam</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<section id="scr-result" class="hidden">
+  <div class="result-hero" id="hero">
+    <p class="ey" style="color:#bcd9ff" id="hero-sub">EXAM COMPLETE</p>
+    <div class="score-ring" id="ring"><b><span id="score-num">0</span>/1000<small id="verdict">—</small></b></div>
+    <h2 id="verdict-line" style="margin:14px 0 4px">—</h2>
+    <p style="color:#ffffffcc;margin:0" id="time-note"></p>
+  </div>
+  <div class="hero" style="margin-top:22px">
+    <h2 style="margin-top:0">Score by domain</h2>
+    <div id="domres"></div>
+    <h2>Review answers</h2>
+    <div class="chips">
+      <button class="chip on" data-f="all" type="button">All</button>
+      <button class="chip" data-f="wrong" type="button">Wrong</button>
+      <button class="chip" data-f="unanswered" type="button">Unanswered</button>
+      <button class="chip" data-f="marked" type="button">Marked</button>
+    </div>
+    <div id="review"></div>
+    <div class="actions"><button class="btn btn-p" id="btn-retry" type="button">↻ Retake exam (reshuffled)</button><a class="btn btn-n" href="/azure-agentic-ai-exam/">Return to start</a><a class="btn btn-g" href="/">Back to home</a></div>
+  </div>
+</section>
+
+<!-- submit / timeup modal -->
+<div class="overlay" id="overlay"><div class="modal" id="modal-box"></div></div>
+</main>
+
+<script type="application/json" id="bank">[
+{"d":1,"q":"A sales team wants an application that writes brand-new product descriptions in the style of its brochures. Which kind of AI should be used?","o":["Machine learning that predicts a numeric value","Generative AI that creates new content","Computer vision that classifies images","Anomaly detection that flags outliers"],"a":1,"e":"Generative AI (large language models) produces new text, images or audio that was never in the training data. Predicting a number is regression, classifying images is computer vision, and flagging outliers is anomaly detection."},
+{"d":1,"q":"Which statement best describes how a large language model produces text?","o":["It copies sentences from a database built by Microsoft","It predicts the most likely next token based on patterns in training data","It looks up answers in a knowledge graph","It runs deterministic rules written by engineers"],"a":1,"e":"An LLM generates text one token at a time, choosing the most probable continuation given the prompt and its learned patterns. It is statistical, not a database lookup, so it can produce plausible but incorrect statements (hallucination)."},
+{"d":1,"q":"A developer needs to translate text between 80+ languages in a mobile app. Which Azure AI service is designed for this?","o":["Azure AI Vision","Azure AI Translator","Azure AI Speech","Azure AI Content Understanding"],"a":1,"e":"Azure AI Translator provides text and document translation, language detection and transliteration. Vision handles images, Speech handles audio, Content Understanding extracts structured data from documents."},
+{"d":1,"q":"Which computer vision task returns the location (bounding box) of each object found in an image, not just a label?","o":["Image classification","Object detection","OCR only","Facial recognition only"],"a":1,"e":"Object detection identifies the object class AND its coordinates so an app can act on positions — e.g. 'defect at x,y in the tray'. Classification returns only the label for the whole image."},
+{"d":1,"q":"A bank must extract text from thousands of scanned forms. Which capability is the right choice?","o":["Speech-to-text","Optical character recognition (OCR/Read)","Custom neural voice","Text embedding"],"a":1,"e":"OCR — in Azure the Read/OCR capability (AI Vision or Document Intelligence) — converts printed or handwritten text in images and PDFs into machine-readable text. Speech converts audio, embeddings convert text to vectors."},
+{"d":1,"q":"Which Azure AI service converts spoken audio into text in real time and also supports speech translation?","o":["Azure AI Speech","Azure AI Translator","Azure AI Search","Azure AI Vision"],"a":1,"e":"Azure AI Speech offers speech-to-text, text-to-speech, speech translation and speaker recognition. Translator is for text/document translation only."},
+{"d":1,"q":"A support bot needs to recognise a user's intent — for example 'book a holiday' versus 'cancel an order'. Which capability fits?","o":["Conversational language understanding (CLU)","Anomaly detection","Image classification","Embedding generation"],"a":1,"e":"CLU (part of Azure AI Language) identifies intents and extracts entities from utterances, which is exactly how a bot decides what to do next."},
+{"d":1,"q":"Which Microsoft responsible AI principle requires that AI systems treat people fairly and avoid bias against groups of people?","o":["Fairness","Transparency","Accountability","Inclusiveness"],"a":1,"e":"Fairness is about avoiding bias and treating people equitably. Transparency is explaining how systems work, inclusiveness is designing for accessibility and all abilities, accountability is taking ownership of outcomes."},
+{"d":1,"q":"Which responsible AI principle says people must be able to understand why an AI system made a decision it made?","o":["Reliability and safety","Privacy and security","Transparency","Fairness"],"a":1,"e":"Transparency means systems should be explainable and their capabilities and limitations clearly communicated, so users can make informed decisions about trusting them."},
+{"d":1,"q":"A healthcare AI occasionally gives wrong advice. Which principle is directly about making sure the system behaves correctly and fails gracefully?","o":["Reliability and safety","Privacy and security","Inclusiveness","Accountability"],"a":1,"e":"Reliability and safety covers robustness, consistent correct operation, handling failures gracefully and mitigating risks such as adversarial inputs or over-reliance by users."},
+{"d":1,"q":"Which responsible AI tension is addressed by techniques such as data minimisation, encryption and role-based access control?","o":["Privacy and security","Fairness","Transparency","Inclusiveness"],"a":1,"e":"Privacy and security means protecting data at rest and in transit, limiting who can access it, and meeting regulatory obligations — including not training models on customer data without consent."},
+{"d":1,"q":"An AI provider states that humans remain accountable for the outcomes of the AI systems they deploy. Which principle is this?","o":["Accountability","Fairness","Transparency","Privacy"],"a":1,"e":"Accountability means the organisation deploying the AI — not the model — is responsible for its outcomes, and should document decisions, conduct impact assessments and maintain auditability."},
+{"d":1,"q":"Which design goal is served by providing speech interfaces and screen-reader-friendly outputs in an AI product?","o":["Inclusiveness","Fairness","Reliability","Transparency"],"a":1,"e":"Inclusiveness means designing AI that serves people of all abilities and backgrounds — accessible interfaces help users with disabilities participate equally."},
+{"d":1,"q":"An LLM returns a confident but completely made-up answer about a medical dosage. What is this phenomenon called, and which technique most directly reduces it?","o":["Overfitting; more training epochs","Hallucination; grounding the model with retrieved source data","Drift; regenerating the model","Tokenisation; smaller context window"],"a":1,"e":"Hallucination = plausible but false output. Grounding — retrieving relevant documents and passing them as context (RAG, or 'your data') — lets the model cite sources and dramatically reduces fabrication."},
+{"d":1,"q":"In an Azure OpenAI prompt, which part sets the assistant's behaviour and rules that should persist for the whole conversation?","o":["The user message","The system message","The temperature setting","The max tokens setting"],"a":1,"e":"The system message defines the assistant's persona, constraints and guardrails for the entire session. User messages are the changing inputs. Temperature and max tokens are sampling and length controls."},
+{"d":1,"q":"A model creates chaotic, creative outputs and the team wants steadier, more deterministic answers. Which parameter should they lower?","o":["Temperature","Max tokens","Top-K only","Frequency penalty only"],"a":0,"e":"Temperature controls randomness: lower temperature (e.g. 0.2) makes outputs more focused and repeatable; higher temperature increases creativity and variation."},
+{"d":1,"q":"What is an embedding in the context of generative AI?","o":["A compressed copy of the model weights","A numeric vector that represents the semantic meaning of text","A prompt template stored in a database","A fine-tuned version of a smaller model"],"a":1,"e":"Embedding models convert text into vectors where similar meanings sit close together in vector space. This enables semantic search, clustering and RAG-style retrieval."},
+{"d":1,"q":"A company's model keeps answering stylistic questions in the wrong tone. Retrieval-based grounding is not the issue. What is the most appropriate adaptation?","o":["Fine-tuning the model on examples of the desired style","Adding more temperature","Purchasing a larger context window","Switching to batch processing"],"a":0,"e":"Fine-tuning trains the model on task-specific examples so its behaviour matches your style, format or domain. RAG adds knowledge; fine-tuning changes behaviour."},
+{"d":1,"q":"In Azure OpenAI, roughly one token equals…","o":["One byte of text","About 4 characters of English text","One full sentence","One paragraph"],"a":1,"e":"Tokenisation splits text into tokens; for English, one token is approximately 4 characters (about 3/4 of a word). Billing and model limits (context windows) are measured in tokens."},
+{"d":1,"q":"Which Azure AI capability identifies and blocks harmful content such as hate, violence, sexual and self-harm material in user prompts and model outputs?","o":["Azure AI Content Safety","Azure AI Search semantic ranker","Azure AI Speech custom neural voice","Azure OpenAI fine-tuning"],"a":0,"e":"Azure AI Content Safety provides text and image moderation with severity levels, and is integrated into Azure OpenAI's content filters. Semantic ranker improves search relevance; it does not moderate."},
+{"d":2,"q":"What is Microsoft Foundry?","o":["A database for storing machine learning models","The unified Azure platform for building, deploying and evaluating AI apps and agents, including the model catalogue and Agent Service","A desktop IDE for Python development","A managed Kubernetes service for AI training only"],"a":1,"e":"Microsoft Foundry — the successor to Azure AI Studio — is Microsoft's unified platform: projects, model catalogue, deployments, agent service, evaluation and safety tooling in one place, plus Foundry SDK/Tools for code-first work."},
+{"d":2,"q":"In Foundry, which component holds your working environment — prompts, data connections, evaluations and deployed models?","o":["A Foundry project","A storage container","A virtual network","A key vault"],"a":0,"e":"A Foundry project is the workspace for one AI solution. It is backed by an AI hub/resource (which manages shared compute, connections and the model catalogue) in your Azure subscription."},
+{"d":2,"q":"A team wants to guarantee predictable latency and committed capacity for a high-volume production workload. Which Azure OpenAI deployment option fits best?","o":["Global batch","Provisioned Throughput Units (PTU)","Standard (pay-as-you-go)","Serverless only"],"a":1,"e":"PTUs provide reserved, provisioned capacity with high throughput and predictable latency for mission-critical workloads. Global batch is a low-cost, asynchronous option for non-interactive jobs; Standard is shared pay-per-token capacity."},
+{"d":2,"q":"Which model family in the Azure OpenAI catalogue should be used to generate vector representations for semantic search?","o":["GPT-4o","Text-embedding-3-large","Whisper","DALL-E"],"a":1,"e":"Text-embedding-3-large (and the embedding family) outputs vectors for similarity/vector search. GPT-4o is a multimodal chat model, Whisper transcribes audio, DALL-E/Image generation creates images."},
+{"d":2,"q":"A finance app must accept an image of a receipt AND answer questions about it in one conversation. Which model type is required?","o":["A multimodal model such as GPT-4o","A text-only embedding model","A speech-to-text model","A content safety model"],"a":0,"e":"Multimodal models accept images, audio and text as input in a single chat turn, enabling vision-language scenarios like document Q&A. Embedding, speech and safety models are single-purpose."},
+{"d":2,"q":"What is the recommended authentication for production apps calling Azure OpenAI and Foundry resources?","o":["Embedding the API key in the client app","Using Microsoft Entra ID with a managed identity and disabling key access","Sharing one key across all developers","Using the deployment name as a password"],"a":1,"e":"Managed identity + Microsoft Entra ID with role-based access (e.g. Azure AI Developer) is least-privilege and key-free. Keys embedded in clients get leaked and require rotation."},
+{"d":2,"q":"Which role-based access control role would a developer need to call deployed models and work within a Foundry project?","o":["Azure AI Developer","Storage Blob Data Owner","Virtual Machine Contributor","DNS Zone Contributor"],"a":1,"e":"The Azure AI Developer role grants access to Foundry/hub actions and model calls while limiting management rights. Least privilege means the developer does NOT get subscription-wide roles."},
+{"d":2,"q":"What is retrieval-augmented generation (RAG)?","o":["Training a model on your documents to change its weights","Retrieving relevant documents and adding them as context to the prompt so the model answers from your data","Sending all documents to the model in a single token window","Running the model locally on your servers"],"a":1,"e":"RAG: chunk and index your documents (typically with embeddings in Azure AI Search), retrieve the most relevant chunks per query, then augment the prompt so the model grounds its answer in your content — reducing hallucination without retraining."},
+{"d":2,"q":"Which Azure service is the recommended vector and hybrid search engine for RAG at enterprise scale?","o":["Azure AI Search","Azure Blob Storage","Azure Table Storage","Azure Cosmos DB for MongoDB only"],"a":1,"e":"Azure AI Search supports vector search, keyword search, hybrid (both, fused) retrieval and semantic ranking — plus indexers and skillsets to ingest and chunk source documents."},
+{"d":2,"q":"Why are source documents chunked before being embedded and indexed?","o":["To reduce storage cost per file","Because retrieval performs best on smaller, semantically coherent units that fit context windows","Because chunking converts text to audio","Because embeddings only work on numeric data"],"a":1,"e":"Chunks let the retriever find the specific passage that answers the question and let the prompt fit the context window with the most relevant evidence. Overly large chunks dilute meaning and waste tokens."},
+{"d":2,"q":"A search index ranks a document above another with an identical keyword match because the former is more relevant in meaning. Which feature produces this?","o":["Semantic ranking","Compression","Replication","Token limits"],"a":0,"e":"The semantic ranker re-orders results by understanding the query's meaning, not just keyword overlap — the reason hybrid + semantic is the standard RAG recipe."},
+{"d":2,"q":"What distinguishes an AI agent from a simple chat completion call?","o":["Agents use a larger model","Agents autonomously loop: plan, call tools, observe results and act until the task is done","Agents always run on Kubernetes","Agents only answer with images"],"a":1,"e":"An agent is an LLM-driven system that can use tools (search, code, APIs, knowledge), observe the tool result, and decide the next step in a loop until it completes the goal — possibly over several turns."},
+{"d":2,"q":"In the Foundry Agent Service, what is a 'tool' in an agent definition?","o":["A skill the agent can invoke, such as Bing search, Azure AI Search knowledge retrieval, function calling or code interpreter","A GPU for training","A storage account setting","A licensing option"],"a":0,"e":"Tools are how agents act on the world: grounded retrieval, web search, function calls to your APIs, or executing code. Defining a precise tool schema both unlocks capability and limits blast radius."},
+{"d":2,"q":"How does function calling (tool use) actually work?","o":["The model always executes code directly on the server","The model returns a structured request to invoke a function; your application executes it and returns the result to the model","Functions are hard-coded inside the model weights","The user must execute functions manually"],"a":1,"e":"With function calling, the model produces a JSON tool call. Your app runs the function (e.g. a database query) and feeds the result back — the model never executes arbitrary code on its own, so you keep control."},
+{"d":2,"q":"Why does an agent need session and conversation state (memory)?","o":["To store passwords","So it can recall earlier turns, user context and tool results across the conversation","To reduce API costs permanently","Because agents cannot accept new instructions"],"a":1,"e":"State lets an agent maintain context across turns — earlier user requests, facts it discovered, results of tool calls — which is what makes multi-turn, multi-step tasks coherent."},
+{"d":2,"q":"A customer-service scenario needs a triage agent that hands off to specialist agents for billing, refunds and technical support. What is this pattern?","o":["Multi-agent orchestration","Single-agent prompt only","Batch inference","Model distillation"],"a":0,"e":"Multi-agent orchestration divides work among specialised agents coordinated by an orchestrator — useful for complex domains, though a single well-tooled agent is often simpler and sufficient."},
+{"d":2,"q":"Which evaluation metric measures whether the model's answer is supported by the provided source content (no fabrication)?","o":["Groundedness","Fluency","Coherence","Token cost"],"a":0,"e":"Groundedness measures how well the answer is supported by retrieved context — low groundedness = hallucination risk. Relevance checks context-to-question fit; fluency/coherence judge readability."},
+{"d":2,"q":"What is the purpose of AI Foundry's evaluation capability?","o":["To compare prompts, models and RAG configurations with built-in evaluators and a test dataset before deployment","To debug Python runtime errors","To replace the content filter","To manage billing"],"a":0,"e":"Evaluation runs built-in (groundedness, relevance, coherence, fluency) and custom evaluators over a test dataset so you can pick the best prompt/model/chunking and catch regressions — an iterative loop, not a one-off."},
+{"d":2,"q":"What is 'red teaming' in the context of an AI agent?","o":["Adversarial testing — attacking the agent with jailbreaks, prompt injections and edge cases to find weaknesses before attackers do","Colour-coding the UI","Testing with a red font for warnings","Configuring the failure responses"],"a":0,"e":"Red teaming probes for jailbreaks, prompt injection, data leakage, over-reliance and unsafe actions. Foundry provides risk and safety evaluators and red-teaming tooling for this."},
+{"d":2,"q":"A rival's text is hidden inside a web page your agent's search tool retrieves, and it tries to make the agent ignore its instructions. What is this attack?","o":["Prompt injection","Distributed denial of service","SQL injection only","Phishing"],"a":0,"e":"Prompt injection = malicious instructions embedded in retrieved or user-visible content. Mitigations: treat all external content as data, limit tool permissions, instruction hierarchy, allowlists and human approval for sensitive actions."},
+{"d":2,"q":"What should you do when an agent's tool can perform a high-impact action such as deleting files or transferring money?","o":["Add a human-in-the-loop approval step and least-privilege permissions on the tool","Remove content filtering","Increase the model temperature","Disable logging"],"a":0,"e":"Critical actions need guardrails: required human approval, restricted scopes, audit logging, and tools that are read-only by default. Agent autonomy must be matched by control."},
+{"d":2,"q":"Which Foundry service structures semi-structured documents (PDFs, scans) into fields, tables and markdown that agents and RAG can consume?","o":["Azure AI Content Understanding","Azure AI Speech","Azure AI Translator","Azure DNS"],"a":0,"e":"Content Understanding converts documents into structured, multimodal outputs — fields, tables, visual elements and clean markdown — making them usable as grounded knowledge for agents and search."},
+{"d":2,"q":"Document Intelligence (formerly Form Recognizer) is best described as…","o":["A tool for extracting key-value pairs, tables and invoices from documents with prebuilt and custom models","A chatbot framework","A vector database","A model monitoring dashboard"],"a":0,"e":"Document Intelligence offers prebuilt models (invoices, receipts, IDs) plus custom extraction, and is the classic document-extraction workhorse, often upstream of RAG pipelines."},
+{"d":2,"q":"Where does the 'knowledge' an agent retrieves over live to answer questions about your private documents live at runtime?","o":["Inside the model weights","In a vector database / search index such as Azure AI Search","In the prompt template only","In the DNS records"],"a":1,"e":"RAG stores your content in an external index. The model stays generic; you retrieve evidence per query. This keeps knowledge fresh and auditable without retraining — and you control who may access it."},
+{"d":2,"q":"Which Azure OpenAI feature lets you point a chat model at your own documents without building the full retrieval pipeline yourself?","o":["'Your data' (grounding with your data)","Fine-tuning","Provisioned throughput only","Content filtering only"],"a":0,"e":"Azure OpenAI On Your Data connects configured data sources and handles chunking, retrieval and citation flow — a quick, supported path to grounded answers before you roll a custom RAG pipeline."},
+{"d":2,"q":"A team needs a very small model for a high-volume, low-latency classification task and a reasoning model for complex multi-step problems. What is the right approach?","o":["Use one largest model for everything","Match model capability to task — small/fast models for simple tasks, reasoning models for complex ones","Use only open-source models","Use whichever model is cheapest to train"],"a":1,"e":"Model selection is a trade-off of capability, latency and cost. Over-provisioning wastes money and slows responses; under-provisioning causes poor quality on complex reasoning."},
+{"d":2,"q":"Which configuration blocks or flags harmful content based on severity levels such as low/medium/high and category?","o":["Azure OpenAI content filters (with Azure AI Content Safety)","The deployment name","A longer system message only","Semantic ranking"],"a":0,"e":"Content filters run on prompts and outputs with configurable severity thresholds per category. Moderation is layered: filters plus Content Safety service for a second, independent check."},
+{"d":2,"q":"A model keeps failing on a long legal contract because it exceeds the context window. Which technique helps most?","o":["Chunking and summarising the document before prompting","Raising temperature to 1.5","Calling the model twice with the same prompt","Removing the system message"],"a":0,"e":"When content won't fit the context window, split it into chunks and select/summarise the relevant parts (map-reduce, RAG, or pre-summarisation) — never just 'increase temperature'."},
+{"d":2,"q":"What does 'deploying a model' mean in Foundry after picking it from the model catalogue?","o":["Creating a hosting endpoint backed by the chosen deployment type with quota, auth and model version settings","Downloading it to a laptop","Registering a domain name","Creating a storage account"],"a":0,"e":"A deployment is a hosted, callable endpoint: you choose deployment type (standard/PTU/global batch or serverless), capacity, and how model versions roll (pin exact versions or auto-update aliases, evaluating before upgrades)."},
+{"d":2,"q":"Why might a team prefer 'global batch' deployment for a nightly job that summarises a year of support tickets?","o":["Cheaper asynchronous throughput for non-interactive workloads","Lower latency than PTU","It removes the need for a model","It improves answer quality"],"a":0,"e":"Global batch is designed for offline, long-running, high-volume jobs at reduced cost, with responses available within 24 hours. It is not for interactive user-facing requests."},
+{"d":2,"q":"Where in Foundry do you configure custom guardrails, such as blocking certain topics in an agent's responses?","o":["Content filters and system message/instruction hierarchy plus safety evaluations","In the Azure DNS zone","In the VM size","In the storage account firewall"],"a":0,"e":"Guardrails combine platform filters (Content Safety), prompt-level instructions, tool restrictions, human-in-the-loop controls — and you validate them with safety evaluations before release."},
+{"d":2,"q":"An enterprise must show an audit trail of who called which model when. What is the right first step?","o":["Enable diagnostic/audit logging and use Entra ID identities rather than shared keys","Disable all logging to save cost","Use one shared key and no logs","Store prompts in a public bucket"],"a":0,"e":"Operational governance = identity-based access, resource logs (prompts/response metadata), monitoring with Application Insights/Foundry observability, and retention policy. Shared keys erase attribution."},
+{"d":2,"q":"A Foundry project's evaluation shows high relevance but low groundedness. What is the most likely fix?","o":["Improve retrieval: better chunking, more/better sources, hybrid search or query rewriting","Increase temperature to 2","Remove the system message","Switch to a vision model"],"a":0,"e":"Low groundedness with high relevance means retrieval found the right topic but the model still extrapolates. Better: strengthen evidence (chunk quality, top-k, hybrid+semantic), instruct the model to answer only from context, and add 'answer unknown' behaviour."},
+{"d":2,"q":"A developer wants agents to be able to look at up-to-the-minute website content during a conversation. What's the cleanest supported tool to give the agent?","o":["A web search tool (e.g. Bing Search groundings)","A local text file on the development laptop","A screenshot of the homepage","A hard-coded list of URLs in the prompt"],"a":0,"e":"Foundry agents can be given connector tools like Bing search or SharePoint/OneDrive knowledge, giving the agent live, grounded information with citations — instead of stale prompt-era content."}
+]</script>
+
+<script>
+(function(){
+"use strict";
+var BANK=JSON.parse(document.getElementById('bank').textContent);
+var D1="Domain 1 · AI concepts & responsible AI", D2="Domain 2 · Foundry: gen AI apps & agents";
+var TOTAL=BANK.length, PASS=700, MIN=50, SECS=MIN*60;
+var st={answers:new Array(TOTAL).fill(null), marked:new Array(TOTAL).fill(false), idx:0, left:SECS, timer:null, started:false, used:0, order:[]};
+function $(id){return document.getElementById(id)}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function q(i){return BANK[st.order[i]]}
+function fmt(s){var m=Math.floor(s/60),x=s%60;return (m<10?"0":"")+m+":"+(x<10?"0":"")+x}
+
+/* ---- start ---- */
+(function(){ var n=D1count(); var p1=Math.round(n/TOTAL*100);
+  $('fq').textContent=TOTAL; $('fm').textContent=MIN+' min';
+  $('fw').textContent=(100-p1)+'%';
+  $('stat-line').textContent=TOTAL+' questions · '+MIN+' minutes · pass mark 700/1000 · instant scoring · full explanations';
+  $('bd2').style.width=(100-p1)+'%'; $('pd2').textContent=(100-p1)+'%';
+  $('bd1').style.width=p1+'%'; $('pd1').textContent=p1+'%';
+})();
+function D1count(){ var c=0; for(var i=0;i<BANK.length;i++) if(BANK[i].d===1) c++; return c; }
+
+/* ---- start ---- */
+$('btn-start').addEventListener('click',function(){
+  st.order=shuffle(BANK.map(function(_,i){return i}));
+  st.answers=new Array(TOTAL).fill(null); st.marked=new Array(TOTAL).fill(false); st.idx=0; st.left=SECS; st.used=0;
+  $('scr-start').classList.add('hidden'); $('scr-result').classList.add('hidden'); $('scr-exam').classList.remove('hidden');
+  draw(); st.started=true;
+  st.timer=setInterval(function(){ st.left--; st.used++;
+    $('clock').textContent=fmt(Math.max(st.left,0));
+    $('clock').className='clock'+(st.left<=300?(st.left<=60?' danger':' warn'):'');
+    if(st.left<=0){clearInterval(st.timer); submit(true);}
+  },1000);
+});
+
+/* ---- rendering ---- */
+var navpad=$('navpad');
+function draw(){
+  var i=st.idx, Q=q(i);
+  $('qnum').textContent='Q '+(i+1)+' / '+TOTAL;
+  $('qdom').textContent=(Q.d===1?D1:D2);
+  $('qtext').textContent=Q.q;
+  $('btn-flag').classList.toggle('on',st.marked[i]);
+  $('btn-flag').textContent=st.marked[i]?'⚑ Marked':'⚑ Mark for review';
+  var box=$('opts'); box.innerHTML='';
+  Q.o.forEach(function(opt,oi){
+    var lab=document.createElement('label'); lab.className='opt'+(st.answers[i]===oi?' sel':'');
+    lab.innerHTML='<span class="letter">'+String.fromCharCode(65+oi)+'</span><span>'+esc(opt)+'</span>';
+    lab.addEventListener('click',function(){ st.answers[i]=oi; draw(); });
+    box.appendChild(lab);
+  });
+  $('btn-prev').disabled=(i===0); $('btn-next').disabled=(i===TOTAL-1);
+  $('bar').style.width=Math.round(st.answers.filter(function(a){return a!==null}).length/TOTAL*100)+'%';
+  navpad.innerHTML='';
+  for(var k=0;k<TOTAL;k++){ (function(k){
+    var b=document.createElement('button'); b.className='ncell'+(st.answers[k]!==null?' done':'')+(st.marked[k]?' marked':'')+(k===st.idx?' cur':''); b.textContent=k+1;
+    b.addEventListener('click',function(){ st.idx=k; draw(); scrollTo(0,0); });
+    navpad.appendChild(b);
+  })(k); }
+  $('qnum').textContent='Q '+(i+1)+' / '+TOTAL;
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+/* ---- navigation ---- */
+$('btn-next').addEventListener('click',function(){ if(st.idx<TOTAL-1){st.idx++;draw();scrollTo(0,0)} });
+$('btn-prev').addEventListener('click',function(){ if(st.idx>0){st.idx--;draw();scrollTo(0,0)} });
+$('btn-flag').addEventListener('click',function(){ st.marked[st.idx]=!st.marked[st.idx]; draw(); });
+document.addEventListener('keydown',function(e){
+  if(!st.started||$('scr-exam').classList.contains('hidden'))return;
+  if(e.key==='ArrowRight'){ $('btn-next').click(); }
+  else if(e.key==='ArrowLeft'){ $('btn-prev').click(); }
+  else if(e.key.toLowerCase()==='m'){ $('btn-flag').click(); }
+});
+
+/* ---- submit ---- */
+function openModal(html){ $('modal-box').innerHTML=html; $('overlay').classList.add('on'); }
+function closeModal(){ $('overlay').classList.remove('on'); }
+$('overlay').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+
+$('btn-submit').addEventListener('click',function(){
+  var un=st.answers.filter(function(a){return a===null}).length, mk=st.marked.filter(Boolean).length;
+  openModal('<h3>Submit exam now?</h3><p style="color:#48566e">Answered <b>'+(TOTAL-un)+'</b> of <b>'+TOTAL+'</b>. Unanswered: <b>'+un+'</b> · Marked for review: <b>'+mk+'</b>.</p><p style="color:#48566e">You have <b style="color:#075a92">'+fmt(st.left)+'</b> remaining. Once submitted you cannot change answers.</p><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn btn-p" onclick="evtSubmit()" type="button">Yes, submit</button><button class="btn btn-g" onclick="evtClose()" type="button">Keep working</button></div>');
+});
+window.evtSubmit=function(){ closeModal(); submit(false); };
+window.evtClose=closeModal;
+
+$('btn-quit').addEventListener('click',function(){
+  openModal('<h3>End the exam early?</h3><p style="color:#48566e">Your attempt will be scored with the answers you have so far ('+st.answers.filter(function(a){return a!==null}).length+' of '+TOTAL+' answered).</p><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn btn-r" onclick="evtSubmit()" type="button">End and score</button><button class="btn btn-g" onclick="evtClose()" type="button">Continue exam</button></div>');
+});
+window.addEventListener('beforeunload',function(e){ if(st.started && !done && st.left>0){ e.preventDefault(); e.returnValue=''; } });
+var done=false;
+
+function submit(autosubmit){
+  done=true; clearInterval(st.timer);
+  var correct=0, byD={1:{c:0,t:0},2:{c:0,t:0}};
+  st.answers.forEach(function(a,i){ var Q=q(i); byD[Q.d].t++; if(a===Q.a){correct++;byD[Q.d].c++;} });
+  var score=Math.round(correct/TOTAL*1000), pass=score>=PASS;
+  drawResults(score,correct,pass,autosubmit,byD);
+  $('scr-exam').classList.add('hidden'); $('scr-result').classList.remove('hidden'); st.started=false;
+  scrollTo(0,0);
+}
+
+function drawResults(score,correct,pass,auto,byD){
+  var hero=$('hero');
+  hero.className='result-hero '+(pass?'pass':'fail');
+  var pct=Math.round(score/10)+'%';
+  $('ring').style.setProperty('--pct',pct);
+  $('score-num').textContent=score;
+  $('verdict').textContent=pass?'PASS':'FAIL';
+  $('hero-sub').textContent=auto?'TIME EXPIRED — EXAM AUTO-SUBMITTED':'EXAM COMPLETE';
+  $('verdict-line').textContent=pass?'Congratulations — you passed!':'Not quite — keep practising';
+  $('time-note').textContent='Score '+score+'/1000 · Passing mark '+PASS+' · '+correct+'/'+TOTAL+' correct · Time used '+fmt(st.used)+' of '+fmt(SECS);
+  var dr=$('domres'); dr.innerHTML='';
+  [1,2].forEach(function(d){
+    var b=byD[d], pct2=Math.round(b.c/b.t*100);
+    var cls=pct2>=80?'':(pct2>=60?'mid':'low');
+    var row=document.createElement('div'); row.className='dombar';
+    row.innerHTML='<span class="lbl">'+(d===1?D1:D2)+'</span><span class="bar"><i class="'+cls+'" style="width:'+pct2+'%"></i></span><span class="pct">'+pct2+'%</span>';
+    dr.appendChild(row);
+    var cap=document.createElement('p'); cap.style.cssText='font-size:12.5px;color:#5f6c84;margin:-4px 0 16px'; cap.textContent=b.c+' of '+b.t+' correct'; dr.appendChild(cap);
+  });
+  var rv=$('review'); rv.innerHTML='';
+  st.order.forEach(function(orig,i){ var Q=BANK[orig];
+    var item=document.createElement('div'); item.className='hero'; item.style.margin='14px 0';
+    item.setAttribute('data-i',i); item.dataset.state=st.answers[i]===null?'unanswered':(st.answers[i]===Q.a?'right':'wrong'); item.dataset.marked=st.marked[i];
+    var h='<div class="ey" style="font-size:11px">'+(Q.d===1?D1:D2)+'</div><h3 style="margin:6px 0 10px">Q '+(i+1)+' · '+(st.answers[i]===null?'<span style="color:#b3261e">Not answered</span>':(st.answers[i]===Q.a?'<span style="color:#0b7a3a">Correct</span>':'<span style="color:#b3261e">Incorrect</span>'))+(st.marked[i]?' · <span style="color:#8a5a12">⚑ marked</span>':'')+'</h3><p style="font-weight:700;font-size:16.5px;margin:0 0 10px">'+esc(Q.q)+'</p>';
+    Q.o.forEach(function(opt,oi){
+      var cls=oi===Q.a?'r-corr':(st.answers[i]===oi?'r-wrong':'r-none');
+      var mark=oi===Q.a?' ✓ correct':(st.answers[i]===oi?' ✗ your answer':'');
+      h+='<span class="review-opt '+cls+'"><b>'+String.fromCharCode(65+oi)+'.</b> '+esc(opt)+mark+'</span>';
+    });
+    h+='<div class="explain"><b>Explanation:</b> '+esc(Q.e)+'</div>';
+    item.innerHTML=h; rv.appendChild(item);
+  });
+  applyFilter('all');
+}
+var curF='all';
+function applyFilter(f){
+  curF=f;
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.toggle('on',c.dataset.f===f); });
+  document.querySelectorAll('#review > div').forEach(function(el){
+    var show = f==='all' || (f==='wrong'&&el.dataset.state==='wrong') || (f==='unanswered'&&el.dataset.state==='unanswered') || (f==='marked'&&el.dataset.marked==='true');
+    el.style.display=show?'':'none';
+  });
+}
+document.querySelectorAll('.chip').forEach(function(c){ c.addEventListener('click',function(){ applyFilter(c.dataset.f); }); });
+$('btn-retry').addEventListener('click',function(){ st.order=shuffle(BANK.map(function(_,i){return i})); st.answers=new Array(TOTAL).fill(null); st.marked=new Array(TOTAL).fill(false); st.idx=0; st.left=SECS; st.used=0; done=false;
+  $('scr-result').classList.add('hidden'); $('scr-exam').classList.remove('hidden'); draw();
+  $('clock').className='clock'; st.started=true;
+  st.timer=setInterval(function(){ st.left--; st.used++;
+    $('clock').textContent=fmt(Math.max(st.left,0));
+    $('clock').className='clock'+(st.left<=300?(st.left<=60?' danger':' warn'):'');
+    if(st.left<=0){clearInterval(st.timer); submit(true);}
+  },1000);
+});
+})();
+</script></main>
+<footer><nav><a href="/disclaimer.html">Disclaimer</a><a href="/terms-of-use.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings>Privacy and cookie settings</a><a href="/about.html">About</a><a href="mailto:info@rcwittraining.in">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer>
+</body></html>
