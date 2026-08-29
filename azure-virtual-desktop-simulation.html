@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azure Virtual Desktop (WVD) Simulation: AZ-140 Question with Answer and Explanation | RCW IT Training</title><meta name="description" content="Practice an AZ-140-style Azure Virtual Desktop (WVD) simulation: pooled host pool, app group, workspace and FSLogix profiles — with the step-by-step answer and the reasoning behind every task."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/azure-virtual-desktop-simulation.html"><style>:root{--n:#061633;--i:#101b3b;--b:#078be8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1}*{box-sizing:border-box}body{margin:0;background:var(--p);color:var(--i);font:16px/1.68 Inter,system-ui,sans-serif}.top{background:linear-gradient(112deg,#020a18,#06142c);border-bottom:4px solid var(--b);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}.mark{border:1px solid var(--c);border-radius:10px;color:var(--c);font-size:11px;font-weight:900;padding:10px 7px}.brand{font-weight:800}.brand small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.6px;text-transform:uppercase}.home{margin-left:auto;color:var(--c);font-size:14px;font-weight:700;text-decoration:none}.wrap{max-width:850px;margin:auto;padding:42px 22px 70px}.hero,.card{background:#fff;border:1px solid var(--l);border-radius:20px;padding:34px;box-shadow:0 10px 28px #081f4515}.ey{color:#0769be;font-size:12px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase}h1{font-size:clamp(30px,5vw,47px);line-height:1.12;letter-spacing:-1px;margin:10px 0 16px}h2{font-size:25px;line-height:1.22;margin:40px 0 14px}.lead{font-size:19px;color:#42516b}.meta{color:var(--m);font-size:14px}.card{border-left:5px solid var(--b);margin:16px 0;padding:22px}.card p{margin:0;color:#48566e}.take{margin-top:35px;padding:26px 28px;border-radius:18px;background:var(--n);color:#fff}code{background:#eef3fa;border:1px solid #dce5f1;border-radius:6px;padding:1px 6px;font:0.9em ui-monospace,SFMono-Regular,Consolas,monospace}
+/* RCW article additions for the simulation page */
+.note{border-left:5px solid var(--c);background:#eaf7ff;border-radius:14px;padding:16px 18px;margin:18px 0;font-size:15px;color:#123}.note strong{color:#075a92}.taskbox{border:1px solid var(--l);border-left:5px solid var(--n);background:#fff;border-radius:16px;padding:18px 20px 16px;margin:14px 0}.taskbox .tn{display:inline-block;background:var(--n);color:var(--c);font-size:11px;font-weight:850;letter-spacing:1.2px;padding:4px 10px;border-radius:99px;margin-bottom:8px;text-transform:uppercase}.taskbox h3{margin:4px 0 8px;font-size:19px;line-height:1.25}.taskbox p{margin:6px 0;color:#48566e}.taskbox ul{margin:8px 0 0;padding-left:20px;color:#48566e}.taskbox li{margin:4px 0}.steps{counter-reset:s;margin:14px 0 0;padding:0;list-style:none}.steps li{position:relative;padding:0 0 18px 54px;counter-increment:s;color:#2c3b55}.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:34px;height:34px;border-radius:50%;background:var(--n);color:var(--c);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}.steps li strong{color:var(--i)}.steps li:last-child{padding-bottom:0}.code{background:#071330;color:#cfe6ff;border:1px solid #163b66;border-radius:14px;padding:16px 18px;overflow:auto;font:13.5px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;margin:10px 0}.code .k{color:#4bd7ff}.code .g{color:#8fb4dd}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--l);border-radius:14px;overflow:hidden;margin:14px 0;font-size:14.5px}th{background:var(--n);color:#fff;text-align:left;padding:10px 14px;font-size:12.5px;letter-spacing:.8px;text-transform:uppercase}td{padding:10px 14px;border-top:1px solid var(--l);color:#3b4a66;vertical-align:top}td:first-child{font-weight:700;color:var(--i)}tr:nth-child(even) td{background:#f7fafd}.ok{color:#0b7a3a;font-weight:700}.no{color:#b3261e;font-weight:700}.reveal{display:inline-block;margin:6px 0 0;background:var(--n);color:var(--c);border:1px solid #163b66;border-radius:99px;padding:11px 22px;font:700 14px/1 Inter,system-ui,sans-serif;cursor:pointer}.reveal:hover{background:#0a2a5e}.answer{display:none;margin-top:22px}#ans:target~.answer{display:block}.answer.open{display:block}@media(max-width:550px){.hero,.card{padding:24px}.top{padding:13px 16px}.steps li{padding-left:44px}.steps li::before{width:29px;height:29px;font-size:13px}}</style></head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Microsoft Azure · AZ-140 simulation · Exam practice</div><h1>Azure Virtual Desktop (WVD) Simulation: AZ-140-Style Question, Answer and Explanation</h1><p class="lead">Attempt the lab like you would on the real exam — build a pooled host pool, an app group, a workspace and FSLogix profile storage — then check the click-by-click answer and the reasoning the examiners are testing.</p><p class="meta">Published August 29, 2026 · RCW IT Training · Exam AZ-140 (Azure Virtual Desktop, formerly Windows Virtual Desktop)</p></div>
+
+<div class="note"><strong>Looking for “WVD 120”?</strong> That is the older community shorthand for this certification — the current Microsoft exam is <strong>AZ-140: Azure Virtual Desktop (formerly Windows Virtual Desktop)</strong>. On the real exam, “simulation” questions give you a live Azure portal lab and judge the state of your environment, not multiple choice. This page mirrors that format exactly.</div>
+
+<section><h2>The simulation scenario</h2>
+<p><strong>Contoso, Ltd.</strong> is piloting Azure Virtual Desktop for 400 sales users. You are the Azure administrator. The lab environment has already been provisioned for you:</p>
+<table><tr><th>Resource</th><th>Provided in the lab</th></tr>
+<tr><td>Subscription / resource group</td><td>contsub-avd / <code>rg-contoso-avd</code></td></tr>
+<tr><td>Region</td><td>East US 2 (use the region shown in your lab window)</td></tr>
+<tr><td>Networking</td><td><code>vnet-avd</code> (10.20.0.0/16) with subnet <code>snet-sessionhosts</code> (10.20.1.0/24)</td></tr>
+<tr><td>Identity</td><td>Entra ID tenant <code>contoso.onmicrosoft.com</code> joined to AD DS <code>contoso.com</code>; group <code>AVD-Users</code> with five pre-created members</td></tr>
+<tr><td>Storage</td><td>Storage account <code>stcontosoprofiles</code> (Standard, LRS) — no file share yet</td></tr>
+<tr><td>Licensing</td><td>Microsoft 365 E5 assigned to all pilot users</td></tr></table>
+<p><strong>Requirements:</strong> a pooled host pool named <code>hp-avd-01</code> running the Windows 11 Enterprise <em>multi-session</em> image with two session hosts, a desktop application group named <code>dag-avd-01</code> for the <code>AVD-Users</code> group, a workspace named <code>ws-avd-01</code>, and FSLogix profile containers on Azure Files so users keep their profile on every session.</p>
+</section>
+
+<section><h2>Your tasks — attempt before you reveal</h2>
+<p>In the simulator you would perform these directly in the Azure portal. Try to complete all five, then compare with the answer.</p>
+<div class="taskbox"><span class="tn">Task 1</span><h3>Create the host pool and session hosts</h3>
+<p>Create <code>hp-avd-01</code>: a <strong>pooled</strong> host pool, <strong>Desktop</strong> preferred app group type, <strong>Breadth-first</strong> load balancing, max 10 sessions per host. Add two session hosts from the Azure Marketplace image <em>Windows 11 Enterprise multi-session, version 23H2</em> (Gen 2), size <code>Standard_D2s_v5</code>, name prefix <code>hp-avd-01</code>, joined to <code>contoso.com</code>, deployed to <code>vnet-avd / snet-sessionhosts</code> with availability zone 1.</p></div>
+<div class="taskbox"><span class="tn">Task 2</span><h3>Create the application group and assign users</h3>
+<p>Create <code>dag-avd-01</code> of type <strong>Desktop</strong> inside <code>hp-avd-01</code>, then assign the <code>AVD-Users</code> group. Publishing a desktop needs no apps to be added.</p></div>
+<div class="taskbox"><span class="tn">Task 3</span><h3>Create the workspace and register the app group</h3>
+<p>Create <code>ws-avd-01</code> in the same resource group, register <code>dag-avd-01</code> with it, and confirm the desktop plan is selected.</p></div>
+<div class="taskbox"><span class="tn">Task 4</span><h3>Enable FSLogix profile containers on Azure Files</h3>
+<p>On <code>stcontosoprofiles</code>, create an SMB share named <code>profiles</code>, grant <code>AVD-Users</code> <em>Storage File Data SMB Share Contributor</em>, then configure session hosts (group policy) to store user profiles in <code>\\stcontosoprofiles.file.core.windows.net\profiles</code>.</p></div>
+<div class="taskbox"><span class="tn">Task 5</span><h3>Verify the deployment</h3>
+<p>Sign in to <a href="https://client.wvd.microsoft.com" style="color:#0769be">client.wvd.microsoft.com</a> as a pilot user, confirm the <strong>Contoso Desktop</strong> appears, and check that an FSLogix profile folder is created for the user.</p></div>
+<p style="margin-top:18px"><button class="reveal" onclick="var a=document.getElementById('answer');a.classList.toggle('open');this.textContent=a.classList.contains('open')?'Hide the answer':'Reveal answer &amp; explanation';" type="button">Reveal answer &amp; explanation</button></p>
+</section>
+
+<div class="answer" id="answer">
+<section><h2>Answer — how to complete each task</h2>
+
+<div class="card"><strong>Task 1 — Host pool and session hosts</strong>
+<ol class="steps">
+<li>Portal → <strong>Azure Virtual Desktop → Host pools → + Create</strong>. On <em>Basics</em>: subscription, <code>rg-contoso-avd</code>, name <code>hp-avd-01</code>, region <strong>East US 2</strong>, validation environment: <strong>No</strong>.</li>
+<li>Host pool type: <strong>Pooled</strong>; preferred app group type: <strong>Desktop</strong>; load balancing: <strong>Breadth-first</strong>; max session limit: <strong>10</strong>.</li>
+<li>On <em>Virtual machines</em>, choose <strong>“Yes” to add VMs</strong>. Image: <em>Windows 11 Enterprise multi-session, version 23H2</em>, <strong>Gen 2</strong>.</li>
+<li>Size: <code>Standard_D2s_v5</code>; number of VMs: <strong>2</strong>; name prefix: <code>hp-avd-01</code>; availability zone: <strong>1</strong>.</li>
+<li>Networking: <code>vnet-avd</code> → <code>snet-sessionhosts</code>; join type: <strong>Active Directory</strong> (<code>contoso.com</code>) with a domain-join account; skip the (optional) Entra ID/Intune join. Finish the wizard — the template creates the VMs, joins the domain and joins them to the host pool automatically.</li>
+</ol></div>
+
+<div class="card"><strong>Task 2 — Application group and user assignment</strong>
+<ol class="steps">
+<li>Open <strong>hp-avd-01</strong> → <strong>Application groups → + Create</strong>. Name <code>dag-avd-01</code>, type <strong>Desktop</strong> (only a RemoteApp app group needs applications added).</li>
+<li>Inside <code>dag-avd-01</code> → <strong>Assignments → + Add</strong> → add the <code>AVD-Users</code> group. Without this assignment users see <em>nothing</em> in their feed.</li>
+</ol></div>
+
+<div class="card"><strong>Task 3 — Workspace</strong>
+<ol class="steps">
+<li>Azure Virtual Desktop → <strong>Workspaces → + Create</strong> → name <code>ws-avd-01</code>, <code>rg-contoso-avd</code>, region East US 2.</li>
+<li>In <em>Application groups</em>, select <code>dag-avd-01</code> (this “registers” the app group — the step people forget) and confirm the <strong>Desktop</strong> plan is ticked, then create.</li>
+</ol></div>
+
+<div class="card"><strong>Task 4 — FSLogix profile storage (both permission layers!)</strong>
+<ol class="steps">
+<li>Open <code>stcontosoprofiles</code> → <strong>File shares → + File share</strong> → name <code>profiles</code>, quota (e.g. 50 GiB) → create.</li>
+<li><strong>Azure RBAC layer:</strong> on the <em>share</em> (Share → Access control (IAM) → + Add role assignment) grant <code>AVD-Users</code> the built-in role <strong>Storage File Data SMB Share Contributor</strong>. This role controls who can reach the SMB share at all.</li>
+<li><strong>NTFS layer:</strong> if the share is new, grant the same group <code>Modify</code> on the share root (run once with storage credentials or set it via the AAD Kerberos setup / <code>icacls</code> on the first mount). Both layers must allow access or FSLogix fails.</li>
+<li>On the AD side, on <em>any</em> domain-joined session host (or via GPO on <code>contoso.com</code>): <strong>Computer Configuration → Administrative Templates → System → User Profiles</strong>.</li>
+<li>Enable <strong>FSLogix Profile Container</strong> → <em>Enabled</em>, and set <strong>Profile path</strong> to <code>\\stcontosoprofiles.file.core.windows.net\profiles</code> (FSLogix appends the <code>%username%</code> folder automatically from v2, or use <code>\profiles\%username%</code>). Apply the GPO, run <code>gpupdate /force</code> on the session hosts.</li>
+</ol></div>
+
+<div class="card"><strong>Task 5 — Verification</strong>
+<ol class="steps">
+<li>Browse to the web client, sign in as a pilot user: the feed shows <strong>Contoso Desktop</strong>.</li>
+<li>Check <code>profiles</code> in the storage account — a folder per user (e.g. <code>azureuser1</code>) with <code>Profile_*.vhdx</code> proves FSLogix is active.</li>
+<li>On the session host, <code>%ProgramData%\FSLogix\Logs\Profile\</code> shows a healthy connection log.</li>
+</ol></div>
+
+<div class="code"><span class="k"># FSLogix quick health check on a session host</span>
+<span class="g">Get-Item 'HKLM:\SOFTWARE\Policies\FSLogix\Profiles' | fl *</span>
+<span class="g">Get-ChildItem \\stcontosoprofiles.file.core.windows.net\profiles</span>
+<span class="k"># Config registry values you should see:</span>
+<span class="g">Enabled        = 1</span>
+<span class="g">VHDLocations   = \\stcontosoprofiles.file.core.windows.net\profiles</span></div>
+</section>
+
+<section><h2>Explanation — why each step matters</h2>
+<div class="card"><strong>Pooled host pool + Desktop app group is the default recipe</strong>
+<p>A <strong>pooled</strong> pool lets many users share few multi-session VMs (that is the whole value of the multi-session SKU); <strong>personal</strong> pools give users their own single-session VM. With <em>Breadth-first</em> load balancing the broker places each new session on the least-loaded host, and FSLogix keeps the user experience identical on every host. A <strong>Desktop</strong> app group publishes the full desktop and needs no application list; only <strong>RemoteApp</strong> groups require you to add apps. Even a perfect app group shows users nothing until it is <em>both</em> assigned to users <em>and</em> registered to a workspace — the classic “why is my feed empty?” failure.</p></div>
+<div class="card"><strong>Multi-session image and licensing</strong>
+<p>Windows 11 Enterprise <em>multi-session</em> is published only in Azure Marketplace (Gen 2, re-signed images), which is why the task specifies it. It is the only Windows client SKU that permits concurrent signed-in sessions on one VM. Access rights come from Microsoft 365 E3/E5 (per user) or Windows VDA per-user licensing — the lab gives you M365 E5, so no extra purchase is needed.</p></div>
+<div class="card"><strong>FSLogix needs two permission layers, not one</strong>
+<p>This is the most-tested trap in AZ-140: <strong>Azure RBAC</strong> (<em>Storage File Data SMB Share Contributor/Reader</em>) governs access to the SMB share itself, while <strong>NTFS ACLs</strong> govern what a user can do inside it. Granting only one produces “profile failed to load” or empty profile containers. Also remember Azure Files SMB for Entra-joined/domain-joined clients needs <em>Kerberos</em> enabled on the storage account (or the ADDS/Kerberos key configuration) for seamless sign-in — a common second failure point. FSLogix containers, unlike roaming profiles, mount only during sign-in and work with both pooled and personal pools, and they are the reason apps like Outlook don’t rebuild a profile on every host.</p></div>
+<div class="card"><strong>Hosts, region and connectivity</strong>
+<p>Session hosts must sit in the <strong>same Azure region as the host pool</strong> and in a subnet with a route to the domain controller (or be Entra-joined). Users never RDP to the session host IP: the Azure Virtual Desktop client connects outbound over 443 to the Azure Virtual Desktop service (feed, gateway). So no inbound 3389 rule is needed on the NSG — a nice checking point when a lab asks “is the session host reachable?”. Use a <strong>validation environment</strong> for a pilot; roll out updates to it before production hosts.</p></div>
+<div class="card"><strong>Verification is part of the score</strong>
+<p>Simulators often grade the <em>state</em> of the environment. Before you finish: the app group is assigned to users, the workspace shows the published resources, the host pool list shows two <em>healthy</em> VMs (the <em>Adding/Updating</em> state must clear), and the FSLogix share contains a <code>Profile_*.vhdx</code>. Health checks in the Azure Virtual Desktop overview page and <code>Get-AzWvdSessionHost</code> in Azure Cloud Shell confirm readiness.</p></div>
+</section>
+
+<section><h2>Scoring checklist the lab is checking</h2>
+<table><tr><th>Check</th><th>Pass condition</th></tr>
+<tr><td>Host pool exists</td><td><code>hp-avd-01</code>, pooled, Desktop, breadth-first, max 10</td></tr>
+<tr><td>Session hosts</td><td>2 × <code>Standard_D2s_v5</code>, Win 11 Enterprise multi-session 23H2, in <code>snet-sessionhosts</code>, status <span class="ok">Running / healthy</span></td></tr>
+<tr><td>App group + assignment</td><td><code>dag-avd-01</code> has <code>AVD-Users</code> assigned</td></tr>
+<tr><td>Workspace registration</td><td><code>ws-avd-01</code> contains <code>dag-avd-01</code> (Desktop plan)</td></tr>
+<tr><td>FSLogix storage</td><td>Share <code>profiles</code> exists; RBAC <em>and</em> NTFS allow <code>AVD-Users</code>; GPO enabled with UNC path</td></tr>
+<tr><td>User experience</td><td>Pilot user sees the desktop in the web client; profile VHDX is created</td></tr></table>
+<h2>Common mistakes on this exact question</h2>
+<div class="card"><strong>Mistakes that lose marks</strong><p>1. Creating the app group but never registering it to a workspace — the feed stays empty. 2. Choosing Windows 11 Enterprise <em>single-session</em> (or a Windows Server image) for a pooled pool — no multi-user support. 3. Assigning only Azure RBAC or only NTFS rights for FSLogix, never both. 4. Setting the workload profile share at container root but forgetting the <code>%username%</code> path or GPO scope so only the admin machine applies it. 5. Deploying session hosts in a different region than the host pool. 6. Forgetting M365/Windows VDA licensing is a <em>prerequisite</em>, not an exam task — mention it in the explanation.</p></div>
+<div class="take"><strong>Key takeaway:</strong> An Azure Virtual Desktop deployment is a chain — host pool → session hosts → app group → user assignment → workspace registration → profile storage with both RBAC and NTFS permissions. Break one link and users see either an empty feed, an unreachable desktop, or a profile that resets on every sign-in. In the lab, verify end-to-end from a real user’s sign-in before you submit.</div>
+</section>
+</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>
