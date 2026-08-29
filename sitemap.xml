@@ -39,9 +39,6 @@
   <url><loc>https://www.rcwittraining.in/pure-flasharray-troubleshooting.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/san-multipath-latency-troubleshooting.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/veeam-jobs-restore-troubleshooting.html</loc><priority>0.6</priority></url>
-  <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-25.html</loc><priority>0.6</priority></url>
-  <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-26.html</loc><priority>0.6</priority></url>
-  <url><loc>https://www.rcwittraining.in/vendor-tech-certification-webinar-roundup-2026-08-28.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/vmware-snapshot-datastore-troubleshooting.html</loc><priority>0.6</priority></url>
   <url><loc>https://www.rcwittraining.in/vmware-vcenter-network-troubleshooting.html</loc><priority>0.6</priority></url>
   <!-- Detailed troubleshooting guides (added 29 Aug 2026) -->
@@ -58,6 +55,11 @@
   <url><loc>https://www.rcwittraining.in/linux-backup-rsync-restic-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/linux-disk-space-inode-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/vmware-vmotion-failures-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/fc-zoning-lun-masking-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/gcp-cloud-sql-connection-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/linux-boot-grub-failures-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/rclone-restic-cloud-backup-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/vmware-datastore-capacity-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d1.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d2.html</loc><priority>0.8</priority></url>
@@ -69,4 +71,5 @@
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d8.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/cram.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/exam.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/about.html</loc><priority>0.3</priority></url>
 </urlset>
