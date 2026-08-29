@@ -60,6 +60,11 @@
   <url><loc>https://www.rcwittraining.in/linux-boot-grub-failures-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/rclone-restic-cloud-backup-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/vmware-datastore-capacity-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/gcp-gke-upgrade-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/linux-packet-loss-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/vmware-esxi-psod-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/vss-shadow-copy-troubleshooting.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.rcwittraining.in/zfs-degraded-pool-troubleshooting.html</loc><priority>0.5</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d1.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/d2.html</loc><priority>0.8</priority></url>
