@@ -1,0 +1,32 @@
+name: daily-publish
+
+on:
+  schedule:
+    # 09:00 IST daily (UTC 03:30)
+    - cron: "30 3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish next batch
+        run: python3 tools/publish_batch.py
+
+      - name: Commit and push if there is anything new
+        run: |
+          git config user.name "rcw-daily-publish"
+          git config user.email "publish@rcwittraining.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No unpublished batch — queue empty, nothing committed."
+          else
+            BATCH=$(tail -1 tools/published_batches.txt)
+            git commit -m "Daily publish ${BATCH}: five troubleshooting guides (GCP, VMware, Linux, storage, backup)"
+            git push origin main
+          fi
