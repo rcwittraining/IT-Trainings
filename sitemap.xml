@@ -72,4 +72,9 @@
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/cram.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cissp-bootcamp/exam.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/about.html</loc><priority>0.3</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-autopilot-device-association.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-remote-help-unattended-access.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-endpoint-privilege-management.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-windows-autopatch-hotpatch.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-macos-recovery-lock.html</loc><priority>0.6</priority></url>
 </urlset>
