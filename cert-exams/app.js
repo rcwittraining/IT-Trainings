@@ -345,6 +345,22 @@
     a.addEventListener("click", (e) => { e.preventDefault(); show("home"); })
   );
 
+  /* ---------- deep links: ?exam=ccna|ccna-security|vcf|cce-v [&mode=exam] [&n=50] ---------- */
+  function autoStartFromQuery() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const examId = params.get("exam");
+      if (!examId || !BANKS[examId]) return;
+      const bank = BANKS[examId];
+      const mode = params.get("mode") === "exam" ? "exam" : "practice";
+      let n = parseInt(params.get("n"), 10);
+      if (!n || isNaN(n) || n < 1) n = bank.questions.length;
+      n = Math.min(n, bank.questions.length);
+      startExam(bank, n, mode);
+    } catch (e) { /* fall through to hub home */ }
+  }
+
   renderHome();
   show("home");
+  autoStartFromQuery();
 })();

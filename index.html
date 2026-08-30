@@ -641,6 +641,77 @@
       </div>
     </section>
 
+    <section class="cert-exams-home" aria-label="Certification practice exams">
+      <style>
+        .cert-exams-home{padding:54px 0;background:linear-gradient(#f5f8fc,#eef4fb);border-top:1px solid #dce5f1;border-bottom:1px solid #dce5f1}
+        .ce-shell{background:#fff;border:1px solid #dce5f1;border-radius:22px;padding:clamp(26px,4vw,46px);box-shadow:0 14px 36px rgba(8,31,69,.08)}
+        .ce-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+        .ce-kicker{color:#076dc9;font-size:12.5px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;margin:0 0 6px}
+        .ce-head h2{margin:0;color:#101b3b;font-size:clamp(26px,3.6vw,40px);line-height:1.1;letter-spacing:-1px;text-transform:uppercase}
+        .ce-head p{margin:8px 0 0;color:#5f6c84;font-size:15.5px;max-width:620px}
+        .ce-hub-btn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none;font-weight:850;font-size:14px;
+          color:#fff;background:linear-gradient(135deg,#0870d5,#064bb9);padding:12px 20px;border-radius:12px;box-shadow:0 8px 20px rgba(7,83,190,.25)}
+        .ce-hub-btn:hover{filter:brightness(1.08)}
+        .ce-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+        .ce-card{position:relative;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;
+          background:#fbfdff;border:1.5px solid #dce5f1;border-radius:16px;padding:22px;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+        .ce-card:hover{transform:translateY(-4px);border-color:#078be8;box-shadow:0 16px 34px rgba(8,31,69,.14)}
+        .ce-ic{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:950;font-size:14px;letter-spacing:-.4px;
+          box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 7px 16px rgba(8,31,69,.18)}
+        .ce-card h3{margin:2px 0 0;font-size:18px;line-height:1.25;color:#101b3b}
+        .ce-code{font-size:12.5px;font-weight:800;color:#5f6c84;letter-spacing:.4px;text-transform:uppercase}
+        .ce-card p{margin:0;color:#5f6c84;font-size:13.5px;line-height:1.5;flex:1}
+        .ce-meta{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+        .ce-q{font-size:12.5px;font-weight:900;color:#0758c8;background:#e6f5ff;border-radius:999px;padding:5px 11px}
+        .ce-go{font-size:13px;font-weight:900;color:#078be8}
+        .ce-note{margin:18px 0 0;font-size:12.5px;color:#8a97ad;text-align:center}
+        @media(max-width:640px){.ce-head{flex-direction:column;align-items:flex-start}}
+      </style>
+      <div class="container">
+        <div class="ce-shell">
+          <div class="ce-head">
+            <div>
+              <p class="ce-kicker">Exam simulators · Timed &amp; practice modes</p>
+              <h2>Certification Practice Exams</h2>
+              <p>430+ realistic multiple-choice questions with instant feedback, detailed explanations, flagging and a scored report. Practice mode or a timed exam that feels like the real thing — each exam opens on its own page.</p>
+            </div>
+            <a class="ce-hub-btn" href="cert-exams/">Open the full exam hub →</a>
+          </div>
+          <div class="ce-grid">
+            <a class="ce-card" href="cert-exams/?exam=ccna">
+              <span class="ce-ic" style="background:linear-gradient(135deg,#1ba0d7,#0b6fb0)">CCNA</span>
+              <h3>Cisco CCNA</h3>
+              <span class="ce-code">Exam 200-301</span>
+              <p>Networking fundamentals, switching, routing, IP services, security basics, wireless and automation.</p>
+              <div class="ce-meta"><span class="ce-q">105 questions</span><span class="ce-go">Start →</span></div>
+            </a>
+            <a class="ce-card" href="cert-exams/?exam=ccna-security">
+              <span class="ce-ic" style="background:linear-gradient(135deg,#e2484d,#b3141f)">SEC</span>
+              <h3>Cisco CCNA Security</h3>
+              <span class="ce-code">Exam 210-260 IINS</span>
+              <p>AAA, 802.1X/ISE, firewalls, IPS, IPsec &amp; SSL VPNs, cryptography and network hardening.</p>
+              <div class="ce-meta"><span class="ce-q">113 questions</span><span class="ce-go">Start →</span></div>
+            </a>
+            <a class="ce-card" href="cert-exams/?exam=vcf">
+              <span class="ce-ic" style="background:linear-gradient(135deg,#7f5cc7,#5541a8)">VCF</span>
+              <h3>VMware Cloud Foundation</h3>
+              <span class="ce-code">VCF (5V0-31.x style)</span>
+              <p>SDDC Manager, workload domains, bring-up, vSAN, NSX, lifecycle management and operations.</p>
+              <div class="ce-meta"><span class="ce-q">103 questions</span><span class="ce-go">Start →</span></div>
+            </a>
+            <a class="ce-card" href="cert-exams/?exam=cce-v">
+              <span class="ce-ic" style="background:linear-gradient(135deg,#f26822,#c64a0c)">CCE-V</span>
+              <h3>Citrix CCE-V</h3>
+              <span class="ce-code">Exam 1Y0-403</span>
+              <p>Designing Citrix Virtual Apps &amp; Desktops: FlexCast, provisioning, NetScaler, profiles and DR.</p>
+              <div class="ce-meta"><span class="ce-q">115 questions</span><span class="ce-go">Start →</span></div>
+            </a>
+          </div>
+          <p class="ce-note">Unofficial self-study practice. CCNA, Cisco, VMware and Citrix are trademarks of their respective owners; not affiliated with or endorsed by them.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="catalogue-home" id="labs" aria-labelledby="labs-title">
       <div class="container">
         <div class="catalogue-shell">
