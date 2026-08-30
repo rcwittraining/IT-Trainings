@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certification Exam Simulator — CCNA · CCNA Security · VCF · CCE-V | RCW IT Training</title>
+<meta name="description" content="Free certification exam simulators from RCW IT Training: CCNA 200-301, CCNA Security 210-260, VMware Cloud Foundation (VCF) and Citrix CCE-V — 430+ multiple-choice practice questions with timed exam mode and explanations.">
+<link rel="canonical" href="https://www.rcwittraining.in/cert-exams/">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+</head>
+<body>
+<div id="app">
+
+  <!-- HOME -->
+  <section id="view-home" class="view">
+    <header class="site-header">
+      <div class="logo">🎓 RCW <span>Certification Exam Simulator</span></div>
+      <nav class="top-nav">
+        <a href="https://www.rcwittraining.in/">← All Labs &amp; Simulators</a>
+        <a href="https://www.rcwittraining.in/about.html">About</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <h1>Certification practice like it's <em>exam day</em>.</h1>
+      <p>Four exam simulators from RCW IT Training · <strong id="total-questions">0</strong> realistic multiple-choice questions · instant feedback or timed exam mode · detailed explanations and score reports.</p>
+      <div class="hero-badges">
+        <span class="badge">⏱ Timed exams</span>
+        <span class="badge">📖 Explanations</span>
+        <span class="badge">🏳 Flag & review</span>
+        <span class="badge">📊 Category scoring</span>
+      </div>
+    </div>
+
+    <div id="exam-grid" class="exam-grid"><!-- cards injected --></div>
+
+    <footer class="site-footer">
+      <p>A free study tool from <a href="https://www.rcwittraining.in/" style="color:var(--acc)">RCW IT Training</a>. Unofficial self-study material: CCNA, Cisco, VMware and Citrix are trademarks of their respective owners; this simulator is not affiliated with or endorsed by them.</p>
+    </footer>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view hidden">
+    <header class="quiz-header">
+      <button class="btn btn-ghost" id="btn-quit">✕ Quit</button>
+      <div class="quiz-meta">
+        <span id="quiz-title" class="quiz-title"></span>
+        <span id="quiz-mode-label" class="mode-chip"></span>
+      </div>
+      <div class="quiz-timer" id="quiz-timer">00:00</div>
+    </header>
+
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+
+    <main class="quiz-main">
+      <div class="question-card">
+        <div class="q-topline">
+          <span class="q-number" id="q-number"></span>
+          <span class="q-category" id="q-category"></span>
+          <button class="btn btn-flag" id="btn-flag">🏳 Flag</button>
+        </div>
+        <h2 class="q-text" id="q-text"></h2>
+        <div class="options" id="options"></div>
+        <div class="explanation hidden" id="explanation">
+          <div class="exp-head" id="exp-head"></div>
+          <p id="exp-text"></p>
+        </div>
+      </div>
+
+      <div class="quiz-side">
+        <div class="palette-card">
+          <div class="palette-legend">
+            <span><i class="dot dot-current"></i> Current</span>
+            <span><i class="dot dot-answered"></i> Answered</span>
+            <span><i class="dot dot-flagged"></i> Flagged</span>
+            <span><i class="dot dot-unseen"></i> Unseen</span>
+          </div>
+          <div class="palette" id="palette"></div>
+          <button class="btn btn-primary btn-block" id="btn-submit">Submit Exam</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="quiz-footer">
+      <button class="btn btn-secondary" id="btn-prev">← Previous</button>
+      <span class="answered-count" id="answered-count"></span>
+      <button class="btn btn-primary" id="btn-next">Next →</button>
+    </footer>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="view-results" class="view hidden">
+    <header class="site-header">
+      <div class="logo">🎓 RCW <span>Certification Exam Simulator</span></div>
+      <nav class="top-nav">
+        <a href="https://www.rcwittraining.in/">← All Labs &amp; Simulators</a>
+      </nav>
+    </header>
+    <div class="results-wrap">
+      <div class="score-hero" id="score-hero">
+        <div class="score-ring" id="score-ring">
+          <div class="score-inner"><span id="score-pct">0%</span><small id="score-fraction"></small></div>
+        </div>
+        <h1 id="result-verdict"></h1>
+        <p id="result-sub"></p>
+        <div class="result-stats" id="result-stats"></div>
+        <div class="result-actions">
+          <button class="btn btn-primary" id="btn-retry">🔄 Retake this exam</button>
+          <button class="btn btn-secondary" id="btn-home">🏠 All exams</button>
+        </div>
+      </div>
+
+      <div class="category-report">
+        <h2>Performance by domain</h2>
+        <div id="category-bars"></div>
+      </div>
+
+      <div class="review-section">
+        <h2>Answer review</h2>
+        <div class="review-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="wrong">❌ Incorrect</button>
+          <button class="filter-btn" data-filter="flagged">🏳 Flagged</button>
+          <button class="filter-btn" data-filter="correct">✅ Correct</button>
+        </div>
+        <div id="review-list"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script src="data/ccna.js"></script>
+<script src="data/ccna-security.js"></script>
+<script src="data/vcf.js"></script>
+<script src="data/cce-v.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

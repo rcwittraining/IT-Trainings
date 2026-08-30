@@ -636,6 +636,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Exam Simulators"
   },
   {
+    "title": "CCNA · CCNA Security · VMware VCF · Citrix CCE-V Exam Simulator",
+    "category": "Cisco • VMware • Citrix • Timed Exam Practice • 430+ MCQs",
+    "badge": "CERT",
+    "accent": "#7c5cff",
+    "id": "cert-exams",
+    "targetUrl": "https://www.rcwittraining.in/cert-exams/",
+    "contentType": "Simulator",
+    "technology": "Cisco, VMware, Citrix",
+    "subcategory": "Exam Practice",
+    "group": "Exam Simulators"
+  },
+  {
     "title": "Azure Admin Exam Simulator",
     "category": "Microsoft Azure • Exam Practice",
     "badge": "AZ",
