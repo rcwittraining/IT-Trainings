@@ -240,6 +240,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Adaptive Learning"
   },
   {
+    "title": "VMware Cloud Foundation (SDDC Manager) Console Practice Lab",
+    "category": "VMware VCF • SDDC Manager • Hands-on Console Simulation",
+    "badge": "VCF",
+    "accent": "#7f5cc7",
+    "id": "vcf-lab",
+    "targetUrl": "https://www.rcwittraining.in/vcf-lab/",
+    "contentType": "Lab",
+    "technology": "VMware",
+    "subcategory": "VMware Cloud Foundation",
+    "group": "Technology Labs"
+  },
+  {
     "title": "Amazon Bedrock End-to-End GUI Lab",
     "category": "AWS • Generative AI • Responsible AI",
     "badge": "GENAI",

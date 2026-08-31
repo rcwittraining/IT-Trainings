@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VMware Cloud Foundation — SDDC Manager Console Practice Lab | RCW IT Training</title>
+<meta name="description" content="Hands-on practice lab that simulates the VMware Cloud Foundation SDDC Manager console: commission hosts, create workload domains, configure network pools, run lifecycle upgrades, backups, certificates and password rotation.">
+<link rel="canonical" href="https://www.rcwittraining.in/vcf-lab/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Compliance / simulation notice -->
+<div id="simRibbon" class="sim-ribbon">
+  <span class="ribbon-tag">EDUCATIONAL SIMULATION</span>
+  <span>This is a free, non-functional training replica of the <strong>VMware Cloud Foundation™ SDDC Manager</strong> console for learning purposes. It is not a VMware product and is not affiliated with or endorsed by VMware. No real infrastructure is changed.</span>
+  <button id="ribbonClose" class="ribbon-close" title="Dismiss">×</button>
+</div>
+
+<div class="console">
+
+  <!-- ===== Top bar ===== -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" id="navToggle" aria-label="Toggle navigation">☰</button>
+      <div class="brand">
+        <div class="brand-mark">◧</div>
+        <div class="brand-text">
+          <strong>SDDC Manager</strong>
+          <small>VMware Cloud Foundation <span id="vcfVersion">5.2</span> · Console Practice Lab</small>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="global-search"><span>🔍</span><input type="text" id="globalSearch" placeholder="Search inventory…" disabled title="Search is decorative in this lab"></div>
+      <button class="top-icon" id="taskBell" title="Tasks & notifications">🔔<span class="bell-dot" id="bellDot"></span></button>
+      <div class="user-chip"><div class="avatar">P</div><span>admin@vcf.local</span></div>
+    </div>
+  </header>
+
+  <div class="console-body">
+    <!-- ===== Left nav ===== -->
+    <nav class="sidenav" id="sidenav">
+      <div class="nav-group">
+        <a class="nav-item active" data-view="dashboard"><span class="nav-ic">▦</span> Dashboard</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Inventory</div>
+        <a class="nav-item" data-view="domains"><span class="nav-ic">▤</span> Workload Domains</a>
+        <a class="nav-item" data-view="hosts"><span class="nav-ic">🖧</span> Hosts</a>
+        <a class="nav-item" data-view="networkpools"><span class="nav-ic">🌐</span> Network Pools</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Lifecycle management</div>
+        <a class="nav-item" data-view="lifecycle"><span class="nav-ic">⟳</span> Updates &amp; Upgrades</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Administration</div>
+        <a class="nav-item" data-view="backup"><span class="nav-ic">💾</span> Backup Settings</a>
+        <a class="nav-item" data-view="certificates"><span class="nav-ic">🔒</span> Certificates</a>
+        <a class="nav-item" data-view="passwords"><span class="nav-ic">🔑</span> Password Management</a>
+        <a class="nav-item" data-view="licensing"><span class="nav-ic">🧾</span> Licensing</a>
+      </div>
+      <div class="nav-group">
+        <a class="nav-item" data-view="tasks"><span class="nav-ic">▤</span> Tasks <span class="nav-badge" id="navTaskBadge">0</span></a>
+      </div>
+      <div class="nav-footer">
+        <button class="reset-btn" id="resetLab" title="Reset the practice lab to its starting state">↺ Reset lab</button>
+      </div>
+    </nav>
+
+    <!-- ===== Main content ===== -->
+    <main class="content" id="content"><!-- rendered by app.js --></main>
+  </div>
+</div>
+
+<!-- Modal host -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+</div>
+
+<!-- Toast host -->
+<div class="toast-host" id="toastHost"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
