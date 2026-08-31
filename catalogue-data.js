@@ -1,5 +1,17 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "RHEL 10 Interview Questions & Answers (50+ Questions)",
+    "category": "Red Hat • RHEL 10 • Interview Prep • Answers + Explanations",
+    "badge": "Q&A",
+    "accent": "#cc0000",
+    "id": "rhel10-interview",
+    "targetUrl": "https://www.rcwittraining.in/rhel10-interview/",
+    "contentType": "Interview",
+    "technology": "Linux and RHEL",
+    "subcategory": "Interview Questions",
+    "group": "Interview Questions"
+  },
+  {
     "title": "Linux Auto-Fixer v3.0.0 \u2014 Prompt-driven Linux Admin (no AI) \u2014 Official Download",
     "category": "Linux \u2022 Troubleshooting \u2022 Admin-approved",
     "badge": "RCW",
@@ -238,18 +250,6 @@ window.RCW_CATALOGUE = Object.freeze([
     "technology": "Multi-technology",
     "subcategory": "Technical Skills",
     "group": "Adaptive Learning"
-  },
-  {
-    "title": "VMware Cloud Foundation (SDDC Manager) Console Practice Lab",
-    "category": "VMware VCF • SDDC Manager • Hands-on Console Simulation",
-    "badge": "VCF",
-    "accent": "#7f5cc7",
-    "id": "vcf-lab",
-    "targetUrl": "https://www.rcwittraining.in/vcf-lab/",
-    "contentType": "Lab",
-    "technology": "VMware",
-    "subcategory": "VMware Cloud Foundation",
-    "group": "Technology Labs"
   },
   {
     "title": "Amazon Bedrock End-to-End GUI Lab",
@@ -597,6 +597,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "contentType": "Lab",
     "technology": "AWS",
     "subcategory": "Governance",
+    "group": "Technology Labs"
+  },
+  {
+    "title": "VMware Cloud Foundation (SDDC Manager) Console Practice Lab",
+    "category": "VMware VCF • SDDC Manager • Hands-on Console Simulation",
+    "badge": "VCF",
+    "accent": "#7f5cc7",
+    "id": "vcf-lab",
+    "targetUrl": "https://www.rcwittraining.in/vcf-lab/",
+    "contentType": "Lab",
+    "technology": "VMware",
+    "subcategory": "VMware Cloud Foundation",
     "group": "Technology Labs"
   },
   {
