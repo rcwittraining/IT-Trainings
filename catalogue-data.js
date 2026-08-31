@@ -492,6 +492,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Hands-on Challenges"
   },
   {
+    "title": "Docker for Beginners — Study Guide + Hands-on Terminal Lab",
+    "category": "Containers • Docker • Beginner Course • Study + Practice",
+    "badge": "DKR101",
+    "accent": "#2496ed",
+    "id": "docker-beginners",
+    "targetUrl": "https://www.rcwittraining.in/docker-beginners/",
+    "contentType": "Lab",
+    "technology": "Containers",
+    "subcategory": "Docker",
+    "group": "Technology Labs"
+  },
+  {
     "title": "Docker Basics Challenge",
     "category": "Containers • Docker",
     "badge": "DKR",

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Free beginner Docker course: study guide plus an interactive hands-on terminal lab. Learn images, containers, Dockerfiles, volumes, networking and Docker Compose by typing real commands.">
+  <link rel="canonical" href="https://www.rcwittraining.in/docker-beginners/">
+  <title>Docker for Beginners — Study Guide + Hands-on Lab | RCW IT Training</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐳</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://www.rcwittraining.in/">
+      <span class="brand-mark">&gt;_</span>
+      <span class="brand-copy"><strong>RCW</strong><small>IT TRAINING</small></span>
+    </a>
+    <div class="top-note"><span class="dot"></span> Beginner-friendly · Study + Hands-on</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="kicker">FREE DOCKER COURSE</span>
+      <h1>Docker for <span>Beginners</span></h1>
+      <p>Learn containers by <b>doing</b>. Read a concept, then type the real command in the simulated Docker terminal. No installation needed — it runs entirely in your browser.</p>
+      <div class="hero-tabs" role="tablist">
+        <button class="htab active" data-tab="study" role="tab">📘 Study guide</button>
+        <button class="htab" data-tab="lab" role="tab">⌨️ Hands-on terminal lab</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STUDY ================= -->
+  <main class="view view-study" id="view-study">
+    <div class="wrap">
+      <div class="study-layout">
+        <aside class="study-toc" id="toc">
+          <div class="toc-title">Course modules</div>
+          <a href="#m1" class="toc-link">1 · What is Docker?</a>
+          <a href="#m2" class="toc-link">2 · Images &amp; containers</a>
+          <a href="#m3" class="toc-link">3 · Your first containers</a>
+          <a href="#m4" class="toc-link">4 · Run options in detail</a>
+          <a href="#m5" class="toc-link">5 · Build images (Dockerfile)</a>
+          <a href="#m6" class="toc-link">6 · Data &amp; volumes</a>
+          <a href="#m7" class="toc-link">7 · Networking</a>
+          <a href="#m8" class="toc-link">8 · Docker Compose</a>
+          <a href="#cheatsheet" class="toc-link">★ Command cheat sheet</a>
+          <button class="btn btn-primary go-lab" data-tab="lab">Start the hands-on lab →</button>
+        </aside>
+
+        <div class="study-content">
+          <article class="module" id="m1">
+            <h2><span class="mnum">1</span> What is Docker?</h2>
+            <p><b>Docker</b> is a platform for running <b>containers</b>. A container is a lightweight, isolated process that packages an application together with everything it needs — code, runtime, libraries and settings — so it runs identically on any machine.</p>
+            <div class="compare">
+              <div class="cmp"><h4>Virtual machine</h4><p>Each VM includes a full guest operating system. Boots slowly, is large (GBs), and several VMs per host.</p></div>
+              <div class="cmp good"><h4>Container</h4><p>Shares the host kernel, no guest OS. Starts in seconds, is tiny (MBs), and you can run dozens on one host.</p></div>
+            </div>
+            <ul class="bullets">
+              <li><b>Image</b> — a read-only template (the "blueprint") for a container, built from layers.</li>
+              <li><b>Container</b> — a running (or stopped) instance of an image.</li>
+              <li><b>Dockerfile</b> — a text file describing how to build an image.</li>
+              <li><b>Registry</b> — where images are stored; <b>Docker Hub</b> is the default public one.</li>
+            </ul>
+            <div class="keypoint">💡 <b>Why it matters:</b> "works on my machine" disappears — the same image runs on a laptop, a test server and production.</div>
+          </article>
+
+          <article class="module" id="m2">
+            <h2><span class="mnum">2</span> Images &amp; containers</h2>
+            <p>Images are pulled from a registry. A container is created when you <i>run</i> an image. Images use a layered filesystem: each instruction in a Dockerfile adds a layer that is cached and shared between images.</p>
+            <pre class="cmd"><code>docker pull nginx            <span class="c"># download the nginx image</span>
+docker images                <span class="c"># list local images</span>
+docker run hello-world       <span class="c"># run a tiny test image</span>
+docker ps                    <span class="c"># list RUNNING containers</span>
+docker ps -a                 <span class="c"># list ALL containers (incl. stopped)</span></code></pre>
+            <div class="keypoint">💡 One image → many containers. Containers are <b>ephemeral</b>: data written inside is lost when the container is removed unless you use a <b>volume</b>.</div>
+          </article>
+
+          <article class="module" id="m3">
+            <h2><span class="mnum">3</span> Your first containers</h2>
+            <p>The core lifecycle you will use constantly:</p>
+            <pre class="cmd"><code>docker run -d -p 8080:80 --name web nginx   <span class="c"># start in background</span>
+docker logs web                             <span class="c"># view its logs</span>
+docker stop web                             <span class="c"># stop it</span>
+docker start web                            <span class="c"># start again</span>
+docker rm web                               <span class="c"># delete (must be stopped)</span>
+docker rm -f web                            <span class="c"># force-remove a running one</span></code></pre>
+            <ul class="bullets">
+              <li><code>-d</code> = <b>detached</b> (run in the background).</li>
+              <li><code>-p host:container</code> = <b>publish a port</b> so you can reach it.</li>
+              <li><code>--name</code> = give the container a friendly name instead of a random one.</li>
+            </ul>
+            <button class="btn btn-soft try" data-task="0">▶ Try this in the lab</button>
+          </article>
+
+          <article class="module" id="m4">
+            <h2><span class="mnum">4</span> Run options in detail</h2>
+            <pre class="cmd"><code><span class="c"># Interactive shell inside a container</span>
+docker run -it ubuntu bash
+docker exec -it web sh        <span class="c"># open a shell in a running container</span>
+docker exec web cat /etc/os-release   <span class="c"># run one command</span>
+
+<span class="c"># Environment variables &amp; cleanup</span>
+docker run -e MY_VAR=hello alpine env
+docker run --rm alpine echo "gone after exit"</code></pre>
+            <ul class="bullets">
+              <li><code>-it</code> = interactive + allocate a TTY (for shells).</li>
+              <li><code>-e KEY=VAL</code> = set an environment variable.</li>
+              <li><code>--rm</code> = automatically remove the container when it exits.</li>
+            </ul>
+            <button class="btn btn-soft try" data-task="6">▶ Try this in the lab</button>
+          </article>
+
+          <article class="module" id="m5">
+            <h2><span class="mnum">5</span> Building images — the Dockerfile</h2>
+            <p>A <b>Dockerfile</b> is a recipe. Common instructions:</p>
+            <pre class="dockerfile"><code><span class="k">FROM</span> node:20-alpine        <span class="c"># base image</span>
+<span class="k">WORKDIR</span> /app               <span class="c"># working directory</span>
+<span class="k">COPY</span> package*.json ./      <span class="c"># copy files into the image</span>
+<span class="k">RUN</span> npm install --omit=dev  <span class="c"># execute a build step</span>
+<span class="k">COPY</span> . .
+<span class="k">EXPOSE</span> 8080                <span class="c"># document the port</span>
+<span class="k">CMD</span> ["node","server.js"]   <span class="c"># default command</span></code></pre>
+            <pre class="cmd"><code>docker build -t myapp:1.0 .    <span class="c"># build, tag as myapp:1.0</span>
+docker images                 <span class="c"># see your new image</span>
+docker run -d -p 8081:8080 myapp:1.0</code></pre>
+            <div class="keypoint">💡 <code>-t</code> sets <b>name:tag</b>. The <code>.</code> is the build <b>context</b> (current directory). Layers are cached, so rebuilding after a small change is fast.</div>
+            <button class="btn btn-soft try" data-task="10">▶ Try this in the lab</button>
+          </article>
+
+          <article class="module" id="m6">
+            <h2><span class="mnum">6</span> Data &amp; volumes</h2>
+            <p>Container files vanish when the container is removed. To keep data, mount a <b>volume</b> (managed by Docker) or a <b>bind mount</b> (a host directory).</p>
+            <pre class="cmd"><code>docker volume create webdata
+docker run -d -p 8090:80 \
+  -v webdata:/usr/share/nginx/html --name site nginx
+docker volume ls
+docker volume inspect webdata</code></pre>
+            <ul class="bullets">
+              <li><b>Named volume</b> <code>-v name:/path</code> — Docker manages storage; best for databases and persistent data.</li>
+              <li><b>Bind mount</b> <code>-v /host/path:/path</code> — mirrors a host folder; great for development.</li>
+            </ul>
+            <button class="btn btn-soft try" data-task="12">▶ Try this in the lab</button>
+          </article>
+
+          <article class="module" id="m7">
+            <h2><span class="mnum">7</span> Networking</h2>
+            <p>By default containers attach to the <code>bridge</code> network and reach each other via IP. For name-based service discovery, put them on the same <b>user-defined network</b>.</p>
+            <pre class="cmd"><code>docker network create webnet
+docker network ls
+docker run -d --network webnet --name api nginx
+docker run --rm --network webnet alpine ping -c1 api</code></pre>
+            <div class="keypoint">💡 On a user-defined network, containers resolve each other by <b>name</b>. Port publishing (<code>-p</code>) is only needed to reach a container from outside Docker.</div>
+            <button class="btn btn-soft try" data-task="13">▶ Try this in the lab</button>
+          </article>
+
+          <article class="module" id="m8">
+            <h2><span class="mnum">8</span> Docker Compose</h2>
+            <p><b>Compose</b> defines multi-container apps in a <code>docker-compose.yml</code> file and starts them with one command.</p>
+            <pre class="dockerfile"><code><span class="k">services:</span>
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - webdata:/usr/share/nginx/html
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: secret
+<span class="k">volumes:</span>
+  webdata:</code></pre>
+            <pre class="cmd"><code>docker compose up -d     <span class="c"># start all services in background</span>
+docker compose ps        <span class="c"># service status</span>
+docker compose logs      <span class="c"># combined logs</span>
+docker compose down      <span class="c"># stop and remove everything</span></code></pre>
+            <button class="btn btn-soft try" data-task="14">▶ Try this in the lab</button>
+          </article>
+
+          <article class="module cheatsheet" id="cheatsheet">
+            <h2>★ Command cheat sheet</h2>
+            <div class="sheet-grid">
+              <div><h4>Images</h4><code>docker pull &lt;img&gt;<br>docker images<br>docker build -t name:tag .<br>docker rmi &lt;img&gt;</code></div>
+              <div><h4>Containers</h4><code>docker run [opts] img<br>docker ps / ps -a<br>docker stop|start|rm &lt;c&gt;<br>docker logs -f &lt;c&gt;<br>docker exec -it &lt;c&gt; sh</code></div>
+              <div><h4>Data</h4><code>docker volume create x<br>docker volume ls<br>-v vol:/path<br>-v /host:/path</code></div>
+              <div><h4>Network</h4><code>docker network create x<br>docker network ls<br>-p host:container<br>--network x</code></div>
+              <div><h4>Compose</h4><code>docker compose up -d<br>docker compose ps<br>docker compose logs<br>docker compose down</code></div>
+              <div><h4>Cleanup</h4><code>docker rm &lt;c&gt;<br>docker rmi &lt;img&gt;<br>docker system prune<br>docker volume prune</code></div>
+            </div>
+            <button class="btn btn-primary go-lab" data-tab="lab">I've read enough — take me to the terminal →</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= LAB ================= -->
+  <main class="view view-lab hidden" id="view-lab">
+    <div class="wrap lab-wrap">
+      <div class="lab-grid">
+        <aside class="task-panel">
+          <div class="tp-head">
+            <div class="tp-title">Hands-on tasks</div>
+            <div class="tp-progress"><div class="tp-bar" id="taskBar"></div></div>
+            <div class="tp-count" id="taskCount">0 / 15 complete</div>
+          </div>
+          <ol class="task-list" id="taskList"></ol>
+          <button class="btn btn-soft reset-lab" id="resetLab">↺ Reset lab</button>
+        </aside>
+
+        <section class="terminal-panel">
+          <div class="term-bar">
+            <span class="tb-dots"><i></i><i></i><i></i></span>
+            <span class="tb-title">rcw@docker-lab: ~ — simulated docker engine</span>
+            <button class="tb-hint" id="hintBtn">💡 Hint</button>
+          </div>
+          <div class="terminal" id="terminal" tabindex="0">
+            <div class="term-output" id="termOutput"></div>
+            <div class="term-line">
+              <span class="prompt">root@rcw:~#</span>
+              <input type="text" id="termInput" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Docker command input">
+            </div>
+          </div>
+          <div class="term-foot">
+            <span>Type <code>help</code> for commands · <code>clear</code> to clear the screen · the engine simulates real Docker output</span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p>A free practice resource from <a href="https://www.rcwittraining.in/">RCW IT Training</a>. Educational simulator — commands run against a simulated engine in your browser, not a real Docker host. Docker&reg; is a trademark of Docker, Inc.; this lab is an independent educational resource and is not affiliated with or endorsed by Docker.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

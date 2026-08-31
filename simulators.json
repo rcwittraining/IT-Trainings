@@ -1,6 +1,18 @@
 {
   "simulators": [
     {
+      "title": "Docker for Beginners — Study Guide + Hands-on Terminal Lab",
+      "category": "Containers • Docker • Beginner Course • Study + Practice",
+      "badge": "DKR101",
+      "accent": "#2496ed",
+      "id": "docker-beginners",
+      "targetUrl": "https://www.rcwittraining.in/docker-beginners/",
+      "contentType": "Lab",
+      "technology": "Containers",
+      "subcategory": "Docker",
+      "group": "Technology Labs"
+    },
+    {
       "title": "RHEL 10 Interview Questions & Answers (50+ Questions)",
       "category": "Red Hat • RHEL 10 • Interview Prep • Answers + Explanations",
       "badge": "Q&A",
