@@ -64,6 +64,9 @@
   }
 
   function launcherUrl(lab) {
+    if (lab.targetUrl && typeof lab.targetUrl === 'string' && lab.targetUrl.startsWith('http')) {
+      return lab.targetUrl;
+    }
     return './open.html?lab=' + encodeURIComponent(lab.id);
   }
 

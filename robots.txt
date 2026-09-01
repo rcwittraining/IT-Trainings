@@ -1,7 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /open.html
-Disallow: /awsnixops.html
+Disallow: /admin/
+Disallow: /admin-restricted-tools/
+Disallow: /drafts/
 Disallow: /downloads/
 
 Sitemap: https://www.rcwittraining.in/sitemap.xml
