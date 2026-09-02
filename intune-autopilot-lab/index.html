@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Intune Autopilot & Zero-Trust Compliance Lab | RCW IT Training</title>
+  <meta name="description" content="Interactive Microsoft Intune Admin Center simulator: Configure Windows Autopilot deployment profiles, import hardware hashes, enforce Zero-Trust device compliance (BitLocker, TPM 2.0, Secure Boot), and test Windows 11 OOBE provisioning.">
+  <link rel="canonical" href="https://www.rcwittraining.in/intune-autopilot-lab/">
+  
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Microsoft Intune Windows Autopilot & Zero-Trust Compliance Lab",
+    "description": "Hands-on browser-based simulator for Microsoft Intune Autopilot deployment and Zero-Trust device compliance standards.",
+    "author": {
+      "@type": "Person",
+      "name": "Pradeep Raju",
+      "jobTitle": "Senior Enterprise Infrastructure Architect",
+      "url": "https://www.linkedin.com/in/pradeepmcp826/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "RCW IT Training",
+      "url": "https://www.rcwittraining.in/"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="intune-header">
+    <div class="header-left">
+      <div class="portal-title">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect width="9" height="9" fill="#F25022"/><rect x="11" width="9" height="9" fill="#7FBA00"/><rect y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg>
+        Microsoft Intune admin center <span>| Enterprise Simulation</span>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search devices, policies, users (Ctrl + /)..." readonly>
+    </div>
+    <div class="header-right">
+      <span class="badge-sim">RCW Practice Lab</span>
+      <span>tenant: <strong>contoso-rcw.onmicrosoft.com</strong></span>
+      <span>👤 <strong>Pradeep Raju (Admin)</strong></span>
+    </div>
+  </header>
+
+  <!-- BODY LAYOUT -->
+  <div class="intune-body">
+    
+    <!-- SIDEBAR NAVIGATION -->
+    <nav class="intune-sidebar">
+      <div class="nav-group-title">Home</div>
+      <a class="nav-item active" data-view="dashboard">🏠 Dashboard</a>
+      
+      <div class="nav-group-title">Windows Autopilot</div>
+      <a class="nav-item" data-view="autopilot">⚙️ Deployment Profiles</a>
+      <a class="nav-item" data-view="devices">💻 Autopilot Devices</a>
+      <a class="nav-item" data-view="oobe">⚡ Run OOBE Test Simulator</a>
+
+      <div class="nav-group-title">Device Compliance</div>
+      <a class="nav-item" data-view="compliance">🛡️ Compliance Policies</a>
+      <a class="nav-item" data-view="all-devices">📋 All Managed Devices</a>
+
+      <div class="nav-group-title">Resources</div>
+      <a class="nav-item" data-view="guide">📘 Lab Guide & Standards</a>
+      <a class="nav-item" href="https://www.rcwittraining.in/" target="_blank">🌐 RCW IT Training Home</a>
+    </nav>
+
+    <!-- WORKSPACE -->
+    <main class="intune-workspace">
+      
+      <!-- COMMAND BAR -->
+      <div class="command-bar">
+        <div>
+          <div class="breadcrumbs">
+            <a href="#">Microsoft Intune</a> &gt; <span id="breadcrumbCurrent">Dashboard</span>
+          </div>
+          <h1 class="view-title" id="currentViewTitle">Dashboard</h1>
+        </div>
+      </div>
+
+      <!-- PAGE CONTENT -->
+      <div class="page-content">
+
+        <!-- VIEW 1: DASHBOARD -->
+        <section id="view-dashboard" class="view-panel">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-title">Enrolled Windows Devices</div>
+              <div class="stat-value">1,482</div>
+              <div class="stat-sub">↑ 99.4% Entra Joined</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Zero-Trust Compliance Rate</div>
+              <div class="stat-value">98.8%</div>
+              <div class="stat-sub">BitLocker & Secure Boot Enforced</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Autopilot Devices Ready</div>
+              <div class="stat-value">120</div>
+              <div class="stat-sub">Hardware Hashes Registered</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #e1dfdd;border-radius:6px;padding:24px;margin-bottom:24px;">
+            <h2 style="font-size:16px;margin-bottom:12px;color:#0078d4;">🎯 Lab Objectives & Compliance Standards</h2>
+            <p style="font-size:13px;color:#605e5c;line-height:1.6;margin-bottom:16px;">
+              In this enterprise simulation, you will configure <strong>Microsoft Intune Windows Autopilot</strong> and enforce <strong>Zero-Trust Device Compliance</strong> for a fleet of Windows 11 corporate laptops.
+            </p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px,1fr));gap:14px;">
+              <div style="background:#f8f9fa;padding:14px;border-left:3px solid #0078d4;border-radius:4px;">
+                <strong>1. Autopilot Deployment Profile</strong>
+                <p style="font-size:12px;color:#605e5c;margin-top:4px;">Configure User-Driven Microsoft Entra join with automated naming template <code>RCW-WIN-%RAND:4%</code> and standard user rights.</p>
+              </div>
+              <div style="background:#f8f9fa;padding:14px;border-left:3px solid #107c41;border-radius:4px;">
+                <strong>2. Zero-Trust Compliance Standard</strong>
+                <p style="font-size:12px;color:#605e5c;margin-top:4px;">Enforce BitLocker (XTS-AES 256), Secure Boot, TPM 2.0, Defender Antivirus, and Minimum Windows 11 Build <code>10.0.22631</code>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: AUTOPILOT PROFILES -->
+        <section id="view-autopilot" class="view-panel" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Create and customize Windows Autopilot out-of-box experience (OOBE) profiles.</p>
+            <button class="ms-btn ms-btn-primary" onclick="openModal('modalProfile')">➕ Create Deployment Profile</button>
+          </div>
+          <div class="ms-table-container">
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Profile Name</th>
+                  <th>Deployment Mode</th>
+                  <th>Join Type</th>
+                  <th>Device Name Template</th>
+                  <th>Account Type</th>
+                  <th>Assigned Group</th>
+                </tr>
+              </thead>
+              <tbody id="profileTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 3: AUTOPILOT DEVICES -->
+        <section id="view-devices" class="view-panel" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Manage registered hardware hashes and device profile assignments.</p>
+            <button class="ms-btn ms-btn-primary" onclick="openModal('modalImport')">📥 Import Hardware CSV</button>
+          </div>
+          <div class="ms-table-container">
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Serial Number</th>
+                  <th>Device Model</th>
+                  <th>Group Tag</th>
+                  <th>Assigned Profile</th>
+                  <th>Assigned User</th>
+                  <th>Registration Status</th>
+                </tr>
+              </thead>
+              <tbody id="deviceTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 4: COMPLIANCE POLICIES -->
+        <section id="view-compliance" class="view-panel" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Define zero-trust health rules required for devices to access corporate resources.</p>
+            <button class="ms-btn ms-btn-primary" onclick="openModal('modalCompliance')">➕ Create Compliance Policy</button>
+          </div>
+          <div class="ms-table-container">
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Policy Name</th>
+                  <th>Target Platform</th>
+                  <th>BitLocker</th>
+                  <th>Secure Boot</th>
+                  <th>TPM 2.0</th>
+                  <th>Minimum OS Version</th>
+                </tr>
+              </thead>
+              <tbody id="complianceTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 5: ALL MANAGED DEVICES -->
+        <section id="view-all-devices" class="view-panel" style="display:none;">
+          <div style="margin-bottom:16px;">
+            <p style="font-size:13px;color:#605e5c;">Real-time inventory and compliance state of enrolled corporate endpoints.</p>
+          </div>
+          <div class="ms-table-container">
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Device Name</th>
+                  <th>Primary User</th>
+                  <th>Operating System</th>
+                  <th>Compliance State</th>
+                  <th>BitLocker Encryption</th>
+                  <th>Last Check-in</th>
+                </tr>
+              </thead>
+              <tbody id="allDevicesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 6: OOBE VIRTUAL RUNNER -->
+        <section id="view-oobe" class="view-panel" style="display:none;">
+          <div style="margin-bottom:16px;">
+            <h2 style="font-size:16px;color:#201f1e;margin-bottom:4px;">Windows 11 Autopilot Out-of-Box Experience (OOBE) Simulator</h2>
+            <p style="font-size:13px;color:#605e5c;">Test your configured Autopilot profile and Compliance Policy on a simulated new laptop.</p>
+          </div>
+
+          <div style="text-align:center;margin-bottom:20px;">
+            <button class="ms-btn ms-btn-primary" id="startOobeBtn" onclick="startOOBE()" style="font-size:14px;padding:10px 24px;">▶ Power On & Start Windows 11 Autopilot</button>
+          </div>
+
+          <div id="oobeInteractive" style="display:none;">
+            <div class="oobe-screen">
+              <div class="oobe-spinner"></div>
+              <div class="oobe-step-text" id="oobeStatusText">Connecting to Microsoft Cloud...</div>
+              <div class="oobe-subtext">Setting up your corporate PC according to RCW Zero-Trust standards. Please don't turn off your device.</div>
+
+              <div class="oobe-checklist">
+                <div class="oobe-check-item pending" id="step-1" data-label="Windows 11 OOBE Boot & Region Skip">○ Windows 11 OOBE Boot & Region Skip</div>
+                <div class="oobe-check-item pending" id="step-2" data-label="Autopilot Hardware Hash Identification">○ Autopilot Hardware Hash Identification</div>
+                <div class="oobe-check-item pending" id="step-3" data-label="Microsoft Entra ID Authentication">○ Microsoft Entra ID Authentication</div>
+                <div class="oobe-check-item pending" id="step-4" data-label="Intune MDM Profile & Device Prep">○ Intune MDM Profile & Device Prep</div>
+                <div class="oobe-check-item pending" id="step-5" data-label="BitLocker Silent Encryption & TPM 2.0">○ BitLocker Silent Encryption & TPM 2.0</div>
+                <div class="oobe-check-item pending" id="step-6" data-label="Zero-Trust Compliance Health Evaluation">○ Zero-Trust Compliance Health Evaluation</div>
+                <div class="oobe-check-item pending" id="step-7" data-label="Account Provisioning & Desktop Ready">○ Account Provisioning & Desktop Ready</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 7: LAB GUIDE -->
+        <section id="view-guide" class="view-panel" style="display:none;">
+          <div style="background:#fff;border:1px solid #e1dfdd;border-radius:6px;padding:24px;line-height:1.7;">
+            <h2 style="font-size:18px;color:#0078d4;margin-bottom:12px;">Enterprise Windows Autopilot & Compliance Architecture</h2>
+            <p><strong>Windows Autopilot</strong> enables IT departments to deliver a modern zero-touch deployment experience: new devices are shipped directly from OEM vendors to end-users without requiring IT imaging.</p>
+            
+            <h3 style="font-size:15px;margin-top:20px;margin-bottom:8px;">Compliance Standard Checklist (Zero-Trust Standard)</h3>
+            <ul style="margin-left:20px;color:#444;font-size:13px;">
+              <li><strong>Device Encryption:</strong> BitLocker must be enabled with XTS-AES 256-bit encryption with key escrow to Entra ID.</li>
+              <li><strong>Hardware Security:</strong> TPM 2.0 chip and UEFI Secure Boot must be enabled and attested.</li>
+              <li><strong>OS Baseline:</strong> Minimum OS Build 10.0.22631 (Windows 11 23H2) to prevent known kernel vulnerabilities.</li>
+              <li><strong>Endpoint Protection:</strong> Microsoft Defender Antivirus Real-time Protection and Cloud-delivered protection enabled.</li>
+            </ul>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- LAB DOCK (PROGRESS & SCORE) -->
+  <footer class="lab-dock">
+    <div style="display:flex;align-items:center;">
+      <strong>🎖️ Skill Passport Progress:</strong>
+      <div class="progress-bar-container">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span id="scoreValue" style="font-weight:700;color:#38bdf8;">0/100</span>
+    </div>
+
+    <div style="display:flex;gap:16px;font-size:12px;">
+      <span id="task-1"><span class="task-icon">○</span> 1. Autopilot Profile (20pts)</span>
+      <span id="task-2"><span class="task-icon">○</span> 2. Hardware Hash (20pts)</span>
+      <span id="task-3"><span class="task-icon">○</span> 3. Compliance Policy (25pts)</span>
+      <span id="task-4"><span class="task-icon">○</span> 4. Run OOBE Test (20pts)</span>
+      <span id="task-5"><span class="task-icon">○</span> 5. Verify Compliance (15pts)</span>
+    </div>
+  </footer>
+
+  <!-- MODAL: CREATE AUTOPILOT PROFILE -->
+  <div class="modal-overlay" id="modalProfile">
+    <div class="modal-wizard">
+      <div class="modal-header">
+        <h3>Create Windows Autopilot Deployment Profile</h3>
+        <button class="close-btn" onclick="closeModal('modalProfile')">&times;</button>
+      </div>
+      <form onsubmit="submitProfile(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Profile Name</label>
+            <input type="text" id="profName" class="form-input" value="ZeroTrust-Corporate-Autopilot" required>
+          </div>
+          <div class="form-group">
+            <label>Join to Microsoft Entra ID as</label>
+            <select id="profJoinType" class="form-select">
+              <option value="Microsoft Entra joined" selected>Microsoft Entra joined (Cloud-Native Zero Trust)</option>
+              <option value="Microsoft Entra hybrid joined">Microsoft Entra hybrid joined (On-premises Active Directory)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Device Name Template</label>
+            <div class="hint">Use %RAND:4% for 4 random alphanumeric characters.</div>
+            <input type="text" id="profTemplate" class="form-input" value="RCW-WIN-%RAND:4%">
+          </div>
+          <div class="form-group">
+            <label>User Account Type</label>
+            <select id="profUserType" class="form-select">
+              <option value="Standard" selected>Standard User (Least Privilege / Zero Trust)</option>
+              <option value="Administrator">Administrator (Not Recommended)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="ms-btn" onclick="closeModal('modalProfile')">Cancel</button>
+          <button type="submit" class="ms-btn ms-btn-primary">Create & Assign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: IMPORT HARDWARE HASH -->
+  <div class="modal-overlay" id="modalImport">
+    <div class="modal-wizard">
+      <div class="modal-header">
+        <h3>Import Windows Autopilot Devices (CSV)</h3>
+        <button class="close-btn" onclick="closeModal('modalImport')">&times;</button>
+      </div>
+      <form onsubmit="submitImport(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Device Serial Number</label>
+            <input type="text" id="devSerial" class="form-input" value="RCW-WIN11-8842" required>
+          </div>
+          <div class="form-group">
+            <label>Device Model</label>
+            <input type="text" id="devModel" class="form-input" value="Dell Latitude 7440" required>
+          </div>
+          <div class="form-group">
+            <label>Group Tag (For Dynamic Group Assignment)</label>
+            <input type="text" id="devTag" class="form-input" value="CORP-SECURE" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="ms-btn" onclick="closeModal('modalImport')">Cancel</button>
+          <button type="submit" class="ms-btn ms-btn-primary">Import & Sync</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE COMPLIANCE POLICY -->
+  <div class="modal-overlay" id="modalCompliance">
+    <div class="modal-wizard">
+      <div class="modal-header">
+        <h3>Create Windows 10/11 Compliance Policy</h3>
+        <button class="close-btn" onclick="closeModal('modalCompliance')">&times;</button>
+      </div>
+      <form onsubmit="submitCompliance(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Policy Name</label>
+            <input type="text" id="compName" class="form-input" value="ZeroTrust-Windows11-Baseline" required>
+          </div>
+          <div class="form-group">
+            <label>BitLocker Drive Encryption</label>
+            <select id="compBitlocker" class="form-select">
+              <option value="Required" selected>Required (Enforced on OS Drive)</option>
+              <option value="Not Configured">Not Configured</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Secure Boot</label>
+            <select id="compSecureBoot" class="form-select">
+              <option value="Required" selected>Required</option>
+              <option value="Not Configured">Not Configured</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Trusted Platform Module (TPM)</label>
+            <select id="compTPM" class="form-select">
+              <option value="Required" selected>Required (TPM 2.0)</option>
+              <option value="Not Configured">Not Configured</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Minimum OS Version</label>
+            <input type="text" id="compMinOS" class="form-input" value="10.0.22631.3880">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="ms-btn" onclick="closeModal('modalCompliance')">Cancel</button>
+          <button type="submit" class="ms-btn ms-btn-primary">Save & Deploy Policy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

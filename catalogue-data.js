@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+  "title": "Microsoft Intune: Windows Autopilot & Zero-Trust Compliance Lab",
+  "category": "Microsoft Intune \u2022 Autopilot \u2022 Zero Trust \u2022 Compliance \u2022 OOBE Simulator",
+  "badge": "INTUNE",
+  "accent": "#0078d4",
+  "id": "intune-autopilot-lab",
+  "targetUrl": "https://www.rcwittraining.in/intune-autopilot-lab/",
+  "contentType": "Lab",
+  "technology": "Microsoft Azure",
+  "subcategory": "Compliance",
+  "group": "Technology Labs"
+},
+  
+  {
     "title": "RHEL 10 Interview Questions & Answers (50+ Questions)",
     "category": "Red Hat • RHEL 10 • Interview Prep • Answers + Explanations",
     "badge": "Q&A",
