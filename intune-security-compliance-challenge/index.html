@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Intune: Endpoint Security & Zero-Trust Compliance Challenge | RCW IT Training</title>
+  <meta name="description" content="Hands-on Microsoft Intune Challenge Simulator: Triage a high-severity non-compliance incident, deploy silent BitLocker 256-bit encryption, Microsoft Defender RTP baselines, Conditional Access, and Proactive Remediations.">
+  <link rel="canonical" href="https://www.rcwittraining.in/intune-security-compliance-challenge/">
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Microsoft Intune Endpoint Security & Zero-Trust Compliance Challenge",
+    "description": "Enterprise challenge lab for Microsoft Intune administrators to resolve non-compliance incidents and enforce Zero-Trust device baselines.",
+    "author": {
+      "@type": "Person",
+      "name": "Pradeep Raju",
+      "jobTitle": "Senior Enterprise Infrastructure Architect",
+      "url": "https://www.linkedin.com/in/pradeepmcp826/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "RCW IT Training",
+      "url": "https://www.rcwittraining.in/"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="intune-header">
+    <div class="header-brand">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect width="9" height="9" fill="#F25022"/><rect x="11" width="9" height="9" fill="#7FBA00"/><rect y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg>
+      Microsoft Intune admin center <span>| Security Incident Triage</span>
+    </div>
+    <div>
+      <span class="incident-badge">🚨 SEV-2 SOC ALERT #INC-8092</span>
+    </div>
+    <div style="font-size:12.5px;">
+      tenant: <strong>contoso-rcw.onmicrosoft.com</strong> | 👤 <strong>Pradeep Raju (SecAdmin)</strong>
+    </div>
+  </header>
+
+  <!-- BODY LAYOUT -->
+  <div class="intune-layout">
+    
+    <!-- SIDEBAR -->
+    <nav class="intune-sidebar">
+      <div class="sidebar-title">Incident Response</div>
+      <a class="sidebar-link active" data-view="overview">🚨 Incident Overview</a>
+      <a class="sidebar-link" data-view="devices">💻 Non-Compliant Devices</a>
+
+      <div class="sidebar-title">Endpoint Security</div>
+      <a class="sidebar-link" data-view="bitlocker">🔐 Disk Encryption (BitLocker)</a>
+      <a class="sidebar-link" data-view="defender">🛡️ Defender Antivirus</a>
+      <a class="sidebar-link" data-view="ca">🔒 Conditional Access</a>
+      <a class="sidebar-link" data-view="remediation">⚡ Proactive Remediations</a>
+
+      <div class="sidebar-title">Documentation</div>
+      <a class="sidebar-link" data-view="standards">📘 CIS & NIST Standards</a>
+      <a class="sidebar-link" href="https://www.rcwittraining.in/" target="_blank">🌐 RCW Home</a>
+    </nav>
+
+    <!-- CONTENT WORKSPACE -->
+    <main class="intune-content">
+      
+      <!-- COMMAND STRIP -->
+      <div class="command-strip">
+        <div>
+          <div class="breadcrumb">
+            <a href="#">Microsoft Intune</a> &gt; <span id="breadcrumbText">Incident Overview</span>
+          </div>
+          <h1 class="page-title" id="viewTitle">Security Incident Overview — SOC Alert #INC-8092</h1>
+        </div>
+      </div>
+
+      <!-- MAIN PANE -->
+      <div class="content-pane">
+
+        <!-- VIEW 1: OVERVIEW -->
+        <section id="view-overview" class="content-view">
+          <div class="alert-banner" id="socAlertBanner">
+            <div>
+              <strong>🚨 ACTIVE SECURITY ALERT: 65% of Executive & Finance Fleet is Non-Compliant!</strong>
+              <p>Corporate laptops are missing BitLocker full-disk encryption and have disabled Defender real-time protection, violating CIS Microsoft Intune Benchmark v3.0.</p>
+            </div>
+            <button class="btn btn-primary" onclick="triggerGlobalSync()">⚡ Re-Evaluate Compliance</button>
+          </div>
+
+          <div class="cards-grid">
+            <div class="kpi-card">
+              <div class="kpi-title">Fleet Compliance Health</div>
+              <div class="kpi-num" id="compRate" style="color:#a80000;">35%</div>
+              <div class="kpi-sub" style="color:#a80000;">Critical Risk: Target is 100%</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Unencrypted BitLocker Disks</div>
+              <div class="kpi-num" style="color:#a80000;">5</div>
+              <div class="kpi-sub">Executive & Finance Laptops</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Defender Real-time Disabled</div>
+              <div class="kpi-num" style="color:#a80000;">2</div>
+              <div class="kpi-sub">Tamper Protection Inactive</div>
+            </div>
+          </div>
+
+          <div class="table-card" style="padding:20px;">
+            <h2 style="font-size:16px;color:#0078d4;margin-bottom:12px;">🎯 Your 5 Challenge Missions:</h2>
+            <ol style="margin-left:20px;font-size:13px;line-height:1.8;color:#444;">
+              <li><strong>Mission 1:</strong> Configure and deploy a <strong>Silent BitLocker 256-bit AES-XTS Encryption Policy</strong> with TPM key escrow to Entra ID.</li>
+              <li><strong>Mission 2:</strong> Enforce <strong>Microsoft Defender Real-Time & Tamper Protection</strong> endpoint security baselines.</li>
+              <li><strong>Mission 3:</strong> Configure <strong>Zero-Trust Conditional Access</strong> to block non-compliant devices from Microsoft 365 Exchange & Teams.</li>
+              <li><strong>Mission 4:</strong> Run <strong>Intune Proactive Remediations</strong> to auto-remediate unencrypted drives across the fleet.</li>
+              <li><strong>Mission 5:</strong> Re-evaluate compliance and restore <strong>100% Fleet Zero-Trust Health</strong> to close the SOC incident.</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- VIEW 2: NON-COMPLIANT DEVICES -->
+        <section id="view-devices" class="content-view" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Real-time inventory of endpoints failing compliance health checks.</p>
+            <button class="btn btn-primary" onclick="triggerGlobalSync()">🔄 Trigger Fleet Sync & Re-Evaluate</button>
+          </div>
+          <div class="table-card">
+            <table class="fluent-table">
+              <thead>
+                <tr>
+                  <th>Device Name</th>
+                  <th>Primary User</th>
+                  <th>BitLocker Status</th>
+                  <th>Defender RTP</th>
+                  <th>OS Build</th>
+                  <th>Overall Compliance</th>
+                </tr>
+              </thead>
+              <tbody id="triageTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- VIEW 3: BITLOCKER -->
+        <section id="view-bitlocker" class="content-view" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Configure Endpoint Security &gt; Disk Encryption policies to silently encrypt Windows 11 drives.</p>
+            <button class="btn btn-primary" onclick="openModal('modalBitlocker')">➕ Create BitLocker Silent Policy</button>
+          </div>
+          <div class="table-card" style="padding:20px;">
+            <h3 style="font-size:14px;margin-bottom:8px;">Enterprise Standard: Silent BitLocker Policy Requirements</h3>
+            <ul style="font-size:13px;color:#444;margin-left:20px;line-height:1.7;">
+              <li><strong>Encryption Method:</strong> XTS-AES 256-bit for Operating System and Fixed Data Drives.</li>
+              <li><strong>Silent Enablement:</strong> Require device encryption without prompting standard end-users.</li>
+              <li><strong>Key Protector:</strong> TPM 2.0 Required (Prevent PIN prompting on standard corporate boot).</li>
+              <li><strong>Key Recovery Escrow:</strong> 48-digit Recovery Password must be backed up to Microsoft Entra ID.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- VIEW 4: DEFENDER -->
+        <section id="view-defender" class="content-view" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Deploy Microsoft Defender for Endpoint security baselines and Tamper Protection.</p>
+            <button class="btn btn-primary" onclick="openModal('modalDefender')">➕ Deploy Defender Baseline</button>
+          </div>
+          <div class="table-card" style="padding:20px;">
+            <h3 style="font-size:14px;margin-bottom:8px;">Zero-Trust Antivirus Baseline</h3>
+            <p style="font-size:13px;color:#444;line-height:1.6;">
+              Ensure Real-Time Protection (RTP), Behavior Monitoring, Cloud-Delivered Protection, and Tamper Protection are strictly locked down against local admin interference.
+            </p>
+          </div>
+        </section>
+
+        <!-- VIEW 5: CONDITIONAL ACCESS -->
+        <section id="view-ca" class="content-view" style="display:none;">
+          <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <p style="font-size:13px;color:#605e5c;">Control access to Microsoft 365 cloud apps based on device compliance state.</p>
+            <button class="btn btn-primary" onclick="openModal('modalCA')">➕ Create Conditional Access Policy</button>
+          </div>
+          <div class="table-card" style="padding:20px;">
+            <h3 style="font-size:14px;margin-bottom:8px;">Zero-Trust Principle: Never Trust, Always Verify</h3>
+            <p style="font-size:13px;color:#444;line-height:1.6;">
+              Block non-compliant endpoints from accessing Exchange Online, Teams, and SharePoint to prevent unencrypted device data leakage.
+            </p>
+          </div>
+        </section>
+
+        <!-- VIEW 6: PROACTIVE REMEDIATIONS -->
+        <section id="view-remediation" class="content-view" style="display:none;">
+          <div style="margin-bottom:16px;">
+            <p style="font-size:13px;color:#605e5c;">Deploy automated PowerShell remediation scripts to detect and encrypt unencrypted drives on the fly.</p>
+          </div>
+          <div style="margin-bottom:16px;">
+            <button class="btn btn-primary" id="runRemBtn" onclick="runRemediation()">▶ Run Automated BitLocker Remediation Engine</button>
+          </div>
+          <div id="remediationLog" style="display:none;background:#0b1120;color:#38bdf8;padding:16px;border-radius:4px;font-family:monospace;font-size:12.5px;max-height:220px;overflow-y:auto;"></div>
+        </section>
+
+        <!-- VIEW 7: STANDARDS -->
+        <section id="view-standards" class="content-view" style="display:none;">
+          <div class="table-card" style="padding:24px;line-height:1.7;">
+            <h2 style="font-size:16px;color:#0078d4;margin-bottom:12px;">CIS Microsoft Intune Benchmark & NIST 800-171 Compliance</h2>
+            <p style="font-size:13px;color:#444;margin-bottom:12px;">This challenge adheres to the following industry cybersecurity benchmarks:</p>
+            <ul style="margin-left:20px;font-size:13px;color:#444;">
+              <li><strong>CIS Benchmark 2.3.1:</strong> Ensure 'BitLocker Drive Encryption' is configured for all OS and Fixed volumes.</li>
+              <li><strong>CIS Benchmark 2.3.2:</strong> Ensure 'Configure encryption method for operating system drives' is set to 'XTS-AES 256-bit'.</li>
+              <li><strong>NIST 800-171 Rev 2 (3.1.1):</strong> Limit system access to authorized devices with enforced compliance state.</li>
+            </ul>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- BOTTOM CHALLENGE DOCK -->
+  <footer class="challenge-dock">
+    <div style="display:flex;align-items:center;">
+      <strong>🎖️ Challenge Score:</strong>
+      <div class="dock-progress">
+        <div class="dock-fill" id="dockFill"></div>
+      </div>
+      <span id="challengeScore" style="font-weight:700;color:#38bdf8;">0/100</span>
+    </div>
+
+    <div style="display:flex;gap:14px;">
+      <span class="mission-badge pending" id="m-1" data-label="M1: BitLocker Policy (20pts)">○ M1: BitLocker (20pts)</span>
+      <span class="mission-badge pending" id="m-2" data-label="M2: Defender Baseline (20pts)">○ M2: Defender (20pts)</span>
+      <span class="mission-badge pending" id="m-3" data-label="M3: Conditional Access (20pts)">○ M3: CA Policy (20pts)</span>
+      <span class="mission-badge pending" id="m-4" data-label="M4: Proactive Remediation (20pts)">○ M4: Remediation (20pts)</span>
+      <span class="mission-badge pending" id="m-5" data-label="M5: Resolve Incident (20pts)">○ M5: Close Incident (20pts)</span>
+    </div>
+  </footer>
+
+  <!-- MODAL: BITLOCKER POLICY -->
+  <div class="modal-backdrop" id="modalBitlocker">
+    <div class="modal-container">
+      <div class="modal-head">
+        <h3>Configure BitLocker Silent Encryption Policy</h3>
+        <button class="btn" style="border:none;background:none;font-size:18px;" onclick="closeModal('modalBitlocker')">&times;</button>
+      </div>
+      <form onsubmit="applyBitlockerPolicy(event)">
+        <div class="modal-content">
+          <div class="input-group">
+            <label>Policy Name</label>
+            <input type="text" class="control-input" value="ZeroTrust-BitLocker-256bit-Silent" required>
+          </div>
+          <div class="input-group">
+            <label>Encryption Algorithm (OS & Fixed Disks)</label>
+            <select class="control-select">
+              <option value="XTS-AES 256-bit" selected>XTS-AES 256-bit (CIS Benchmark Required)</option>
+              <option value="AES-CBC 128-bit">AES-CBC 128-bit</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Key Protector</label>
+            <select class="control-select">
+              <option value="TPM 2.0" selected>TPM 2.0 Silent (No user interaction)</option>
+              <option value="TPM+PIN">TPM + Startup PIN</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Save Recovery Key to</label>
+            <select class="control-select">
+              <option value="Entra ID" selected>Microsoft Entra ID Cloud Escrow</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn" onclick="closeModal('modalBitlocker')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Deploy Policy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DEFENDER BASELINE -->
+  <div class="modal-backdrop" id="modalDefender">
+    <div class="modal-container">
+      <div class="modal-head">
+        <h3>Deploy Microsoft Defender Security Baseline</h3>
+        <button class="btn" style="border:none;background:none;font-size:18px;" onclick="closeModal('modalDefender')">&times;</button>
+      </div>
+      <form onsubmit="applyDefenderPolicy(event)">
+        <div class="modal-content">
+          <div class="input-group">
+            <label>Real-Time Protection (RTP)</label>
+            <select class="control-select"><option selected>Enabled (Strict)</option></select>
+          </div>
+          <div class="input-group">
+            <label>Tamper Protection</label>
+            <select class="control-select"><option selected>Enforced (Prevent user override)</option></select>
+          </div>
+          <div class="input-group">
+            <label>Cloud-Delivered Protection Level</label>
+            <select class="control-select"><option selected>High (Block at first sight)</option></select>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn" onclick="closeModal('modalDefender')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Deploy Baseline</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONDITIONAL ACCESS -->
+  <div class="modal-backdrop" id="modalCA">
+    <div class="modal-container">
+      <div class="modal-head">
+        <h3>Create Zero-Trust Conditional Access Rule</h3>
+        <button class="btn" style="border:none;background:none;font-size:18px;" onclick="closeModal('modalCA')">&times;</button>
+      </div>
+      <form onsubmit="applyCAPolicy(event)">
+        <div class="modal-content">
+          <div class="input-group">
+            <label>Target Cloud Apps</label>
+            <select class="control-select"><option selected>All Microsoft 365 Cloud Apps (Exchange, Teams, SharePoint)</option></select>
+          </div>
+          <div class="input-group">
+            <label>Grant Access Controls</label>
+            <select class="control-select"><option selected>Require device to be marked as compliant + Require MFA</option></select>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn" onclick="closeModal('modalCA')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Enforce Conditional Access</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

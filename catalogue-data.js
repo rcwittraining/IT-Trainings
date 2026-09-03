@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+  "title": "Microsoft Intune: Endpoint Security & Zero-Trust Compliance Challenge",
+  "category": "Microsoft Intune \u2022 Endpoint Security \u2022 BitLocker \u2022 Defender \u2022 Remediation Challenge",
+  "badge": "INTUNE-CHALLENGE",
+  "accent": "#0078d4",
+  "id": "intune-security-compliance-challenge",
+  "targetUrl": "https://www.rcwittraining.in/intune-security-compliance-challenge/",
+  "contentType": "Challenge Lab",
+  "technology": "Microsoft Azure",
+  "subcategory": "Security & Compliance",
+  "group": "Hands-on Challenges"
+},
+  
+  {
   "title": "Microsoft Intune: Windows Autopilot & Zero-Trust Compliance Lab",
   "category": "Microsoft Intune \u2022 Autopilot \u2022 Zero Trust \u2022 Compliance \u2022 OOBE Simulator",
   "badge": "INTUNE",

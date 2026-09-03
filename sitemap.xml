@@ -88,13 +88,14 @@
   <url><loc>https://www.rcwittraining.in/helm-basics/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/incident-response-freshers/</loc><priority>0.9</priority></url>
   <url><loc>https://www.rcwittraining.in/index.html</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/intune-autopilot-device-association.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-autopilot-device-association.html</loc><priority>0.9</priority></url>
   <url><loc>https://www.rcwittraining.in/intune-autopilot-lab/</loc><priority>0.9</priority></url>
-  <url><loc>https://www.rcwittraining.in/intune-endpoint-privilege-management.html</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/intune-enrollment-apps-troubleshooting.html</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/intune-macos-recovery-lock.html</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/intune-remote-help-unattended-access.html</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/intune-windows-autopatch-hotpatch.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-endpoint-privilege-management.html</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-enrollment-apps-troubleshooting.html</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-macos-recovery-lock.html</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-remote-help-unattended-access.html</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-security-compliance-challenge/</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/intune-windows-autopatch-hotpatch.html</loc><priority>0.9</priority></url>
   <url><loc>https://www.rcwittraining.in/iptables-basics/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/iscsi-multipath-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/it-admin-zombie-game/</loc><priority>0.8</priority></url>
@@ -124,8 +125,8 @@
   <url><loc>https://www.rcwittraining.in/linux-packet-loss-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/linux-performance-ssh-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/log-analysis/</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/microsoft-intune-compliance-conditional-access.html</loc><priority>0.8</priority></url>
-  <url><loc>https://www.rcwittraining.in/microsoft-intune-zero-touch-windows.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-intune-compliance-conditional-access.html</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-intune-zero-touch-windows.html</loc><priority>0.9</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-25.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-26.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-28.html</loc><priority>0.8</priority></url>
