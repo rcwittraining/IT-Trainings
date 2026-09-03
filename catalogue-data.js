@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+  "title": "Microsoft Intune: Windows Autopilot Hands-on Lab & Console Replica",
+  "category": "Microsoft Intune \u2022 Autopilot \u2022 Console Replica \u2022 Zero Trust \u2022 Compliance",
+  "badge": "INTUNE-AUTOPILOT",
+  "accent": "#0078d4",
+  "id": "intune-autopilot-handson-lab",
+  "targetUrl": "https://www.rcwittraining.in/intune-autopilot-handson-lab/",
+  "contentType": "Lab",
+  "technology": "Microsoft Azure",
+  "subcategory": "Compliance",
+  "group": "Technology Labs"
+},
+  
+  {
   "title": "Microsoft Intune: Endpoint Security & Zero-Trust Compliance Challenge",
   "category": "Microsoft Intune \u2022 Endpoint Security \u2022 BitLocker \u2022 Defender \u2022 Remediation Challenge",
   "badge": "INTUNE-CHALLENGE",
