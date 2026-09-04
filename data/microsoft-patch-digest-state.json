@@ -1,5 +1,35 @@
 {
   "published_links": [
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84359",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84358",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84357",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84356",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84355",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84354",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84353",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84351",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84350",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84349",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84348",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84347",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84335",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84334",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84332",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84331",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84329",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84328",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84327",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84326",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84325",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84324",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-84323",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-83711",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-80098",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-70352",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-70178",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69857",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69414",
+    "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-65818",
     "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-70336",
     "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69320",
     "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69306",
@@ -279,5 +309,5 @@
     "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69855",
     "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69851"
   ],
-  "last_run": "2026-09-03T11:00:53.335005+05:30"
+  "last_run": "2026-09-04T09:11:47.141469+05:30"
 }
