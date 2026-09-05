@@ -2838,5 +2838,17 @@ window.RCW_CATALOGUE = Object.freeze([
     "technology": "Cybersecurity",
     "subcategory": "Incident Response",
     "group": "Technology Labs"
+  },
+  ,{
+    "title": "Citrix Virtual Apps & Desktops",
+    "category": "Virtualisation \u2022 Practice Labs",
+    "badge": "CITRIX",
+    "accent": "#005c9e",
+    "id": "citrix-labs",
+    "targetUrl": "https://rcwittraining.github.io/citrix-labs/",
+    "contentType": "Lab",
+    "technology": "Citrix",
+    "subcategory": "Virtual Apps & Desktops",
+    "group": "Technology Labs"
   }
-]);
+];
