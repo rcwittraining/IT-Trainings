@@ -74,3 +74,4 @@ With GitHub Pages only, `/admin/` cannot be made invisible or protected before i
 The simulator's GitHub Pages URL is hidden from normal page display and from the address bar. It is not cryptographically secret: a technical user can still discover an iframe destination with browser developer tools. Completely concealing it would require a reverse proxy or authenticated backend.
 
 For true email/password protection of the URL itself, a service such as Cloudflare Access or an authenticated server would be required later.
+# Citrix labs rebuild trigger – Sept 2026
