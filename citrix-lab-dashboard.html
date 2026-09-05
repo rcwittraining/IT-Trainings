@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Citrix Virtual Apps & Desktops – Dashboard</title>
+<link rel="stylesheet" href="catalogue.css">
+<style>
+  :root {
+    --navy: #061633;
+    --ink: #101b3b;
+    --blue: #078be8;
+    --cyan: #4bd7ff;
+    --green: #9ee636;
+    --paper: #f4f7fb;
+    --white: #fff;
+    --muted: #5f6c84;
+    --radius: 18px;
+  }
+  .hero { position:relative; min-height:460px; overflow:hidden; color:#fff;
+          background: linear-gradient(115deg,#078be8,#0758c8);
+          border-bottom:5px solid #087cd8; }
+  .hero .stats { position:absolute; right:24px; top:24px; }
+  .stat { background:rgba(255,255,255,.2); padding:12px 18px;
+          border-radius:var(--radius); margin-bottom:12px; }
+  .hero h1 { margin:0; line-height:.88; letter-spacing:-4px; }
+  .card { background:#fff; margin-bottom:24px; border-radius:var(--radius);
+          box-shadow:0 10px 28px rgba(8,31,69,.10); overflow:hidden; }
+  .card h3 { margin:0; padding:12px; background:#005c9e; color:#fff; }
+  .card pre { padding:12px; background:#f8f8f8; color:#555; overflow-x:auto; }
+  .table { width:100%; border-collapse collapse; }
+  .table th,.table td { border:1px solid #ddd; padding:8px; text-align:left; }
+  .table th { background:#005c9e; color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- ---------- Dashboard header ---------- -->
+<div class="hero">
+  <div class="stats">
+    <div class="stat"><strong>2,840</strong> Enrolled Devices</div>
+    <div class="stat"><strong>99.2 %</strong> Zero‑Trust Compliance</div>
+    <div class="stat"><strong>185</strong> Autopilot‑Ready Hardware Hashes</div>
+  </div>
+  <h1>Citrix Virtual Apps & Desktops</h1>
+</div>
+
+<!-- ---------- Card 1: Delivery Controller ----------
+<div class="card">
+  <h3>Delivery Controller Basics</h3>
+  <pre>Controller Name: CTX-DC-01
+Status: Online
+Registered Services: Broker, Licensing, StoreFront</pre>
+</div>
+
+<!-- ---------- Card 2: App & Desktop Delivery ----------
+<div class="card">
+  <h3>Published Applications</h3>
+  <table class="table">
+    <thead><tr><th>Application</th><th>Desktop</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>WordProcessor</td><td>Desktop‑01</td><td><button>Open</button></td></tr>
+      <tr><td>Spreadsheet</td><td>Desktop‑02</td><td><button>Open</button></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ---------- Card 3: Citrix ADC / Load Balancing ----------
+<div class="card">
+  <h3>Citrix ADC / Load Balancing</h3>
+  <form id="adcForm">
+    <label>ADC IP: <input type="text" id="adcIp" placeholder="5.6.7.8"></label>
+    <label>Port: <input type="number" id="adcPort" placeholder="80"></label>
+    <br/><button type="submit">Apply Configuration</button>
+  </form>
+</div>
+
+<!-- ---------- Card 4: StoreFront ----------
+<div class="card">
+  <h3>StoreFront Configuration</h3>
+  <form id="sfForm">
+    <label>Server Address: <input type="text" id="sfAddress" placeholder="storefront.example.com"></label>
+    <label>HTTPS Port: <input type="number" id="sfPort" placeholder="443"></label>
+    <br/><button type="submit">Add Server</button>
+  </form>
+</div>
+
+</body>
+</html>
