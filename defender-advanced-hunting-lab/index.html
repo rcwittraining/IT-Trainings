@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.className += ' js';</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 3 · Microsoft Defender advanced hunting, custom detections &amp; alert tuning | RCW IT Training</title>
+<meta name="description" content="Advanced Microsoft Defender practice lab on a faithful console replica: write bounded KQL over the endpoint, identity and email schema, pivot across domains, build a custom detection rule and a governed alert-suppression record. Runs on an offline KQL engine with synthetic data, by RCW IT Training.">
+<meta name="author" content="Pradeep Raju — RCW IT Training">
+<link rel="canonical" href="https://www.rcwittraining.in/defender-advanced-hunting-lab/">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RCW IT Training">
+<meta property="og:title" content="Lab 3 · Advanced hunting, custom detections &amp; alert tuning">
+<meta property="og:description" content="Four graded queries, one custom detection and one suppression decision — scored by a real KQL engine over a synthetic tenant.">
+<meta property="og:url" content="https://www.rcwittraining.in/defender-advanced-hunting-lab/">
+<meta name="theme-color" content="#1b1a19">
+<link rel="stylesheet" href="../microsoft-defender-labs/shared/defender-lab.css">
+<script src="../microsoft-defender-labs/shared/kql-lite.js" defer></script>
+<script src="../microsoft-defender-labs/shared/defender-lab.js" defer></script>
+<script src="app.js" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LearningResource","name":"Microsoft Defender advanced hunting: KQL, custom detections and alert tuning","description":"Advanced console-replica lab: build bounded KQL queries over simulated endpoint, identity and email tables, pivot across data domains, parse AdditionalFields, aggregate with bin() and dcount(), then encode the finding as a custom detection rule and tune the noisy false positive with a scoped, expiring suppression record.","learningResourceType":"Practice lab","educationalLevel":"Advanced","timeRequired":"PT90M","inLanguage":"en","isAccessibleForFree":true,"interactivityType":"active","teaches":"KQL query construction, cross-domain pivoting, detection engineering, alert tuning governance","provider":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"},"creator":{"@type":"Person","name":"Pradeep Raju","jobTitle":"Founder & Senior Enterprise Infrastructure Architect","url":"https://www.linkedin.com/in/pradeepmcp826/"},"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/","citation":"https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-overview"}
+</script>
+</head>
+<body data-lab-id="defender-advanced-hunting">
+<div id="labShell"></div>
+<div id="labViewsSource">
+
+<section class="view is-active" data-view="overview" data-view-label="Home · brief" aria-labelledby="ovT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Microsoft Defender portal</span><span class="sep" aria-hidden="true">›</span><span>Investigation &amp; response</span><span class="sep" aria-hidden="true">›</span><span class="current">Advanced hunting</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Defender XDR series · Lab 3 of 5 · Advanced</span><h1 id="ovT">Hunting is writing the query you can defend at 03:00</h1>
+    <p class="lede">Four queries, one custom detection, one suppression record and one handover note. Every query is executed by a real (if small) KQL engine against synthetic tables in your browser — the row counts the validator expects are the row counts the engine gives you, so you can check your own work instead of guessing.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="qtime">Required</span><button class="btn btn--primary" type="button" data-route="workbench">Open the query workbench</button></div>
+  </div>
+  <div class="notice info"><span class="n-ico" aria-hidden="true">i</span><div><b>KQL-Lite · what is and is not here.</b><p>Supported: <code>let</code>, <code>where</code>, <code>project</code> / <code>project--away</code> / <code>project-rename</code>, <code>extend</code>, <code>summarize … by</code>, <code>distinct</code>, <code>order by</code>, <code>take</code>, <code>count</code>, <code>union</code>, <code>join kind=…</code> and the common string, time and aggregate functions. <em>Not</em> modelled: <code>mv-expand</code>, <code>datatable</code>, <code>externaldata</code>, <code>make-series</code>, <code>render</code> visuals, window functions and <code>arg_max</code> as a row picker. Computed group-by columns need an alias (<code>by HOUR = bin(Timestamp, 1h)</code>). A real tenant has hundreds of tables and full engine semantics.</p></div></div>
+  <div class="grid-2">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objectives · 100 pts</span><h2>What is graded</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-route="guide">Full guide</button></span></div>
+      <ul class="gate-list">
+        <li class="gate"><span class="g-ico">1</span><div><b>Bounded counting · 10</b><small>Right table, right window, no <code>take</code> shortcut, honest row count.</small></div></li>
+        <li class="gate"><span class="g-ico">2</span><div><b>Cross-domain pivot · 20</b><small>Identity logon → endpoint process, on the account, not on vibes.</small></div></li>
+        <li class="gate"><span class="g-ico">3</span><div><b>AdditionalFields · 15</b><small><code>parse_json</code> plus a typed extension so the field is queryable.</small></div></li>
+        <li class="gate"><span class="g-ico">4</span><div><b>Aggregation &amp; baselines · 15</b><small><code>bin()</code>, <code>dcount()</code> and an ordering that puts the anomaly on top.</small></div></li>
+        <li class="gate"><span class="g-ico">5</span><div><b>Custom detection · 20</b><small>Turn the query into a rule with a limit, an exemption and a safe remediation setting.</small></div></li>
+        <li class="gate"><span class="g-ico">6</span><div><b>Alert tuning · 10</b><small>Suppress the known-benign pattern narrowly, with an owner and an expiry.</small></div></li>
+        <li class="gate"><span class="g-ico">7</span><div><b>Handover · 10</b><small>Save the query, file the hunting note, create the incident from evidence.</small></div></li>
+      </ul></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Scenario</span><h2>Why you are hunting</h2></div></div>
+      <p class="small">Two Medium alerts on 2026-08-27 mentioned an unusual service account (<code>svc_print</code>) starting an interactive logon, then a process with a network beacon. Neither alert was severe enough to become an incident, and the SIEM owner asked whether this is a pattern or noise. You have 14 days of endpoint data, 30 days of identity data and the email tables.</p>
+      <dl class="kv">
+        <dt>Simulated "now"</dt><dd class="mono">2026-08-28T09:00:00Z</dd>
+        <dt>Retention in this lab</dt><dd>Endpoint 14 days · identity 30 days (real tenants differ by plan)</dd>
+        <dt>Rows available</dt><dd class="mono" data-rowcount>—</dd>
+        <dt>Who may see the output</dt><dd>SOC and IT operations only; the export is redacted by default</dd>
+      </dl>
+      <div class="notice" style="margin-top:10px"><span class="n-ico" aria-hidden="true">§</span><div><b>Compliance posture.</b><p>Console replica, not Microsoft software. Offline, synthetic data, no tenant connection, no telemetry. Nothing you type leaves this browser; the audit log redacts real-looking identifiers and the evidence pack is generated locally.</p></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="library" data-view-label="Query library" hidden aria-labelledby="lbT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Advanced hunting</span><span class="sep" aria-hidden="true">›</span><span class="current">Library</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="lbT">Saved queries · tenant workspace</h1>
+    <p class="lede">Reuse is a control, not laziness: a query that has been reviewed and named is the one an auditor accepts.</p></div>
+    <div class="head-actions"><button class="btn btn--sm" type="button" data-route="workbench">Back to the workbench</button></div>
+  </div>
+  <div class="grid-3">
+    <article class="card qcard"><div class="card-head"><div><span class="kicker">Endpoint</span><h2>Suspicious process by hash</h2></div></div>
+      <pre class="code">DeviceProcessEvents
+| where Timestamp &gt; ago(14d)
+| where FileName !in (&quot;expected.exe&quot;)
+| summarize E = count() by DeviceName</pre>
+      <p class="small muted">Reviewed by · detection engineering · 2026-07-14</p>
+      <div class="form-actions"><button class="btn btn--sm" type="button" data-load="pivot1">Load into workbench</button></div></article>
+    <article class="card qcard"><div class="card-head"><div><span class="kicker">Cross-domain</span><h2>Identity logon → endpoint process</h2></div></div>
+      <pre class="code">let win = 14d;
+IdentityLogonEvents
+| where Timestamp &gt; ago(30d) and ActionType == &quot;LogonSuccess&quot;</pre>
+      <p class="small muted">Incomplete on purpose: it never joins the endpoint side.</p>
+      <div class="form-actions"><button class="btn btn--sm" type="button" data-load="pivot2">Load into workbench</button></div></article>
+    <article class="card qcard"><div class="card-head"><div><span class="kicker">Anti-pattern</span><h2>The query you must not ship</h2></div></div>
+      <pre class="code">DeviceEvents
+| take 100000
+| where 1 == 1</pre>
+      <p class="small muted">Unbounded, always true, and it looks like it worked. This is the shape of a false sense of coverage.</p>
+      <div class="form-actions"><button class="btn btn--sm" type="button" data-load="bad1">Load into workbench</button></div></article>
+  </div>
+  <p class="small muted">Loading a sample never completes an objective. The validator re-runs your text, so editing a sample into something defensible is the work.</p>
+</section>
+
+<section class="view" data-view="workbench" data-view-label="Query workbench" hidden aria-labelledby="wbT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="library">Advanced hunting</button><span class="sep" aria-hidden="true">›</span><span class="current">Workbench</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objectives 1–4 · 60 pts</span><h1 id="wbT">Four queries, four tabs</h1>
+    <p class="lede">Each tab is graded separately and keeps its own text. Run first, then submit — the validator executes the query exactly as it stands.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="qtime">Required</span><button class="btn btn--sm" type="button" data-route="library">Query library</button></div>
+  </div>
+  <div class="tabbed">
+    <div class="tabs" role="tablist" aria-label="Hunting tasks">
+      <button class="tab" type="button" role="tab" aria-selected="true" data-tab="t1">1 · Bounded count</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="t2">2 · Identity → endpoint</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="t3">3 · AdditionalFields</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="t4">4 · Baseline &amp; peak</button>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" data-tabpanel="t1">
+      <div class="grid-2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start">
+        <article class="card"><div class="card-head"><div><span class="kicker">Task 1 · 10 pts</span><h2>How many process events in the last 7 days?</h2></div></div>
+          <p class="small">Requirements: <code>DeviceProcessEvents</code> as the source, a time filter of <b>7 days or less</b>, a single row whose <code>Count</code> is the true number for this tenant. No <code>take</code>, no <code>1 == 1</code>.</p>
+          <label class="field"><span class="lbl">KQL</span><textarea id="qTime" data-kql="qTime" class="kql-editor" rows="7" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-qTime">Run</button><button class="btn btn--sm" type="button" id="fmt-qTime">Format</button><button class="btn btn--sm" type="button" id="clr-qTime">Clear</button><span class="grow"></span><span class="small muted" id="meta-qTime">not run</span></div>
+          <div class="msg" id="err-qTime" role="alert" hidden></div>
+          <div id="res-qTime" class="grid-wrap"></div>
+        </article>
+        <article class="card"><div class="card-head"><div><span class="kicker">Objective 1</span><h2>Submit the query</h2></div><span class="obj-badge" data-objective-status="qtime">Required</span></div>
+          <form id="form-qtime" data-objective="qtime" novalidate>
+            <label class="field"><span class="lbl">Why a bounded window matters here (min 60 chars)</span><textarea id="whyBound" rows="3"></textarea></label>
+            <div class="msg" id="msg-qtime" role="status" aria-live="polite"></div>
+            <div class="form-actions"><button class="btn btn--primary" type="submit">Validate task 1</button></div>
+          </form></article>
+      </div>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" data-tabpanel="t2" hidden>
+      <div class="grid-2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start">
+        <article class="card"><div class="card-head"><div><span class="kicker">Task 2 · 20 pts</span><h2>Which devices did <code>svc_print</code> touch after a successful logon?</h2></div></div>
+          <p class="small">Join <code>IdentityLogonEvents</code> (successful logons, last 30 days) to <code>DeviceProcessEvents</code> on the account name, then return one row per device. Use <code>let</code> for at least one side and <code>join kind=inner</code>.</p>
+          <label class="field"><span class="lbl">KQL</span><textarea id="qPivot" data-kql="qPivot" class="kql-editor" rows="12" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-qPivot">Run</button><button class="btn btn--sm" type="button" id="fmt-qPivot">Format</button><button class="btn btn--sm" type="button" id="clr-qPivot">Clear</button><span class="grow"></span><span class="small muted" id="meta-qPivot">not run</span></div>
+          <div class="msg" id="err-qPivot" role="alert" hidden></div>
+          <div id="res-qPivot" class="grid-wrap"></div>
+        </article>
+        <article class="card"><div class="card-head"><div><span class="kicker">Objective 2</span><h2>Interpret, don't just run</h2></div><span class="obj-badge" data-objective-status="qpivot">Required</span></div>
+          <form id="form-qpivot" data-objective="qpivot" novalidate>
+            <label class="field"><span class="lbl">What the join proves</span>
+              <select id="pivotMeans"><option value="">Choose</option>
+                <option value="o1">That the account authenticated somewhere and that a process ran on a device — correlated, not causally proven</option>
+                <option value="o2">That the account was compromised on every device in the result</option>
+                <option value="o3">That IdentityLogonEvents contains the process name</option></select></label>
+            <label class="field"><span class="lbl">Why join on the account instead of the device name</span>
+              <select id="pivotKey"><option value="">Choose</option>
+                <option value="o1">Because the logon was recorded on a different host than the process event; the shared identifier is the account</option>
+                <option value="o2">Because joining on DeviceName is never valid in KQL</option></select></label>
+            <div class="msg" id="msg-qpivot" role="status" aria-live="polite"></div>
+            <div class="form-actions"><button class="btn btn--primary" type="submit">Validate task 2</button></div>
+          </form></article>
+      </div>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" data-tabpanel="t3" hidden>
+      <div class="grid-2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start">
+        <article class="card"><div class="card-head"><div><span class="kicker">Task 3 · 15 pts</span><h2>Pull the authentication package out of the JSON</h2></div></div>
+          <p class="small">On <code>DeviceLogonEvents</code>: bound to 14 days, extend a column <code>AuthPkg</code> from <code>parse_json(AdditionalFields).AuthenticationPackage</code>, keep only NTLM (the downgrade signal), and return the devices. Expected result: exactly 2 rows.</p>
+          <label class="field"><span class="lbl">KQL</span><textarea id="qParse" data-kql="qParse" class="kql-editor" rows="10" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-qParse">Run</button><button class="btn btn--sm" type="button" id="fmt-qParse">Format</button><button class="btn btn--sm" type="button" id="clr-qParse">Clear</button><span class="grow"></span><span class="small muted" id="meta-qParse">not run</span></div>
+          <div class="msg" id="err-qParse" role="alert" hidden></div>
+          <div id="res-qParse" class="grid-wrap"></div>
+        </article>
+        <article class="card"><div class="card-head"><div><span class="kicker">Objective 3</span><h2>Why extend before you filter</h2></div><span class="obj-badge" data-objective-status="qparse">Required</span></div>
+          <form id="form-qparse" data-objective="qparse" novalidate>
+            <label class="field"><span class="lbl">Pick the correct statement</span>
+              <select id="extWhy"><option value="">Choose</option>
+                <option value="o1">A materialised column can be filtered, aggregated and reused by a detection rule; a raw JSON substring match is fragile and misses case or ordering changes</option>
+                <option value="o2">extend is faster than where, so it is always preferred</option>
+                <option value="o3">parse_json is required by policy in every query</option></select></label>
+            <label class="field"><span class="lbl">Cost note for the query header (min 40 chars)</span><input id="costNote" type="text" maxlength="120"></label>
+            <div class="msg" id="msg-qparse" role="status" aria-live="polite"></div>
+            <div class="form-actions"><button class="btn btn--primary" type="submit">Validate task 3</button></div>
+          </form></article>
+      </div>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" data-tabpanel="t4" hidden>
+      <div class="grid-2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start">
+        <article class="card"><div class="card-head"><div><span class="kicker">Task 4 · 15 pts</span><h2>Hourly beaconing baseline</h2></div></div>
+          <p class="small">On <code>DeviceNetworkEvents</code>: last 14 days, restrict to the C2 address <code>203.0.113.64</code>, then <code>summarize</code> per hour with <code>Devices = dcount(DeviceName)</code> and <code>Conns = count()</code>, ordered so the busiest hour comes first. Aliased group-by is required here.</p>
+          <label class="field"><span class="lbl">KQL</span><textarea id="qAgg" data-kql="qAgg" class="kql-editor" rows="10" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+          <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-qAgg">Run</button><button class="btn btn--sm" type="button" id="fmt-qAgg">Format</button><button class="btn btn--sm" type="button" id="clr-qAgg">Clear</button><span class="grow"></span><span class="small muted" id="meta-qAgg">not run</span></div>
+          <div class="msg" id="err-qAgg" role="alert" hidden></div>
+          <div id="res-qAgg" class="grid-wrap"></div>
+        </article>
+        <article class="card"><div class="card-head"><div><span class="kicker">Objective 4</span><h2>Read your own chart</h2></div><span class="obj-badge" data-objective-status="qagg">Required</span></div>
+          <form id="form-qagg" data-objective="qagg" novalidate>
+            <label class="field"><span class="lbl">Busiest hour in your result</span>
+              <select id="peakHour"><option value="">Choose</option>
+                <option value="o1">08:00 UTC</option><option value="o2">12:00 UTC</option><option value="o3">03:00 UTC</option></select>
+              <span class="help">Answer from the grid above, not from what a beacon "should" look like.</span></label>
+            <label class="field"><span class="lbl">Why <code>dcount</code> and not <code>count</code> for the device column</span>
+              <select id="dcountWhy"><option value="">Choose</option>
+                <option value="o1">Because a device beacons many times; counting rows would measure frequency, not the number of distinct hosts affected</option>
+                <option value="o2">Because dcount is cheaper than count</option></select></label>
+            <div class="msg" id="msg-qagg" role="status" aria-live="polite"></div>
+            <div class="form-actions"><button class="btn btn--primary" type="submit">Validate task 4</button></div>
+          </form></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" data-view="detections" data-view-label="Custom detection" hidden aria-labelledby="cdT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Advanced hunting</span><span class="sep" aria-hidden="true">›</span><span class="current">Custom detections</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 5 · 20 pts</span><h1 id="cdT">Turn a query into a rule without becoming the next noise problem</h1>
+    <p class="lede">A custom detection runs on a schedule, creates incidents and can act on devices. Every field below has a blast radius; the validator checks the safety-critical ones.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="rule">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Create custom detection</span><h2>Rule definition</h2></div></div>
+      <form id="form-rule" data-objective="rule" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Name</span><input id="detName" type="text" maxlength="60" placeholder="svc_print interactive logon followed by beacon"></label>
+          <label class="field"><span class="lbl">Alert severity</span>
+            <select id="detSeverity"><option value="">Choose</option>
+              <option value="o1">Informational</option><option value="o2">Low</option><option value="o3">Medium</option><option value="o4">High</option></select></label>
+          <label class="field"><span class="lbl">Category</span>
+            <select id="detCategory"><option value="">Choose</option>
+              <option value="o1">Initial access</option><option value="o2">Persistence</option><option value="o3">Command and control</option><option value="o4">Credential access</option></select></label>
+          <label class="field"><span class="lbl">MITRE ATT&amp;CK tactic</span>
+            <select id="detTactic"><option value="">Choose</option>
+              <option value="o1">TA0011 Command and Control</option><option value="o2">TA0001 Initial Access</option><option value="o3">TA0040 Impact</option></select></label>
+          <label class="field"><span class="lbl">Run every</span>
+            <select id="detFreq"><option value="">Choose</option>
+              <option value="o1">Hour</option><option value="o2">Day</option><option value="o3">Week</option></select></label>
+          <label class="field"><span class="lbl">Query period</span>
+            <select id="detPeriod"><option value="">Choose</option>
+              <option value="o1">Last hour</option><option value="o2">Last 3 days</option><option value="o3">All retained data</option></select></label>
+          <label class="field"><span class="lbl">Limit alerts to this many devices per run</span>
+            <select id="detLimit"><option value="">Choose</option>
+              <option value="o1">1 device (highest count)</option><option value="o2">10 devices (highest count)</option><option value="o3">Unlimited</option></select></label>
+          <label class="field"><span class="lbl">Exempt device groups (comma separated)</span>
+            <input id="detExempt" type="text" maxlength="60" placeholder="PAY-SRV, FIN-SRV"></label>
+          <label class="field"><span class="lbl">Automatic remediation actions</span>
+            <select id="detRemediation"><option value="">Choose</option>
+              <option value="o1">None — investigate first</option>
+              <option value="o2">Stop and quarantine the file, and isolate the device</option>
+              <option value="o3">Run a full AV scan only</option></select></label>
+          <label class="field"><span class="lbl">Recommended actions for the analyst</span>
+            <input id="detRec" type="text" maxlength="140" placeholder="Collect package, confirm logon source, check persistence"></label>
+        </div>
+        <label class="field"><span class="lbl">Detection query (it must run here, and must not contain personal data)</span>
+          <textarea id="detQuery" data-kql="detQuery" class="kql-editor" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+        <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-detQuery">Run</button><span class="grow"></span><span class="small muted" id="meta-detQuery">not run</span></div>
+        <div class="msg" id="err-detQuery" role="alert" hidden></div>
+        <div class="msg" id="msg-rule" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save the detection</button>
+          <button class="btn" type="button" id="copyFromTask4">Copy task 4 query in</button></div>
+      </form></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Design review</span><h2>Four things to get right</h2></div></div>
+      <ol class="rules">
+        <li><b>A window that matches the schedule.</b> A rule that runs hourly and queries three days re-alerts on the same activity for 72 hours. Pair them deliberately.</li>
+        <li><b>Limit is a courtesy to your analysts.</b> "Highest count" ordering with a small limit means the worst host surfaces first; unlimited turns one behaviour into a queue-clogging incident storm.</li>
+        <li><b>Exemptions are for known-good noise, not for machines you like.</b> Name the device group and put the reason in the alert description so the next shift can read it.</li>
+        <li><b>Automatic remediation needs a tested rule.</b> On a first run, choose no automatic action; add isolation only after the false-positive rate is known and the exception list exists.</li>
+      </ol>
+      <p class="small muted">In the real portal these controls live under Advanced hunting → Custom detections, and the incidents they create carry your query text as evidence — which is why personal data in the query is a policy problem, not a style problem.</p>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="tuning" data-view-label="Alert tuning" hidden aria-labelledby="atT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Settings · Microsoft Defender XDR</span><span class="sep" aria-hidden="true">›</span><span class="current">Alert tuning</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 6 · 10 pts</span><h1 id="atT">Silencing an alert is a control change, not a preference</h1>
+    <p class="lede">The print-monitor process spawns a benign helper on every run. You want it gone from the queue. There is a right way and a very wrong way.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="tune">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Evidence</span><h2>What justifies suppression</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid">
+        <thead><tr><th scope="col">Alert</th><th scope="col">Occurrences</th><th scope="col">Investigated</th><th scope="col">Outcome</th></tr></thead>
+        <tbody>
+          <tr><td>Unusual process (splweb.exe)</td><td class="num">41</td><td>7 of 41, all identical command line</td><td><span class="chip done">Informational</span></td></tr>
+          <tr><td>Suspicious connection to low-reputation IP</td><td class="num">9</td><td>1 of 9</td><td><span class="chip warn">Open</span></td></tr>
+          <tr><td>Credential stealing behaviour</td><td class="num">1</td><td>1 of 1</td><td><span class="chip sev-high">True positive</span></td></tr>
+        </tbody></table></div>
+      <p class="small muted">Sample rate matters: seven reviewed-and-benign out of 41 is a basis for a narrow suppression. One out of nine is not.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 6</span><h2>Create the suppression</h2></div><span class="obj-badge" data-objective-status="tune">Required</span></div>
+      <form id="form-tune" data-objective="tune" novalidate>
+        <label class="field"><span class="lbl">Where the suppression belongs</span>
+          <select id="tuneWhere"><option value="">Choose</option>
+            <option value="o1">Microsoft Defender XDR → Alert tuning: a rule scoped to this alert name and the product</option>
+            <option value="o2">Turn off the underlying detection in the analytics settings</option>
+            <option value="o3">Filter it out of the incidents view with a saved column filter</option></select></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Scope</span>
+            <select id="tuneScope"><option value="">Choose</option>
+              <option value="o1">Alert name + product + the two device groups where the software is deployed</option>
+              <option value="o2">All alerts, all devices, all products</option></select></label>
+          <label class="field"><span class="lbl">Expiry</span>
+            <select id="tuneExpiry"><option value="">Choose</option>
+              <option value="o1">Set an expiry date (review in 90 days)</option>
+              <option value="o2">Never — the vendor said this behaviour is normal</option></select></label>
+          <label class="field"><span class="lbl">Owner</span>
+            <select id="tuneOwner"><option value="">Choose</option>
+              <option value="o1">Detection engineering (a named role, recorded in the rule description)</option>
+              <option value="o2">Whoever is on shift</option></select></label>
+          <label class="field"><span class="lbl">What must still alert</span>
+            <select id="tuneKeep"><option value="">Choose</option>
+              <option value="o1">The same process name with a different command line, path or parent</option>
+              <option value="o2">Nothing — the name is enough</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">Justification for the change record (min 80 chars, no personal data)</span>
+          <textarea id="tuneWhy" rows="3"></textarea></label>
+        <div class="msg" id="msg-tune" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save suppression and move to handover</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="handoff" data-view-label="Handover" hidden aria-labelledby="hoT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Advanced hunting</span><span class="sep" aria-hidden="true">›</span><span class="current">Save · create incident · note</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 7 · 10 pts</span><h1 id="hoT">A hunt that ends in nobody's queue</h1>
+    <p class="lede">Save the work where the next shift will find it, and write the note as if the reviewer has never seen this tenant.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="note">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 7</span><h2>Close the loop</h2></div><span class="obj-badge" data-objective-status="note">Required</span></div>
+      <form id="form-note" data-objective="note" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Query name and folder</span>
+            <input id="qName" type="text" maxlength="80" placeholder="svc-print-beacon-baseline · Workspace: Detection engineering"></label>
+          <label class="field"><span class="lbl">Where the finding goes</span>
+            <select id="handoffTo"><option value="">Choose</option>
+              <option value="o1">Create an incident from the query results, then attach the saved query</option>
+              <option value="o2">Post the CSV in the team chat</option>
+              <option value="o3">Nothing — the alerts will catch it eventually</option></select></label>
+          <label class="field"><span class="lbl">Export scope for the evidence file</span>
+            <select id="exportScope"><option value="">Choose</option>
+              <option value="o1">Current result set, redacted, with the query text and the run time</option>
+              <option value="o2">All 30 days of the raw table</option></select></label>
+          <label class="field"><span class="lbl">Review date for the query itself</span>
+            <input id="qReview" type="text" class="mono" maxlength="10" placeholder="YYYY-MM-DD"></label>
+        </div>
+        <fieldset><legend>Handover hygiene</legend>
+          <label class="check"><input type="checkbox" id="nA"><span><b>The saved query states its assumptions (window, retention, exclusions) in the description</b></span></label>
+          <label class="check"><input type="checkbox" id="nB"><span><b>The suppression and the new detection are both listed in the note, so the queue change is explainable</b></span></label>
+          <label class="check"><input type="checkbox" id="nC"><span><b>Identities are referenced by account name or role, never by personal contact details</b></span></label>
+          <label class="check"><input type="checkbox" id="nD"><span><b>Residual uncertainty is written down — what the data cannot tell us</b></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Hunting note (min 180 chars)</span>
+          <textarea id="huntNote" rows="5"></textarea></label>
+        <div class="msg" id="msg-note" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Complete the lab</button>
+          <button class="btn" type="button" data-evidence="download">Export evidence pack</button></div>
+      </form></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Peer review</span><h2>What a reviewer looks for in a saved hunt</h2></div></div>
+      <div class="checklist-review">
+        <p><span class="tick yes" aria-hidden="true">✓</span> Time window stated and consistent with the schedule</p>
+        <p><span class="tick yes" aria-hidden="true">✓</span> Explicit filters; no <code>1 == 1</code>, no <code>take</code> as a proxy for a filter</p>
+        <p><span class="tick yes" aria-hidden="true">✓</span> Output columns named, ordered and stable between runs</p>
+        <p><span class="tick yes" aria-hidden="true">✓</span> Exemptions and their reason inside the query text or the description</p>
+        <p><span class="tick no" aria-hidden="true">✕</span> Any personal identifier, mailbox address or raw log line</p>
+        <p><span class="tick no" aria-hidden="true">✕</span> A conclusion stronger than the query supports</p>
+      </div>
+      <div class="notice info" style="margin-top:10px"><span class="n-ico" aria-hidden="true">i</span><div><b>Retention honesty.</b><p>Real tenants lose endpoint rows after the retention window of their plan. A query written for 90 days of data will silently return less; a hunting note that does not state the retention assumption is unverifiable later.</p></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="guide" data-view-label="Lab guide" hidden aria-labelledby="gdT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>RCW IT Training</span><span class="sep" aria-hidden="true">›</span><span class="current">Lab guide</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="gdT">Marking, limits of the engine, and the standing rules</h1></div>
+    <div class="head-actions"><button class="btn btn--sm" type="button" data-route="overview">Back to the lab</button></div></div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Marking</span><h2>How the 100 points are awarded</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid">
+        <thead><tr><th scope="col">#</th><th scope="col">Objective</th><th scope="col">Pts</th><th scope="col">Validation performed in your browser</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>Bounded count</td><td class="num">10</td><td>Query parses, targets DeviceProcessEvents, contains a time filter, returns 1 row with the true count; forbidden shortcuts absent; rationale written</td></tr>
+          <tr><td class="num">2</td><td>Cross-domain pivot</td><td class="num">20</td><td>Uses <code>let</code> and <code>join kind=inner</code> across the identity and endpoint tables, returns exactly the three affected devices, plus two interpretation answers</td></tr>
+          <tr><td class="num">3</td><td>AdditionalFields</td><td class="num">15</td><td><code>parse_json</code> extension present, NTLM filter applied, exactly 2 rows, cost note written</td></tr>
+          <tr><td class="num">4</td><td>Baseline &amp; peak</td><td class="num">15</td><td><code>bin()</code> group-by aliased, <code>dcount</code> present, ordered descending, and the peak-hour answer matches your own result set</td></tr>
+          <tr><td class="num">5</td><td>Custom detection</td><td class="num">20</td><td>Named rule, severity/category/tactic set, schedule paired with a matching query period, device limit, exemptions, no auto-remediation on a first run, query runs and is free of personal data</td></tr>
+          <tr><td class="num">6</td><td>Alert tuning</td><td class="num">10</td><td>Suppression placed in alert tuning, narrowly scoped, expiring, owned, with a "must still alert" condition and a written justification</td></tr>
+          <tr><td class="num">7</td><td>Handover</td><td class="num">10</td><td>Saved query named, incident creation chosen over chat, redacted export scope, review date within 90 days, four hygiene items, 180-character note with no addresses</td></tr>
+        </tbody></table></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Standing rules</span><h2>Seven habits this lab drills</h2></div></div>
+      <ol class="rules">
+        <li><b>Every query has a window.</b> Unbounded scans are slow, expensive and impossible to reproduce; <code>take</code> is not a filter.</li>
+        <li><b>Pivot on a stable identifier.</b> Hashes, account names, report IDs and registry value names survive renaming; file names do not.</li>
+        <li><b>Named output beats <code>*</code>.</b> A rule whose projection changes breaks the alert format downstream.</li>
+        <li><b>Write the rule you can live with at 03:00.</b> Severity, limit and exemptions are queue design, not decoration.</li>
+        <li><b>Suppress narrowly, and with an expiry.</b> Disabling a detection is a control change that needs a change record and an owner.</li>
+        <li><b>Correlation is not causation.</b> A join proves co-occurrence; the incident note must not claim more.</li>
+        <li><b>Leave the query where the next shift can find it.</b> A hunt nobody saved is a hunt that will be repeated by two people at once.</li>
+      </ol>
+      <div class="notice" style="margin-top:12px"><span class="n-ico" aria-hidden="true">§</span><div><b>Framework mapping</b><p>Queries and rules map to NIST SP 800-61r3 §3.2 (detection &amp; analysis) and §3.3 (containment); detection engineering lifecycle to ISO/IEC 27001:2022 A.8.16 (monitoring activities) and A.5.28; alert-tuning governance to PCI DSS v4.0 requirement 10.4 and 13.3; regulator clocks referenced in the series are NIS2 Art. 23, DORA Art. 19 and GDPR Art. 33. Training aid only — not certification preparation and not affiliated with Microsoft.</p></div></div>
+    </article>
+  </div>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Data</span><h2>Synthetic by construction</h2></div></div>
+      <table class="data-grid"><thead><tr><th scope="col">Element</th><th scope="col">This lab</th><th scope="col">Real portal</th></tr></thead>
+        <tbody>
+          <tr><td>Tables</td><td>6 hand-built tables, ≤ 14 rows each</td><td>Hundreds of tables, tenant-wide</td></tr>
+          <tr><td>Engine</td><td>KQL-Lite, deterministic and offline</td><td>Full KQL over the warehouse</td></tr>
+          <tr><td>Addresses</td><td class="mono">203.0.113.0/24, 2001:db8::/32</td><td>Public internet</td></tr>
+          <tr><td>Accounts</td><td class="mono">svc_print, fin.clerk @contoso-rcw.example</td><td>Live directory</td></tr>
+          <tr><td>Detections</td><td>Fabricated names, no real IOCs</td><td>Microsoft + custom rules</td></tr>
+        </tbody></table>
+      <p class="small muted">No network call is made from this page. localStorage only, and the reset control wipes the lab completely.</p></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Accessibility</span><h2>Keyboard and assistive tech</h2></div></div>
+      <ul class="rules">
+        <li>Tabs are real <code>role="tab"</code> buttons; panels are labelled by them and hidden with the <code>hidden</code> attribute, so screen readers never announce a hidden result set.</li>
+        <li>Editors are plain textareas — spellcheck and autocorrect off, and every error is written into a live region under the editor rather than only coloured red.</li>
+        <li>Result grids are keyboard-scrollable with column headers as <code>&lt;th scope="col"&gt;</code>; row counts are announced in the caption.</li>
+        <li>Focus is visible at 3:1 contrast, Escape closes overlays, and forced-colors mode keeps the toolbar legible.</li>
+      </ul>
+      <p class="small"><a href="../microsoft-defender-labs/compliance-standards.html">Full compliance and accessibility standard →</a></p></article>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

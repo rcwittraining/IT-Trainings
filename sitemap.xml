@@ -53,6 +53,11 @@
   <url><loc>https://www.rcwittraining.in/cron-drill/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cron-jobs/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/cybersecurity-challenge/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/defender-advanced-hunting-lab/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/defender-email-campaign-lab/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/defender-endpoint-containment-lab/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/defender-identity-attack-path-lab/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/defender-incident-triage-lab/</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/dell-poweredge-idrac-perc-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/disclaimer.html</loc><priority>0.3</priority></url>
   <url><loc>https://www.rcwittraining.in/dnf-packages/</loc><priority>0.8</priority></url>
@@ -126,6 +131,8 @@
   <url><loc>https://www.rcwittraining.in/linux-packet-loss-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/linux-performance-ssh-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/log-analysis/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-defender-labs/</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rcwittraining.in/microsoft-defender-labs/compliance-standards.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-intune-compliance-conditional-access.html</loc><priority>0.9</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-intune-zero-touch-windows.html</loc><priority>0.9</priority></url>
   <url><loc>https://www.rcwittraining.in/microsoft-security-patch-roundup-2026-08-25.html</loc><priority>0.8</priority></url>
@@ -289,3 +296,4 @@
   <url><loc>https://www.rcwittraining.in/vss-shadow-copy-troubleshooting.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.rcwittraining.in/zfs-degraded-pool-troubleshooting.html</loc><priority>0.8</priority></url>
 </urlset>
+

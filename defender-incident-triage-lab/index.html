@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.className += ' js';</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 1 · Microsoft Defender incident triage &amp; alert classification console replica | RCW IT Training</title>
+<meta name="description" content="Advanced practice lab for the Microsoft Defender portal: triage a correlated XDR incident in the incidents queue, read the attack story and entity graph, hunt with KQL, take contained response actions and resolve with a compliant classification. Simulated console replica by RCW IT Training.">
+<meta name="keywords" content="Microsoft Defender, XDR, incident triage, Defender for Endpoint, advanced hunting, KQL, MITRE ATT&amp;CK, NIS2, DORA, security operations lab">
+<meta name="author" content="Pradeep Raju — RCW IT Training">
+<link rel="canonical" href="https://www.rcwittraining.in/defender-incident-triage-lab/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RCW IT Training">
+<meta property="og:title" content="Lab 1 · Microsoft Defender incident triage &amp; alert classification">
+<meta property="og:description" content="A 100-point advanced practice lab on a faithful replica of the Microsoft Defender portal. Synthetic tenant, real workflow, auditable evidence.">
+<meta property="og:url" content="https://www.rcwittraining.in/defender-incident-triage-lab/">
+<meta name="theme-color" content="#1b1a19">
+<link rel="stylesheet" href="../microsoft-defender-labs/shared/defender-lab.css">
+<script src="../microsoft-defender-labs/shared/kql-lite.js" defer></script>
+<script src="../microsoft-defender-labs/shared/defender-lab.js" defer></script>
+<script src="app.js" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LearningResource","name":"Microsoft Defender XDR: incident triage, alert classification and containment","description":"Interactive console-replica lab. Learners filter the Defender incidents queue, review an attack story and entity graph, run KQL in advanced hunting, perform approval-gated response actions and resolve the incident with a defensible classification and regulatory escalation decision.","learningResourceType":"Practice lab","educationalLevel":"Advanced","typicalAgeRange":"18-65","timeRequired":"PT75M","inLanguage":"en","isAccessibleForFree":true,"interactivityType":"active","teaches":"Unified XDR incident triage, alert classification, blast-radius analysis, KQL advanced hunting, containment actions with change control, incident tagging and regulatory notification clocks","competencyType":"Security operations","provider":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"},"creator":{"@type":"Person","name":"Pradeep Raju","jobTitle":"Founder & Senior Enterprise Infrastructure Architect","url":"https://www.linkedin.com/in/pradeepmcp826/"},"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/","citation":"https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents","about":"Microsoft Defender XDR"}
+</script>
+</head>
+<body data-lab-id="defender-incident-triage">
+
+<div id="labShell"></div>
+
+<div id="labViewsSource">
+
+<!-- ======================================================== OVERVIEW -->
+<section class="view is-active" data-view="overview" data-view-label="Lab home" aria-labelledby="ovTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Microsoft Defender portal</span><span class="sep" aria-hidden="true">›</span><span class="current">Home · Lab briefing</span></nav>
+
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Defender XDR series · Lab 1 of 5 · Advanced</span>
+      <h1 id="ovTitle">Triage a correlated incident the way a Tier&nbsp;2 analyst does</h1>
+      <p class="lede">Operation NIGHTBLOOM has produced one Defender XDR incident spanning a mailbox, a Windows 11 endpoint and an on-premises service account. You have 75 minutes of analyst time: filter the queue to the real signal, prove the attack story, hunt for the rest of the blast radius, contain it under change control, and close it with a classification you could defend in an audit.</p>
+    </div>
+    <div class="head-actions">
+      <span class="obj-badge" data-objective-status="intake">Required</span>
+      <button class="btn btn--primary" type="button" data-route="queue">Open the incidents queue</button>
+    </div>
+  </div>
+
+  <div class="notice info">
+    <span class="n-ico" aria-hidden="true">i</span>
+    <div>
+      <b>This is a console replica, not Microsoft software.</b>
+      <p>The layout, page names and control labels model the 2026 Microsoft Defender portal at <code>security.microsoft.com</code> so the workflow transfers. No tenant is connected, no API is called, and every device, account, alert, file name and address below is synthetic. Product names are used only to describe the workflow; no Microsoft logo or trade dress is reproduced.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Alerting sources</span><h2>What the tenant saw</h2></div><span class="chip sev-high">High</span></div>
+      <dl class="kv">
+        <dt>Incident</dt><dd class="mono">INC-2291 · id 2291</dd>
+        <dt>Title</dt><dd>Suspicious PowerShell activity and mailbox rule creation on FIN-WKS-0421</dd>
+        <dt>First activity</dt><dd class="mono">2026-08-19 09:34:11Z</dd>
+        <dt>Last activity</dt><dd class="mono">2026-08-19 11:58:02Z</dd>
+        <dt>Detection sources</dt><dd><span class="tag">Defender for Endpoint</span> <span class="tag">Defender for Office 365</span> <span class="tag">Defender for Identity</span></dd>
+        <dt>Alerts</dt><dd>6 correlated · 4 pending Air</dd>
+        <dt>Entities</dt><dd>1 device · 2 accounts · 1 mailbox · 1 file · 2 URLs</dd>
+        <dt>Blast radius</dt><dd>medium · 1 of 3 shared-service hosts reached</dd>
+      </dl>
+      <div class="legend" style="margin-top:12px">
+        <span><i style="background:var(--sev-high)"></i>Confirmed true threat</span>
+        <span><i style="background:var(--sev-med)"></i>Needs analyst judgement</span>
+        <span><i style="background:var(--ok)"></i>Simulated / safe</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Objectives · 100 points</span><h2>Seven controls you must evidence</h2></div>
+        <span class="card-actions"><button class="btn btn--sm" type="button" data-route="guide">Full guide</button></span></div>
+      <ul class="gate-list">
+        <li class="gate" data-gate="intake"><span class="g-ico" aria-hidden="true">1</span><div><b>Intake &amp; priority · 10 pts</b><small>Confirm the queue scope, set the priority you can defend, record the on-call owner.</small></div></li>
+        <li class="gate" data-gate="triage"><span class="g-ico" aria-hidden="true">2</span><div><b>Queue filtering &amp; ownership · 15 pts</b><small>Filter to High severity, New status and the Endpoint source; claim the incident.</small></div></li>
+        <li class="gate" data-gate="story"><span class="g-ico" aria-hidden="true">3</span><div><b>Attack story &amp; blast radius · 20 pts</b><small>Identify initial access, the correct ATT&amp;CK technique set, and the pivot evidence.</small></div></li>
+        <li class="gate" data-gate="hunt"><span class="g-ico" aria-hidden="true">4</span><div><b>Advanced hunting (KQL) · 15 pts</b><small>Write a bounded, reproducible query that finds every host running the loader.</small></div></li>
+        <li class="gate" data-gate="respond"><span class="g-ico" aria-hidden="true">5</span><div><b>Contained response · 15 pts</b><small>Isolate, quarantine the artefact and collect evidence — in the right order, with approval.</small></div></li>
+        <li class="gate" data-gate="resolve"><span class="g-ico" aria-hidden="true">6</span><div><b>Classification &amp; closure · 15 pts</b><small>Resolve with a true-positive classification, threat type, tags and a note that passes review.</small></div></li>
+        <li class="gate" data-gate="escalate"><span class="g-ico" aria-hidden="true">7</span><div><b>Regulatory escalation decision · 10 pts</b><small>Decide which notification clocks apply to this entity and who owns each filing.</small></div></li>
+      </ul>
+      <p class="small muted" style="margin-top:10px">Objectives unlock in order — containment is locked until you have justified it in the hunt, exactly as a real change-advisory boundary works. Your score, notes and action log stay in this browser.</p>
+    </article>
+  </div>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Standards used by this lab</span><h2>Every step maps to a control</h2></div></div>
+      <table class="map">
+        <thead><tr><th scope="col">Framework</th><th scope="col">Control</th><th scope="col">Where it is graded</th></tr></thead>
+        <tbody>
+          <tr><td>NIST SP 800-61r3</td><td>Preparation · Detection &amp; analysis · Containment · Post-incident</td><td>All seven objectives</td></tr>
+          <tr><td>MITRE ATT&amp;CK v17</td><td>T1566.001, T1059.001, T1114.002, T1021.002</td><td>Attack story, hunt</td></tr>
+          <tr><td>ISO/IEC 27035-2</td><td>Scope decision, evidence, escalation</td><td>Escalation decision</td></tr>
+          <tr><td>NIS2 Art. 23 / DORA Art. 19</td><td>24h · 72h · 1-month / 4h clocks</td><td>Escalation decision</td></tr>
+          <tr><td>GDPR Art. 33</td><td>72h to the supervisory authority</td><td>Escalation decision</td></tr>
+          <tr><td>WCAG 2.2 AA</td><td>Keyboard, contrast, live regions, focus order</td><td>Console usability</td></tr>
+        </tbody>
+      </table>
+    </article>
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Ground rules</span><h2>What this lab will never do</h2></div></div>
+      <ul class="gate-list">
+        <li class="gate done"><span class="g-ico" aria-hidden="true">✓</span><div><b>No real systems</b><small>Nothing you click can isolate a laptop, delete a mail, or disable an account.</small></div></li>
+        <li class="gate done"><span class="g-ico" aria-hidden="true">✓</span><div><b>No data leaves the page</b><small>No sign-in, no API, no telemetry of your answers. Progress is <code>localStorage</code> only.</small></div></li>
+        <li class="gate done"><span class="g-ico" aria-hidden="true">✓</span><div><b>No personal data</b><small>Free-text notes are redacted on export; enter nothing real. Domains use <code>.example</code>, addresses use RFC&nbsp;5737 documentation ranges.</small></div></li>
+        <li class="gate done"><span class="g-ico" aria-hidden="true">✓</span><div><b>No credential claims</b><small>The evidence pack is a personal practice record, not a Microsoft certification.</small></div></li>
+      </ul>
+    </article>
+  </div>
+  <form class="card" id="form-intake" data-objective="intake" novalidate>
+    <div class="card-head"><div><span class="kicker">Objective 1 · 10 pts</span><h2>Intake: record the priority you can defend</h2></div>
+      <span class="card-actions"><span class="obj-badge" data-objective-status="intake">Required</span></span></div>
+    <div class="grid-2">
+      <div>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Your priority call for INC-2291</span>
+            <select id="priority">
+              <option value="">Choose</option>
+              <option value="p3">Low — single endpoint, no evidence of business impact</option>
+              <option value="p2">Medium — confirmed intrusion with a finance share touched; work it today</option>
+              <option value="p1">Critical — declare a major incident now and start every clock</option>
+            </select>
+            <span class="help">There is no free "critical" in a lab: pick the level the evidence supports, and be ready to change it if the hunt finds more.</span></label>
+          <label class="field"><span class="lbl">On-call owner you are handing this to</span>
+            <select id="oncall"><option value="">Choose</option>
+              <option value="l2">SOC L2 analyst (me) with the endpoint team copied</option>
+              <option value="mgr">My manager, no technical copy</option>
+              <option value="nobody">Nobody — it is already in the queue</option></select></label>
+          <label class="field"><span class="lbl">Triage target from your SLA</span>
+            <select id="sla"><option value="">Choose</option>
+              <option value="15">Assign + status within 15 minutes for High severity</option>
+              <option value="24h">Within one business day</option>
+              <option value="wk">Whenever the queue drains</option></select></label>
+        </div>
+      </div>
+      <div>
+        <fieldset><legend>Intake acknowledgements</legend>
+          <label class="check"><input type="checkbox" id="i1"><span><b>I will not begin with response actions</b><small>Containment before scoping destroys evidence and can spread the outage.</small></span></label>
+          <label class="check"><input type="checkbox" id="i2"><span><b>Correlated alerts are not the same as confirmed impact</b><small>Correlation is a hypothesis about shared entities.</small></span></label>
+          <label class="check"><input type="checkbox" id="i3"><span><b>Every judgement I record here is synthetic-data practice</b><small>No production tenant is involved, and this is not a certification.</small></span></label>
+        </fieldset>
+        <p class="small muted">The queue is already 5 incidents deep and the shift changes in 40 minutes. Prioritising is a decision, not a feeling — write it down.</p>
+      </div>
+    </div>
+    <div class="msg" id="msg-intake" role="status" aria-live="polite"></div>
+    <div class="form-actions">
+      <button class="btn btn--primary" type="submit">Record intake and open the queue</button>
+      <button class="btn" type="button" data-audit-toggle>Review my action log</button>
+    </div>
+  </form>
+</section>
+
+<!-- ======================================================== QUEUE -->
+<section class="view" data-view="queue" data-view-label="Incidents queue" hidden aria-labelledby="qTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button class="" type="button" data-route="overview">Microsoft Defender portal</button><span class="sep" aria-hidden="true">›</span><button type="button" data-route="overview">Investigation &amp; response</button><span class="sep" aria-hidden="true">›</span><span class="current">Incidents</span></nav>
+  <div class="page-head">
+    <div><span class="eyebrow">Objective 2 · 15 pts</span><h1 id="qTitle">Incidents</h1>
+      <p class="lede">The unified queue now receives alerts from Defender for Endpoint, Office 365, Identity, Cloud Apps, Purview DLP and Microsoft Sentinel analytics rules. Everything you do here is filter discipline: find the one incident that is genuinely active, and hand it an owner and a status.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="triage">Required</span></div>
+  </div>
+
+  <div class="notice warn">
+    <span class="n-ico" aria-hidden="true">!</span>
+    <div><b>Three of these five incidents are noise you must prove, not assume.</b>
+    <p>A “Medium / New” row with a single alert can still be the real one, and a “High” row may be expected penetration-test traffic. Set the filters that answer the intake question, then select the incident whose <em>entities</em> overlap across at least two workloads.</p></div>
+  </div>
+
+  <div class="grid-2" style="grid-template-columns:minmax(0,2.1fr) minmax(0,1fr);align-items:start">
+    <div>
+      <div class="toolbar" role="search">
+        <label class="field" style="margin:0"><span class="lbl">Time</span>
+          <select id="qTime"><option value="">Last 24 hours</option><option>Last 7 days</option><option>Last 30 days</option></select></label>
+        <label class="field" style="margin:0"><span class="lbl">Severity</span>
+          <select id="qSeverity"><option value="">All severities</option><option>Informational</option><option>Low</option><option>Medium</option><option>High</option></select></label>
+        <label class="field" style="margin:0"><span class="lbl">Status</span>
+          <select id="qStatus"><option value="">All statuses</option><option>New</option><option>In progress</option><option>Resolved</option></select></label>
+        <label class="field" style="margin:0"><span class="lbl">Service / detection source</span>
+          <select id="qSource"><option value="">All sources</option><option>Microsoft Defender for Endpoint</option><option>Microsoft Defender for Office 365</option><option>Microsoft Defender for Identity</option><option>Microsoft Sentinel</option><option>Microsoft Purview DLP</option></select></label>
+        <label class="field" style="margin:0;flex:1 1 190px"><span class="lbl">Contains</span>
+          <input id="qText" type="search" placeholder="device, user or incident id" autocomplete="off"></label>
+      </div>
+
+      <div class="grid-wrap">
+        <table class="data-grid" id="incidentQueue" data-selectable data-grid-name="Incidents queue" data-restore-rows>
+          <caption>Select one row. <span class="muted" data-selection-count>No rows selected</span></caption>
+          <thead><tr>
+            <th scope="col" data-sort="id">Incident ID</th>
+            <th scope="col" data-sort="title">Title</th>
+            <th scope="col" data-sort="sev">Severity</th>
+            <th scope="col" data-sort="status">Status</th>
+            <th scope="col" data-sort="src">Service / detection source</th>
+            <th scope="col" data-sort="ent">Entities</th>
+            <th scope="col" data-sort="class">Classification</th>
+            <th scope="col" data-sort="last">Last activity</th>
+          </tr></thead>
+          <tbody>
+            <tr data-row-id="INC-2291">
+              <td class="mono"><span class="link">INC-2291</span></td>
+              <td>Suspicious PowerShell activity and mailbox rule creation on FIN-WKS-0421<b class="sub">6 alerts · automated investigation pending</b></td>
+              <td><span class="chip sev-high">High</span></td>
+              <td><span class="chip state-new">New</span></td>
+              <td>Endpoint · Office 365 · Identity</td>
+              <td>1 device · 2 users · 1 mailbox</td>
+              <td class="muted">Not set</td>
+              <td class="mono">2026-08-19 11:58Z</td>
+            </tr>
+            <tr data-row-id="INC-2288">
+              <td class="mono"><span class="link">INC-2288</span></td>
+              <td>Penetration test activity from the contracted red team<b class="sub">2 alerts · scope: FIN-SEGMENT</b></td>
+              <td><span class="chip sev-high">High</span></td>
+              <td><span class="chip state-new">New</span></td>
+              <td>Endpoint</td>
+              <td>1 device · 1 user</td>
+              <td><span class="tag grey">Exercise</span></td>
+              <td class="mono">2026-08-19 09:12Z</td>
+            </tr>
+            <tr data-row-id="INC-2287">
+              <td class="mono"><span class="link">INC-2287</span></td>
+              <td>Suspicious sign-in after MFA prompt refused<b class="sub">1 alert · impossible travel not confirmed</b></td>
+              <td><span class="chip sev-medium">Medium</span></td>
+              <td><span class="chip state-new">New</span></td>
+              <td>Identity</td>
+              <td>1 user</td>
+              <td class="muted">Not set</td>
+              <td class="mono">2026-08-19 07:44Z</td>
+            </tr>
+            <tr data-row-id="INC-2285">
+              <td class="mono"><span class="link">INC-2285</span></td>
+              <td>Malware detected and already remediated by Defender Antivirus<b class="sub">1 alert · auto-remediation succeeded</b></td>
+              <td><span class="chip sev-medium">Medium</span></td>
+              <td><span class="chip state-prog">In progress</span></td>
+              <td>Endpoint</td>
+              <td>1 device · 1 file</td>
+              <td class="muted">Not set</td>
+              <td class="mono">2026-08-18 22:05Z</td>
+            </tr>
+            <tr data-row-id="INC-2280">
+              <td class="mono"><span class="link">INC-2280</span></td>
+              <td>Vendor monitoring agent signed by an untrusted certificate<b class="sub">3 alerts · software distribution</b></td>
+              <td><span class="chip sev-low">Low</span></td>
+              <td><span class="chip state-new">New</span></td>
+              <td>Endpoint · Sentinel</td>
+              <td>12 devices</td>
+              <td><span class="tag grey">Known app</span></td>
+              <td class="mono">2026-08-18 16:30Z</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="grid-foot"><span>5 incidents in the current time range</span><span class="muted">·</span><span>Queue modelled on the unified XDR queue, including Purview DLP and Sentinel sources</span></div>
+      </div>
+    </div>
+
+    <div>
+      <article class="card">
+        <div class="card-head"><div><span class="kicker">Summary pane</span><h2>Priority assessment</h2></div><span class="chip sev-high">Priority 28/100</span></div>
+        <p class="small muted mt0">The priority score in the queue is a triage aid, not a verdict. These are the factors the service published for INC-2291 — decide what they mean for <em>your</em> business.</p>
+        <ul class="gate-list">
+          <li class="gate"><span class="g-ico" aria-hidden="true">↑</span><div><b>Active alert on a financially sensitive device</b><small>FIN-WKS-0421 · Finance shared drive reachable</small></div></li>
+          <li class="gate"><span class="g-ico" aria-hidden="true">↑</span><div><b>Mailbox rule created after credential theft indicator</b><small>Inbox rule “FIN-Mail-Junk” forwarding externally</small></div></li>
+          <li class="gate"><span class="g-ico" aria-hidden="true">–</span><div><b>No confirmed data egress volume</b><small>1.4 MB to the C2 host; no large SharePoint download</small></div></li>
+          <li class="gate"><span class="g-ico" aria-hidden="true">↓</span><div><b>Device is not internet-facing</b><small>No inbound exposure; no external listener observed</small></div></li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><div><span class="kicker">Objective 2</span><h2>Filter, then own it</h2></div></div>
+        <p class="small muted mt0">Submit the queue state a reviewer would accept for INC-2291.</p>
+        <form id="form-triage" data-objective="triage" novalidate>
+          <div class="form-grid">
+            <label class="field"><span class="lbl">Assigned to</span>
+              <select id="assignee">
+                <option value="">Unassigned</option>
+                <option value="mira.solanki">Mira Solanki — SOC L2 (simulated)</option>
+                <option value="queue">Leave in the triage queue</option>
+                <option value="vendor">Escalate to the OEM vendor first</option>
+              </select></label>
+            <label class="field"><span class="lbl">Incident status</span>
+              <select id="incStatus">
+                <option value="">New</option>
+                <option value="inprogress">In progress</option>
+                <option value="resolved">Resolved</option>
+              </select></label>
+          </div>
+          <label class="field"><span class="lbl">Why this incident, and not INC-2288 (which is also High / New)?</span>
+            <textarea id="triageWhy" maxlength="400" placeholder="Reference the concrete differentiator: correlated alerts across two or more workloads, shared entities, and the red-team exception on 2288."></textarea>
+            <span class="help">25 characters minimum. In a real queue this is the sentence that stops a colleague re-opening your incident.</span></label>
+          <div class="msg" id="msg-triage" role="status" aria-live="polite"></div>
+          <div class="form-actions">
+            <button class="btn btn--primary" type="submit">Apply filters, claim and set status</button>
+            <button class="btn" type="button" data-route="incident">Open the incident page →</button>
+          </div>
+        </form>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== INCIDENT -->
+<section class="view" data-view="incident" data-view-label="Incident INC-2291" hidden aria-labelledby="incTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="overview">Investigation &amp; response</button><span class="sep" aria-hidden="true">›</span><button type="button" data-route="queue">Incidents</button><span class="sep" aria-hidden="true">›</span><span class="current">INC-2291</span></nav>
+
+  <div class="page-head">
+    <div><span class="eyebrow">Objective 3 · 20 pts</span><h1 id="incTitle">Suspicious PowerShell activity and mailbox rule creation on FIN-WKS-0421</h1>
+      <div class="pill-row"><span class="chip sev-high">High</span><span class="chip state-new">New</span><span class="tag">INC-2291</span><span class="tag grey">6 alerts</span><span class="tag grey">Correlated by shared device + user</span><span class="tag attack">T1566.001</span><span class="tag attack">T1059.001</span></div>
+    </div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="story">Required</span><button class="btn btn--sm" type="button">Summarize with Copilot <span class="tag grey">not in lab</span></button></div>
+  </div>
+
+  <div class="tabbed" data-tabs>
+    <div class="tabs" role="tablist" aria-label="Incident panes">
+      <button class="tab" role="tab" id="tab-alerts" data-tab="alerts" aria-selected="true" aria-controls="panel-alerts">Alerts (6)</button>
+      <button class="tab" role="tab" id="tab-graph" data-tab="graph" aria-selected="false" aria-controls="panel-graph">Attack story graph</button>
+      <button class="tab" role="tab" id="tab-time" data-tab="time" aria-selected="false" aria-controls="panel-time">Timeline</button>
+      <button class="tab" role="tab" id="tab-ent" data-tab="ent" aria-selected="false" aria-controls="panel-ent">Entities (5)</button>
+      <button class="tab" role="tab" id="tab-ev" data-tab="ev" aria-selected="false" aria-controls="panel-ev">Evidence &amp; queries</button>
+    </div>
+
+    <div role="tabpanel" data-tabpanel="alerts" id="panel-alerts" aria-labelledby="tab-alerts">
+      <div class="grid-wrap">
+        <table class="data-grid" data-grid-name="Incident alerts">
+          <caption>Alerts grouped into this incident by shared entities and overlapping time.</caption>
+          <thead><tr><th scope="col" data-sort="t">Timestamp</th><th scope="col">Category</th><th scope="col" data-sort="title">Title</th><th scope="col" data-sort="sev">Severity</th><th scope="col">Source</th><th scope="col">Status</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">2026-08-19 09:34Z</td><td>Malicious email link</td><td><b>Payload delivered through a link in a phishing email</b><span class="sub">URL reputation changed to malicious 09:31Z · delivery: Allow (not detected at time)</span></td><td><span class="chip sev-medium">Medium</span></td><td>Office 365</td><td><span class="chip state-prog">Pending AIR</span></td></tr>
+            <tr><td class="mono">2026-08-19 09:41Z</td><td>Defense evasion</td><td><b>PowerShell downloaded a file from a remote server</b><span class="sub">powershell.exe -nop -w hidden -enc &lt;base64&gt; · parent excel.exe</span></td><td><span class="chip sev-high">High</span></td><td>Endpoint</td><td><span class="chip state-new">Active</span></td></tr>
+            <tr><td class="mono">2026-08-19 09:44Z</td><td>Persistence</td><td><b>New startup file created in the user’s Start-up folder</b><span class="sub">svch0st.exe copied to %APPDATA%\Microsoft\Windows\Start Menu\Programs\StartUp</span></td><td><span class="chip sev-medium">Medium</span></td><td>Endpoint</td><td><span class="chip state-new">Active</span></td></tr>
+            <tr><td class="mono">2026-08-19 10:02Z</td><td>Collection</td><td><b>Mailbox audit: new inbox rule created and forwarded externally</b><span class="sub">Rule “FIN-Mail-Junk” · forward-to n1ghtbloom@relay-secure.example · delete-action enabled</span></td><td><span class="chip sev-high">High</span></td><td>Office 365</td><td><span class="chip state-new">Active</span></td></tr>
+            <tr><td class="mono">2026-08-19 10:19Z</td><td>Lateral movement</td><td><b>Unusual SMB access to a share from a workstation account</b><span class="sub">\\FS-FIN01\Finance · 1.4 MB read · first time observed for this pair</span></td><td><span class="chip sev-high">High</span></td><td>Identity</td><td><span class="chip state-new">Active</span></td></tr>
+            <tr><td class="mono">2026-08-19 11:58Z</td><td>Command &amp; control</td><td><b>Outbound connection to a domain registered 3 days ago</b><span class="sub">login-contoso.secure-mail.example · registered 2026-08-16 · 4 beacons</span></td><td><span class="chip sev-medium">Medium</span></td><td>Endpoint</td><td><span class="chip state-new">Active</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div role="tabpanel" data-tabpanel="graph" id="panel-graph" aria-labelledby="tab-graph" hidden>
+      <div class="graph-box">
+        <svg viewBox="0 0 980 380" role="img" aria-labelledby="gTitle gDesc">
+          <title id="gTitle">Incident attack story graph</title>
+          <desc id="gDesc">A phishing email delivered a link to user mira.solanki. The link launched PowerShell on device FIN-WKS-0421, which created a start-up file and beaconed to a newly registered domain. The same device used SMB to read the Finance share on server FS-FIN01 as service account svc_backup, and the mailbox on the user account gained a forwarding rule.</desc>
+          <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aa1b8"/></marker></defs>
+          <g class="edges">
+            <path d="M182 88 H262" marker-end="url(#ar)" class="hostile"/><path d="M438 88 H520" marker-end="url(#ar)" class="hostile"/>
+            <path d="M612 124 V188 H398" marker-end="url(#ar)"/><path d="M612 124 V220 H470" marker-end="url(#ar)"/>
+            <path d="M330 232 H262 V188" marker-end="url(#ar)" class="hostile"/><path d="M330 260 V300 H520" marker-end="url(#ar)" class="hostile"/>
+            <path d="M690 232 H790" marker-end="url(#ar)"/><path d="M330 292 H406 V300" marker-end="url(#ar)"/>
+          </g>
+          <g class="node hostile"><rect x="40" y="52" width="142" height="72" rx="8"/><text class="abbr" x="111" y="78" text-anchor="middle">EMAIL</text><text class="name" x="111" y="97" text-anchor="middle">Invoice_Scant.pdf.link</text><text class="meta" x="111" y="113" text-anchor="middle">sent 09:33Z</text></g>
+          <g class="node primary"><rect x="262" y="52" width="176" height="72" rx="8"/><text class="abbr" x="350" y="78" text-anchor="middle">USER + MAILBOX</text><text class="name" x="350" y="97" text-anchor="middle">mira.solanki</text><text class="meta" x="350" y="113" text-anchor="middle">Finance · standard MFA</text></g>
+          <g class="node hostile"><rect x="520" y="52" width="184" height="72" rx="8"/><text class="abbr" x="612" y="78" text-anchor="middle">PROCESS</text><text class="name" x="612" y="97" text-anchor="middle">powershell.exe -enc</text><text class="meta" x="612" y="113" text-anchor="middle">parent: excel.exe</text></g>
+          <g class="node"><rect x="262" y="160" width="200" height="72" rx="8"/><text class="abbr" x="362" y="186" text-anchor="middle">DEVICE</text><text class="name" x="362" y="205" text-anchor="middle">FIN-WKS-0421</text><text class="meta" x="362" y="221" text-anchor="middle">Win11 23H2 · onboarding OK</text></g>
+          <g class="node hostile"><rect x="520" y="188" width="170" height="64" rx="8"/><text class="abbr" x="605" y="212" text-anchor="middle">FILE</text><text class="name" x="605" y="231" text-anchor="middle">svch0st.exe</text></g>
+          <g class="node hostile"><rect x="790" y="200" width="160" height="64" rx="8"/><text class="abbr" x="870" y="224" text-anchor="middle">DOMAIN</text><text class="name" x="870" y="243" text-anchor="middle">secure-mail.example</text></g>
+          <g class="node"><rect x="40" y="228" width="222" height="72" rx="8"/><text class="abbr" x="151" y="254" text-anchor="middle">MAILBOX RULE</text><text class="name" x="151" y="273" text-anchor="middle">FIN-Mail-Junk → forward</text><text class="meta" x="151" y="289" text-anchor="middle">created 10:02Z</text></g>
+          <g class="node"><rect x="470" y="272" width="230" height="64" rx="8"/><text class="abbr" x="585" y="296" text-anchor="middle">SHARE / ACCOUNT</text><text class="name" x="585" y="315" text-anchor="middle">\\FS-FIN01\Finance as svc_backup</text></g>
+          <text class="edge-label" x="196" y="46">initial access</text><text class="edge-label" x="452" y="46">T1059.001</text>
+          <text class="edge-label" x="452" y="182">persistence</text><text class="edge-label" x="360" y="152">executed on</text>
+          <text class="edge-label" x="352" y="330">T1114.002 collection</text><text class="edge-label" x="600" y="266">T1021.002 SMB</text>
+        </svg>
+      </div>
+      <div class="legend" style="margin-top:8px"><span><i style="background:#c50f1f"></i>Hostile / attacker-controlled</span><span><i style="background:#0f6cbd"></i>Pivot asset</span><span class="muted">Graph is a static model of the correlated alerts — it is not a live rendering of an environment.</span></div>
+    </div>
+
+    <div role="tabpanel" data-tabpanel="time" id="panel-time" aria-labelledby="tab-time" hidden>
+      <ol class="timeline">
+        <li class="h"><span class="t">09:33:41Z</span><b>Email delivered · no detonation verdict yet</b><p>Attachment-less link message to 41 recipients; 3 clicked within 90 seconds. Defender for Office 365 network protection did not block: the domain was 3 days old and previously clean.</p></li>
+        <li class="h"><span class="t">09:41:22Z</span><b>powershell.exe spawned by excel.exe with an encoded command</b><p>ASR rule “Block JavaScript or VBScript from launching downloaded executable content” was in <em>audit</em> on this device group, so nothing was blocked.</p></li>
+        <li><span class="t">09:41:25Z</span><b>Download of <code>svch0st.exe</code> from <code>203.0.113.64</code></b><p>RFC 5737 documentation address used deliberately by this lab; in a real case, record the address in your evidence and never paste it into a ticketing system that logs third parties.</p></li>
+        <li><span class="t">09:44:10Z</span><b>Copy to the user Start-up folder + Run key value</b><p>Persistence is user-scoped, so re-imaging the profile is as effective as re-imaging the disk.</p></li>
+        <li class="h"><span class="t">10:02:00Z</span><b>Inbox rule <code>FIN-Mail-Junk</code> created</b><p>Rule deletes inbound mail containing “invoice” and forwards to <code>relay-secure.example</code>. This is the alert that tells you the mailbox, not just the device, is compromised.</p></li>
+        <li><span class="t">10:19:36Z</span><b>SMB read of <code>\\FS-FIN01\Finance</code> (1.4 MB)</b><p>Authenticated as <code>svc_backup</code> from a workstation — the account is configured “cannot be delegated” but is not marked sensitive and can log on interactively.</p></li>
+        <li class="ok"><span class="t">11:58:02Z</span><b>Four C2 beacons, then silence</b><p>No further beacon after 11:58Z. Absence of beaconing is <em>not</em> evidence of removal — check the sensor state on the device before you believe it.</p></li>
+      </ol>
+    </div>
+
+    <div role="tabpanel" data-tabpanel="ent" id="panel-ent" aria-labelledby="tab-ent" hidden>
+      <div class="grid-3">
+        <article class="card flat"><span class="kicker">Device</span><h2>FIN-WKS-0421</h2>
+          <dl class="kv"><dt>OS</dt><dd>Windows 11 23H2</dd><dt>Exposure</dt><dd>Group: FIN-WKS (medium)</dd><dt>Sensor</dt><dd>Healthy · v10.26.08</dd><dt>Onboarded</dt><dd class="mono">2025-04-11</dd><dt>Isolated</dt><dd>No</dd><dt>TD state</dt><dd>Investigate</dd></dl>
+          <div class="btn-group" style="margin-top:10px"><button class="btn btn--sm" type="button" data-route="respond">Take action</button></div></article>
+        <article class="card flat"><span class="kicker">Account</span><h2>mira.solanki</h2>
+          <dl class="kv"><dt>Risk</dt><dd>High · confirmed compromised</dd><dt>MFA</dt><dd>Registered · phishing-resistant no</dd><dt>Tokens</dt><dd>Active on 2 devices</dd><dt>Last logon</dt><dd class="mono">2026-08-19 09:29Z</dd><dt>Roles</dt><dd>User · Finance-Share-Owner</dd></dl>
+          <p class="small muted">Identity risk state and endpoint telemetry point at the same device — that correlation is what makes this a single incident.</p></article>
+        <article class="card flat"><span class="kicker">Service account</span><h2>svc_backup</h2>
+          <dl class="kv"><dt>Type</dt><dd>On-premises · sync’d</dd><dt>Password age</dt><dd>812 days</dd><dt>Constraints</dt><dd>Kerberos delegation allowed</dd><dt>Logon right</dt><dd>Allow log on locally — <b>yes</b></dd></dl>
+          <div class="notice danger" style="margin:10px 0 0"><span class="n-ico" aria-hidden="true">!</span><div><b>Root-cause candidate</b><p>A service account with interactive logon rights and an 812-day password is a standing exposure, not an artifact of this attack.</p></div></div></article>
+      </div>
+    </div>
+
+    <div role="tabpanel" data-tabpanel="ev" id="panel-ev" aria-labelledby="tab-ev" hidden>
+      <div class="grid-2">
+        <article class="card"><div class="card-head"><div><span class="kicker">Go hunt</span><h2>Built-in queries offered for these entities</h2></div></div>
+          <ul class="gate-list">
+            <li class="gate"><span class="g-ico" aria-hidden="true">1</span><div><b>All Activity — device FIN-WKS-0421</b><small>All telemetry for the device in a bounded window.</small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">2</span><div><b>Related Alerts — user mira.solanki</b><small>Alerts across workloads involving the account.</small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">3</span><div><b>File observed on other devices — <code>svch0st.exe</code></b><small>The blast-radius query. Run it yourself in the hunt tab.</small></div></li>
+          </ul>
+          <div class="form-actions"><button class="btn" type="button" data-route="hunt">Open advanced hunting</button></div>
+        </article>
+        <article class="card"><div class="card-head"><div><span class="kicker">Evidence</span><h2>What must be preserved before you click anything</h2></div></div>
+          <ul class="gate-list">
+            <li class="gate"><span class="g-ico" aria-hidden="true">✓</span><div><b>ReportId / alertId of each alert</b><small>They are the join key back to the raw event.</small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">✓</span><div><b>SHA-256 of the loader + its first-seen time</b><small>Recorded, not shared publicly, from a quarantined copy.</small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">✓</span><div><b>Investigation package, collected <em>before</em> isolation ends</b><small>Once the sensor is offline you cannot get it.</small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">✓</span><div><b>Mailbox audit record for the rule (creation + deletion)</b><small>Export the O365 management log entry, not a screenshot.</small></div></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <form class="card" id="form-story" data-objective="story" style="margin-top:14px" novalidate>
+    <div class="card-head"><div><span class="kicker">Objective 3 · 20 pts</span><h2>Read the story, then commit to a judgement</h2></div><span class="obj-badge" data-objective-status="story">Required</span></div>
+    <div class="grid-2">
+      <div>
+        <fieldset><legend>Which MITRE ATT&amp;CK techniques are supported by the alerts in this incident? (select all that apply)</legend>
+          <label class="check"><input type="checkbox" id="t1566"><span><b>T1566.001 Phishing: Spearphishing Link</b><small>Supported: initial access alert names a link clicked in a delivered mail.</small></span></label>
+          <label class="check"><input type="checkbox" id="t1059"><span><b>T1059.001 Command and Scripting Interpreter: PowerShell</b><small>Supported: encoded PowerShell spawned by Office.</small></span></label>
+          <label class="check"><input type="checkbox" id="t1547"><span><b>T1547.001 Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder</b><small>Supported: file copied to Start-up plus Run key.</small></span></label>
+          <label class="check"><input type="checkbox" id="t1114"><span><b>T1114.002 Email Collection: Remote Email Collection</b><small>Supported: inbox rule forwarding mail externally.</small></span></label>
+          <label class="check"><input type="checkbox" id="t1021"><span><b>T1021.002 Remote Services: SMB/Windows Admin Shares</b><small>Supported: unusual SMB read from a workstation as a service account.</small></span></label>
+          <label class="check"><input type="checkbox" id="t1070"><span><b>T1070.004 Indicator Removal: File Deletion</b><small>Not evidenced: no deletion events in the timeline.</small></span></label>
+          <label class="check"><input type="checkbox" id="t1190"><span><b>T1190 Exploit Public-Facing Application</b><small>Not evidenced: the device is not internet-facing.</small></span></label>
+        </fieldset>
+      </div>
+      <div>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Initial access</span>
+            <select id="initialAccess"><option value="">Choose</option>
+              <option value="exploit">Exploited SharePoint web part on the gateway</option>
+              <option value="phish">Spearphishing link clicked in Outlook on the web and client</option>
+              <option value="stolen">Pass-the-hash using a cached credential</option>
+              <option value="vendor">Compromised vendor support tool</option></select></label>
+          <label class="field"><span class="lbl">Strongest single piece of evidence that the mailbox — not only the laptop — is compromised</span>
+            <select id="pivot"><option value="">Choose</option>
+              <option value="beacon">Four C2 beacons from the device</option>
+              <option value="rule">The inbox rule that deletes and forwards mail</option>
+              <option value="smb">SMB access to \\FS-FIN01\Finance</option>
+              <option value="asr">ASR rule running in audit mode</option></select></label>
+          <label class="field"><span class="lbl">Correct treatment of the “no beacon since 11:58Z” observation</span>
+            <select id="silence"><option value="">Choose</option>
+              <option value="cleared">It proves the loader stopped; downgrade severity</option>
+              <option value="unknown">It is absence of evidence; verify sensor health before any downgrade</option>
+              <option value="auto">It means Defender removed it automatically</option></select></label>
+        </div>
+        <div class="notice info"><span class="n-ico" aria-hidden="true">i</span><div><b>Why this is graded</b><p>Over-claiming techniques inflates your reporting and breaks metric comparability year over year; under-claiming hides a detection gap. Only assert what an alert or event supports.</p></div></div>
+      </div>
+    </div>
+    <div class="msg" id="msg-story" role="status" aria-live="polite"></div>
+    <div class="form-actions">
+      <button class="btn btn--primary" type="submit">Record the assessment</button>
+      <button class="btn" type="button" data-route="hunt">Continue to hunting →</button>
+    </div>
+  </form>
+</section>
+
+<!-- ======================================================== HUNT -->
+<section class="view" data-view="hunt" data-view-label="Advanced hunting" hidden aria-labelledby="hTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="overview">Investigation &amp; response</button><span class="sep" aria-hidden="true">›</span><button type="button" data-route="queue">Hunting</button><span class="sep" aria-hidden="true">›</span><span class="current">Advanced hunting</span></nav>
+  <div class="page-head">
+    <div><span class="eyebrow">Objective 4 · 15 pts</span><h1 id="hTitle">Advanced hunting</h1>
+      <p class="lede">You are proving blast radius, not going shopping. The question you must answer with a query: <em>which other devices in the last 14 days have run the same loader?</em> KQL-Lite in this lab executes for real — a wrong filter returns the wrong row count and the objective will tell you so.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="hunt">Required</span></div>
+  </div>
+
+  <div class="grid-2" style="grid-template-columns:minmax(0,250px) minmax(0,1fr);align-items:start">
+    <aside class="card" style="padding:10px">
+      <div class="card-head" style="margin-bottom:6px"><div><span class="kicker">Schema</span><h2>Simulated tables</h2></div></div>
+      <div class="schema" id="huntSchema" role="tree" aria-label="Simulated advanced hunting schema"></div>
+      <p class="small muted" style="margin:8px 2px 0">A subset of the real schema, with synthetic rows. Table and column names match Microsoft’s published advanced hunting schema so the queries you write here are portable.</p>
+    </aside>
+
+    <div>
+      <div class="kql-shell">
+        <div class="kql-bar">
+          <span class="tabfile" aria-hidden="true">blast-radius.kql</span>
+          <span class="grow"></span>
+          <button type="button" id="rcwKqlRun-huntQuery" class="run">Run query <kbd style="background:#0b4a7a;border:0;color:#cfe6fa">Ctrl+Enter</kbd></button>
+          <button type="button" id="rcwKqlFormat">Format</button>
+          <button type="button" id="rcwKqlClear">Clear</button>
+          <button type="button" id="rcwKqlExport">Export CSV</button>
+        </div>
+        <div class="kql-editor-wrap">
+          <div class="kql-lines" id="huntQueryLines" aria-hidden="true">1</div>
+          <textarea id="huntQuery" data-kql="huntQuery" rows="10" aria-label="KQL query editor" aria-describedby="huntHint"></textarea>
+        </div>
+        <p id="rcwKqlError" class="kql-error" role="alert" hidden></p>
+      </div>
+      <div class="kql-meta" id="rcwKqlMeta" aria-live="polite"><span>Query not run yet</span><span>·</span><span>Time range: last 14 days · scope: all devices (simulated)</span></div>
+
+      <div id="rcwKqlResults" aria-live="polite"></div>
+
+      <div class="grid-2" style="margin-top:12px">
+        <article class="card" id="form-hunt">
+          <div class="card-head"><div><span class="kicker">Objective 4</span><h2>Submit the blast-radius query</h2></div><span class="obj-badge" data-objective-status="hunt">Required</span></div>
+          <p class="small muted mt0" id="huntHint">Requirements, checked automatically: run against <code>DeviceProcessEvents</code>, bound the window with <code>ago()</code> or <code>datetime()</code>, match the loader name case-insensitively, and return exactly the three affected devices. No <code>take 1</code> shortcuts, no <code>where 1 == 1</code>.</p>
+          <form data-objective="hunt" novalidate>
+            <div class="msg" id="msg-hunt" role="status" aria-live="polite"></div>
+            <div class="form-actions">
+              <button class="btn btn--primary" type="submit">Validate my query</button>
+              <button class="btn" type="button" data-kql-sample="DeviceProcessEvents | where Timestamp &gt; ago(14d) | where FileName =~ 'svch0st.exe' | summarize Hosts = dcount(DeviceName), Events = count() by DeviceName | order by Events desc" data-sample-name="template · fill in the gaps" class="btn--subtle">Insert a template, then edit it</button>
+            </div>
+          </form>
+        </article>
+        <article class="card">
+          <div class="card-head"><div><span class="kicker">Not graded · recommended</span><h2>Second-order checks</h2></div></div>
+          <p class="small muted mt0">Once your first query is accepted, run these against the same dataset to complete the analyst habit:</p>
+          <ul class="gate-list">
+            <li class="gate"><span class="g-ico" aria-hidden="true">a</span><div><b>Persistence per device</b><small><code>DeviceRegistryEvents | where Timestamp &gt; ago(14d) | where RegistryKey has 'CurrentVersion\\Run' | summarize Devices = dcount(DeviceName) by InitiatingProcessFileName</code></small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">b</span><div><b>Same C2 domain, different devices</b><small><code>DeviceNetworkEvents | where Timestamp &gt; ago(14d) | where RemoteUrl contains 'secure-mail.example' | summarize by DeviceName, RemoteIP</code></small></div></li>
+            <li class="gate"><span class="g-ico" aria-hidden="true">c</span><div><b>Who else got the mail</b><small><code>EmailEvents | where Timestamp &gt; ago(14d) | where SenderFromAddress has 'n1ghtbloom' | summarize Recipients = count() by RecipientEmailAddress</code></small></div></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== RESPOND -->
+<section class="view" data-view="respond" data-view-label="Response actions" hidden aria-labelledby="rTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="overview">Assets</button><span class="sep" aria-hidden="true">›</span><span>Devices</span><span class="sep" aria-hidden="true">›</span><span class="current">FIN-WKS-0421 · Take action</span></nav>
+  <div class="page-head">
+    <div><span class="eyebrow">Objective 5 · 15 pts · gated by Objective 4</span><h1 id="rTitle">Contain without breaking the business</h1>
+      <p class="lede">High-impact actions are reversible but not free. In a real tenant, response actions on high-value assets can be restricted, and every action requires a justification that the Action Center records. Order matters: evidence collected after isolation can be unrecoverable.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="respond">Locked</span></div>
+  </div>
+
+  <div class="notice danger">
+    <span class="n-ico" aria-hidden="true">!</span>
+    <div><b>Clicking an action before the approval fields are complete is recorded as a control violation.</b>
+    <p>The lab will let you do it — so you can see what an auditor sees. Reset and redo it properly; the violation stays in your log as a learning artefact, not a mark of shame.</p></div>
+  </div>
+
+  <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start">
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Change control</span><h2>Authorisation to act</h2></div></div>
+      <form id="form-respond" data-objective="respond" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Action category</span>
+            <select id="respCategory"><option value="">Choose</option><option value="contain">Containment</option><option value="eradicate">Eradication</option><option value="recover">Recovery</option></select></label>
+          <label class="field"><span class="lbl">Approved by (name + role)</span>
+            <input id="approver" type="text" maxlength="70" placeholder="e.g. Head of IT Operations"></label>
+          <label class="field"><span class="lbl">Change / ticket reference</span>
+            <input id="changeRef" type="text" maxlength="32" placeholder="e.g. CHG-2026-4471"></label>
+          <label class="field"><span class="lbl">Business window for the impact</span>
+            <select id="window"><option value="">Choose</option><option>Within the emergency-change window (user notified)</option><option>Any time — no notice needed</option><option>Only after the finance month-end freeze ends</option></select></label>
+        </div>
+        <fieldset><legend>Pre-action checklist</legend>
+          <label class="check"><input type="checkbox" id="preIsolate"><span><b>Device isolation will interrupt the user — owner notified</b><small>Isolation blocks inbound and outbound network access except the Defender connection.</small></span></label>
+          <label class="check"><input type="checkbox" id="prePackage"><span><b>Investigation package requested before isolation is lifted</b><small>Forensic artefacts must be collected while the sensor is still live.</small></span></label>
+          <label class="check"><input type="checkbox" id="preTokens"><span><b>Active refresh tokens revoked for mira.solanki</b><small>Device containment alone does not end mailbox access.</small></span></label>
+          <label class="check"><input type="checkbox" id="preRule"><span><b>Suspicious inbox rule removed, and removal is logged</b><small>Otherwise mail keeps flowing to the attacker while you celebrate.</small></span></label>
+          <label class="check"><input type="checkbox" id="preSMB"><span><b>svc_backup blocked from interactive logon + password rotated</b><small>Root-cause exposure, not just this incident.</small></span></label>
+          <label class="check"><input type="checkbox" id="preUndo"><span><b>Reversal path recorded (un-isolate, restore, re-onboard)</b><small>Include who can undo it and how fast.</small></span></label>
+        </fieldset>
+        <p class="small muted">The checklist is deliberately over-inclusive: <strong>every</strong> item applies here, so “tick everything fast” still passes. What is graded next is the sequence.</p>
+        <div class="msg" id="msg-respond2" role="status" aria-live="polite"></div>
+      </form>
+    </article>
+
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Action pane</span><h2>Execute the containment sequence</h2></div><span class="chip plain sev-info">6 steps</span></div>
+      <p class="small muted mt0">In the real portal these live under <em>Take action</em> on the device page, <em>Manage user</em> on the identity page and <em>Action center</em>. Click them in the order NIST SP 800-61r3 containment guidance and evidence preservation demand.</p>
+      <div class="grid-2" style="gap:8px">
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Collect investigation package">1 · Collect investigation package</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Isolate device">Isolate device</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Stop and quarantine file">Stop and quarantine file</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Add indicator to block file hash">Add indicator to block file hash</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Confirm identity action: revoke sessions and tokens">Confirm identity action (revoke sessions and tokens)</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Reset password and require MFA re-register">Reset password and require MFA re-registration</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Remove inbox rule">Remove the mailbox rule</button>
+        <button class="btn btn--danger" type="button" data-seq-obj="respond" data-seq-step="Image the device">Image the device</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Initiate automated investigation">Initiate automated investigation</button>
+        <button class="btn" type="button" data-seq-obj="respond" data-seq-step="Open Action center">Open Action center</button>
+      </div>
+      <p class="small muted" style="margin-top:10px">Two of these are <em>out of order or out of scope</em> for this stage and must not be clicked yet: imaging (eradication decision, not yours alone) and “Action center” (it is your verification step, done last). The validator enforces the first six in order and rejects the rest.</p>
+      <div class="msg" id="msg-respond" role="status" aria-live="polite"></div>
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit" form="form-respond">Submit containment evidence</button>
+        <button class="btn" type="button" data-route="resolve">Close the incident →</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ======================================================== RESOLVE -->
+<section class="view" data-view="resolve" data-view-label="Classify & resolve" hidden aria-labelledby="clTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="incident">Incident INC-2291</button><span class="sep" aria-hidden="true">›</span><span class="current">Manage incident · Resolve</span></nav>
+  <div class="page-head">
+    <div><span class="eyebrow">Objective 6 · 15 pts</span><h1 id="clTitle">Classify, tag and resolve</h1>
+      <p class="lede">Classification is how a SOC learns. Get it wrong and you teach the correlation engine, the alert-tuning rules and your own metrics to lie. Everything on this page is a real field in the Defender portal’s <em>Manage incident</em> flyout.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="resolve">Required</span></div>
+  </div>
+
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start">
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Manage incident</span><h2>Resolution form</h2></div><span class="obj-badge" data-objective-status="resolve">Required</span></div>
+      <form id="form-resolve" data-objective="resolve" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Status</span>
+            <select id="status"><option value="">New</option><option value="ip">In progress</option><option value="resolved">Resolved</option></select></label>
+          <label class="field"><span class="lbl">Classification</span>
+            <select id="classification"><option value="">Not classified</option>
+              <option value="tp">True positive</option>
+              <option value="fp">False positive</option>
+              <option value="info">Informational, expected activity</option></select></label>
+          <label class="field"><span class="lbl">Threat / determination</span>
+            <select id="threatType"><option value="">Choose</option>
+              <option value="multi">Multi-staged activity</option>
+              <option value="compacct">Compromised account</option>
+              <option value="malware">Malware</option>
+              <option value="phish">Phishing / fraudulent sites</option>
+              <option value="benign">Benign — no threat</option>
+              <option value="noise">Other: noise</option></select></label>
+          <label class="field"><span class="lbl">False-positive reason <span class="muted">(only when applicable)</span></span>
+            <select id="fpReason"><option value="">Not applicable</option>
+              <option>Alert too vague or generic</option>
+              <option>Malicious activity not detected by other Microsoft products</option>
+              <option>Properly functioning query or rule</option></select></label>
+          <label class="field"><span class="lbl">Assignee</span>
+            <select id="assignee2"><option value="">Unassigned</option><option value="mira">Mira Solanki — SOC L2</option><option value="itops">IT Operations (for device rebuild)</option></select></label>
+          <label class="field"><span class="lbl">Incident tags</span>
+            <input id="tags" type="text" maxlength="120" placeholder="comma separated, e.g. NIGHTBLOOM, finance, lateral-movement"></label>
+        </div>
+        <fieldset><legend>Remediation state at closure</legend>
+          <label class="check"><input type="checkbox" id="remIsolated"><span><b>Device remained isolated pending rebuild</b><small>If you select this, the resolution note must name who owns the rebuild and when.</small></span></label>
+          <label class="check"><input type="checkbox" id="remRule"><span><b>Inbox rule removed and mailbox audit exported</b></span></label>
+          <label class="check"><input type="checkbox" id="remCreds"><span><b>Credentials reset, sessions and tokens revoked</b></span></label>
+          <label class="check"><input type="checkbox" id="remSvc"><span><b>svc_backup constrained and rotated; ticket raised to change the account type</b></span></label>
+          <label class="check"><input type="checkbox" id="remAsr"><span><b>ASR rule moved from audit to block on FIN-WKS, with a rollback note</b></span></label>
+          <label class="check"><input type="checkbox" id="remNothing"><span><b>Nothing further required — Defender remediated it</b><small>Correct only if the alert was auto-remediated and no exposure remains.</small></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Resolution note (visible to the SOC, and to any future audit of this incident)</span>
+          <textarea id="triageNote" rows="6" maxlength="900" placeholder="What happened, what was contained, what is still open, what we are changing so it does not repeat."></textarea>
+          <span class="help">Assessed for length and for the four elements an incident reviewer looks for: <em>containment</em>, <em>root cause</em>, <em>residual risk</em>, <em>next action with an owner</em>. Never paste hashes, full UPNs, IP addresses, keys or ticket bodies with personal data — the export redactor will mask them, which is exactly why you should not put them in.</span></label>
+        <div class="msg" id="msg-resolve" role="status" aria-live="polite"></div>
+        <div class="form-actions">
+          <button class="btn btn--primary" type="submit">Save classification and resolve</button>
+          <button class="btn btn--subtle" type="button" data-route="escalate">Still need the escalation decision →</button>
+        </div>
+      </form>
+    </article>
+
+    <div>
+      <article class="card">
+        <div class="card-head"><div><span class="kicker">Consequence</span><h2>What your choices change</h2></div></div>
+        <table class="map">
+          <thead><tr><th scope="col">Choice</th><th scope="col">Effect in a real tenant</th></tr></thead>
+          <tbody>
+            <tr><td>True positive + Multi-staged activity</td><td>Feeds correlation tuning; keeps the incident in MTTR metrics; unlocks the “reported by customer” signal.</td></tr>
+            <tr><td>False positive</td><td>Reduces effective detection coverage in Secure Score reporting and may drive someone to suppress a rule that was right.</td></tr>
+            <tr><td>Informational, expected activity</td><td>Appropriate for red-team exercises within scope — such as INC-2288, not this one.</td></tr>
+            <tr><td>No tags</td><td>Next quarter you cannot count how many finance-impacting incidents you handled. Tags are cheap search.</td></tr>
+            <tr><td>Resolution note with no owner</td><td>The “what we are changing” item silently never happens. Auditors call this an open finding.</td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="card">
+        <div class="card-head"><div><span class="kicker">Self-check</span><h2>Before you submit</h2></div></div>
+        <ul class="gate-list">
+          <li class="gate"><span class="g-ico" aria-hidden="true">?</span><div><b>Did you leave “False-positive reason” blank?</b><small>Filling it while classifying as a true positive is the most common data-quality defect in incident queues.</small></div></li>
+          <li class="gate"><span class="g-ico" aria-hidden="true">?</span><div><b>Is the open item on a named human?</b><small>“IT will look at it” is not an owner.</small></div></li>
+          <li class="gate"><span class="g-ico" aria-hidden="true">?</span><div><b>Would you paste this note into a regulator’s evidence pack?</b><small>If it contains a customer name, a hash or a full UPN, no.</small></div></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== ESCALATE -->
+<section class="view" data-view="escalate" data-view-label="Escalation decision" hidden aria-labelledby="eTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Post-incident</span><span class="sep" aria-hidden="true">›</span><span class="current">Notification &amp; disclosure decision</span></nav>
+  <div class="page-head">
+    <div><span class="eyebrow">Objective 7 · 10 pts</span><h1 id="eTitle">Which clock is running?</h1>
+      <p class="lede">A Tier 2 analyst is not the notifier — but you are the person who tells the incident commander which obligations are triggered and how fast they tick. Get this wrong and the legal deadline is missed while everyone is busy being technical.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="escalate">Required</span></div>
+  </div>
+
+  <div class="notice warn">
+    <span class="n-ico" aria-hidden="true">!</span>
+    <div><b>Synthetic scenario, real obligations.</b>
+    <p>Contoso-RCW is modelled here as an EU-based credit institution that also processes personal data — so DORA applies as <em>lex specialis</em> and NIS2 does not double-report the same incident for that entity. Verify against your own counsel: national transposition differs, and some member states count in working days.</p></div>
+  </div>
+
+  <article class="card" id="form-escalate">
+    <div class="card-head"><div><span class="kicker">Objective 7</span><h2>Record the escalation decision</h2></div><span class="obj-badge" data-objective-status="escalate">Required</span></div>
+    <form data-objective="escalate" novalidate>
+      <div class="grid-3">
+        <label class="field"><span class="lbl">Entity profile</span>
+          <select id="entityType"><option value="">Choose</option>
+            <option value="financial">EU credit institution (DORA scope)</option>
+            <option value="nis2">Manufacturing entity, NIS2 essential</option>
+            <option value="saas">SaaS provider outside NIS2 scope</option></select></label>
+        <label class="field"><span class="lbl">DORA — initial notification of a major ICT incident</span>
+          <select id="doraClock"><option value="">Choose</option>
+            <option value="4h">Within 4 hours of classifying it as major (and never later than 24h from awareness)</option>
+            <option value="24h">Within 24 hours of awareness</option>
+            <option value="72h">Within 72 hours of awareness</option>
+            <option value="30d">Only in the monthly report</option></select></label>
+        <label class="field"><span class="lbl">NIS2 Article 23 — early warning</span>
+          <select id="nis2Clock"><option value="">Choose</option>
+            <option value="24h">Within 24 hours of awareness</option>
+            <option value="4h">Within 4 hours of classification</option>
+            <option value="72h">Within 72 hours only — there is no early warning</option>
+            <option value="24h">Within 24 hours of awareness for this entity, in place of the DORA filing</option>
+            <option value="context">DORA supersedes NIS2 for this entity; the 24h early warning still applies to group entities outside DORA scope</option></select></label>
+        <label class="field"><span class="lbl">GDPR Article 33 — personal data breach to the supervisory authority</span>
+          <select id="gdprClock"><option value="">Choose</option>
+            <option value="72h">Within 72 hours of awareness, supplementing as facts emerge</option>
+            <option value="24h">Within 24 hours</option>
+            <option value="30d">Within one month</option>
+            <option value="na">Not applicable — no personal data is involved once the mailbox is checked</option></select></label>
+        <label class="field"><span class="lbl">Final report timing (NIS2 / DORA intermediate then final)</span>
+          <select id="finalClock"><option value="">Choose</option>
+            <option value="1m">One month after the notification / intermediate report</option>
+            <option value="72h">72 hours</option>
+            <option value="never">None required</option></select></label>
+        <label class="field"><span class="lbl">Who owns the filing</span>
+          <select id="disclosureOwner"><option value="">Choose</option>
+            <option value="dpo">DPO / legal, with the SOC supplying the factual annex</option>
+            <option value="soc">The L2 analyst who resolved the incident</option>
+            <option value="vendor">The MDSP that runs our Defender tenant</option></select></label>
+      </div>
+      <fieldset><legend>Also triggered by these facts? (select all that apply)</legend>
+        <div class="grid-2" style="gap:0 14px">
+          <label class="check"><input type="checkbox" id="e1"><span><b>Contractual breach-notice to customers</b><small>Finance data of clients was read from the share.</small></span></label>
+          <label class="check"><input type="checkbox" id="e2"><span><b>Law-enforcement / national CERT contact</b><small>Appropriate for confirmed fraud activity.</small></span></label>
+          <label class="check"><input type="checkbox" id="e3"><span><b>Board-level materiality assessment</b><small>In scope where the entity is also a listed company (e.g. SEC 8-K within four business days of a materiality determination).</small></span></label>
+          <label class="check"><input type="checkbox" id="e4"><span><b>Immediate public disclosure on the company website</b><small>Not a legal requirement here; premature disclosure can damage containment.</small></span></label>
+          <label class="check"><input type="checkbox" id="e5"><span><b>Notify the affected users whose mailboxes were touched</b><small>High-risk for the individuals → Article 34.</small></span></label>
+          <label class="check"><input type="checkbox" id="e6"><span><b>Nothing else — the incident is closed once the device is rebuilt</b><small>Incorrect: obligations attach to facts, not to ticket status.</small></span></label>
+        </div>
+      </fieldset>
+      <label class="field"><span class="lbl">Handover line for the incident commander (one sentence, no personal data)</span>
+        <input id="handover" type="text" maxlength="220" placeholder="e.g. Confirmed intrusion contained on one endpoint; mailbox and share exposure evidenced; regulator clocks started at 2026-08-19 12:10Z."></label>
+      <div class="msg" id="msg-escalate" role="status" aria-live="polite"></div>
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit">Submit the escalation decision</button>
+      </div>
+    </form>
+  </article>
+
+  <div id="rcwCompletion" hidden>
+    <article class="card" style="border-color:#9ec99a;background:#f6fcf7">
+      <div class="card-head"><div><span class="kicker">All objectives evidenced</span><h2>Your completion record</h2></div><span class="chip state-res">Lab complete</span></div>
+      <div id="rcwCompletionBody"></div>
+    </article>
+  </div>
+</section>
+
+<!-- ======================================================== GUIDE -->
+<section class="view" data-view="guide" data-view-label="Lab guide" hidden aria-labelledby="guideTitle">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="overview">Microsoft Defender portal</button><span class="sep" aria-hidden="true">›</span><span class="current">Lab guide</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="guideTitle">Lab guide, marking scheme and standing rules</h1>
+    <p class="lede">Everything an instructor or auditor needs about this lab is on this page, and it is also in <code>LAB_GUIDE.md</code> next to the lab files.</p></div></div>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Walkthrough</span><h2>Recommended path</h2></div></div>
+      <ol class="small" style="line-height:1.9">
+        <li><b>Home.</b> Read the briefing; note which detection sources correlate. Nothing to submit.</li>
+        <li><b>Incidents queue.</b> Set Severity = High, Status = New, Source = Defender for Endpoint, then select <code>INC-2291</code>. Assign it to yourself and set <em>In progress</em>. Justify against INC-2288.</li>
+        <li><b>Incident page.</b> Read the alert titles before the graph. Tick only techniques an alert supports, pick the initial access vector, the mailbox pivot and the correct reading of the beacon silence.</li>
+        <li><b>Advanced hunting.</b> Write a bounded query over <code>DeviceProcessEvents</code>. Run it, look at the row count, then validate. If you get 1 row you filtered on the known device; if you get 3 you found the others.</li>
+        <li><b>Response.</b> Fill the change-control fields and the checklist first, then execute: package → isolate → quarantine file → block hash → revoke sessions → reset credentials. Imaging waits for the eradication decision.</li>
+        <li><b>Resolve.</b> Status Resolved, classification True positive, threat type Multi-staged activity, tags, four-element note.</li>
+        <li><b>Escalation.</b> Pick the correct clocks and owners. Then export your evidence pack if you want a record.</li>
+      </ol>
+    </article>
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Marking</span><h2>How points are awarded</h2></div></div>
+      <table class="map">
+        <thead><tr><th scope="col">Objective</th><th scope="col">Points</th><th scope="col">Pass condition</th></tr></thead>
+        <tbody>
+          <tr><td>Intake &amp; priority</td><td class="num">10</td><td>Accepted at the gate; priority judgement recorded</td></tr>
+          <tr><td>Queue filter + ownership</td><td class="num">15</td><td>Correct row selected, correct filters, assignee and status, non-trivial justification</td></tr>
+          <tr><td>Attack story</td><td class="num">20</td><td>Exactly the five supported techniques, correct initial access, pivot and beacon reading</td></tr>
+          <tr><td>Advanced hunting</td><td class="num">15</td><td>Query executes and returns exactly the three affected devices, bounded window</td></tr>
+          <tr><td>Containment</td><td class="num">15</td><td>Approval fields complete, checklist, correct action order, no premature high-impact action</td></tr>
+          <tr><td>Classification</td><td class="num">15</td><td>True positive + multi-staged, no contradictory FP reason, remediation set, four-element note</td></tr>
+          <tr><td>Escalation</td><td class="num">10</td><td>Correct clocks, owners and triggered obligations</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">Objectives are gated: containment requires the hunt, resolution requires containment. A failed submit costs nothing and can be retried; violations are logged, not penalised.</p>
+    </article>
+  </div>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Data protection &amp; ethics</span><h2>Standing rules of this lab</h2></div></div>
+      <ul class="gate-list">
+        <li class="gate"><span class="g-ico" aria-hidden="true">1</span><div><b>Synthetic identifiers only</b><small>Domains use RFC 2606 reserved names (<code>.example</code>, <code>contoso</code>); network addresses use RFC 5737 documentation ranges (<code>192.0.2.0/24</code>, <code>198.51.100.0/24</code>, <code>203.0.113.0/24</code>); hashes shown are truncated or obviously fake.</small></div></li>
+        <li class="gate"><span class="g-ico" aria-hidden="true">2</span><div><b>Redaction on export</b><small>Anything that looks like a real UPN, GUID, IP or long hash is masked when the audit trail or evidence pack is written.</small></div></li>
+        <li class="gate"><span class="g-ico" aria-hidden="true">3</span><div><b>Local-only state</b><small><code>localStorage</code> in your browser. No sign-in, no upload, no lab telemetry. Site analytics run only under your saved consent choice and never see your answers.</small></div></li>
+        <li class="gate"><span class="g-ico" aria-hidden="true">4</span><div><b>No live-action instructions</b><small>The lab describes console actions but never tells you to run them outside a training tenant. Destructive steps are always framed as decisions with owners and approvals.</small></div></li>
+        <li class="gate"><span class="g-ico" aria-hidden="true">5</span><div><b>Accessibility</b><small>Keyboard-operable queue and grids, ARIA live regions for validation and query results, focus trapping in the authorisation dialog, WCAG 2.2 AA contrast, reduced-motion and forced-colors support.</small></div></li>
+      </ul>
+    </article>
+    <article class="card">
+      <div class="card-head"><div><span class="kicker">Sources &amp; honesty</span><h2>What to read next</h2></div></div>
+      <ul class="small" style="line-height:1.9">
+        <li><a href="https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents" rel="noopener noreferrer">Investigate incidents in the Microsoft Defender portal</a> — the workflow this lab models.</li>
+        <li><a href="https://learn.microsoft.com/en-us/defender-endpoint/respond-machine-alerts" rel="noopener noreferrer">Take response actions on a device</a> — the exact action set used in Objective 5.</li>
+        <li><a href="https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-overview" rel="noopener noreferrer">Advanced hunting overview and KQL schema</a>.</li>
+        <li><a href="https://learn.microsoft.com/en-us/defender-endpoint/investigate-alerts" rel="noopener noreferrer">Investigate and classify alerts</a> — classification vocabulary.</li>
+        <li><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf" rel="noopener noreferrer">NIST SP 800-61r3, Computer Security Incident Handling Guide</a>.</li>
+        <li><a href="https://www.mitre.org/capabilities/global-cybersecurity/attack-knowledge/attack-mitre-attack-and-attack-navigation-matrix" rel="noopener noreferrer">MITRE ATT&amp;CK</a> — technique IDs are referenced for education; ATT&amp;CK is a registered trademark of MITRE RE®.</li>
+      </ul>
+      <div class="notice info" style="margin:12px 0 0"><span class="n-ico" aria-hidden="true">i</span><div><b>UI drift is normal</b><p>Microsoft ships the Defender portal continuously; labels, menu order and preview features move. Where this replica and your tenant differ, your tenant is right — the workflow and the controls being taught are the point.</p></div></div>
+    </article>
+  </div>
+</section>
+
+</div><!-- /labViewsSource -->
+
+<noscript>
+  <div style="max-width:900px;margin:24px auto;padding:0 16px;font-family:'Segoe UI',system-ui,sans-serif">
+    <h1>Microsoft Defender incident triage lab — JavaScript required</h1>
+    <p>This lab is an interactive replica of the Microsoft Defender portal: the incidents queue, the attack story, the KQL hunting console and the response panes all run locally in your browser with synthetic data. Enable JavaScript to attempt the objectives.</p>
+    <p>The full lab text, marking scheme and compliance rules are in the <em>Lab guide</em> page of this lab and in <code>LAB_GUIDE.md</code>. Publisher: RCW IT Training — <a href="https://www.rcwittraining.in/">www.rcwittraining.in</a> · founder Pradeep Raju. Not affiliated with Microsoft.</p>
+  </div>
+</noscript>
+</body>
+</html>

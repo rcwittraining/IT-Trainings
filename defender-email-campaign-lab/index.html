@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.className += ' js';</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 5 · Microsoft Defender for Office 365 phishing campaign containment | RCW IT Training</title>
+<meta name="description" content="Advanced Microsoft Defender practice lab on a faithful console replica: triage email alerts, work the threat-submission queue, scope a phishing campaign in KQL, run quarantine and mailbox remediation with approvals, harden mail policy and file a threat-tracker record. Synthetic tenant, offline, auditable evidence, by RCW IT Training.">
+<meta name="author" content="Pradeep Raju — RCW IT Training">
+<link rel="canonical" href="https://www.rcwittraining.in/defender-email-campaign-lab/">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RCW IT Training">
+<meta property="og:title" content="Lab 5 · Phishing campaign containment in Defender for Office 365">
+<meta property="og:description" content="From one user-reported email to a scoped campaign response: submissions, quarantine, ZAP, indicators and a regulator-ready tracker record.">
+<meta property="og:url" content="https://www.rcwittraining.in/defender-email-campaign-lab/">
+<meta name="theme-color" content="#1b1a19">
+<link rel="stylesheet" href="../microsoft-defender-labs/shared/defender-lab.css">
+<script src="../microsoft-defender-labs/shared/kql-lite.js" defer></script>
+<script src="../microsoft-defender-labs/shared/defender-lab.js" defer></script>
+<script src="app.js" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LearningResource","name":"Microsoft Defender for Office 365: phishing campaign triage, remediation and tracking","description":"Advanced console-replica lab: triage real-time email alerts, adjudicate the threat submission queue, scope a campaign with KQL across mail tables, run soft-delete, hard-delete, ZAP and indicator actions through actions-and-approvals with correct authorisation, tighten impersonation and detonation policy, and file a threat-tracker record with the right notification clock.","learningResourceType":"Practice lab","educationalLevel":"Advanced","timeRequired":"PT85M","inLanguage":"en","isAccessibleForFree":true,"interactivityType":"active","teaches":"Email threat triage, submission adjudication, campaign scoping, mail remediation with approvals, mail policy hardening, incident documentation","provider":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"},"creator":{"@type":"Person","name":"Pradeep Raju","jobTitle":"Founder & Senior Enterprise Infrastructure Architect","url":"https://www.linkedin.com/in/pradeepmcp826/"},"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/","citation":"https://learn.microsoft.com/en-us/defender-office-365/mdo-sec-ops-guide"}
+</script>
+</head>
+<body data-lab-id="defender-email-campaign">
+<div id="labShell"></div>
+<div id="labViewsSource">
+
+<section class="view is-active" data-view="overview" data-view-label="Home · brief" aria-labelledby="ovT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Microsoft Defender portal</span><span class="sep" aria-hidden="true">›</span><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span class="current">Alerts</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Defender XDR series · Lab 5 of 5 · Advanced</span><h1 id="ovT">One reported email, eleven mailboxes, and a Friday</h1>
+    <p class="lede">At 07:41 UTC a user reported an invoice mail. The submission queue has three items waiting, two real-time alerts fired, and the finance team has already paid a changed bank detail on another thread. This lab grades the <em>campaign</em> response: scope before you delete, approval before you act on a mailbox you do not own, and a tracker record a regulator could read.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="triage">Required</span><button class="btn btn--primary" type="button" data-route="alerts">Open the email alert queue</button></div>
+  </div>
+  <div class="notice info"><span class="n-ico" aria-hidden="true">i</span><div><b>Console replica · not Microsoft software · offline.</b><p>Simulated 2026 portal layout, six synthetic mail tables, and a KQL engine that runs entirely in your browser. No tenant, no Graph permissions, no mailbox is touched, and nothing is uploaded. Addresses, message IDs, URLs and attachments are fabricated; only documentation ranges are used for IPs and domains.</p></div></div>
+  <div class="grid-2">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objectives · 100 pts</span><h2>Seven graded steps</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-route="guide">Full guide</button></span></div>
+      <ul class="gate-list">
+        <li class="gate"><span class="g-ico">1</span><div><b>Real-time alert triage · 10</b><small>Which alerts are the same campaign, and what the delivery action already tells you.</small></div></li>
+        <li class="gate"><span class="g-ico">2</span><div><b>Submission queue · 10</b><small>Adjudicate three submissions without letting the verdict drift into policy.</small></div></li>
+        <li class="gate"><span class="g-ico">3</span><div><b>Campaign scope · 20</b><small>KQL over the mail tables plus the exact mailbox list that needs action.</small></div></li>
+        <li class="gate"><span class="g-ico">4</span><div><b>Remediation &amp; approvals · 20</b><small>Soft delete, hard delete, ZAP, indicator — in the order that keeps evidence and trust.</small></div></li>
+        <li class="gate"><span class="g-ico">5</span><div><b>Mail policy hardening · 15</b><small>Impersonation, detonation for unknown malware, and the audit switch you forgot.</small></div></li>
+        <li class="gate"><span class="g-ico">6</span><div><b>User communication · 10</b><small>Tell people what to do without blaming them or naming victims.</small></div></li>
+        <li class="gate"><span class="g-ico">7</span><div><b>Tracker record &amp; clocks · 15</b><small>Threat tracker entry, GDPR judgement, and what stays open.</small></div></li>
+      </ul></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Timeline so far</span><h2>What is already known</h2></div></div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-t">07:12</span><span class="tl-ico file" aria-hidden="true">M</span><div><b>Campaign mail delivered to 11 mailboxes</b><span class="sub">Subject pattern “Invoice 88xxx · open immediately”, sender n1ghtbloom@relay-secure.example</span></div></div>
+        <div class="tl-row"><span class="tl-t">07:20</span><span class="tl-ico net" aria-hidden="true">U</span><div><b>4 users clicked the link; 2 entered credentials on the page</b><span class="sub">login-contoso.secure-mail.example · 203.0.113.64</span></div></div>
+        <div class="tl-row"><span class="tl-t">07:31</span><span class="tl-ico proc" aria-hidden="true">P</span><div><b>Mailbox rule created on FIN-CLERK: forward + delete</b><span class="sub">Post-delivery action recorded; this is why mail is not the whole story</span></div></div>
+        <div class="tl-row"><span class="tl-t">07:41</span><span class="tl-ico reg" aria-hidden="true">S</span><div><b>User reported the message with the Report Message add-in</b><span class="sub">Submission queue now holds three items, one of them a newsletter</span></div></div>
+        <div class="tl-row"><span class="tl-t">08:02</span><span class="tl-ico file" aria-hidden="true">$</span><div><b>Payment made to a changed bank detail (separate thread, 2 weeks earlier)</b><span class="sub">Finance reports it as a possible business email compromise</span></div></div>
+      </div>
+      <p class="small muted">Simulated “now”: 2026-09-04T09:00:00Z · tenant contoso-rcw.example · 1,840 mailboxes · MDO Plan 2 · mailbox audit already enabled on 40% of hosts.</p>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="alerts" data-view-label="Email alerts" hidden aria-labelledby="alT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span class="current">Alerts queue</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 1 · 10 pts</span><h1 id="alT">Real-time detections · 2026-09-04</h1>
+    <p class="lede">Group the campaign alerts, and be explicit about the one that is a different problem entirely.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="triage">Required</span></div>
+  </div>
+  <article class="card"><div class="card-head"><div><span class="kicker">Queue</span><h2>Five alerts</h2></div></div>
+    <div class="grid-wrap"><table class="data-grid" id="mailAlerts" data-selectable data-multi data-grid-name="Email alerts" data-restore-rows>
+      <caption>Select every alert that belongs to this campaign. <span class="muted" data-selection-count>No rows selected</span></caption>
+      <thead><tr><th scope="col">Alert</th><th scope="col">Detection</th><th scope="col">Delivery action</th><th scope="col">Users</th><th scope="col">Time</th><th scope="col">Note</th></tr></thead>
+      <tbody>
+        <tr data-row-id="MA-9001"><td class="mono">MA-9001<span class="sub">Phish delivered</span></td><td>Phish · High confidence</td><td>Delivered (allowed by admin override 2026-08-19)</td><td class="num">11</td><td class="mono">07:12</td><td>Same URL as MA-9003</td></tr>
+        <tr data-row-id="MA-9002"><td class="mono">MA-9002<span class="sub">Credential theft page visited</span></td><td>URL click · Safe Links detonation</td><td>n/a</td><td class="num">4</td><td class="mono">07:20</td><td>2 posted credentials</td></tr>
+        <tr data-row-id="MA-9003"><td class="mono">MA-9003<span class="sub">Suspicious email reported by users</span></td><td>User submission triage</td><td>Delivered</td><td class="num">3</td><td class="mono">07:41</td><td>Same sender and template</td></tr>
+        <tr data-row-id="MA-9004"><td class="mono">MA-9004<span class="sub">Mailish anomaly: forwarding rule created</span></td><td>Post-delivery behavioural</td><td>Rule added</td><td class="num">1</td><td class="mono">07:31</td><td>FIN-CLERK mailbox</td></tr>
+        <tr data-row-id="MA-9005"><td class="mono">MA-9005<span class="sub">Malware detected by attachment detonation</span></td><td>Malware · Doc.Dropper</td><td>Quarantined</td><td class="num">1</td><td class="mono">Tue</td><td>Different sender, different payload, unrelated thread</td></tr>
+      </tbody></table></div>
+  </article>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 1</span><h2>Triage decision</h2></div><span class="obj-badge" data-objective-status="triage">Required</span></div>
+      <form id="form-triage" data-objective="triage" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">MA-9001 says “delivered (allowed by admin override)”. What does that mean for you?</span>
+            <select id="override"><option value="">Choose</option>
+              <option value="o1">A tenant rule allowed it — the campaign is a policy failure as well as an attack, and the override needs its own finding</option>
+              <option value="o2">The detection was wrong, so nothing to do</option>
+              <option value="o3">Delivered means the user must have clicked</option></select></label>
+          <label class="field"><span class="lbl">MA-9005 (Tuesday's malware) handling</span>
+            <select id="other"><option value="">Choose</option>
+              <option value="o1">Triage it separately: same queue, different incident, no shared indicators</option>
+              <option value="o2">Merge it into the campaign so the incident looks bigger</option>
+              <option value="o3">Close it as a duplicate of MA-9001</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">What the alert set proves and what it does not (min 100 chars)</span>
+          <textarea id="triageNote" rows="3"></textarea></label>
+        <div class="msg" id="msg-triage" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Open the submission queue</button></div>
+      </form></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Reading mail alerts</span><h2>Three distinctions that decide your next click</h2></div></div>
+      <dl class="kv">
+        <dt>Detected vs delivered</dt><dd>A detection with a delivery action of Delivered is a <em>hit</em>; Quarantined is a <em>block</em>. Only the first needs user-side work.</dd>
+        <dt>Allowed by policy</dt><dd>When a rule or an allow list let it through, the mail fix is not the only fix — the policy needs a finding.</dd>
+        <dt>Reported ≠ confirmed</dt><dd>A user submission is a hypothesis. The verdict comes from detonation and message trace, not from the report count.</dd>
+      </dl>
+      <div class="notice" style="margin-top:10px"><span class="n-ico" aria-hidden="true">§</span><div><b>Compliance gate.</b><p>Actions on other people's mailboxes are authorised only for the incident scope you declare. The lab records that gate; so should your ticket.</p></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="submissions" data-view-label="Submission queue" hidden aria-labelledby="sbT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span>Submissions</span><span class="sep" aria-hidden="true">›</span><span class="current">Queue</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 2 · 10 pts</span><h1 id="sbT">Threat submission queue</h1>
+    <p class="lede">Verdicts here also train the tenant's allow/block lists, which is precisely why a careless “close it” costs more than a minute.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="submit">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Three submissions</span><h2>Remediation and verdict per item</h2></div></div>
+      <div class="grid-wrap"><table class="matrix">
+        <thead><tr><th scope="col">Item</th><th scope="col">Detonation</th><th scope="col">Analyst notes</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">SUB-1101<span class="sub">Invoice 88216 (FIN-CLERK)</span></th><td>URL leads to a credential page; form posts to an external host</td><td>Matches MA-9001 template; 8 similar mails in the tenant</td></tr>
+          <tr><th scope="row">SUB-1102<span class="sub">Vendor newsletter (OPS-ADMIN)</span></th><td>Clean; link resolves to a known subscription service with valid domain history</td><td>Reported by three people because the layout changed</td></tr>
+          <tr><th scope="row">SUB-1103<span class="sub">“Scanner scan-to-email” with macro (RECEP-01)</span></th><td>Macro executes and beacons; detonation still running (in progress)</td><td>Attachment 214 KB · sender is a spoofed internal display name</td></tr>
+        </tbody></table></div>
+      <p class="small muted">In the real portal you can request a re-scan and, on a shared or dirty tenancy, decide whether a tenant-level allow applies. Here you record the decision; the validator checks the reasoning, not just the label.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 2</span><h2>Record the adjudication</h2></div><span class="obj-badge" data-objective-status="submit">Required</span></div>
+      <form id="form-submit" data-objective="submit" novalidate>
+        <label class="field"><span class="lbl">SUB-1101 verdict and action</span>
+          <select id="v1"><option value="">Choose</option>
+            <option value="o1">Confirmed phish, remediate across the tenant for the same message, and scope the campaign</option>
+            <option value="o2">Clean — close</option>
+            <option value="o3">Phish, but only remove it from the reporter's mailbox</option></select></label>
+        <label class="field"><span class="lbl">SUB-1102 verdict and action</span>
+          <select id="v2"><option value="">Choose</option>
+            <option value="o1">Allow as phish-submission remediation with a note to the reporters; do not add the sending domain to the tenant allow list</option>
+            <option value="o2">Allow the sender domain tenant-wide so the queue stops seeing it</option>
+            <option value="o3">Block the sender to be safe</option></select></label>
+        <label class="field"><span class="lbl">SUB-1103, with detonation still running</span>
+          <select id="v3"><option value="">Choose</option>
+            <option value="o1">Hold the verdict, request the re-scan result, and act on the macro behaviour separately now that a beacon is evidenced</option>
+            <option value="o2">Close as clean because the portal has not said otherwise yet</option>
+            <option value="o3">Add the sender to the allow list — internal display names are trusted</option></select></label>
+        <fieldset><legend>Queue discipline</legend>
+          <label class="check"><input type="checkbox" id="qA"><span><b>Verdicts are recorded with the evidence reference, not just the label</b></span></label>
+          <label class="check"><input type="checkbox" id="qB"><span><b>The reporters get a reply telling them the outcome</b></span></label>
+          <label class="check"><input type="checkbox" id="qC"><span><b>No tenant-wide allow list entry is created from a single submission</b></span></label>
+        </fieldset>
+        <div class="msg" id="msg-submit" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save verdicts and scope the campaign</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="scope" data-view-label="Campaign scope" hidden aria-labelledby="scT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span>Threat explorer</span><span class="sep" aria-hidden="true">›</span><span class="current">Campaign scope</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 3 · 20 pts</span><h1 id="scT">How far did it get, and into whose mailbox?</h1>
+    <p class="lede">Two answers, both from data: one query over the mail tables, and the mailbox list that actually needs user-level work.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="scope">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Query</span><h2>Every message from this sender in 7 days, by delivery action</h2></div></div>
+      <p class="small">Requirements: start from <code>EmailEvents</code>, bound the window to 7 days or less, filter on the sender <code>n1ghtbloom@relay-secure.example</code>, and <code>summarize … by DeliveryAction</code> with a distinct-user count.</p>
+      <label class="field"><span class="lbl">KQL</span><textarea id="mailQuery" data-kql="mailQuery" class="kql-editor" rows="8" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+      <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-mailQuery">Run</button><button class="btn btn--sm" type="button" id="fmt-mailQuery">Format</button><button class="btn btn--sm" type="button" id="clr-mailQuery">Clear</button><span class="grow"></span><span class="small muted" id="meta-mailQuery">not run</span></div>
+      <div class="msg" id="err-mailQuery" role="alert" hidden></div>
+      <div id="res-mailQuery" class="grid-wrap"></div>
+      <p class="small muted">Tables: <code>EmailEvents</code>, <code>EmailUrlInfo</code>, <code>EmailPostDeliveryEvents</code>, <code>EmailAttachmentInfo</code>, <code>DeviceNetworkEvents</code>, <code>IdentityLogonEvents</code>.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Mailboxes</span><h2>Select the four that need user-level work</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid" id="mailboxGrid" data-selectable data-multi data-grid-name="Affected mailboxes" data-restore-rows>
+        <caption>Multi-select exactly four. <span class="muted" data-selection-count>No rows selected</span></caption>
+        <thead><tr><th scope="col">Mailbox</th><th scope="col">Message</th><th scope="col">Clicked</th><th scope="col">Creds</th><th scope="col">Rule</th><th scope="col">Audit</th></tr></thead>
+        <tbody>
+          <tr data-row-id="MBX-1"><td class="mono">FIN-CLERK</td><td>Delivered</td><td>Yes</td><td>Yes · 07:22</td><td>Forward + delete</td><td>On</td></tr>
+          <tr data-row-id="MBX-2"><td class="mono">FIN-MGR</td><td>Delivered</td><td>Yes</td><td>Yes · 07:24</td><td>None</td><td>Off</td></tr>
+          <tr data-row-id="MBX-3"><td class="mono">HR-ASST</td><td>Delivered</td><td>Yes</td><td>No — page error</td><td>None</td><td>On</td></tr>
+          <tr data-row-id="MBX-4"><td class="mono">RECEP-01</td><td>Delivered</td><td>Yes</td><td>No — closed tab</td><td>None</td><td>Off</td></tr>
+          <tr data-row-id="MBX-5"><td class="mono">OPS-ADMIN</td><td>Delivered</td><td>No</td><td>No</td><td>None</td><td>On</td></tr>
+          <tr data-row-id="MBX-6"><td class="mono">IT-SHARED (deck)</td><td>Delivered</td><td>Blocked</td><td>No</td><td>None</td><td>Not auditable (shared)</td></tr>
+          <tr data-row-id="MBX-7"><td class="mono">PAY-BATCH (service)</td><td>Quarantined</td><td>No</td><td>No</td><td>None</td><td>n/a</td></tr>
+        </tbody></table></div>
+      <p class="small muted">Clicked-and-delivered is the boundary for user-level work: credential reset, rule removal and ZAP. Everyone else is covered by the tenant-wide search-and-remove.</p>
+    </article>
+  </div>
+  <article class="card" style="margin-top:16px"><div class="card-head"><div><span class="kicker">Objective 3</span><h2>State the scope you will act on</h2></div><span class="obj-badge" data-objective-status="scope">Required</span></div>
+    <form id="form-scope" data-objective="scope" novalidate>
+      <div class="form-grid">
+        <label class="field"><span class="lbl">Messages your query counted as delivered</span>
+          <select id="deliveredCount"><option value="">Choose</option>
+            <option value="o1">11</option><option value="o2">7</option><option value="o3">1,840</option></select>
+          <span class="help">Read it off your own result — the grid above, not the briefing text.</span></label>
+        <label class="field"><span class="lbl">Why summarise by delivery action rather than by user</span>
+          <select id="whyGroup"><option value="">Choose</option>
+            <option value="o1">Because the action determines the work: delivered needs removal and user follow-up, quarantined needs nothing</option>
+            <option value="o2">Because grouping by user is forbidden in this lab</option></select></label>
+        <label class="field"><span class="lbl">Scope of the search-and-remove operation</span>
+          <select id="searchScope"><option value="">Choose</option>
+            <option value="o1">All mailboxes, filtered to the sender and the campaign's message IDs, run as soft delete first</option>
+            <option value="o2">Only the four mailboxes above</option>
+            <option value="o3">All mailboxes, hard delete immediately so it cannot be reopened</option></select></label>
+      </div>
+      <label class="field"><span class="lbl">Scope statement for the ticket (min 120 chars, no personal data)</span>
+        <textarea id="scopeNote" rows="3"></textarea></label>
+      <div class="msg" id="msg-scope" role="status" aria-live="polite"></div>
+      <div class="form-actions"><button class="btn btn--primary" type="submit">Open Actions &amp; approvals</button></div>
+    </form></article>
+</section>
+
+<section class="view" data-view="actions" data-view-label="Actions &amp; approvals" hidden aria-labelledby="acT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span>Actions &amp; approvals</span><span class="sep" aria-hidden="true">›</span><span class="current">Queued operations</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 4 · 20 pts</span><h1 id="acT">Execute the remediation in a defensible order</h1>
+    <p class="lede">Seven operations. Click them in the order that preserves evidence, gets approval before it touches a mailbox, and never leaves the attacker a listening rule.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="remediate">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Operations</span><h2>Click in order</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" id="actReset">Reset</button></span></div>
+      <div class="grid-2" style="gap:8px" role="group" aria-label="Mail remediation operations">
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="Confirm the search results and export the message list">1 · Confirm search results and export the list</button>
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="Soft delete from all mailboxes">Soft delete from all mailboxes</button>
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="Remove the malicious inbox rule on FIN-CLERK">Remove the malicious inbox rule</button>
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="ZAP the campaign in the interacted mailboxes">ZAP the interacted mailboxes</button>
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="Reset credentials and revoke sessions for the two who posted">Reset credentials and revoke sessions</button>
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="Add the URL and file-hash indicators">Add URL and file-hash indicators</button>
+        <button class="btn" type="button" data-seq-obj="remediate" data-seq-step="Request hard delete only where soft delete failed">Request hard delete where soft delete failed</button>
+        <button class="btn btn--danger" type="button" data-seq-obj="remediate" data-seq-step="Hard delete everything immediately">Hard delete everything immediately</button>
+        <button class="btn btn--danger" type="button" data-seq-obj="remediate" data-seq-step="Notify all staff that finance lost money">Notify all staff that finance lost money</button>
+      </div>
+      <p class="small muted">Two of these are here to be refused. “Hard delete everything immediately” removes the copy you may still need and skips the approval that mailbox content deletion requires in most change policies; the all-staff notice is a communications decision, not a mail action.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 4</span><h2>Authorisation record</h2></div><span class="obj-badge" data-objective-status="remediate">Required</span></div>
+      <form id="form-remediate" data-objective="remediate" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Approval for mailbox actions</span>
+            <select id="approval"><option value="">Choose</option>
+              <option value="o1">Obtained from the mailbox owner's department head, recorded against the incident, for the declared scope only</option>
+              <option value="o2">Not needed — I am a global admin</option>
+              <option value="o3">Obtained verbally, no record</option></select></label>
+          <label class="field"><span class="lbl">Soft delete vs hard delete</span>
+            <select id="deleteMode"><option value="">Choose</option>
+              <option value="o1">Soft delete first; hard delete only the residue, after the export is filed and where the user consent or policy allows it</option>
+              <option value="o2">Hard delete always — soft delete leaves the payload reachable</option></select></label>
+        </div>
+        <fieldset><legend>Conditions before the last operation</legend>
+          <label class="check"><input type="checkbox" id="aA"><span><b>Message list exported into the incident as evidence</b></span></label>
+          <label class="check"><input type="checkbox" id="aB"><span><b>The inbox rule removal is verified in the mailbox, not just requested</b></span></label>
+          <label class="check"><input type="checkbox" id="aC"><span><b>Credential reset happened before ZAP was relied on as “done”</b></span></label>
+          <label class="check"><input type="checkbox" id="aD"><span><b>Indicators added for URL, sender and hash so the block is not limited to one action</b></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Action record (min 150 chars, no addresses)</span>
+          <textarea id="actNote" rows="4"></textarea></label>
+        <div class="msg" id="msg-remediate" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Close the remediation</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="policies" data-view-label="Mail policy" hidden aria-labelledby="poT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span>Policies</span><span class="sep" aria-hidden="true">›</span><span class="current">Rules &amp; settings</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 5 · 15 pts</span><h1 id="poT">Close the gate that let it in</h1>
+    <p class="lede">The mail flow rule that allowed this campaign is a finding. So is the missing audit on half the tenant. Fix both without turning the gateway into a noise machine.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="policies">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Candidate changes</span><h2>Apply today · schedule · refuse</h2></div></div>
+      <div class="grid-wrap"><table class="matrix">
+        <thead><tr><th scope="col">Change</th><th scope="col">Effect</th><th scope="col">Risk of the change itself</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Enable mailbox audit on the remaining 60% and on shared mailboxes</th><td>You can prove who read and forwarded what</td><td>Storage and retention planning</td></tr>
+          <tr><th scope="row">Impersonation protection for finance leadership and the two named vendors</th><td>Blocks display-name spoofing of the accounts used here</td><td>Low — protected users get tips, not blocks, until tuned</td></tr>
+          <tr><th scope="row">Enable impersonation protection for every mailbox in the tenant</th><td>Broad</td><td>High false-positive load on day one</td></tr>
+          <tr><th scope="row">Block until detonation completes for unknown malware on inbound mail</th><td>No more “delivered, then retracted”</td><td>Delivery delay for some legitimate attachments</td></tr>
+          <tr><th scope="row">Remove the tenant rule that allowed n1ghtbloom@relay-secure.example</th><td>Removes the reason MA-9001 was delivered</td><td>None — but record why it existed first</td></tr>
+          <tr><th scope="row">Enable zero-hour auto purge for phishing, malware and spam</th><td>Retracts after delivery</td><td>Users lose mail silently unless notifications are on</td></tr>
+          <tr><th scope="row">Turn on aggressive file sandbox for all outbound mail too</th><td>Not needed for this incident</td><td>Outbound delay for finance batches</td></tr>
+        </tbody></table></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 5</span><h2>Policy decision</h2></div><span class="obj-badge" data-objective-status="policies">Required</span></div>
+      <form id="form-policies" data-objective="policies" novalidate>
+        <label class="field"><span class="lbl">Select exactly the four changes to apply today</span>
+          <select id="policySet"><option value="">Choose</option>
+            <option value="o1">Audit everywhere · impersonation for the named finance list · block until detonation for unknown malware · remove the allow rule</option>
+            <option value="o2">Impersonation for every mailbox · outbound sandbox · remove the allow rule · ZAP</option>
+            <option value="o3">Audit everywhere · ZAP for everything · outbound sandbox · impersonation for everyone</option></select></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">ZAP notifications</span>
+            <select id="zapNote"><option value="">Choose</option>
+              <option value="o1">On — users must know a message was retracted, or support tickets become your incident</option>
+              <option value="o2">Off — silent is cleaner</option></select></label>
+          <label class="field"><span class="lbl">The allow rule that caused this</span>
+            <select id="allowRule"><option value="">Choose</option>
+              <option value="o1">Remove it, and record who asked for it, when and against what justification — that is a control finding, not a mail fix</option>
+              <option value="o2">Keep it and add the URL to a block list instead</option></select></label>
+        </div>
+        <fieldset><legend>Guardrails</legend>
+          <label class="check"><input type="checkbox" id="gA"><span><b>Changes are made in the change window with a rollback for each one</b></span></label>
+          <label class="check"><input type="checkbox" id="gB"><span><b>Mail flow is re-tested after the allow rule is removed (a test message, not a hope)</b></span></label>
+          <label class="check"><input type="checkbox" id="gC"><span><b>The policy change is linked to the incident record so the audit trail is bidirectional</b></span></label>
+        </fieldset>
+        <div class="msg" id="msg-policies" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save the policy set</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="comms" data-view-label="User communication" hidden aria-labelledby="cmT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Email &amp; collaboration</span><span class="sep" aria-hidden="true">›</span><span class="current">Notification</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 6 · 10 pts</span><h1 id="cmT">Tell people what to do, not who failed</h1>
+    <p class="lede">The reporting rate you have built is the reason this is 11 mailboxes and not 400. Do not spend it in one email.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="comms">Required</span></div>
+  </div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Draft</span><h2>Message content</h2></div></div>
+      <form id="form-comms" data-objective="comms" novalidate>
+        <label class="field"><span class="lbl">Audience</span>
+          <select id="audience"><option value="">Choose</option>
+            <option value="o1">Everyone who received the campaign plus the finance and HR teams, with the specific ask: report, do not click, reset if you entered details</option>
+            <option value="o2">All staff, with the names of the four who clicked</option>
+            <option value="o3">Only the four affected users, quietly</option></select></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Named individuals in the notice</span>
+            <select id="naming"><option value="">Choose</option>
+              <option value="o1">None — describe roles and counts, never who clicked</option>
+              <option value="o2">Yes, so people know who to help</option></select></label>
+          <label class="field"><span class="lbl">Payment-fraud detail</span>
+            <select id="fraud"><option value="">Choose</option>
+              <option value="o1">Leave it out of a company-wide notice; it goes to the incident record and to whoever owns the financial loss</option>
+              <option value="o2">Include the amount so people take it seriously</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">The notice itself (min 160 chars, no addresses, no names)</span>
+          <textarea id="notice" rows="6" placeholder="What happened, what we did, what you must do, by when, where to ask"></textarea></label>
+        <div class="msg" id="msg-comms" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Send to the incident record</button></div>
+      </form></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Reference</span><h2>What a good notice contains</h2></div></div>
+      <ol class="rules">
+        <li><b>The observable symptom</b> — “an invoice mail with a link that asks you to sign in”, not an internal detection name.</li>
+        <li><b>The concrete ask</b> — report it with the add-in, do not delete it, reset if you entered details, and by when.</li>
+        <li><b>What has already been done</b> — the mail is being removed; the link is blocked. This is what stops ten open tickets per minute.</li>
+        <li><b>No blame, no names</b> — a named person stops reporting. Reporting rate is a control; you are protecting it.</li>
+        <li><b>One place to ask</b> — a phone number or a queue, not “reply all”.</li>
+      </ol>
+      <div class="notice info" style="margin-top:10px"><span class="n-ico" aria-hidden="true">i</span><div><b>Why the payment detail stays out.</b><p>Amounts and vendor names in a mass notice create a second incident: rumour, and disclosure of a commercial dispute. It belongs in the record and to the owner of the loss.</p></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="record" data-view-label="Tracker &amp; clocks" hidden aria-labelledby="rcT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Threat intelligence</span><span class="sep" aria-hidden="true">›</span><span class="current">Threat trackers</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 7 · 15 pts</span><h1 id="rcT">The record that outlives the incident</h1>
+    <p class="lede">A tracker entry is how the next analyst recognises this template in ninety days, and how the DPO proves what was known when.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="record">Required</span></div>
+  </div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Threat tracker</span><h2>NIGHTBLOOM / invoice-88xxx · new entry</h2></div></div>
+      <dl class="kv">
+        <dt>Campaign</dt><dd class="mono">invoice-88xxx · n1ghtbloom@relay-secure.example</dd>
+        <dt>Indicators</dt><dd>1 URL · 1 sender · 1 file hash (from SUB-1103, pending confirmation)</dd>
+        <dt>Delivery</dt><dd>11 mailboxes · 11 delivered (allowed by rule) · 4 clicked · 2 posted credentials</dd>
+        <dt>Post-delivery</dt><dd>1 inbox rule · 1 mailbox with audit disabled · 1 ZAP candidate</dd>
+        <dt>Related</dt><dd>MA-9001…9004 · submission SUB-1101 · endpoint alert on FIN-CLERK (none)</dd>
+      </dl>
+      <div class="notice warn"><span class="n-ico" aria-hidden="true">!</span><div><b>The file-hash indicator is not confirmed.</b><p>SUB-1103's detonation finished after the mail remediation was queued. An indicator added from an unfinished detonation is a policy change built on a guess — the record has to say which is which.</p></div></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 7</span><h2>Close it out properly</h2></div><span class="obj-badge" data-objective-status="record">Required</span></div>
+      <form id="form-record" data-objective="record" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Tracker status at 09:00</span>
+            <select id="status"><option value="">Choose</option>
+              <option value="o1">Open — mail remediated, identity follow-up and two indicators still pending confirmation</option>
+              <option value="o2">Closed — the mail is gone</option></select></label>
+          <label class="field"><span class="lbl">Classification</span>
+            <select id="classify"><option value="">Choose</option>
+              <option value="o1">Phish · credential harvest, with business email compromise as a separate related case</option>
+              <option value="o2">Malware</option>
+              <option value="o3">Suspicious — unconfirmed</option></select></label>
+          <label class="field"><span class="lbl">Personal-data breach assessment (GDPR Art. 33)</span>
+            <select id="gdpr"><option value="">Choose</option>
+              <option value="o1">Assess now on the risk to rights and freedoms: mailbox content was forwarded to an external address, so notify within 72 hours of awareness unless the assessment records why not</option>
+              <option value="o2">No — no email is personal data</option>
+              <option value="o3">Wait until the investigation closes, then decide</option></select></label>
+          <label class="field"><span class="lbl">Regulatory clock for this tenant</span>
+            <select id="clock"><option value="">Choose</option>
+              <option value="o1">NIS2 essential entity: early warning within 24 h, notification within 72 h, final report within one month</option>
+              <option value="o2">DORA: 4 hours — it is a bank</option>
+              <option value="o3">None applies to a hospital group</option></select></label>
+        </div>
+        <fieldset><legend>Indicator handling</legend>
+          <label class="check"><input type="checkbox" id="iA"><span><b>Confirmed indicators (URL, sender) are applied tenant-wide with expiry</b></span></label>
+          <label class="check"><input type="checkbox" id="iB"><span><b>The unconfirmed hash is recorded as pending, not enforced</b></span></label>
+          <label class="check"><input type="checkbox" id="iC"><span><b>The tracker entry links the incident, the submissions, the policy finding and the notice</b></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">What stays open after this shift (min 180 chars)</span>
+          <textarea id="openNote" rows="5"></textarea></label>
+        <div class="msg" id="msg-record" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">File the record and finish the lab</button>
+          <button class="btn" type="button" data-evidence="download">Export evidence pack</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="guide" data-view-label="Lab guide" hidden aria-labelledby="gdT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>RCW IT Training</span><span class="sep" aria-hidden="true">›</span><span class="current">Lab guide</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="gdT">Marking, the mail-specific traps, and provenance</h1></div>
+    <div class="head-actions"><button class="btn btn--sm" type="button" data-route="overview">Back to the lab</button></div></div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Marking</span><h2>How the 100 points are awarded</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid">
+        <thead><tr><th scope="col">#</th><th scope="col">Objective</th><th scope="col">Pts</th><th scope="col">What the validator checks</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>Real-time alert triage</td><td class="num">10</td><td>Exactly the four campaign alerts; the “allowed by override” and the unrelated malware alert handled correctly; proof/disproof written out</td></tr>
+          <tr><td class="num">2</td><td>Submission queue</td><td class="num">10</td><td>Three verdicts with the right remediation breadth; no tenant allow list from one submission; re-scan held for the unfinished detonation; three discipline items</td></tr>
+          <tr><td class="num">3</td><td>Campaign scope</td><td class="num">20</td><td>Bounded KQL over EmailEvents grouped by DeliveryAction with a distinct-user count, the delivered figure matching your result, exactly four mailboxes selected, scope written to match the choice</td></tr>
+          <tr><td class="num">4</td><td>Remediation &amp; approvals</td><td class="num">20</td><td>Seven operations in the evidence-preserving order, no hard-delete-first, approval recorded for the declared scope, four verified conditions, 150-character action record</td></tr>
+          <tr><td class="num">5</td><td>Mail policy</td><td class="num">15</td><td>The four changes that address <em>this</em> failure mode, ZAP notifications on, the allow rule removed as a finding, three guardrails</td></tr>
+          <tr><td class="num">6</td><td>User communication</td><td class="num">10</td><td>Audience, no names, no fraud amounts, and a notice that contains the ask and the deadline</td></tr>
+          <tr><td class="num">7</td><td>Tracker &amp; clocks</td><td class="num">15</td><td>Open status with the reason, correct classification, Article 33 assessed on risk, NIS2 (not DORA) clocks, confirmed vs pending indicators separated, 180-character open list</td></tr>
+        </tbody></table></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Traps</span><h2>Seven ways this lab catches a shortcut</h2></div></div>
+      <ol class="rules">
+        <li><b>Deleting first, scoping second.</b> Without the exported message list you cannot prove what was removed, and you cannot re-check who was affected.</li>
+        <li><b>Tenant-wide allow lists born from one submission.</b> A newsletter reported by three people is not a domain trust decision.</li>
+        <li><b>Hard delete “to be sure”.</b> It removes the artefact, and usually needs the approval you skipped.</li>
+        <li><b>Fixing mail only.</b> The inbox rule and the two credential-posting accounts are identity events; mail remediation without them leaves the door open.</li>
+        <li><b>Enforcing an indicator from an unfinished detonation.</b> Pending is a valid state; write it as pending.</li>
+        <li><b>Naming who clicked.</b> The reporting rate is your cheapest sensor; spend it once and it is gone for a year.</li>
+        <li><b>“Delivered means they must have clicked.”</b> Delivery, click and credential entry are three different facts and each changes your next action.</li>
+      </ol>
+      <div class="notice" style="margin-top:12px"><span class="n-ico" aria-hidden="true">§</span><div><b>Standards mapped in this lab</b><p>Process: NIST SP 800-61r3 §3.2–§3.4 and ISO/IEC 27001:2022 A.5.24–A.5.28 (incident management) with A.8.16 (monitoring) for the audit gaps. Controls: PCI DSS v4.0 requirements 12.10 (incident response) and 6.3 for the change to the mail flow rule. Clocks: NIS2 Art. 23(4) — 24 h early warning, 72 h notification, one-month final report; GDPR Art. 33/34 on risk, not on proof. MITRE ATT&amp;CK: T1566.002, T1204.003, T1534, T1078.004, T1098.003. Training aid only — not certification preparation, and not affiliated with or endorsed by Microsoft.</p></div></div>
+    </article>
+  </div>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Provenance</span><h2>Every value in this lab is fabricated</h2></div></div>
+      <table class="data-grid"><thead><tr><th scope="col">Kind</th><th scope="col">Used here</th><th scope="col">Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Addresses</td><td class="mono">fin.clerk@contoso-rcw.example</td><td>RFC 2606/6761 reserved domains only; never a real tenant</td></tr>
+          <tr><td>Message IDs</td><td class="mono">m-88216a …</td><td>Invented; not real Graph identifiers</td></tr>
+          <tr><td>URLs / IPs</td><td class="mono">login-contoso.secure-mail.example · 203.0.113.64</td><td>Documentation ranges; nothing resolves to real infrastructure</td></tr>
+          <tr><td>Attachments</td><td>Fabricated names and hashes</td><td>No real malware sample fingerprint is reproduced</td></tr>
+          <tr><td>Logos</td><td>Text brand mark only</td><td>No Microsoft 4-square or vendor marks are reproduced</td></tr>
+        </tbody></table>
+      <p class="small muted">Offline by design: no analytics, no web fonts, no third-party requests, and no state leaves this browser. Evidence redaction masks anything shaped like a real identity unless it is obviously documentation data.</p></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Access</span><h2>Keyboard, screen readers, printing</h2></div></div>
+      <ul class="rules">
+        <li>Grids: arrow keys move, Space toggles a row, Shift+Arrow extends; the caption announces the running count, so selection is never colour-only.</li>
+        <li>The operations list is a labelled group of real buttons; the sequence state is announced in a live region and mirrored into the audit log.</li>
+        <li>Every form message sits inside its form, uses <code>aria-live</code>, and repeats the expected value in words — no red outline alone.</li>
+        <li>Skip link, visible focus at 3:1, Escape closes the audit flyout and modals, forced-colours mode and <code>prefers-reduced-motion</code> supported, and the views print with the tabs expanded.</li>
+      </ul>
+      <p class="small"><a href="../microsoft-defender-labs/compliance-standards.html">Read the series compliance and accessibility standard →</a></p></article>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

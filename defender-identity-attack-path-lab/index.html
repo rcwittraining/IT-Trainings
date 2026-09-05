@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.className += ' js';</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 4 · Microsoft Defender for Identity attack paths, DCSync &amp; token theft response | RCW IT Training</title>
+<meta name="description" content="Advanced Microsoft Defender practice lab on a faithful console replica: triage identity alerts (Kerberoasting, DCSync, NTLM downgrade, honeytoken), read the exposure graph and attack path, hunt the directory in KQL, remediate a risky user in Entra ID Protection and close the path with hardening decisions. Synthetic tenant, auditable evidence, by RCW IT Training.">
+<meta name="author" content="Pradeep Raju — RCW IT Training">
+<link rel="canonical" href="https://www.rcwittraining.in/defender-identity-attack-path-lab/">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RCW IT Training">
+<meta property="og:title" content="Lab 4 · Identity attack paths, DCSync and token theft response">
+<meta property="og:description" content="From a honeytoken hit to a revoked refresh token: a graded, offline rehearsal of identity incident response in the Defender portal.">
+<meta property="og:url" content="https://www.rcwittraining.in/defender-identity-attack-path-lab/">
+<meta name="theme-color" content="#1b1a19">
+<link rel="stylesheet" href="../microsoft-defender-labs/shared/defender-lab.css">
+<script src="../microsoft-defender-labs/shared/kql-lite.js" defer></script>
+<script src="../microsoft-defender-labs/shared/defender-lab.js" defer></script>
+<script src="app.js" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LearningResource","name":"Microsoft Defender for Identity: attack paths, DCSync and token theft response","description":"Advanced console-replica lab: triage identity-domain alerts, read the identity exposure graph and choose the edge to cut, hunt DCSync in KQL, remediate a compromised identity in Entra ID Protection including refresh-token revocation, and close the path with privileged-access hardening under a documented risk acceptance.","learningResourceType":"Practice lab","educationalLevel":"Advanced","timeRequired":"PT90M","inLanguage":"en","isAccessibleForFree":true,"interactivityType":"active","teaches":"Identity threat triage, attack-path analysis, KQL over directory events, risky-user remediation, privileged access hardening","provider":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"},"creator":{"@type":"Person","name":"Pradeep Raju","jobTitle":"Founder & Senior Enterprise Infrastructure Architect","url":"https://www.linkedin.com/in/pradeepmcp826/"},"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/","citation":"https://learn.microsoft.com/en-us/defender-for-identity/"}
+</script>
+</head>
+<body data-lab-id="defender-identity-attack-path">
+<div id="labShell"></div>
+<div id="labViewsSource">
+
+<section class="view is-active" data-view="overview" data-view-label="Home · brief" aria-labelledby="ovT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Microsoft Defender portal</span><span class="sep" aria-hidden="true">›</span><span>Identities</span><span class="sep" aria-hidden="true">›</span><span class="current">Alert queue</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Defender XDR series · Lab 4 of 5 · Advanced</span><h1 id="ovT">On-premises Active Directory is still the crown</h1>
+    <p class="lede">Four alerts landed on the domain controllers between 02:10 and 04:40 UTC: a Kerberoasting pattern, a directory replication enquiry, an NTLM downgrade and a honeytoken hit. One of them is a false positive created by your own backup job. Nothing here can be fixed by resetting one password — the objective is to cut the path, not the symptom.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="intake">Required</span><button class="btn btn--primary" type="button" data-route="alerts">Open the identity alert queue</button></div>
+  </div>
+  <div class="notice info"><span class="n-ico" aria-hidden="true">i</span><div><b>Console replica · not Microsoft software · synthetic tenant.</b><p>Offline and deterministic: the KQL objectives run in your browser against six hand-built tables. No directory, no connector, no sensor is contacted. Account names, SIDs, hosts and addresses are fabricated (documentation ranges only) and no vendor marks are reproduced.</p></div></div>
+  <div class="grid-2">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objectives · 100 pts</span><h2>Seven graded decisions</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-route="guide">Full guide</button></span></div>
+      <ul class="gate-list">
+        <li class="gate"><span class="g-ico">1</span><div><b>Alert triage · 10</b><small>Which of the four alerts are real, and which one is your backup agent.</small></div></li>
+        <li class="gate"><span class="g-ico">2</span><div><b>Attack path · 15</b><small>Read the exposure graph and pick the single edge with the least collateral damage.</small></div></li>
+        <li class="gate"><span class="g-ico">3</span><div><b>Hunt the directory · 10</b><small>KQL over IdentityDirectoryEvents: prove who asked for replication data.</small></div></li>
+        <li class="gate"><span class="g-ico">4</span><div><b>Risky user remediation · 20</b><small>Order matters: sessions and <em>refresh</em> tokens, then password, then re-registration.</small></div></li>
+        <li class="gate"><span class="g-ico">5</span><div><b>Detection coverage · 10</b><small>Honeytoken, Lateral Movement path exemptions and what you deliberately do not exclude.</small></div></li>
+        <li class="gate"><span class="g-ico">6</span><div><b>Hardening the path · 20</b><small>Kerberos, NTLM, delegation, Protected Users and the dMSA decision.</small></div></li>
+        <li class="gate"><span class="g-ico">7</span><div><b>Report &amp; notify · 15</b><small>What is known, what is not, and which clock is running.</small></div></li>
+      </ul></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Environment</span><h2>What you are protecting</h2></div></div>
+      <dl class="kv">
+        <dt>Simulated "now"</dt><dd class="mono">2026-09-02T06:00:00Z</dd>
+        <dt>Forest</dt><dd class="mono">contoso-rcw.example · 2 domains · 6 DCs</dd>
+        <dt>Hybrid</dt><dd>Entra Connect (staged) · password writeback on · PHS enabled</dd>
+        <dt>Identities in scope</dt><dd class="mono">svc_backup · adrsync-02$ · DC-01$ · it.admin.k · svc_print</dd>
+        <dt>Sensors</dt><dd>DFI on all 6 DCs · traffic mirror healthy · one DC with a 4-minute clock skew</dd>
+        <dt>Change window</dt><dd>06:00–10:00 UTC today; anything else needs an emergency approval</dd>
+      </dl>
+      <div class="notice warn" style="margin-top:10px"><span class="n-ico" aria-hidden="true">!</span><div><b>The clock-skew line matters.</b><p>Kerberos tolerance is five minutes by default. A domain controller four minutes out of skew can produce failures that look like an attack, and can mask ones that are real. Note it before you conclude anything about authentication.</p></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="alerts" data-view-label="Identity alerts" hidden aria-labelledby="alT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Investigation &amp; response</span><span class="sep" aria-hidden="true">›</span><span class="current">Alerts</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 1 · 10 pts</span><h1 id="alT">Identity alert queue · 2026-09-02 night shift</h1>
+    <p class="lede">Select the alerts that belong to one campaign. The fourth one is your backup agent doing exactly what it was told to do.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="intake">Required</span></div>
+  </div>
+  <article class="card"><div class="card-head"><div><span class="kicker">Queue</span><h2>Four alerts, one correlated intrusion</h2></div></div>
+    <div class="grid-wrap"><table class="data-grid" id="idAlerts" data-selectable data-multi data-grid-name="Identity alerts" data-restore-rows>
+      <caption>Multi-select the alerts to include in the incident. <span class="muted" data-selection-count>No rows selected</span></caption>
+      <thead><tr><th scope="col">Alert</th><th scope="col" data-sort="al">Severity</th><th scope="col">Entity</th><th scope="col">Technique</th><th scope="col">Time (UTC)</th><th scope="col">Evidence</th></tr></thead>
+      <tbody>
+        <tr data-row-id="ALT-4401"><td class="mono">ALT-4401<span class="sub">Kerberoasting activity</span></td><td><span class="chip sev-high">High</span></td><td>svc_backup</td><td class="mono">T1558.003</td><td class="mono">02:14</td><td>214 service tickets in 6 minutes, 3 different SPNs</td></tr>
+        <tr data-row-id="ALT-4402"><td class="mono">ALT-4402<span class="sub">Suspicious user account mapping (recon)</span></td><td><span class="chip sev-medium">Medium</span></td><td>DC-01$</td><td class="mono">T1087.002</td><td class="mono">02:16</td><td>Enumerated all members of Protected Users from a workstation session</td></tr>
+        <tr data-row-id="ALT-4403"><td class="mono">ALT-4403<span class="sub">Active directory replication data access (DCSync)</span></td><td><span class="chip sev-high">High</span></td><td>it.admin.k</td><td class="mono">T1003.006</td><td class="mono">04:38</td><td>GetChangesAll on the domain naming context, from a server OS</td></tr>
+        <tr data-row-id="ALT-4404"><td class="mono">ALT-4404<span class="sub">Honeytoken account used</span></td><td><span class="chip sev-high">High</span></td><td>svc_honey01</td><td class="mono">T1187</td><td class="mono">04:40</td><td>NTLM auth attempt from 203.0.113.97 — this account must never authenticate</td></tr>
+        <tr data-row-id="ALT-4405"><td class="mono">ALT-4405<span class="sub">Suspicious connection to a domain controller</span></td><td><span class="chip sev-low">Low</span></td><td>backup-agent-02</td><td class="mono">T1087.002</td><td class="mono">03:02</td><td>Scheduled Veeam-style enumeration, matches the change record for the backup rollout</td></tr>
+      </tbody></table></div>
+    <p class="small muted">A honeytoken hit is never a false positive on its own: the account exists only to be used. Two alerts 24 seconds apart on the same account pair is correlation, not coincidence.</p>
+  </article>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 1</span><h2>Triage decision</h2></div><span class="obj-badge" data-objective-status="intake">Required</span></div>
+      <form id="form-intake" data-objective="intake" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">What you do with ALT-4405 (the backup agent)</span>
+            <select id="fpDecision"><option value="">Choose</option>
+              <option value="o1">False positive with determination, then an alert-tuning rule for that alert name and device group, with a review date</option>
+              <option value="o2">Close all five alerts as false positives so the queue is clear for the day shift</option>
+              <option value="o3">Disable the DFI sensor on that host</option></select></label>
+          <label class="field"><span class="lbl">Handling the clock skew on DC-03</span>
+            <select id="skew"><option value="">Choose</option>
+              <option value="o1">Fix NTP first; note in the record that authentication anomalies on that DC are unreliable until then</option>
+              <option value="o2">Ignore — the sensor timestamp is always accurate</option>
+              <option value="o3">Treat every Kerberos failure as an attack</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">Why the four alerts are one incident and not four (min 90 chars)</span>
+          <textarea id="whyOne" rows="3"></textarea></label>
+        <div class="msg" id="msg-intake" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Create the incident from these alerts</button></div>
+      </form></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Reading the alerts</span><h2>What each one really claims</h2></div></div>
+      <dl class="kv">
+        <dt>Kerberoasting (4401)</dt><dd>Service tickets requested for SPNs with weak history. It proves *requests*, not a cracked password — say so in the record.</dd>
+        <dt>Account mapping (4402)</dt><dd>A machine account enumerated the privileged groups. Normal for some scanners, so look at the source: it came from a workstation session, not a service.</dd>
+        <dt>DCSync (4403)</dt><dd>GetChangesAll requires replication rights. If the account legitimately has them, this is a permission design problem as much as an attack.</dd>
+        <dt>Honeytoken (4404)</dt><dd>Definitive. Anything that touches it is in the environment with credentials it should not possess.</dd>
+        <dt>Backup enumeration (4405)</dt><dd>Matches a change record. Suppress narrowly, with an owner and an expiry — do not turn off the detection class.</dd>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="graph" data-view-label="Exposure graph" hidden aria-labelledby="gpT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Identities</span><span class="sep" aria-hidden="true">›</span><span class="current">Identity exposure graph</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 2 · 15 pts</span><h1 id="gpT">The path is a graph, not a list of names</h1>
+    <p class="lede">Six edges connect the attacker's foothold to Domain Administrators. Cutting the wrong one breaks a business process; cutting the right one removes three paths at once.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="recon">Required</span></div>
+  </div>
+  <article class="card"><div class="card-head"><div><span class="kicker">Attack path AP-118</span><h2>Workstation foothold → Enterprise Admins in four hops</h2></div>
+    <span class="card-actions"><span class="tag attack">Critical path</span><span class="tag grey">6 edges</span></span></div>
+    <div class="graph-wrap" role="img" aria-label="Attack path graph: FIN-WKS-0777 connects to svc_print, which is a member of the Helpdesk group, which has generic reset rights on IT-ADMIN-K, which has unconstrained delegation on APP-SRV-01, which is a member of Domain Admins on DC-01. A second edge runs from svc_backup through the Account Operators group to DC-01.">
+      <svg viewBox="0 0 900 300" class="pathgraph" preserveAspectRatio="xMidYMid meet">
+        <title id="pathgraphTitle">Identity attack path diagram</title>
+        <defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arw-fill"></path></marker></defs>
+        <g class="edges">
+          <path d="M150,80 C220,80 230,140 300,140" marker-end="url(#arw)"></path>
+          <path d="M420,140 C470,140 470,80 520,80" marker-end="url(#arw)" class="is-hot"></path>
+          <path d="M640,80 C700,80 700,140 760,140" marker-end="url(#arw)"></path>
+          <path d="M300,200 C380,200 420,240 520,240" marker-end="url(#arw)"></path>
+          <path d="M640,240 C700,240 700,180 760,180" marker-end="url(#arw)"></path>
+          <path d="M420,140 C470,180 470,200 520,200" marker-end="url(#arw)"></path>
+        </g>
+        <g class="nodes">
+          <g><rect x="40" y="60" width="110" height="42" rx="6"></rect><text x="95" y="78">FIN-WKS-0777</text><text x="95" y="93" class="nsub">foothold</text></g>
+          <g><rect x="300" y="119" width="120" height="42" rx="6"></rect><text x="360" y="137">svc_print</text><text x="360" y="152" class="nsub">Helpdesk</text></g>
+          <g><rect x="520" y="59" width="120" height="42" rx="6"></rect><text x="580" y="77">it.admin.k</text><text x="580" y="92" class="nsub">unconstrained deleg.</text></g>
+          <g><rect x="760" y="119" width="110" height="42" rx="6"></rect><text x="815" y="137">DC-01</text><text x="815" y="152" class="nsub">DA / EA</text></g>
+          <g><rect x="180" y="180" width="120" height="42" rx="6"></rect><text x="240" y="198">svc_backup</text><text x="240" y="213" class="nsub">Account Operators</text></g>
+          <g><rect x="520" y="219" width="120" height="42" rx="6"></rect><text x="580" y="237">APP-SRV-01</text><text x="580" y="252" class="nsub">Domain Admins</text></g>
+        </g>
+      </svg>
+    </div>
+    <p class="small muted">The highlighted edge is the one the graph engine scores as the shortest exploitable hop with the highest exposure. Read the table before you decide whether you agree with it.</p>
+  </article>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Edges</span><h2>Select the single edge you cut today</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid" id="pathEdges" data-selectable data-grid-name="Attack path edges" data-restore-rows>
+        <caption>Single select. <span class="muted" data-selection-count>No row selected</span></caption>
+        <thead><tr><th scope="col">Edge</th><th scope="col">Rights</th><th scope="col">Exploitable now?</th><th scope="col">Cost of removing</th></tr></thead>
+        <tbody>
+          <tr data-row-id="EDGE-1"><td class="mono">svc_print → Helpdesk</td><td>Reset password on 410 non-privileged accounts</td><td>Yes</td><td>Self-service password reset stops working</td></tr>
+          <tr data-row-id="EDGE-2"><td class="mono">Helpdesk → it.admin.k</td><td>GenericAll on 3 accounts, one of them a DA</td><td>Yes</td><td>None — the right was granted by mistake in 2021</td></tr>
+          <tr data-row-id="EDGE-3"><td class="mono">it.admin.k → APP-SRV-01</td><td>Unconstrained delegation on a server running an unsupported app</td><td>Yes — already used in the alert chain</td><td>Medium — needs a service account replacement plan</td></tr>
+          <tr data-row-id="EDGE-4"><td class="mono">svc_backup → Account Operators</td><td>Create and manage groups</td><td>Suspected (4401)</td><td>Backup job must move to a scoped gMSA</td></tr>
+          <tr data-row-id="EDGE-5"><td class="mono">APP-SRV-01 → DC-01</td><td>Domain Admins membership</td><td>Yes</td><td>Breaking — the payroll batch runs as this account</td></tr>
+          <tr data-row-id="EDGE-6"><td class="mono">FIN-WKS-0777 → svc_print</td><td>Local admin to saved credentials</td><td>Yes</td><td>None — rotate and remove the saved credential</td></tr>
+        </tbody></table></div>
+      <p class="small muted">Removing the delegation edge (EDGE-3) removes the already-used hop and does not stop a business process; EDGE-5 is the true crown but cannot be cut before the batch job is fixed. That trade-off is the whole exercise.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 2</span><h2>Justify the cut</h2></div><span class="obj-badge" data-objective-status="recon">Required</span></div>
+      <form id="form-recon" data-objective="recon" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Why not cut the Domain Admins membership itself</span>
+            <select id="pathWhy"><option value="">Choose</option>
+              <option value="o1">Because it is the correct end state but a running business process depends on it — cut an adjacent edge today and schedule this one with an owner</option>
+              <option value="o2">Because Domain Admins is not a real path</option>
+              <option value="o3">Because the graph engine is authoritative and must not be questioned</option></select></label>
+          <label class="field"><span class="lbl">What the graph cannot tell you</span>
+            <select id="pathLimits"><option value="">Choose</option>
+              <option value="o1">Whether the edge was actually used, and what the attacker did with it — that is what the alerts and the directory hunt are for</option>
+              <option value="o2">Nothing; the graph is a complete audit log</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">Second path the graph may be missing (min 110 chars)</span>
+          <textarea id="pathNote" rows="4" placeholder="Think about what the sensor cannot see: on-prem-only groups, SIDHistory, AD FS tokens, service accounts with non-expiring SPNs"></textarea></label>
+        <div class="msg" id="msg-recon" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save the path decision</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="hunt" data-view-label="Directory hunt" hidden aria-labelledby="hkT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Investigation &amp; response</span><span class="sep" aria-hidden="true">›</span><span class="current">Advanced hunting · identity</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 3 · 10 pts</span><h1 id="hkT">Who asked the domain controller for replication data?</h1>
+    <p class="lede">One query, one answer, and a follow-up decision based on your own result.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="hunt">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Query</span><h2>DCSync-style replication requests, last 30 days</h2></div></div>
+      <p class="small">Requirements: start from <code>IdentityDirectoryEvents</code>, bound the window, keep only <code>ActionType == 'DirectoryServiceReplicationGetChangesAll'</code>, and summarise by <code>AccountName</code>. Then state what you do about the result.</p>
+      <label class="field"><span class="lbl">KQL</span><textarea id="idQuery" data-kql="idQuery" class="kql-editor" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></label>
+      <div class="kql-toolbar"><button class="btn btn--sm" type="button" id="run-idQuery">Run</button><button class="btn btn--sm" type="button" id="fmt-idQuery">Format</button><button class="btn btn--sm" type="button" id="clr-idQuery">Clear</button><span class="grow"></span><span class="small muted" id="meta-idQuery">not run</span></div>
+      <div class="msg" id="err-idQuery" role="alert" hidden></div>
+      <div id="res-idQuery" class="grid-wrap"></div>
+      <p class="small muted">Available: <code>IdentityDirectoryEvents</code>, <code>IdentityLogonEvents</code>, <code>IdentityInfo</code>, <code>DeviceProcessEvents</code>, <code>DeviceNetworkEvents</code>, <code>AlertInfo</code>.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 3</span><h2>Interpret the result</h2></div><span class="obj-badge" data-objective-status="hunt">Required</span></div>
+      <form id="form-hunt" data-objective="hunt" novalidate>
+        <label class="field"><span class="lbl">Your query returned two accounts. What is the correct reading?</span>
+          <select id="huntNext"><option value="">Choose</option>
+            <option value="o1">One has legitimate replication rights by design (the sync account) and must be verified against its expected source host; the other has no such right and is confirmed credential abuse</option>
+            <option value="o2">Both are attacks — DCSync is never legitimate</option>
+            <option value="o3">Neither: GetChangesAll is only used by malware</option></select></label>
+        <label class="field"><span class="lbl">Why summarise by account instead of listing events (min 60 chars)</span>
+          <textarea id="huntWhy" rows="3"></textarea></label>
+        <div class="msg" id="msg-hunt" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save hunt and open the risky user</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="entra" data-view-label="Risky user" hidden aria-labelledby="enT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Identities</span><span class="sep" aria-hidden="true">›</span><span>Entra ID Protection</span><span class="sep" aria-hidden="true">›</span><span class="current">Risky user</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 4 · 20 pts</span><h1 id="enT">it.admin.k — risk confirmed, and the order is the whole point</h1>
+    <p class="lede">A password reset alone does not stop a stolen refresh token. Perform the actions in the order that actually removes access, using the action bar below; each click is recorded.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="token">Required</span><span class="chip sev-high">Risk level: high</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">User at risk</span><h2>Detected anomalies</h2></div></div>
+      <dl class="kv">
+        <dt>Risk state</dt><dd>Confirmed compromised risk</dd>
+        <dt>Detections</dt><dd>Anonymous IP address · Atypical travel (11 minutes, impossible) · Malicious IP login</dd>
+        <dt>Last sign-in</dt><dd class="mono">2026-09-02 04:36 UTC · from 203.0.113.97 · Chrome on Windows</dd>
+        <dt>Sessions today</dt><dd>3 · 1 with a refresh token minted at 04:37</dd>
+        <dt>License / policy</dt><dd>P2 · MFA registered (FIDO2 + phone) · self-service reset enabled</dd>
+        <dt>On-premises</dt><dd>Domain account enabled · member of Domain Admins (via APP-SRV-01 path)</dd>
+        <dt>Protection state</dt><dd><b>Not blocked on-premises</b> — a cloud disable does not stop Kerberos tickets</dd>
+      </dl>
+      <div class="notice warn" style="margin-top:10px"><span class="n-ico" aria-hidden="true">!</span><div><b>The last line is the trap.</b><p>Disabling the cloud account and resetting the cloud password does not affect the on-premises account while writeback is scoped away from privileged accounts. Both sides need an action, and the record must say so.</p></div></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Action bar</span><h2>Click in the order you would really work</h2></div>
+      <span class="card-actions"><button class="btn btn--sm" type="button" id="tokenReset">Reset sequence</button></span></div>
+      <div class="grid-2" style="gap:8px" role="group" aria-label="Remediation actions for the risky user">
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Confirm compromise">Confirm compromise</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Dismiss risk">Dismiss risk</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Revoke active sessions">Revoke active sessions</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Revoke refresh tokens">Revoke refresh tokens</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Disable user account">Disable user account</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Block sign-in on-premises (AD)">Block sign-in on-premises (AD)</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Reset password (cloud and on-premises)">Reset password (cloud and on-premises)</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Require re-registration of authentication methods">Require re-registration of authentication methods</button>
+        <button class="btn btn--sm" type="button" data-seq-obj="token" data-seq-step="Delete the user">Delete the user</button>
+      </div>
+      <p class="small muted">The sequence you click is graded against the documented containment order. “Revoke refresh tokens” after a password reset is the mistake that leaves an attacker holding a working token for up to its lifetime.</p>
+      <form id="form-token" data-objective="token" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Scope of the disable action you chose</span>
+            <select id="disableScope"><option value="">Choose</option>
+              <option value="o1">Block sign-in in Entra AND set the on-premises account as disabled / expired, then confirm the sync state</option>
+              <option value="o2">Entra only — the cloud is the only thing that matters</option></select></label>
+          <label class="field"><span class="lbl">Do you require re-registration of MFA?</span>
+            <select id="mfaWhy"><option value="">Choose</option>
+              <option value="o1">Yes — the phone factor was registered on a device inside the blast radius, so the registration itself is untrusted</option>
+              <option value="o2">No — a password reset is enough</option>
+              <option value="o3">No — deleting the account is cleaner</option></select></label>
+        </div>
+        <fieldset><legend>Around the account</legend>
+          <label class="check"><input type="checkbox" id="tkA"><span><b>Kerberos ticket-granting state considered: the SPNs owned by this identity were re-keyed</b></span></label>
+          <label class="check"><input type="checkbox" id="tkB"><span><b>Mail rule and inbox-forward check run on the mailbox before it was locked</b></span></label>
+          <label class="check"><input type="checkbox" id="tkC"><span><b>Legacy authentication is now blocked for this account (or the tenant, with a documented exception)</b></span></label>
+          <label class="check"><input type="checkbox" id="tkD"><span><b>KRBTGT double-rollback discussed and deferred with a reason, not skipped</b></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Containment note (min 160 chars, no addresses)</span>
+          <textarea id="tokenNote" rows="4"></textarea></label>
+        <div class="msg" id="msg-token" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Submit the remediation</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="configure" data-view-label="Detection coverage" hidden aria-labelledby="cfT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Identities</span><span class="sep" aria-hidden="true">›</span><span>Configuration</span><span class="sep" aria-hidden="true">›</span><span class="current">Exclusions &amp; honeytoken</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 5 · 10 pts</span><h1 id="cfT">Coverage is a setting you can lose by accident</h1>
+    <p class="lede">Two of the “fixes” below would have removed the alert that caught this intrusion. Choose what to exclude, and why.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="honey">Required</span></div>
+  </div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Pending exclusion requests</span><h2>Approve none, one, or two</h2></div></div>
+      <div class="grid-wrap"><table class="matrix">
+        <thead><tr><th scope="col">Request</th><th scope="col">From</th><th scope="col">Would it hide this attack?</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Exclude backup-agent-02 from “suspicious connection to a DC”</th><td>Infrastructure team</td><td>No — the alert name is still monitored elsewhere, and the account is not the one used</td></tr>
+          <tr><th scope="row">Exclude the whole “Account Operations” alert category</th><td>Service desk</td><td><b>Yes</b> — it contains the enumeration that preceded the DCSync</td></tr>
+          <tr><th scope="row">Exclude svc_honey01 from all monitoring</th><td>Unattributed, raised at 05:01</td><td><b>Yes</b> — and it is the trip-wire; a request to mute a honeytoken at 05:01 is itself an indicator</td></tr>
+          <tr><th scope="row">Exclude DC-03 from sensors until NTP is fixed</th><td>Server team</td><td><b>Yes</b> — fix the clock instead; excluding a DC removes visibility of exactly the traffic you need</td></tr>
+        </tbody></table></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 5</span><h2>Configuration decision</h2></div><span class="obj-badge" data-objective-status="honey">Required</span></div>
+      <form id="form-honey" data-objective="honey" novalidate>
+        <label class="field"><span class="lbl">Which exclusion request do you approve?</span>
+          <select id="exclApprove"><option value="">Choose</option>
+            <option value="o1">Only the backup agent, scoped to that alert name and that device group, with a review date</option>
+            <option value="o2">Backup agent and the Account Operations category</option>
+            <option value="o3">All four — the queue is unusable</option></select></label>
+        <label class="field"><span class="lbl">Honeytoken account: what makes it usable as a control</span>
+          <select id="honeySetup"><option value="">Choose</option>
+            <option value="o1">Never signed in, no mailbox, description and group membership documented, and the alert routed to a human with a runbook</option>
+            <option value="o2">A strong password plus a mailbox so it looks real</option>
+            <option value="o3">It is added to Domain Users so the account appears normal</option></select></label>
+        <fieldset><legend>Coverage checks</legend>
+          <label class="check"><input type="checkbox" id="cx1"><span><b>Every domain controller still reports a healthy sensor after the change</b></span></label>
+          <label class="check"><input type="checkbox" id="cx2"><span><b>The 05:01 request to mute svc_honey01 is recorded in the incident as suspicious</b></span></label>
+          <label class="check"><input type="checkbox" id="cx3"><span><b>Exclusions are documented in the runbook with owner and expiry</b></span></label>
+        </fieldset>
+        <div class="msg" id="msg-honey" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save coverage settings</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="harden" data-view-label="Hardening" hidden aria-labelledby="hdT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Identities</span><span class="sep" aria-hidden="true">›</span><span class="current">Hardening plan</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 6 · 20 pts</span><h1 id="hdT">Four actions this sprint, one exception with a date</h1>
+    <p class="lede">The path exists because of permissions, protocols and hygiene. Pick what you can land in two weeks without breaking payroll, and write down what you are deliberately not doing yet.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="harden">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Candidate mitigations</span><h2>Select exactly four to schedule now</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid" id="mitigations" data-selectable data-multi data-grid-name="Mitigations" data-restore-rows>
+        <caption>Multi-select exactly four. <span class="muted" data-selection-count>No rows selected</span></caption>
+        <thead><tr><th scope="col">ID</th><th scope="col">Mitigation</th><th scope="col">Blocks</th><th scope="col">Effort</th><th scope="col">Breaks</th></tr></thead>
+        <tbody>
+          <tr data-row-id="MIT-1"><td class="mono">MIT-1</td><td>Remove unconstrained delegation from APP-SRV-01; replace with resource-based constrained delegation<span class="sub">Directly removes the exploited edge EDGE-3</span></td><td>T1558.004</td><td>Medium</td><td>Nothing if the SPN is migrated in the same window</td></tr>
+          <tr data-row-id="MIT-2"><td class="mono">MIT-2</td><td>Revoke GenericAll on it.admin.k from the Helpdesk group<span class="sub">Closes the mistaken 2021 grant</span></td><td>T1098.001</td><td>Low</td><td>Nothing</td></tr>
+          <tr data-row-id="MIT-3"><td class="mono">MIT-3</td><td>Move svc_backup to a gMSA with a 40-character password and remove its interactive logon right<span class="sub">Kerberoasting target becomes unkernelable</span></td><td>T1558.003</td><td>Medium</td><td>Backup job must be re-pointed (planned)</td></tr>
+          <tr data-row-id="MIT-4"><td class="mono">MIT-4</td><td>Add all tier-0 and privileged accounts to Protected Users<span class="sub">No NTLM, weaker encryption, no cached creds</span></td><td>T1558.004</td><td>Medium</td><td>Legacy agents using NTLM break — audit first</td></tr>
+          <tr data-row-id="MIT-5"><td class="mono">MIT-5</td><td>Disable LDAP signing enforcement to reduce help-desk tickets</td><td>nothing — helps the attacker</td><td>Low</td><td>Sensitive-data exposure (T1021.005)</td></tr>
+          <tr data-row-id="MIT-6"><td class="mono">MIT-6</td><td>Set the domain functional level to 2016 and enable SAM-R filtering only</td><td>partly</td><td>Low</td><td>Nothing, but it does not address this path</td></tr>
+          <tr data-row-id="MIT-7"><td class="mono">MIT-7</td><td>Deploy LAPS across all workstations and remove local admin from every user<span class="sub">Removes the credential source at the foothold</span></td><td>T1078</td><td>High</td><td>Two apps need elevation — use a broker</td></tr>
+        </tbody></table></div>
+      <p class="small muted">MIT-5 and MIT-6 are the two options that look like hardening and are not. Choosing “all of the above” is exactly how a sprint becomes a slide.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 6</span><h2>Decisions and the exception</h2></div><span class="obj-badge" data-objective-status="harden">Required</span></div>
+      <form id="form-harden" data-objective="harden" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">NTLM on servers</span>
+            <select id="ntlm"><option value="">Choose</option>
+              <option value="o1">Audit first with the deny list in audit mode, then enforce on the tier-0 servers this sprint</option>
+              <option value="o2">Enforce everywhere tonight — NTLM is obsolete</option></select></label>
+          <label class="field"><span class="lbl">KRBTGT rollback</span>
+            <select id="krbtgt"><option value="">Choose</option>
+              <option value="o1">Deferred: twice, 12 hours apart, with all tier-0 sessions ended — scheduled with an owner because a single reset leaves stale tickets valid</option>
+              <option value="o2">Do it once now and close the item</option>
+              <option value="o3">Skip; nobody can forge tickets forever anyway</option></select></label>
+          <label class="field"><span class="lbl">Service accounts: dMSA vs gMSA</span>
+                <select id="dmsa"><option value="">Choose</option>
+                  <option value="o1">gMSA where the host is domain-joined and modern; dMSA for the legacy hosts that cannot use gMSA</option>
+                  <option value="o2">Keep the managed local accounts plan; nothing to do with AD</option></select></label>
+          <label class="field"><span class="lbl">Exception you accept today</span>
+            <select id="exception"><option value="">Choose</option>
+              <option value="o1">APP-SRV-01 keeps Domain Admins until the payroll batch is rewritten — owner, compensating control and expiry recorded in the risk register</option>
+              <option value="o2">No exceptions: everything gets fixed this week</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">Compensating control while that exception is open (min 90 chars)</span>
+          <textarea id="compControl" rows="3"></textarea></label>
+        <div class="msg" id="msg-harden" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">File the hardening plan</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="report" data-view-label="Report &amp; notify" hidden aria-labelledby="rpT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Incidents</span><span class="sep" aria-hidden="true">›</span><span class="current">Report and notification</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 7 · 15 pts</span><h1 id="rpT">What you can say, and to whom, by when</h1>
+    <p class="lede">The tenant is an EU hospital group: an essential entity under NIS2, personal data of patients in the affected file share, and no financial-services oversight. The regulator clocks are different from last week's bank.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="report">Required</span></div>
+  </div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Evidence at 06:00 UTC</span><h2>Confirmed, indicated, unknown</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-evidence="copy">Copy summary</button></span></div>
+      <table class="data-grid"><thead><tr><th scope="col">Claim</th><th scope="col">Status</th><th scope="col">Because</th></tr></thead>
+        <tbody>
+          <tr><td>Credential material for svc_backup was requested (Kerberoasting pattern)</td><td><span class="chip done">Confirmed</span></td><td>214 service tickets in 6 minutes; honeytoken tripped 2 h later</td></tr>
+          <tr><td>Replication data was read from DC-01 by an account without a right to it</td><td><span class="chip done">Confirmed</span></td><td>GetChangesAll from 203.0.113.97 · source host is not a DC</td></tr>
+          <tr><td>The svc_backup password was cracked and used</td><td><span class="chip warn">Indicated</span></td><td>Logon from an anomalous source after the ticket storm — no offline-cracking artefact</td></tr>
+          <tr><td>Patient-identifying data was exfiltrated</td><td><span class="chip sev-high">Not established</span></td><td>9.7 MB staged, upload failed; no egress confirmed</td></tr>
+          <tr><td>Two more accounts were mapped but not used</td><td><span class="chip done">Confirmed</span></td><td>Directory enumeration events; no authentication followed</td></tr>
+        </tbody></table>
+      <p class="small muted">A regulator-facing summary that upgrades “indicated” to “confirmed” is not confidence, it is a defect — and it is the sentence that gets quoted back at you.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 7</span><h2>Notification decision</h2></div><span class="obj-badge" data-objective-status="report">Required</span></div>
+      <form id="form-report" data-objective="report" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Which clock applies to the competent authority?</span>
+            <select id="clock"><option value="">Choose</option>
+              <option value="o1">NIS2 Art. 23(4): early warning within 24 hours, incident notification within 72 hours, final report within one month</option>
+              <option value="o2">DORA Art. 19: initial notification within 4 hours</option>
+              <option value="o3">None — this was contained before 06:00</option></select></label>
+          <label class="field"><span class="lbl">GDPR Article 33 for the patient data</span>
+            <select id="gdpr"><option value="">Choose</option>
+              <option value="o1">Notify the supervisory authority within 72 hours of awareness, and the data subjects without undue delay if the risk is high — record the reasoning either way</option>
+              <option value="o2">Never, because no exfiltration was confirmed</option></select></label>
+          <label class="field"><span class="lbl">Who is told at 06:15, before any filing</span>
+            <select id="whoTold"><option value="">Choose</option>
+              <option value="o1">CISO, DPO, the hospital IT owner and the on-call executive, with the confirmed/indicated split stated</option>
+              <option value="o2">Everyone in a company-wide email, so nobody is surprised</option></select></label>
+          <label class="field"><span class="lbl">Where does the “indicated” claim go?</span>
+            <select id="indicated"><option value="">Choose</option>
+              <option value="o1">Into the incident record as unverified, with the specific evidence that would confirm or clear it</option>
+              <option value="o2">Left out — the report should only carry certainty</option></select></label>
+        </div>
+        <label class="field"><span class="lbl">Executive summary (min 200 chars, no addresses or names of people)</span>
+          <textarea id="execSum" rows="5"></textarea></label>
+        <div class="msg" id="msg-report" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">File the record and finish the lab</button>
+          <button class="btn" type="button" data-evidence="download">Export evidence pack</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="guide" data-view-label="Lab guide" hidden aria-labelledby="gdT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>RCW IT Training</span><span class="sep" aria-hidden="true">›</span><span class="current">Lab guide</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="gdT">Marking, deliberate traps, and what this lab cannot teach</h1></div>
+    <div class="head-actions"><button class="btn btn--sm" type="button" data-route="overview">Back to the lab</button></div></div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Marking</span><h2>How the 100 points are awarded</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid">
+        <thead><tr><th scope="col">#</th><th scope="col">Objective</th><th scope="col">Pts</th><th scope="col">Validated behaviour</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>Alert triage</td><td class="num">10</td><td>Exactly the four campaign alerts selected, the backup alert handled as a false positive with a narrow suppression, skew acknowledged, correlation argued in writing</td></tr>
+          <tr><td class="num">2</td><td>Attack path</td><td class="num">15</td><td>One edge chosen (the already-used delegation hop), the Domain Admins trade-off understood, a path the graph cannot see described</td></tr>
+          <tr><td class="num">3</td><td>Directory hunt</td><td class="num">10</td><td>Bounded KQL over IdentityDirectoryEvents returning exactly the two accounts, plus the correct legitimate-vs-abuse reading</td></tr>
+          <tr><td class="num">4</td><td>Risky user remediation</td><td class="num">20</td><td>Documented order of actions, both cloud and on-premises disable, refresh-token revocation before the password reset, no deletion, four surrounding checks, containment note</td></tr>
+          <tr><td class="num">5</td><td>Detection coverage</td><td class="num">10</td><td>Only the narrowly scoped exclusion approved, honeytoken properties correct, three coverage checks confirmed</td></tr>
+          <tr><td class="num">6</td><td>Hardening</td><td class="num">20</td><td>Exactly four feasible mitigations (not the two decoys), NTLM audited before enforced, KRBTGT deferred with a reason, a real compensating control for the accepted exception</td></tr>
+          <tr><td class="num">7</td><td>Report &amp; notify</td><td class="num">15</td><td>NIS2 clocks (not DORA) chosen for this entity, Article 33 handled on risk, confirmed/indicated distinction preserved, 200-character summary without personal data</td></tr>
+        </tbody></table></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Traps in this lab</span><h2>Six things that cost points on purpose</h2></div></div>
+      <ol class="rules">
+        <li><b>“Both DCSync accounts are attacks.”</b> One is the sync account by design. Verify the source host before you disable a connector and stop the directory synchronising.</li>
+        <li><b>Password reset before token revocation.</b> The refresh token keeps minting access tokens after the reset; the attacker does not notice for hours.</li>
+        <li><b>Cloud-only disable of a hybrid account.</b> On-premises Kerberos keeps working; the record must state both actions.</li>
+        <li><b>Excluding an alert <em>category</em> to please a queue.</b> Approve the narrow request, refuse the category, and treat a 05:01 request to mute the honeytoken as an indicator.</li>
+        <li><b>Disabling LDAP signing as “hardening”.</b> It is the opposite; the option is there to be resisted.</li>
+        <li><b>Importing last week's regulator.</b> DORA's four-hour clock belongs to financial entities. This tenant is an essential entity under NIS2 with GDPR duties — read the entity, not the habit.</li>
+      </ol>
+      <div class="notice" style="margin-top:12px"><span class="n-ico" aria-hidden="true">§</span><div><b>Standards mapped</b><p>MITRE ATT&amp;CK for enterprise: T1558.003, T1558.004, T1003.006, T1098.001, T1187, T1087.002, T1078. Process: NIST SP 800-61r3 §3.3 containment and §3.4 eradication/recovery; ISO/IEC 27001:2022 A.5.15, A.5.17, A.8.2 (privileged access), A.8.16 (monitoring). Timelines: NIS2 Art. 23(4), GDPR Art. 33/34. Training aid only, not certification preparation, and not affiliated with or endorsed by Microsoft.</p></div></div>
+    </article>
+  </div>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Limits</span><h2>What this replica cannot teach you</h2></div></div>
+      <ul class="rules">
+        <li>No directory is queried, so you will not learn the PowerShell module, repadmin output or the shape of a real replication metadata dump.</li>
+        <li>No Entra tenant, so the portals' latency, licensing gates and conditional-access evaluation What-If are absent.</li>
+        <li>Six tables with a handful of rows: real hunting is dominated by schema discovery, retention surprises and query cost, not syntax.</li>
+        <li>Nothing here rehearses the human part: the 06:15 phone call, the trust you lose by over-claiming, the negotiating with the payroll team about a two-week fix.</li>
+      </ul>
+      <p class="small muted">Everything is deterministic and offline; the state lives in your browser's localStorage and is wiped by the reset control.</p></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Data &amp; access</span><h2>Synthetic identifiers, accessible controls</h2></div></div>
+      <table class="data-grid"><thead><tr><th scope="col">Kind</th><th scope="col">In this lab</th><th scope="col">Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Accounts</td><td class="mono">svc_backup · it.admin.k · svc_honey01</td><td>Invented; no real UPNs, no directory suffixes outside <code>.example</code></td></tr>
+          <tr><td>Hosts</td><td class="mono">DC-01 · APP-SRV-01 · FIN-WKS-0777</td><td>Role-prefixed, local only</td></tr>
+          <tr><td>Addresses</td><td class="mono">203.0.113.97 · 2001:db8::ff:1</td><td>RFC 5737 / RFC 4193 documentation ranges</td></tr>
+          <tr><td>Graph</td><td>Hand-drawn SVG</td><td>No vendor iconography, no Microsoft marks</td></tr>
+        </tbody></table>
+      <p class="small muted">The path diagram carries a full <code>aria-label</code> description and the notes table repeats every edge in text, so nothing important exists only as a picture. Actions are real buttons with visible focus; the sequence state is announced in a live region; forced-colours and reduced-motion are honoured by the shared stylesheet.</p>
+      <p class="small"><a href="../microsoft-defender-labs/compliance-standards.html">Series compliance standard →</a></p></article>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

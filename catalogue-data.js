@@ -2778,4 +2778,65 @@ window.RCW_CATALOGUE = Object.freeze([
     "subcategory": "Exam Practice",
     "group": "Bootcamp"
   }
+
+  ,{
+    "title": "Defender incident triage, response and closure · advanced lab",
+    "category": "Microsoft Defender • Incident triage • KQL blast radius • Console Replica • Lab 1 of 5",
+    "badge": "TRIAGE-XDR",
+    "accent": "#ef405b",
+    "id": "defender-incident-triage-lab",
+    "targetUrl": "https://www.rcwittraining.in/defender-incident-triage-lab/",
+    "contentType": "Lab",
+    "technology": "Cybersecurity",
+    "subcategory": "Incident Response",
+    "group": "Technology Labs"
+  }
+  ,{
+    "title": "Defender for Endpoint containment and live response · advanced lab",
+    "category": "Microsoft Defender • Endpoint containment • Live response • Console Replica • Lab 2 of 5",
+    "badge": "CONTAIN-EDR",
+    "accent": "#ef405b",
+    "id": "defender-endpoint-containment-lab",
+    "targetUrl": "https://www.rcwittraining.in/defender-endpoint-containment-lab/",
+    "contentType": "Lab",
+    "technology": "Cybersecurity",
+    "subcategory": "Incident Response",
+    "group": "Technology Labs"
+  }
+  ,{
+    "title": "Defender advanced hunting to working detection · advanced lab",
+    "category": "Microsoft Defender • Advanced hunting • Custom detection • Console Replica • Lab 3 of 5",
+    "badge": "HUNT-KQL",
+    "accent": "#ef405b",
+    "id": "defender-advanced-hunting-lab",
+    "targetUrl": "https://www.rcwittraining.in/defender-advanced-hunting-lab/",
+    "contentType": "Lab",
+    "technology": "Cybersecurity",
+    "subcategory": "Incident Response",
+    "group": "Technology Labs"
+  }
+  ,{
+    "title": "Defender identity attack paths and hybrid containment · advanced lab",
+    "category": "Microsoft Defender • Identity attack path • Hybrid AD • Console Replica • Lab 4 of 5",
+    "badge": "IDENTITY-PATH",
+    "accent": "#ef405b",
+    "id": "defender-identity-attack-path-lab",
+    "targetUrl": "https://www.rcwittraining.in/defender-identity-attack-path-lab/",
+    "contentType": "Lab",
+    "technology": "Cybersecurity",
+    "subcategory": "Incident Response",
+    "group": "Technology Labs"
+  }
+  ,{
+    "title": "Defender for Office 365 campaign containment and tracking · advanced lab",
+    "category": "Microsoft Defender for Office 365 • Phish campaign • ZAP and tracking • Lab 5 of 5",
+    "badge": "MAIL-XDR",
+    "accent": "#ef405b",
+    "id": "defender-email-campaign-lab",
+    "targetUrl": "https://www.rcwittraining.in/defender-email-campaign-lab/",
+    "contentType": "Lab",
+    "technology": "Cybersecurity",
+    "subcategory": "Incident Response",
+    "group": "Technology Labs"
+  }
 ]);

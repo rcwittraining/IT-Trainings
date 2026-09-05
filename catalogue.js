@@ -9,7 +9,7 @@
     empty: document.getElementById('emptySearch'), technology: document.getElementById('technologyFilter'), type: document.getElementById('typeFilter'),
     group: document.getElementById('groupFilter'), subcategory: document.getElementById('subcategoryFilter'), sort: document.getElementById('sortFilter'),
     tabs: document.getElementById('groupTabs'), active: document.getElementById('activeFilter'), clear: document.getElementById('clearFilters'),
-    practice: document.getElementById('filterRhcsa'), incident: document.getElementById('filterIncidentResponse'), total: document.getElementById('catalogueTotal'), technologies: document.getElementById('technologyTotal')
+    practice: document.getElementById('filterRhcsa'), incident: document.getElementById('filterIncidentResponse'), defender: document.getElementById('filterDefender'), total: document.getElementById('catalogueTotal'), technologies: document.getElementById('technologyTotal')
   };
 
   function safeText(value) {
@@ -152,6 +152,12 @@
     elements.group.value = PRACTICE_GROUP; expandedGroups = Object.create(null); renderTabs(); render();
     document.querySelector('.catalogue-controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+  if (elements.defender && elements.search) {
+    elements.defender.addEventListener('click', function () {
+      elements.search.value = 'Defender'; elements.search.dispatchEvent(new Event('input', { bubbles: true }));
+      document.querySelector('.catalogue-controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
   if (elements.incident) {
     elements.incident.addEventListener('click', function () {
       elements.group.value = 'Incident Response'; expandedGroups = Object.create(null); renderTabs(); render();

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Defender lab series meets its compliance standard · RCW IT Training</title>
+<meta name="description" content="The written standard behind RCW IT Training's Microsoft Defender lab series: console fidelity without impersonation, synthetic data rules, privacy and local-only state, assessment integrity, WCAG 2.2 AA accessibility, and mapping to NIST SP 800-61r3, ISO/IEC 27001:2022, CIS v8.1, NIS2, GDPR, DORA and PCI DSS v4.0.">
+<link rel="canonical" href="https://www.rcwittraining.in/microsoft-defender-labs/compliance-standards.html">
+<style>
+  :root{--navy:#061633;--bg:#f6f8fb;--card:#fff;--line:#dbe3ee;--muted:#5f6f88;--brand:#0f6bd8;--warn:#9a6700}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#12243c;font:16px/1.65 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif}
+  a{color:var(--brand)}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  .skip{position:absolute;left:-9999px;top:0;background:#fff;padding:10px 14px;border-radius:8px;z-index:20}
+  .skip:focus{left:12px;top:12px}
+  header.site{background:var(--navy);color:#eaf1fb}
+  .site-inner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 0}
+  .mark{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;font-weight:800}
+  .mark span.sq{width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,#0f6bd8,#ef405b);color:#fff;display:grid;place-items:center;font-size:.72rem}
+  .mark small{display:block;font-weight:600;font-size:.68rem;opacity:.78;letter-spacing:.14em;text-transform:uppercase}
+  nav.top a{color:#cfe0f7;text-decoration:none;font-size:.86rem;padding:7px 11px;border-radius:999px;border:1px solid #2b4c78}
+  main{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin:26px auto 20px}
+  h1{font-size:1.5rem;line-height:1.25;margin:0 0 6px;letter-spacing:-.02em}
+  h2{font-size:1.06rem;margin:26px 0 8px;padding-top:6px;letter-spacing:-.01em}
+  h3{font-size:.95rem;margin:16px 0 6px}
+  p,li{font-size:.93rem}
+  .meta{font-size:.8rem;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px}
+  .toc{background:#f6f9fd;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.86rem;columns:2;column-gap:22px}
+  .toc a{display:block;padding:2px 0;text-decoration:none}
+  table{width:100%;border-collapse:collapse;font-size:.84rem;margin:8px 0 4px}
+  caption{text-align:left;font-weight:700;font-size:.86rem;padding:6px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f2f6fb;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;color:#3d5170}
+  tbody tr:nth-child(even){background:#fafcfe}
+  code{font:13px/1.5 "Cascadia Mono",Consolas,monospace;background:#eef2f8;border:1px solid #dde5f0;border-radius:5px;padding:1px 5px;word-break:break-word}
+  .note{border-left:4px solid var(--brand);background:#eef5fd;padding:11px 13px;border-radius:0 12px 12px 0;font-size:.88rem;margin:12px 0}
+  .note.warn{border-left-color:var(--warn);background:#fdf6e7;color:#6b4a00}
+  ul.tight{margin:6px 0;padding-left:20px}
+  ul.tight li{margin:3px 0}
+  :focus-visible{outline:3px solid #0f6bd8;outline-offset:2px}
+  footer.site{background:var(--navy);color:#b9cbe4;padding:22px 0 28px;font-size:.84rem;margin-bottom:26px}
+  footer.site a{color:#dbe8fa}
+  @media (max-width:720px){.toc{columns:1}main{padding:20px 16px}}
+  @media print{body{background:#fff}main{border:0}header.site,footer.site,.toc,.skip{display:none}a{color:inherit;text-decoration:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#doc">Skip to the standard</a>
+<header class="site">
+  <div class="wrap site-inner">
+    <a class="mark" href="../index.html"><span class="sq" aria-hidden="true">RCW</span><span>RCW IT Training<small>Series standard</small></span></a>
+    <nav class="top" aria-label="Site"><a href="./">The five labs</a><a href="../index.html">All labs</a><a href="../contact.html">Contact</a></nav>
+  </div>
+</header>
+
+<main class="wrap" id="doc">
+  <h1>The Defender lab series standard</h1>
+  <p class="meta">Version 1.0 · 5 September 2026 · Applies to: Lab 1 incident triage · Lab 2 endpoint containment · Lab 3 advanced hunting · Lab 4 identity attack paths · Lab 5 Office 365 campaign response · Owner: Pradeep Raju, founder, RCW IT Training</p>
+  <p>This page is the contract the five labs are written against. It exists because “resembles the real console” and “stays inside the lines” are usually treated as opposing goals. They are not: the fidelity is in the workflow, the judgement and the vocabulary; the restraint is in the branding, the data, the access and the claims.</p>
+
+  <nav class="toc" aria-label="Contents">
+    <a href="#s1">1 · Console fidelity without impersonation</a>
+    <a href="#s2">2 · Synthetic data rules</a>
+    <a href="#s3">3 · Privacy, storage and evidence</a>
+    <a href="#s4">4 · Safety gate and authorisation model</a>
+    <a href="#s5">5 · Assessment integrity</a>
+    <a href="#s6">6 · Accessibility conformance</a>
+    <a href="#s7">7 · Standards and regulation mapping</a>
+    <a href="#s8">8 · Content accuracy and review</a>
+    <a href="#s9">9 · Legal, trademark and licence notices</a>
+    <a href="#s10">10 · Version history</a>
+  </nav>
+
+  <h2 id="s1">1 · Console fidelity without impersonation</h2>
+  <table><caption>What is deliberately reproduced, and what is deliberately withheld</caption>
+    <thead><tr><th scope="col">Reproduced for training transfer</th><th scope="col">Withheld on purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Portal chrome: left navigation grouped by workload, breadcrumbs, top bar with tenant and role, the list → summary pane → detail page flow, filters, tabs, and the action centre.</td><td>No Microsoft logo, no 4-square mark, no product artwork, no “Microsoft” in the brand position. The mark shown is the RCW text mark.</td></tr>
+      <tr><td>Field names and vocabulary as an analyst meets them (<code>DeliveryAction</code>, <code>AlertId</code>, <code>RemoteUrl</code>, <code>TVMConfigurationProfileId</code>), including the awkward ones, because vocabulary is the skill.</td><td>No claim of affiliation with, endorsement by, or sponsorship by Microsoft. “Console replica · not Microsoft software” appears in the first screen of every lab.</td></tr>
+      <tr><td>Real decision points: severity queues, approval states, alert tuning, quarantine versus soft delete, isolation scopes, sensor health, retention limits, Plan 1 vs Plan 2 capability differences.</td><td>No live API calls, no authentication, no tenant selection, no import of a customer’s alerts, and no reproduction of proprietary screenshots.</td></tr>
+      <tr><td>Failure modes: what the console does not tell you, what an empty result means, and where an override hides a detection.</td><td>No instructions to bypass a control in a real environment (no “disable AV to make the alert stop”, no credential harvesting steps, no evasion payloads).</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="s2">2 · Synthetic data rules</h2>
+  <p>Every identifier in the series is fabricated, and the fabrication follows reserved ranges so a learner can paste a value into a ticket, a blog post or a class without exposing anything real.</p>
+  <table><caption>Data ranges permitted in the series</caption>
+    <thead><tr><th scope="col">Kind</th><th scope="col">Permitted values</th><th scope="col">Why</th></tr></thead>
+    <tbody>
+      <tr><td>Domains</td><td><code>example</code>, <code>contoso-rcw.example</code>, <code>*.test</code>, <code>*.example</code> hostnames</td><td>RFC 2606 / 6761 reserved; never resolve to a live tenant</td></tr>
+      <tr><td>IP addresses</td><td><code>203.0.113.0/24</code>, <code>192.0.2.0/24</code>, <code>198.51.100.0/24</code>, <code>fd00::/8</code>, RFC 1918</td><td>RFC 5737 documentation and RFC 4193 unique-local ranges</td></tr>
+      <tr><td>Host and account names</td><td>Invented names (<code>FIN-WKS-0777</code>, <code>it.admin.k</code>, <code>svc_honey01</code>)</td><td>No real hostname or UPN appears, and no pattern is reused from a customer environment</td></tr>
+      <tr><td>URLs, message IDs, hashes</td><td>Invented, e.g. <code>login-contoso.secure-mail.example</code>, <code>m-88216a</code>; file hashes are generated for the exercise</td><td>They cannot be looked up, executed, or treated as real reputation data</td></tr>
+      <tr><td>Malware and tooling</td><td>Behaviour described (beacon interval, parent process, persistence key); no code, no sample, no download link</td><td>Teaching detection without distributing a payload</td></tr>
+      <tr><td>Dates and clocks</td><td>Fixed simulated “now” per lab (2026-08-20 → 2026-09-04), stated on the first screen</td><td>SLA and notification windows must be computable and reproducible</td></tr>
+    </tbody>
+  </table>
+  <p class="note warn"><b>Prohibited in this series.</b> Real customer data, real tenant identifiers, screenshots taken from a production portal, live IOC feeds, real malware files or URLs, and anything derived from an unpaid or undisclosed source. If a value could be looked up and belong to somebody, it does not go in.</p>
+
+  <h2 id="s3">3 · Privacy, storage and evidence</h2>
+  <ul class="tight">
+    <li><b>Local only.</b> State is written to <code>localStorage</code> under one key per lab (<code>rcw.defender-lab.&lt;labId&gt;</code>) plus the shared learner-name key. There is no server component, no account, no cookies, no analytics script, no ad call and no web font inside a lab page.</li>
+    <li><b>No mailbox content, ever.</b> Lab 5 models a mail incident using headers, telemetry and metadata only — no message body, no attachment, no credential. That is a design rule, not an oversight: mail is the most privacy-sensitive evidence a SOC touches, and a teaching replica has no need of it.</li>
+    <li><b>Redaction by default.</b> The in-lab audit log masks anything shaped like an identity (mailbox, UPN, bearer- or PAT-shaped string) in exports and clipboard output, and the learner must actively switch redaction off to see unmasked values. The switch itself is recorded.</li>
+    <li><b>Learner-owned artefacts.</b> The evidence pack is downloaded by the learner, from their browser, to their machine. It is never uploaded. Instructors should collect it only with the learner’s consent and store it under the organisation’s own retention rules.</li>
+    <li><b>Minors.</b> The content is written for adult practitioners; no personal data is sought from anyone, and no feature depends on knowing who the learner is.</li>
+  </ul>
+
+  <h2 id="s4">4 · Safety gate and authorisation model</h2>
+  <p>Each lab asks for an explicit authorisation confirmation <em>before</em> the first graded field accepts input, and the confirmation is itself written into the audit record. Inside the lab the same rule is taught as content: no destructive action is accepted without an approver, a change reference, a declared scope, an expiry and a rollback. The labs deliberately refuse, and remember the refusal:</p>
+  <ul class="tight">
+    <li>Hard delete requested before the evidence export → flagged, and the flag survives a reset of the sequence.</li>
+    <li>A destructive live-response verb with no recorded approval → refused, then allowed only after the approval fields are complete.</li>
+    <li>A company-wide notification drafted as a mail operation → flagged as outside the analyst’s authority.</li>
+    <li>An exclusion, exception or suppression with no owner, no expiry or no review date → refused.</li>
+  </ul>
+  <p class="note"><b>Real-environment rule.</b> Nothing in these labs authorises a learner to run a command against a production system. Isolation, purge, ZAP, credential reset, <code>krbtgt</code> rotation, registry persistence removal and firewall blocking all require the organisation’s own change control, and several are irreversible on live assets.</p>
+
+  <h2 id="s5">5 · Assessment integrity</h2>
+  <table>
+    <thead><tr><th scope="col">Aspect</th><th scope="col">How the series handles it</th></tr></thead>
+    <tbody>
+      <tr><td>Scoring</td><td>100 points per lab across seven objectives, awarded only when every check in the objective passes. Checks are typed: required, equals, oneOf/noneOf, all-or-none groups, exact row selections, ordered action sequences, forbidden flags, text floors and required vocabulary, plus live KQL execution with expected row counts and first-row values.</td></tr>
+      <tr><td>Queries graded by execution</td><td>The learner’s query is run against the same synthetic tables the key was derived from, using the same engine shipped on the page. Bounds, joins, projections and aggregations are verified by result, not matched by pattern.</td></tr>
+      <tr><td>Answer keys</td><td>Grading runs entirely in the browser, so the expected values are readable by anyone who inspects the script. That is accepted rather than hidden, and it changes what is graded: no objective closes on a click alone. Every one of them also requires free text with a length floor and specific vocabulary, a figure read from the learner’s own query result, or a selection compared against the row set the query returned. The guide’s <em>expected results</em> section is written for the self-check after submission, not as a shortcut before it.</td></tr>
+      <tr><td>Cheating and integrity</td><td>Not adversarial: these are practice labs, not proctored exams. Flags that persist across resets, and prose checks that require specific vocabulary, make blind guessing fail; a learner who reads and writes honestly is the audience.</td></tr>
+      <tr><td>Progress portability</td><td>Evidence pack (JSON) with per-objective results, all captured fields, the audit trail and the queries run. Machine-verifiable against the same checks.</td></tr>
+      <tr><td>Reset and reuse</td><td>One button clears this lab’s state and nothing else; the shared site progress store is untouched.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="s6">6 · Accessibility conformance</h2>
+  <p>Target: <b>WCAG 2.2 AA</b>. The labs are dense console simulations, which is exactly where accessibility usually fails first, so the following are implemented in the shared layer rather than per-lab:</p>
+  <table>
+    <thead><tr><th scope="col">Success criterion</th><th scope="col">Implementation in the lab pages</th></tr></thead>
+    <tbody>
+      <tr><td>2.1.1 Keyboard · 2.4.3 Focus order</td><td>Every control is a real element. Grids use a single tab stop with roving arrow-key focus, Space toggles, Shift+Arrow extends. Sequence buttons are ordinary buttons in a labelled group.</td></tr>
+      <tr><td>1.3.1 Info and relationships · 1.4.1 Use of colour</td><td>Real <code>table</code> markup with <code>scope</code> and <code>caption</code>; fieldsets and legends for grouped radios and checkboxes; selection and status carried by text and ARIA state, never by colour alone (severity chips always sit beside their word).</td></tr>
+      <tr><td>2.2.2 Pause · 3.3.1–3.3.4 Errors</td><td>Every form message lives inside its form with <code>role="status"</code> and <code>aria-live="polite"</code>, names the field and states the expected value in words; nothing depends on a coloured border.</td></tr>
+      <tr><td>2.4.1 Bypass blocks · 2.4.4 Link text · 3.2.3 Consistent navigation</td><td>Skip link on every page, identical navigation order and labels across all five labs, descriptive link text.</td></tr>
+      <tr><td>1.4.3 Contrast · 1.4.11 Non-text contrast · 2.4.7 Focus visible</td><td>Body text ≥ 4.5:1, UI edges and focus ring ≥ 3:1 on the default and focus states, verified against the palette rather than assumed.</td></tr>
+      <tr><td>1.4.8 / 1.4.9 Adaptation</td><td><code>prefers-reduced-motion</code> disables animation; <code>forced-colors</code> mode keeps focus rings, selection state and the progress bar visible; a print stylesheet expands every tab and prints the tables.</td></tr>
+      <tr><td>4.1.2 Name, role, value</td><td>Custom widgets expose state through ARIA (<code>aria-current</code>, <code>aria-selected</code>, <code>aria-expanded</code>) and mirror it into a live region, so assistive tech hears the same thing the eye sees.</td></tr>
+    </tbody>
+  </table>
+  <p class="note"><b>Verification.</b> Each lab is checked with keyboard-only operation, a screen reader pass over every objective, automated axe checks against the rendered DOM, contrast measurement of the actual palette, forced-colours and reduced-motion emulation, and a print render. Findings are fixed in the shared layer so all five labs inherit them. Anything unfixable is recorded here as a known limitation rather than silently claimed as done.</p>
+
+  <h2 id="s7">7 · Standards and regulation mapping</h2>
+  <p>Mapping is <b>educational</b>: it tells a learner which control a given habit serves. It is not an audit opinion, a certification, or a statement that completing a lab satisfies any requirement.</p>
+  <table><caption>Which standard each objective family serves</caption>
+    <thead><tr><th scope="col">Reference</th><th scope="col">Clause practised</th><th scope="col">Where</th></tr></thead>
+    <tbody>
+      <tr><td>NIST SP 800-61 Rev. 3</td><td>§3.2 detection and analysis · §3.3 containment, eradication and recovery · §3.4 post-incident activity</td><td>Labs 1–5: queue discipline and story building; evidence-before-mutation and approved containment; classification, closure note, handover and lessons learned</td></tr>
+      <tr><td>ISO/IEC 27001:2022</td><td>A.5.24–A.5.28 incident management · A.5.15/A.5.18 access revocation · A.5.9 inventory and ownership · A.8.15–A.8.16 logging and monitoring · A.8.19 installation in operational environments · A.8.8 vulnerability management</td><td>Labs 1, 4, 5 (process and closure); Lab 2 (asset context, device actions, exceptions); Lab 5 (access revocation, audit gap)</td></tr>
+      <tr><td>CIS Controls v8.1</td><td>4 (asset inventory) · 8 (audit log management) · 10 (malware defences) · 12 (network operations management) · 13 (network monitoring and defence) · 14 (access management) · 16 (application software security) · 17 (incident response management)</td><td>Across the series; Lab 3 explicitly on logging, monitoring and detection content; Lab 4 on privileged access</td></tr>
+      <tr><td>NIS2 (Directive (EU) 2022/2555), Art. 23(4)</td><td>Early warning ≤ 24 h · incident notification ≤ 72 h · final report ≤ 1 month</td><td>Labs 1, 4 and 5 — the tenant is modelled as an <b>essential entity</b>, and picking the wrong regime is a graded error</td></tr>
+      <tr><td>GDPR, Art. 33 / 34</td><td>Notification on risk to rights and freedoms within 72 h of awareness · communication to data subjects without undue delay</td><td>Labs 1, 4, 5 — assessment triggered by risk, not by proof of exfiltration</td></tr>
+      <tr><td>DORA (Regulation (EU) 2022/2554), Art. 19 + RTS</td><td>Initial report ≤ 4 h after classifying an incident as major (never later than 24 h from awareness) · intermediate ≤ 72 h · final ≤ 1 month</td><td>Cited in Labs 4 and 5 <b>to be correctly excluded</b>: these tenants are not financial entities. Where a learner’s employer is one, DORA is the operative regime</td></tr>
+      <tr><td>PCI DSS v4.0</td><td>6.3 change management for security controls · 12.10 incident response</td><td>Lab 5 (mail flow rule removal as a change) · Lab 2 (isolation as an emergency change) · Lab 1 (approval and closure records)</td></tr>
+      <tr><td>MITRE ATT&amp;CK Enterprise</td><td>T1566.002 · T1204.003 · T1059 · T1047 · T1082 · T1098.003 · T1078 · T1071.001 · T1558.003 · T1003.006 · T1550.003 · T1187 · T1562.001 · T1486 · T1484.001</td><td>Technique assertion is graded in Labs 1, 3 and 4: over-claiming a technique the telemetry does not evidence fails</td></tr>
+      <tr><td>ENISA technical implementation, Regulation (EU) 2024/2960</td><td>Content and format of the 24 h / 72 h / one-month notifications</td><td>Labs 4 and 5, in the escalation and record objectives</td></tr>
+    </tbody>
+  </table>
+  <p class="note"><b>Deliberate negative.</b> The series teaches *choosing* a regime, not reciting one. Several objectives mark a wrong-but-plausible citation (DORA for a hospital, “NIS2 has no deadline”, “no regulator applies to internal incidents”) as the failure mode, because that is how it fails in practice.</p>
+
+  <h2 id="s8">8 · Content accuracy and review</h2>
+  <ul class="tight">
+    <li><b>Sources.</b> UI flow, terminology, action names, retention windows and query columns are taken from Microsoft Learn documentation for Defender for Endpoint, Defender for Identity and Defender for Office 365; notification timings from the texts named in §7. Product behaviour is described, never copied as artwork.</li>
+    <li><b>Version anchoring.</b> The labs describe the <b>2026 portal</b>. Where the real product changes naming or moves a control, the lab is updated in the shared layer and the version history below records it. A lab that cannot be kept accurate is retired rather than left to mislead.</li>
+    <li><b>Errata.</b> Report a factual error through the contact page; corrections are published in the version history and in the affected lab’s guide. Where the product itself is ambiguous, the lab states the ambiguity instead of inventing a rule.</li>
+    <li><b>Scope discipline.</b> Anything unverifiable is dropped: if a panel’s behaviour cannot be confirmed from documentation, the lab does not claim it, and the view says “not reproduced”.</li>
+  </ul>
+
+  <h2 id="s9">9 · Legal, trademark and licence notices</h2>
+  <p>Microsoft, Microsoft Defender, Microsoft Defender XDR, Microsoft Defender for Endpoint, Microsoft Defender for Identity, Microsoft Defender for Office 365, Microsoft 365, Azure, Windows and Active Directory are trademarks of Microsoft Corporation. This series <b>is not affiliated with, endorsed by, or sponsored by Microsoft Corporation</b>. No Microsoft logo or trademark artwork is reproduced; product names appear only to describe the workflow being taught. MITRE ATT&amp;CK is a registered trademark of The MITRE Corporation. NIST publications, ISO/IEC 27001, CIS Controls, and the EU texts cited are referenced for education; their own terms govern their use.</p>
+  <p>The labs are provided “as is”, for education, without warranty of any kind. They are not professional security advice, not a compliance or audit deliverable, and not a substitute for your organisation’s incident-response plan, legal counsel, or the vendor’s official documentation. RCW IT Training is not liable for actions taken in a production environment on the strength of a practice lab.</p>
+
+  <h2 id="s10">10 · Version history</h2>
+  <table>
+    <thead><tr><th scope="col">Version</th><th scope="col">Date</th><th scope="col">Change</th></tr></thead>
+    <tbody>
+      <tr><td>1.0</td><td>2026-09-05</td><td>Series published with five labs (500 points, 35 graded objectives), the shared KQL subset engine, the local audit and redaction layer, per-lab guides, and this standard.</td></tr>
+    </tbody>
+  </table>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p><b>RCW IT Training</b> · <a href="https://www.rcwittraining.in">www.rcwittraining.in</a> · Founder: <b>Pradeep Raju</b><br>
+    <a href="./">The five labs</a> · <a href="../index.html">Catalogue</a> · <a href="../terms.html">Terms</a> · <a href="../privacy.html">Privacy</a> · <a href="../contact.html">Report an error</a></p>
+  </div>
+</footer>
+</body>
+</html>

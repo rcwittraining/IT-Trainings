@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microsoft Defender advanced security labs · RCW IT Training</title>
+<meta name="description" content="Five offline, browser-local Microsoft Defender practice labs at advanced level: incident triage, endpoint containment and live response, advanced hunting to custom detection, identity attack paths, and a Defender for Office 365 campaign response. 100 points and seven browser-scored objectives each.">
+<meta name="theme-color" content="#061633">
+<link rel="canonical" href="https://www.rcwittraining.in/microsoft-defender-labs/">
+<meta property="og:title" content="Microsoft Defender advanced security labs · RCW IT Training">
+<meta property="og:description" content="Five console-replica Defender labs: triage, containment, hunting, identity attack paths and mail campaign response. Offline, synthetic data, browser-scored.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.rcwittraining.in/microsoft-defender-labs/">
+<meta property="og:image" content="https://www.rcwittraining.in/microsoft-defender-labs/pradeep-raju.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"ItemList","name":"Microsoft Defender advanced security labs","itemListOrder":"https://schema.org/ItemListOrderAscending","numberOfItems":5,"itemListElement":[
+{"@type":"ListItem","position":1,"item":{"@type":"LearningResource","name":"Defender incident triage, response and closure","url":"https://www.rcwittraining.in/defender-incident-triage-lab/","learningResourceType":"Hands-on lab","educationalLevel":"Advanced","teaches":"Correlated incident triage, bounded KQL scoping, approved containment, honest classification, escalation timing","timeRequired":"PT1H30M","inLanguage":"en","isAccessibleForFree":true,"typicalAgeRange":"18-","license":"https://www.rcwittraining.in/terms.html","provider":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"}}},
+{"@type":"ListItem","position":2,"item":{"@type":"LearningResource","name":"Defender for Endpoint containment and live response","url":"https://www.rcwittraining.in/defender-endpoint-containment-lab/","learningResourceType":"Hands-on lab","educationalLevel":"Advanced","teaches":"Device timeline reading, hash-based blast-radius scoping in KQL, evidence-preserving live response, isolation versus containment, governed vulnerability exceptions","timeRequired":"PT1H30M","inLanguage":"en","isAccessibleForFree":true,"typicalAgeRange":"18-","provider":{"@type":"Organization","name":"RCW IT Training"}}},
+{"@type":"ListItem","position":3,"item":{"@type":"LearningResource","name":"Defender advanced hunting to working detection","url":"https://www.rcwittraining.in/defender-advanced-hunting-lab/","learningResourceType":"Hands-on lab","educationalLevel":"Advanced","teaches":"Bounded KQL, cross-domain pivots, JSON field handling, baselining, custom detection design, alert tuning with expiry and ownership","timeRequired":"PT1H40M","inLanguage":"en","isAccessibleForFree":true,"typicalAgeRange":"18-","provider":{"@type":"Organization","name":"RCW IT Training"}}},
+{"@type":"ListItem","position":4,"item":{"@type":"LearningResource","name":"Defender identity attack paths and hybrid containment","url":"https://www.rcwittraining.in/defender-identity-attack-path-lab/","learningResourceType":"Hands-on lab","educationalLevel":"Advanced","teaches":"Identity alert correlation, attack-path graph limits, DSync evidence in KQL, containment order for a risky user, coverage integrity, hardening with a governed exception","timeRequired":"PT1H30M","inLanguage":"en","isAccessibleForFree":true,"typicalAgeRange":"18-","provider":{"@type":"Organization","name":"RCW IT Training"}}},
+{"@type":"ListItem","position":5,"item":{"@type":"LearningResource","name":"Defender for Office 365 phishing campaign containment and tracking","url":"https://www.rcwittraining.in/defender-email-campaign-lab/","learningResourceType":"Hands-on lab","educationalLevel":"Advanced","teaches":"Email alert triage, submission adjudication, campaign scoping in KQL, sequenced mail remediation with approvals, mail policy hardening, user communication, threat tracker and notification clocks","timeRequired":"PT1H40M","inLanguage":"en","isAccessibleForFree":true,"typicalAgeRange":"18-","provider":{"@type":"Organization","name":"RCW IT Training"}}}]}]}
+</script>
+<style>
+  :root{--navy:#061633;--ink:#0b2c56;--bg:#f6f8fb;--card:#fff;--line:#dbe3ee;--muted:#5f6f88;--brand:#0f6bd8;--alert:#ef405b;--ok:#0e7a55;--warn:#9a6700;--radius:14px}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#12243c;font:16px/1.6 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif}
+  a{color:var(--brand)}
+  .skip{position:absolute;left:-9999px;top:0;background:#fff;padding:10px 14px;border-radius:8px;z-index:20}
+  .skip:focus{left:12px;top:12px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+  header.site{background:var(--navy);color:#eaf1fb;border-bottom:1px solid #16304f}
+  .site-inner{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:14px 0}
+  .mark{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;font-weight:800;letter-spacing:.2px}
+  .mark span.sq{width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,#0f6bd8,#ef405b);color:#fff;display:grid;place-items:center;font-size:.72rem;letter-spacing:.5px}
+  .mark small{display:block;font-weight:600;font-size:.68rem;opacity:.78;letter-spacing:.14em;text-transform:uppercase}
+  nav.top{display:flex;gap:6px;flex-wrap:wrap}
+  nav.top a{color:#cfe0f7;text-decoration:none;font-size:.86rem;padding:7px 11px;border-radius:999px;border:1px solid transparent}
+  nav.top a:hover{border-color:#2b4c78;background:#0d2444}
+  nav.top a:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .hero{background:linear-gradient(160deg,#061633,#0b2c56 55%,#123a6d);color:#eaf1fb;padding:34px 0 30px}
+  .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#9fc2ee}
+  h1{margin:8px 0 6px;font-size:clamp(1.5rem,3.4vw,2.15rem);line-height:1.2;letter-spacing:-.02em}
+  .lede{margin:0;max-width:72ch;color:#c8d9f1;font-size:1.02rem}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .b{border:1px solid #2f5586;background:rgba(255,255,255,.06);border-radius:999px;padding:5px 11px;font-size:.78rem;color:#dbe8fa;display:flex;align-items:center;gap:6px}
+  .b b{color:#fff}
+  .founder{display:flex;gap:12px;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid #1e3d64;font-size:.9rem;color:#cfe0f7}
+  .founder img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #5b8fd0}
+  section{padding:28px 0}
+  h2{font-size:1.16rem;margin:0 0 4px;letter-spacing:-.01em}
+  .sub{margin:0 0 16px;color:var(--muted);font-size:.94rem;max-width:78ch}
+  .grid{display:grid;gap:14px}
+  .grid.c2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 17px}
+  .lab{display:flex;flex-direction:column;gap:10px;height:100%}
+  .lab .no{width:26px;height:26px;border-radius:8px;background:#e8f1fd;color:#0b4ea2;font-weight:800;display:grid;place-items:center;font-size:.84rem;flex:0 0 auto}
+  .lab h3{margin:0;font-size:1.03rem;line-height:1.35}
+  .lab p{margin:0;font-size:.9rem;color:#3a4d68}
+  .lab ul{margin:0;padding-left:18px;font-size:.85rem;color:#44587a}
+  .lab li{margin:2px 0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:.75rem;color:#42566f}
+  .meta i{font-style:normal;border:1px solid var(--line);background:#f8fafd;border-radius:999px;padding:3px 9px}
+  .go{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px}
+  .btn{text-decoration:none;border-radius:10px;padding:9px 13px;font-weight:700;font-size:.87rem;border:1px solid #0857b8;background:var(--brand);color:#fff}
+  .btn.ghost{background:#fff;color:#0b4ea2;border-color:#b9cbe4}
+  .btn.sm{padding:6px 10px;font-size:.8rem}
+  .btn:focus-visible{outline:3px solid #061633;outline-offset:2px}
+  .note{border-left:4px solid var(--brand);background:#eef5fd;border-radius:0 12px 12px 0;padding:12px 14px;font-size:.88rem;color:#22406a}
+  .note.warn{border-left-color:var(--warn);background:#fdf6e7;color:#6b4a00}
+  dl.kv{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:8px 14px;font-size:.87rem;margin:0}
+  dl.kv dt{color:var(--muted);font-weight:600}
+  dl.kv dd{margin:0}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid #e8eef7;vertical-align:top}
+  th{background:#f2f6fb;font-size:.76rem;letter-spacing:.04em;text-transform:uppercase;color:#3d5170}
+  tr:last-child td{border-bottom:0}
+  code{font:13px/1.5 "Cascadia Mono",Consolas,monospace;background:#eef2f8;border:1px solid #dde5f0;border-radius:5px;padding:1px 5px}
+  footer.site{background:var(--navy);color:#b9cbe4;padding:24px 0 30px;margin-top:14px;font-size:.85rem}
+  footer.site a{color:#dbe8fa}
+  .disc{background:rgba(255,255,255,.04);border:1px solid #21406a;border-radius:12px;padding:12px 14px;color:#c8d9f1;font-size:.82rem;margin-bottom:14px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the lab list</a>
+<header class="site">
+  <div class="wrap site-inner">
+    <a class="mark" href="../index.html"><span class="sq" aria-hidden="true">RCW</span><span>RCW IT Training<small>Hands-on cybersecurity labs</small></span></a>
+    <nav class="top" aria-label="Site">
+      <a href="../index.html">All labs</a>
+      <a href="../index.html#labs">Catalogue</a>
+      <a href="compliance-standards.html">How these labs are built</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Defender XDR series · five advanced labs · 500 points</p>
+    <h1>Microsoft Defender practice labs that mark the reasoning, not the clicking</h1>
+    <p class="lede">Five console-replica labs built for people who already know where the alert queue is. Each one drops you into a simulated tenant at a fixed clock, gives you synthetic telemetry you can actually query, and refuses the shortcut — the hard delete before the export, the tenant-wide allow list, the unbounded hunt, the report that calls an indicator confirmed when it is still pending.</p>
+    <div class="badges">
+      <span class="b"><b>100 pts</b> per lab · 7 objectives</span>
+      <span class="b"><b>Offline</b> · no tenant, no login</span>
+      <span class="b"><b>Real KQL engine</b> in the browser</span>
+      <span class="b"><b>WCAG 2.2 AA</b> · keyboard-first</span>
+      <span class="b"><b>NIST · ISO 27001 · NIS2</b> mapped</span>
+    </div>
+    <div class="founder">
+      <img src="pradeep-raju.jpg" alt="Pradeep Raju, founder of RCW IT Training" width="52" height="52">
+      <span>Built by <b>Pradeep Raju</b>, founder, RCW IT Training · labs written from real shift practice, run entirely in your browser.</span>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+<section class="wrap" aria-labelledby="labsH">
+  <h2 id="labsH">The five labs</h2>
+  <p class="sub">Work them in order if you want the narrative to build; skip straight to the one that matches your gap. Every lab states its own objective list, marking table and answer expectations inside the <em>Lab guide</em> view.</p>
+  <div class="grid c2">
+    <article class="card lab">
+      <span class="no" aria-hidden="true">1</span>
+      <h3><a href="../defender-incident-triage-lab/">Defender incident triage, response and closure</a></h3>
+      <p>A correlated incident reaches the queue nine days from its SLA: PowerShell under a delivered link, a startup rule, a mailbox forwarding rule. You claim it, prove the story, bound the blast radius and close it honestly.</p>
+      <ul><li>Queue discipline before selection — and the one incident that does <em>not</em> belong</li><li>Assert only the techniques the alerts evidence</li><li>Approvable containment, classification that survives an audit</li></ul>
+      <div class="meta"><i>100 pts</i><i>7 objectives</i><i>KQL blast radius</i><i>70–90 min</i></div>
+      <div class="go"><a class="btn" href="../defender-incident-triage-lab/">Open lab 1</a><a class="btn ghost sm" href="../defender-incident-triage-lab/LAB_GUIDE.md">Lab guide</a></div>
+    </article>
+    <article class="card lab">
+      <span class="no" aria-hidden="true">2</span>
+      <h3><a href="../defender-endpoint-containment-lab/">Defender for Endpoint containment and live response</a></h3>
+      <p>One workstation, a signed binary doing information gathering, a beacon, and the same file hash on three hosts. Scope it, read the process tree, then run live response so the evidence survives the session.</p>
+      <ul><li>Collect before you mutate — the sequence is graded</li><li>Isolation versus containment, with the business impact named</li><li>Vulnerability remediation and an exception with an owner and an expiry</li></ul>
+      <div class="meta"><i>100 pts</i><i>7 objectives</i><i>Live response console</i><i>75–95 min</i></div>
+      <div class="go"><a class="btn" href="../defender-endpoint-containment-lab/">Open lab 2</a><a class="btn ghost sm" href="../defender-endpoint-containment-lab/LAB_GUIDE.md">Lab guide</a></div>
+    </article>
+    <article class="card lab">
+      <span class="no" aria-hidden="true">3</span>
+      <h3><a href="../defender-advanced-hunting-lab/">Advanced hunting to working detection</a></h3>
+      <p>A service account logs on at the wrong hour, ten children appear on one device, and the beacon has one jittered interval you must not average away. You write the queries — a real KQL engine runs them in your browser — then turn the finding into a detection and a suppression that expires.</p>
+      <ul><li>Four graded queries: row counts come from what your query actually returned</li><li>Severity, category, tactic, frequency and limit that agree with each other</li><li>Alert tuning with scope, expiry and an owning role</li></ul>
+      <div class="meta"><i>100 pts</i><i>7 objectives</i><i>KQL subset engine</i><i>80–100 min</i></div>
+      <div class="go"><a class="btn" href="../defender-advanced-hunting-lab/">Open lab 3</a><a class="btn ghost sm" href="../defender-advanced-hunting-lab/LAB_GUIDE.md">Lab guide</a></div>
+    </article>
+    <article class="card lab">
+      <span class="no" aria-hidden="true">4</span>
+      <h3><a href="../defender-identity-attack-path-lab/">Identity attack paths and hybrid containment</a></h3>
+      <p>Night shift, on-premises Active Directory: Kerberoasting, a DSync enquiry, a four-minute clock skew on a domain controller and a honeytoken that finally spoke. The graph shows possibility; you have to prove which edge was walked and cut it in the right order.</p>
+      <ul><li>Containment sequence — sessions, refresh tokens, then the account, then the password</li><li>Graph limits: SID history, non-joined identities, what a path cannot answer</li><li>Hardening with a governed exception, and a report that keeps “indicated” visible</li></ul>
+      <div class="meta"><i>100 pts</i><i>7 objectives</i><i>Attack-path grid</i><i>75–95 min</i></div>
+      <div class="go"><a class="btn" href="../defender-identity-attack-path-lab/">Open lab 4</a><a class="btn ghost sm" href="../defender-identity-attack-path-lab/LAB_GUIDE.md">Lab guide</a></div>
+    </article>
+    <article class="card lab">
+      <span class="no" aria-hidden="true">5</span>
+      <h3><a href="../defender-email-campaign-lab/">Defender for Office 365: campaign containment and tracking</a></h3>
+      <p>Friday 09:00. One reported mail, eleven delivered, four clicked, two credential posts, a forward-and-delete inbox rule, and a detection that was overridden by a tenant rule. Scope it, remediate it in an order that keeps the evidence, then write the record a regulator could read.</p>
+      <ul><li>Submission verdicts without inventing a tenant allow list</li><li>Soft delete, ZAP, indicators and approval — in that order</li><li>NIS2 and GDPR clocks on the facts, not the loudest field label</li></ul>
+      <div class="meta"><i>100 pts</i><i>7 objectives</i><i>Email + identity + policy</i><i>80–100 min</i></div>
+      <div class="go"><a class="btn" href="../defender-email-campaign-lab/">Open lab 5</a><a class="btn ghost sm" href="../defender-email-campaign-lab/LAB_GUIDE.md">Lab guide</a></div>
+    </article>
+    <article class="card lab" style="background:#f2f6fb">
+      <span class="no" aria-hidden="true">§</span>
+      <h3>The series standard, in one page</h3>
+      <p>Why these labs look like the console but never pretend to be it, what data they may contain, how the scoring works, and how accessibility is verified rather than claimed.</p>
+      <ul><li>Console fidelity with an explicit anti-impersonation boundary</li><li>Synthetic-data rules and the privacy limits on evidence</li><li>Control mapping: NIST, ISO/IEC 27001, CIS, NIS2, GDPR, DORA, PCI DSS</li></ul>
+      <div class="meta"><i>Read before you teach with these</i></div>
+      <div class="go"><a class="btn ghost" href="compliance-standards.html">Open the series standard</a></div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="howH">
+  <h2 id="howH">How these labs are built</h2>
+  <p class="sub">The same eight rules apply to all five. They are what makes the practice transferable to a real shift without the lab pretending to be vendor software.</p>
+  <div class="grid c2">
+    <article class="card"><dl class="kv">
+      <dt>Console replica</dt><dd>Layout, terminology, list → pane → page flow, filters, action centre and approval states follow the 2026 portal so the transfer to a real console is muscle memory. No Microsoft logo, no 4-square mark, no claim of affiliation.</dd>
+      <dt>Fully offline</dt><dd>Static HTML, CSS and vanilla JavaScript. No analytics, no web fonts, no CDN, no API, no login, no telemetry. Opening the network tab shows requests for the page’s own files and nothing else.</dd>
+      <dt>Synthetic tenant</dt><dd>One fabricated tenant, <code>contoso-rcw.example</code>. Reserved example domains for addresses, documentation ranges for IPs, invented message IDs and hashes. Nothing here came out of anyone’s environment.</dd>
+      <dt>No learner data collected</dt><dd>Progress lives in <code>localStorage</code> in your browser and nowhere else. The audit log is local, redacts identities by default, and is only shared if you export and send it yourself.</dd>
+    </dl></article>
+    <article class="card"><dl class="kv">
+      <dt>Graded on reasoning</dt><dd>Every objective combines a state check (what you selected, in what order, with what approval) and a written field with a floor length and required vocabulary. “Looks right” does not pass.</dd>
+      <dt>Queries actually run</dt><dd>A KQL subset engine in <code>shared/kql-lite.js</code> executes your query against the same tables the answer key was derived from, so bounds, joins, projections and aggregates are verified — not pattern-matched.</dd>
+      <dt>Shortcuts recorded</dt><dd>Destructive-first actions, unapproved verbs and over-claims are flagged and stay flagged until you redo the sequence, mirroring an action centre that remembers what you did.</dd>
+      <dt>Accessibility is a spec item</dt><dd>WCAG 2.2 AA target: single tab stop, roving focus in grids, live-region announcements for selection and sequence state, 3:1 focus outline, forced-colours and reduced-motion support, print view that expands the tabs.</dd>
+    </dl></article>
+  </div>
+  <p class="note" style="margin-top:14px"><b>Not certification preparation.</b> These labs practise judgement on synthetic data. They do not follow an exam outline, do not award credit, and are not affiliated with or endorsed by Microsoft. Product names are used to teach the workflow.</p>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="disc">Simulated teaching environment. No tenant connection, no real malware, no production commands. Confirm your own organisation’s authorisation, privacy and change-control requirements before applying any of these procedures at work.</p>
+    <p><b>RCW IT Training</b> · <a href="https://www.rcwittraining.in">www.rcwittraining.in</a> · Founder: <b>Pradeep Raju</b><br>
+    <a href="../index.html">All labs</a> · <a href="../cybersecurity-challenge/">Cybersecurity challenge</a> · <a href="../about.html">About</a> · <a href="../terms.html">Terms</a> · <a href="../privacy.html">Privacy</a> · <a href="../contact.html">Contact</a> · <a href="../sitemap.xml">Sitemap</a></p>
+  </div>
+</footer>
+</body>
+</html>

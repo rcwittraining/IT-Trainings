@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.className += ' js';</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 2 · Microsoft Defender for Endpoint containment, live response &amp; TVM remediation | RCW IT Training</title>
+<meta name="description" content="Advanced Microsoft Defender practice lab on a faithful console replica: device inventory and timeline analysis, isolation and containment decisions, a simulated live-response console, KQL blast-radius hunting and vulnerability remediation with a defensible exception record. Synthetic tenant, auditable evidence, by RCW IT Training.">
+<meta name="author" content="Pradeep Raju — RCW IT Training">
+<link rel="canonical" href="https://www.rcwittraining.in/defender-endpoint-containment-lab/">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RCW IT Training">
+<meta property="og:title" content="Lab 2 · Microsoft Defender for Endpoint containment &amp; live response">
+<meta property="og:description" content="Isolate, contain, collect and remediate on a compromised endpoint — inside a simulated 2026 Defender portal, with change control and evidence discipline built in.">
+<meta property="og:url" content="https://www.rcwittraining.in/defender-endpoint-containment-lab/">
+<meta name="theme-color" content="#1b1a19">
+<link rel="stylesheet" href="../microsoft-defender-labs/shared/defender-lab.css">
+<script src="../microsoft-defender-labs/shared/kql-lite.js" defer></script>
+<script src="../microsoft-defender-labs/shared/defender-lab.js" defer></script>
+<script src="app.js" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LearningResource","name":"Microsoft Defender for Endpoint: device containment, live response and vulnerability remediation","description":"Advanced console-replica lab: review a device timeline and process tree, decide between isolation and containment, run a simulated live-response session with evidence-first sequencing, hunt the blast radius in KQL and close out the underlying vulnerabilities with an approved, expiring exception record.","learningResourceType":"Practice lab","educationalLevel":"Advanced","timeRequired":"PT85M","inLanguage":"en","isAccessibleForFree":true,"interactivityType":"active","teaches":"Endpoint triage, device isolation and containment, live response evidence handling, KQL hunting, vulnerability remediation and exception governance","provider":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"},"creator":{"@type":"Person","name":"Pradeep Raju","jobTitle":"Founder & Senior Enterprise Infrastructure Architect","url":"https://www.linkedin.com/in/pradeepmcp826/"},"license":"https://creativecommons.org/licenses/by-nc-nd/4.0/","citation":"https://learn.microsoft.com/en-us/defender-endpoint/respond-machine-alerts"}
+</script>
+</head>
+<body data-lab-id="defender-endpoint-containment">
+<div id="labShell"></div>
+<div id="labViewsSource">
+
+<section class="view is-active" data-view="overview" data-view-label="Device inventory" aria-labelledby="ovT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Microsoft Defender portal</span><span class="sep" aria-hidden="true">›</span><span>Assets</span><span class="sep" aria-hidden="true">›</span><span class="current">Devices</span></nav>
+  <div class="page-head">
+    <div><span class="eyebrow">Defender XDR series · Lab 2 of 5 · Advanced</span><h1 id="ovT">A machine is behaving badly. Prove it, then touch it.</h1>
+    <p class="lede">FIN-WKS-0777 raised <em>Behavioral threat detected (high severity)</em> plus an RDP session from an unusual peer. You are the endpoint engineer on shift. Everything here is graded on <em>order</em>: evidence before remediation, approval before disruption, verification before closure.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="scope">Required</span><button class="btn btn--primary" type="button" data-route="scope">Open the device page</button></div>
+  </div>
+  <div class="notice info"><span class="n-ico" aria-hidden="true">i</span><div><b>Console replica, synthetic tenant.</b><p>Layout and control names model the 2026 Defender portal. Nothing is connected to a real environment: no device is isolated, no binary is executed, no package is installed. Every host, user, hash, URL and address is fabricated for training (documentation ranges only). No Microsoft marks or logos are reproduced.</p></div></div>
+  <div class="grid-2">
+    <article class="card"><div class="card-head"><div><span class="kicker">Objectives · 100 pts</span><h2>Seven graded controls</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-route="guide">Full guide</button></span></div>
+      <ul class="gate-list">
+        <li class="gate"><span class="g-ico">1</span><div><b>Scope &amp; asset context · 10</b><small>Pick the right device out of the inventory and state the exposure you are protecting.</small></div></li>
+        <li class="gate"><span class="g-ico">2</span><div><b>Timeline &amp; process tree · 15</b><small>Separate parent-child facts from noise; identify why nothing was blocked.</small></div></li>
+        <li class="gate"><span class="g-ico">3</span><div><b>Blast radius in KQL · 15</b><small>Find every host with the same file hash and the same registry persistence.</small></div></li>
+        <li class="gate"><span class="g-ico">4</span><div><b>Live response · 20</b><small>Drive the simulated console: evidence first, no destructive verb before collection, structured query when you need it.</small></div></li>
+        <li class="gate"><span class="g-ico">5</span><div><b>Isolation or containment? · 10</b><small>Choose the right disruption for the right reason, with the notification and the exception path.</small></div></li>
+        <li class="gate"><span class="g-ico">6</span><div><b>Vulnerability remediation · 15</b><small>Recommendations, remediation package, and an exception with owner and expiry.</small></div></li>
+        <li class="gate"><span class="g-ico">7</span><div><b>Verification &amp; closure · 15</b><small>Prove the machine is clean, the sensor is healthy and the note is audit-ready.</small></div></li>
+      </ul></article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Device inventory</span><h2>Five candidates, one is yours</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid" id="deviceInventory" data-selectable data-grid-name="Device inventory" data-restore-rows>
+        <caption>Select one device. <span class="muted" data-selection-count>No rows selected</span></caption>
+        <thead><tr><th scope="col" data-sort="n">Device name</th><th scope="col">Exposure</th><th scope="col">Groups</th><th scope="col" data-sort="al">Alerts</th><th scope="col">Sensor</th><th scope="col">Last seen</th><th scope="col">HVA</th></tr></thead>
+        <tbody>
+          <tr data-row-id="FIN-WKS-0777"><td class="mono"><span class="link">FIN-WKS-0777</span><span class="sub">Windows 11 23H2 · 4 users</span></td><td><span class="chip sev-high">High</span></td><td>FIN-WKS</td><td class="num">3 open</td><td>Healthy</td><td class="mono">2 min ago</td><td><span class="tag grey">No</span></td></tr>
+          <tr data-row-id="FIN-WKS-0421"><td class="mono"><span class="link">FIN-WKS-0421</span><span class="sub">Windows 11 23H2</span></td><td><span class="chip sev-medium">Medium</span></td><td>FIN-WKS</td><td class="num">0</td><td>Healthy</td><td class="mono">11 min ago</td><td><span class="tag grey">No</span></td></tr>
+          <tr data-row-id="OPS-SRV-0102"><td class="mono"><span class="link">OPS-SRV-0102</span><span class="sub">Windows Server 2022</span></td><td><span class="chip sev-medium">Medium</span></td><td>OPS-SRV</td><td class="num">1 open</td><td><b>No onboarding</b></td><td class="mono">3 h ago</td><td><span class="tag">Yes</span></td></tr>
+          <tr data-row-id="PAY-SRV-0007"><td class="mono"><span class="link">PAY-SRV-0007</span><span class="sub">Windows Server 2019 · conditional launch enforced</span></td><td><span class="chip sev-low">Low</span></td><td>PAY-SRV</td><td class="num">1 open</td><td>Healthy</td><td class="mono">40 s ago</td><td><span class="tag">Yes</span></td></tr>
+          <tr data-row-id="HR-WKS-0110"><td class="mono"><span class="link">HR-WKS-0110</span><span class="sub">Windows 11 24H2</span></td><td><span class="chip sev-low">Low</span></td><td>HR-WKS</td><td class="num">2 open</td><td>Healthy</td><td class="mono">1 h ago</td><td><span class="tag grey">No</span></td></tr>
+        </tbody></table></div>
+      <p class="small muted">HVA = onboarded as a <strong>high-value asset</strong>, which deliberately restricts some response actions. Two of these hosts sit in the payroll path: disrupting one at 16:40 on a Friday is a decision, not a reflex.</p>
+    </article>
+  </div>
+</section>
+
+<section class="view" data-view="scope" data-view-label="Device page" hidden aria-labelledby="scT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="overview">Assets</button><span class="sep" aria-hidden="true">›</span><span>Devices</span><span class="sep" aria-hidden="true">›</span><span class="current">FIN-WKS-0777</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 1 · 10 pts</span><h1 id="scT">FIN-WKS-0777</h1>
+    <div class="pill-row"><span class="chip sev-high">3 open alerts</span><span class="chip state-new">Investigate</span><span class="tag">Exposure score 8.1</span><span class="tag grey">Not an HVA</span><span class="tag attack">ASR: 2 rules in audit</span></div></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="scope">Required</span>
+      <button class="btn btn--sm" type="button">Manage tags</button><button class="btn btn--sm" type="button">Initiate automated investigation</button><button class="btn btn--sm" type="button">Action center</button></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Device page</span><h2>Facts you will need in the next six objectives</h2></div></div>
+      <dl class="kv">
+        <dt>Operating system</dt><dd>Windows 11 Enterprise 23H2 (22631.4037)</dd>
+        <dt>Logged on users</dt><dd>fin.clerk (local admin) · svc_print (session 2)</dd>
+        <dt>Device group</dt><dd>FIN-WKS · 118 members</dd>
+        <dt>Internet facing</dt><dd>No external listener; RDP reachable from the LAN only</dd>
+        <dt>Defender AV</dt><dd>Active mode · cloud-delivered protection: <b>High</b> · EDR in block mode: <b>Off</b></dd>
+        <dt>ASR rules</dt><dd>Block executable content from email client — <b>audit</b>; Office child process — <b>audit</b></dd>
+        <dt>Missing updates</dt><dd>4 KBs · 2 with known public exploitation</dd>
+        <dt>Sensor</dt><dd>Version 10.26.08.1 · check-in 2 min ago · no proxy issues</dd>
+        <dt>Disk free</dt><dd>7% — an investigation package needs about 2 GB</dd>
+      </dl>
+      <div class="notice warn" style="margin:12px 0 0"><span class="n-ico" aria-hidden="true">!</span><div><b>The free-space line is a trap on purpose.</b><p>Collecting an investigation package on a nearly full disk, or on a metered connection, fails. Check the environment before you click, exactly as the product guidance tells you to.</p></div></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 1</span><h2>Declare the scope you are working in</h2></div><span class="obj-badge" data-objective-status="scope">Required</span></div>
+      <form id="form-scope" data-objective="scope" novalidate>
+        <label class="field"><span class="lbl">Selected device</span>
+          <select id="devPick"><option value="">Choose from the inventory</option>
+            <option>FIN-WKS-0777</option><option>PAY-SRV-0007</option><option>OPS-SRV-0102</option></select>
+          <span class="help">The one with 3 open alerts, a healthy sensor and a live user session.</span></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Data class on this endpoint</span>
+            <select id="dataClass">
+          <option value="">Choose</option>
+          <option value="o1">Public marketing pages only</option>
+          <option value="o2">Confidential — payroll and client finance records</option>
+          <option value="o3">Nothing is stored locally</option>
+        </select></label>
+          <label class="field"><span class="lbl">Business impact of isolating it now</span>
+            <select id="impact">
+          <option value="">Choose</option>
+          <option value="o1">None — the user is on leave and the machine is idle</option>
+          <option value="o2">Contained: one clerk stops working; month-end reconciliation slips a day</option>
+          <option value="o3">Ignore it — endpoint alerts never affect the business</option>
+        </select></label>
+        </div>
+        <fieldset><legend>Scope statements</legend>
+          <label class="check"><input type="checkbox" id="sA"><span><b>EDR in block mode is off, so a blocking decision is mine to make</b><small>With EDR-in-block-mode on, the alert may already have prevented execution; check before you escalate disruption.</small></span></label>
+          <label class="check"><input type="checkbox" id="sB"><span><b>Two ASR rules are in audit mode on this group</b><small>That explains why the download ran, and it is the fix that stops the next one.</small></span></label>
+          <label class="check"><input type="checkbox" id="sC"><span><b>I will not image, reimage or wipe this device in this lab</b><small>Reimaging is an eradication decision with an owner and a hardware process; the lab will not let you pretend otherwise.</small></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Device tags you will add (comma separated, no personal data)</span>
+          <input id="devTags" type="text" maxlength="80" placeholder="e.g. ir-active, nightbloom-review"></label>
+        <div class="msg" id="msg-scope" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save scope and open the timeline</button>
+          <button class="btn" type="button" data-route="timeline">Skip ahead to the timeline</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="timeline" data-view-label="Device timeline" hidden aria-labelledby="tlT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="scope">FIN-WKS-0777</button><span class="sep" aria-hidden="true">›</span><span class="current">Timeline</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 2 · 15 pts</span><h1 id="tlT">Device timeline · 2026-08-21 08:05 – 09:40 UTC</h1>
+    <p class="lede">The timeline is the only place where the sequence is unambiguous. Read it, then answer what actually executed.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="timeline">Required</span>
+      <span class="legend"><i class="dot d1"></i>Process<i class="dot d2"></i>Network<i class="dot d3"></i>Registry</span></div>
+  </div>
+  <article class="card"><div class="card-head"><div><span class="kicker">Timeline</span><h2>Nine events — three of them are the whole story</h2></div></div>
+    <div class="timeline">
+      <div class="tl-row"><span class="tl-t">08:07</span><span class="tl-ico proc" aria-hidden="true">P</span><div><b>OUTLOOK.EXE started a child: msedge.exe --embedded-webview</b><span class="sub">cscript blocked by policy · no ASR enforcement (audit only)</span></div></div>
+      <div class="tl-row"><span class="tl-t">08:09</span><span class="tl-ico file" aria-hidden="true">F</span><div><b>File written: %TEMP%\invoice_88216.xlsx.exe</b><span class="sub">SHA-256 a91f…4c02 · 1.4 MB · double extension hidden by shell settings</span></div></div>
+      <div class="tl-row"><span class="tl-t">08:11</span><span class="tl-ico proc" aria-hidden="true">P</span><div><b>invoice_88216.xlsx.exe → svch0st.exe spawned in a new session</b><span class="sub">Unsigned · parent chain traces back to Outlook · not blocked (EDR block mode off)</span></div></div>
+      <div class="tl-row"><span class="tl-t">08:11</span><span class="tl-ico net" aria-hidden="true">N</span><div><b>svch0st.exe → login-contoso.secure-mail.example (203.0.113.64:443)</b><span class="sub">3 outbound connections · 42 KB up / 8 KB down in 9 minutes</span></div></div>
+      <div class="tl-row"><span class="tl-t">08:14</span><span class="tl-ico reg" aria-hidden="true">R</span><div><b>Registry value created: HKCU\…\Run\WindowsUpdateSvc</b><span class="sub">Points at the temp loader — this is your second blast-radius key</span></div></div>
+      <div class="tl-row"><span class="tl-t">08:22</span><span class="tl-ico proc" aria-hidden="true">P</span><div><b>mshta.exe ran with an obfuscated argument</b><span class="sub">Related to a <em>different</em> alert on HR-WKS-0110 — not this device's story</span></div></div>
+      <div class="tl-row"><span class="tl-t">08:41</span><span class="tl-ico net" aria-hidden="true">N</span><div><b>RDP inbound session from 10.20.4.19 (WINSCP-SRV, maintenance)</b><span class="sub">Legitimate change window · no file transfer recorded · do not treat as lateral movement</span></div></div>
+      <div class="tl-row"><span class="tl-t">09:02</span><span class="tl-ico file" aria-hidden="true">F</span><div><b>Archive created: C:\PerfLogs\stage.cab (9.7 MB)</b><span class="sub">Staging behaviour · source folder was the payroll export directory</span></div></div>
+      <div class="tl-row"><span class="tl-t">09:38</span><span class="tl-ico proc" aria-hidden="true">P</span><div><b>svch0st.exe deleted itself after a failed second upload</b><span class="sub">Anti-forensics · this is why the timeline matters more than the alert title</span></div></div>
+    </div>
+  </article>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Process tree</span><h2>Who spawned whom</h2></div></div>
+      <div class="tree" role="tree" aria-label="Process tree on FIN-WKS-0777">
+        <div role="treeitem" aria-level="1" aria-expanded="true"><span class="t-ico"></span><b>OUTLOOK.EXE</b><span class="sub">pid 8104</span></div>
+        <div role="group">
+          <div role="treeitem" aria-level="2"><span class="t-ico">└</span><b>msedge.exe</b><span class="sub">embedded webview · pid 8212</span></div>
+          <div role="treeitem" aria-level="2"><span class="t-ico">└</span><b>invoice_88216.xlsx.exe</b><span class="sub">pid 8444 · unsigned</span></div>
+          <div role="group">
+            <div role="treeitem" aria-level="3" class="is-sel"><span class="t-ico">└</span><b>svch0st.exe</b><span class="sub">pid 8502 · network + registry child</span></div>
+          </div>
+        </div>
+        <div role="treeitem" aria-level="1"><span class="t-ico">·</span><b>SearchHost.exe</b><span class="sub">114 children — normal noise</span></div>
+      </div>
+      <p class="small muted">Selecting a node in the replica shows its command line, hash, signer and integrity level. The lab does not need you to click it; it needs you to read the parent chain correctly.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 2</span><h2>Read the timeline, don't guess it</h2></div><span class="obj-badge" data-objective-status="timeline">Required</span></div>
+      <form id="form-timeline" data-objective="timeline" novalidate>
+        <fieldset><legend>Which statements are supported by the timeline? (exactly four)</legend>
+          <label class="check"><input type="checkbox" id="e1"><span><b>The loader was delivered through an email client webview</b></span></label>
+          <label class="check"><input type="checkbox" id="e2"><span><b>Execution was allowed because enforcement was in audit mode, not block</b></span></label>
+          <label class="check"><input type="checkbox" id="e3"><span><b>Persistence was written to HKCU Run</b></span></label>
+          <label class="check"><input type="checkbox" id="e4"><span><b>The 08:41 RDP session is confirmed lateral movement</b><small>Trap: same subnet and an odd time are not evidence.</small></span></label>
+          <label class="check"><input type="checkbox" id="e5"><span><b>The payload staged and deleted itself after a failed upload</b></span></label>
+          <label class="check"><input type="checkbox" id="e6"><span><b>mshta.exe on this host proves a second intrusion</b><small>Trap: that event belongs to HR-WKS-0110.</small></span></label>
+        </fieldset>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Second-best blast-radius key (besides the hash)</span>
+            <select id="pivot2">
+          <option value="">Choose</option>
+          <option value="o1">The registry value name WindowsUpdateSvc</option>
+          <option value="o2">The device name</option>
+          <option value="o3">The Outlook version</option>
+        </select></label>
+          <label class="field"><span class="lbl">What should have blocked it with the current configuration?</span>
+            <select id="shouldBlock">
+          <option value="">Choose</option>
+          <option value="o1">Nothing — detection is only advisory</option>
+          <option value="o2">ASR block-executable-from-email in block mode, or EDR in block mode</option>
+          <option value="o3">A reboot</option>
+        </select></label>
+        </div>
+        <label class="field"><span class="lbl">Timeline note for the incident record (no addresses, no personal data)</span>
+          <textarea id="tlNote" rows="4" placeholder="08:09 …"></textarea>
+          <span class="help">Aim for a chain an auditor can follow: delivery → execution → persistence → C2 → staging → deletion.</span></label>
+        <div class="msg" id="msg-timeline" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save analysis and open Advanced hunting</button>
+          <button class="btn" type="button" data-route="hunt">Hunt</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="hunt" data-view-label="Blast radius" hidden aria-labelledby="hnT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Investigation &amp; response</span><span class="sep" aria-hidden="true">›</span><span class="current">Advanced hunting</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 3 · 15 pts</span><h1 id="hnT">How many machines have the same thing?</h1>
+    <p class="lede">Answer with one bounded query, then state the scope you would remediate.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="hunt">Required</span></div>
+  </div>
+  <div class="kql-toolbar" role="toolbar" aria-label="Query helpers">
+    <button class="btn btn--sm" type="button" id="huntRun">Run</button>
+    <button class="btn btn--sm" type="button" id="huntExplain">Check my query</button>
+    <button class="btn btn--sm" type="button" id="huntFormat">Format</button>
+    <button class="btn btn--sm" type="button" id="huntClear">Clear</button>
+    <button class="btn btn--sm" type="button" id="huntExport">Export CSV</button>
+    <span class="grow"></span>
+    <span class="small muted">Bounded windows only · this lab's retention is 14 days</span>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Query</span><h2>Every device that executed the loader by hash</h2></div></div>
+      <label class="field"><span class="lbl">KQL (KQL-Lite — a teaching subset)</span>
+        <textarea id="devQuery" data-kql="devQuery" class="kql-editor" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="huntHelp"></textarea></label>
+      <p class="small" id="huntHelp">Requirements: start from <code>DeviceFileEvents</code> or <code>DeviceProcessEvents</code>, restrict <code>Timestamp &gt; ago(14d)</code>, filter on <code>SHA1</code> or <code>SHA256</code> of the loader, then <code>summarize … by DeviceName</code>. Available tables: <code>DeviceFileEvents</code>, <code>DeviceProcessEvents</code>, <code>DeviceRegistryEvents</code>, <code>DeviceNetworkEvents</code>.</p>
+      <div class="msg" id="msg-hunt" role="status" aria-live="polite"></div>
+      <div class="form-actions"><button class="btn btn--primary" type="submit">Save the scope answer</button></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Results</span><h2 id="resHead">No query run yet</h2></div></div>
+      <div class="msg" id="huntError" role="alert" hidden></div>
+      <p class="kql-meta" id="huntMeta">Nothing run yet · window bound by your query</p>
+      <div id="huntResults" class="grid-wrap"><p class="small muted" style="padding:12px">Run a query to see simulated results here. The grid is generated from the lab's synthetic dataset — not from a tenant.</p></div>
+      <p class="small"><a href="#" data-route="schema" id="schemaLink">Open the schema blade</a> for column names.</p>
+    </article>
+  </div>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Reference</span><h2>The loader's identity, from the alert</h2></div></div>
+      <dl class="kv"><dt>File name</dt><dd>invoice_88216.xlsx.exe</dd><dt>SHA-1</dt><dd class="mono">f3a4c2d18b7e4a0c9d55e1b0a6c4f2d9e8b71a3c</dd><dt>SHA-256</dt><dd class="mono">a91f4c02…</dd><dt>First seen (tenant)</dt><dd>2026-08-21 08:09 UTC on FIN-WKS-0777</dd><dt>Registry persistence</dt><dd class="mono">HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdateSvc</dd></dl>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 3</span><h2>State the remediation scope</h2></div></div>
+      <form id="form-hunt" data-objective="hunt" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Devices in scope after your query</span>
+            <select id="scopeCount">
+          <option value="">Choose</option>
+          <option value="o1">1 — only FIN-WKS-0777</option>
+          <option value="o2">3 devices, all in the FIN-WKS group</option>
+          <option value="o3">118 — the whole group, by assumption</option>
+        </select>
+            <span class="help">Answer from your own result, not from the alert title.</span></label>
+          <label class="field"><span class="lbl">Right next step</span>
+            <select id="nextStep">
+          <option value="">Choose</option>
+          <option value="o1">Run a full scan on the three devices and switch the two ASR rules to block for FIN-WKS</option>
+          <option value="o2">Wait for Microsoft to push a definition update</option>
+          <option value="o3">Reimage every Windows workstation in the tenant</option>
+        </select></label>
+        </div>
+        <label class="field"><span class="lbl">Why the hash is a better pivot than the file name (min 80 chars)</span>
+          <textarea id="whyHash" rows="3"></textarea></label>
+        <div class="msg" id="msg-hunt2" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Save scope and open live response</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="schema" data-view-label="Schema" hidden aria-labelledby="shT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Advanced hunting</span><span class="sep" aria-hidden="true">›</span><span class="current">Schema</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="shT">Schema of the simulated tables</h1><p class="lede">Only the columns below exist in this lab. Real Advanced hunting has far more tables and columns.</p></div></div>
+  <article class="card"><div class="card-head"><div><span class="kicker">Tables</span><h2>Four endpoint tables</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-route="hunt">Back to the query</button></span></div>
+    <div class="schema" id="schemaList"></div>
+  </article>
+</section>
+
+<section class="view" data-view="liveresp" data-view-label="Live response" hidden aria-labelledby="lrT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="scope">FIN-WKS-0777</button><span class="sep" aria-hidden="true">›</span><span class="current">Live response</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 4 · 20 pts</span><h1 id="lrT">Live response session</h1>
+    <p class="lede">One simulated sensor, one typed console. The grade is not "did you type a command" — it is <em>evidence before destruction</em>, and an approval record for anything that changes the machine.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="lr">Required</span><span class="chip state-new" id="lrState">Session: not started</span></div>
+  </div>
+  <div class="notice warn"><span class="n-ico" aria-hidden="true">!</span><div><b>The verbs below are this lab's subset.</b><p>Real live response exposes a vendor-defined action set that changes over time. What transfers to your console is the discipline: collect first, keep the original file, never remove or kill before you have the artefact, and never run an unsigned binary you have not been approved to run.</p></div></div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Console</span><h2>Typed commands · recorded in the audit log</h2></div>
+      <span class="card-actions"><button class="btn btn--sm" type="button" id="lrReset">Reset session</button></span></div>
+      <div class="lr-term" id="lrOut" role="log" aria-live="polite" tabindex="0">FIN-WKS-0777&gt; session requested. Type help for the accepted verbs.</div>
+      <div class="lr-input">
+        <label class="field"><span class="lbl">Command</span>
+          <input id="lrCmd" class="mono" type="text" spellcheck="false" autocomplete="off" placeholder="collect-investigation-package" aria-describedby="lrHint"></label>
+        <div class="lr-actions"><button class="btn btn--primary" type="button" id="lrRun">Run on device</button>
+          <button class="btn" type="button" id="lrHistory">Show history</button></div>
+      </div>
+      <p class="small" id="lrHint">Accepted: <code>help</code> · <code>collect-investigation-package</code> · <code>get-file &lt;path&gt;</code> · <code>run-av-scan</code> · <code>list-processes</code> · <code>remove-item &lt;path&gt;</code> · <code>stop-process --pid &lt;n&gt;</code> · <code>run-binary &lt;url&gt;</code></p>
+      <div class="card" style="margin-top:12px"><div class="card-head"><div><span class="kicker">Approval</span><h2>Unblock the destructive verbs</h2></div></div>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Change reference for destructive actions</span><input id="lrChange" type="text" maxlength="40" placeholder="CHG-2026-4471"></label>
+          <label class="field"><span class="lbl">Approver</span><input id="lrApprover" type="text" maxlength="40" placeholder="role, not a person"></label>
+        </div>
+        <button class="btn btn--sm" type="button" id="lrApprove">Record approval for this session</button>
+        <p class="small muted" id="lrApproveState">No approval recorded — <code>remove-item</code>, <code>stop-process</code> and <code>run-binary</code> will be refused and flagged.</p>
+      </div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 4</span><h2>Session outcome</h2></div><span class="obj-badge" data-objective-status="lr">Required</span></div>
+      <form id="form-lr" data-objective="lr" novalidate>
+        <label class="field"><span class="lbl">A colleague suggests pulling an unsigned packer from a file host into the session. Your answer:</span>
+          <select id="lrBinary">
+          <option value="">Choose</option>
+          <option value="o1">Refuse — no unapproved binary onto a live sensor; ask for an approved forensic VM instead</option>
+          <option value="o2">Run it, the box is already compromised</option>
+        </select></label>
+        <label class="field"><span class="lbl">What did you do with the original file before any removal?</span>
+          <select id="lrPreserve">
+          <option value="">Choose</option>
+          <option value="o1">Copied it off-box with get-file and recorded the hash; the live file stays until the package is verified</option>
+          <option value="o2">Deleted it immediately so the C2 beacon would stop</option>
+          <option value="o3">Quarantined it twice to be sure</option>
+        </select></label>
+        <fieldset><legend>Session hygiene</legend>
+          <label class="check"><input type="checkbox" id="hA"><span><b>I ran <code>collect-investigation-package</code> before any mutating verb</b></span></label>
+          <label class="check"><input type="checkbox" id="hB"><span><b>I ran <code>run-av-scan</code> and will read the result, not just the fact that it completed</b></span></label>
+          <label class="check"><input type="checkbox" id="hC"><span><b>Every destructive verb I used has the approval recorded above</b></span></label>
+          <label class="check"><input type="checkbox" id="hD"><span><b>I left the RDP maintenance session of 08:41 alone</b></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Live-response note for the evidence folder (min 120 chars, no addresses)</span>
+          <textarea id="lrNote" rows="4" placeholder="Commands run, artefacts collected, hashes, what was left in place and why"></textarea></label>
+        <div class="msg" id="msg-lr" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Close the session and go to containment</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="isolate" data-view-label="Containment" hidden aria-labelledby="isoT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="scope">FIN-WKS-0777</button><span class="sep" aria-hidden="true">›</span><span class="current">Response actions</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 5 · 10 pts</span><h1 id="isoT">Isolate, contain, or neither</h1>
+    <p class="lede">These are different buttons with different blast radii. Choosing one is a decision about the business, not about the alert severity.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="isolate">Required</span></div>
+  </div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Action matrix</span><h2>What each button actually does</h2></div></div>
+      <div class="grid-wrap"><table class="matrix">
+        <thead><tr><th scope="col">Action</th><th scope="col">Effect on the device</th><th scope="col">User impact</th><th scope="col">Undo path</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Isolate device</th><td>Blocks inbound and outbound network traffic except the Defender portal and the sensor's cloud endpoints. Local execution continues.</td><td>High but reversible; the user keeps working offline</td><td>Reverse isolation from the same control</td></tr>
+          <tr><th scope="row">Contain device</th><td>Suspends the machine entirely, including local execution, and keeps it visible for forensics. Intended for devices with no business dependency, e.g. Kiosk / shared hardware.</td><td>Total — the machine stops responding to the user</td><td>Release containment</td></tr>
+          <tr><th scope="row">Restrict app execution</th><td>Blocks untrusted and unsigned applications from running; network stays up.</td><td>Medium; may break line-of-business apps</td><td>Lift restriction</td></tr>
+          <tr><th scope="row">Stop and quarantine file</th><td>Terminates the process tree and quarantines that file only.</td><td>Low</td><td>Action center → restore</td></tr>
+          <tr><th scope="row">Collect investigation package</th><td>No operational effect; produces the artefact set you need before anything else.</td><td>None (needs disk space and a non-metered link)</td><td>n/a</td></tr>
+          <tr><th scope="row">Run full antivirus scan</th><td>Scan plus remediation of detected items.</td><td>Performance hit only</td><td>n/a</td></tr>
+        </tbody></table></div>
+      <p class="small muted">High-value-asset settings can silently disable some of these for particular groups. That is a configuration fact you are expected to check, not discover at the moment you need it.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 5</span><h2>The decision</h2></div><span class="obj-badge" data-objective-status="isolate">Required</span></div>
+      <form id="form-isolate" data-objective="isolate" novalidate>
+        <label class="field"><span class="lbl">Action you take on FIN-WKS-0777 right now</span>
+          <select id="isoAction">
+          <option value="">Choose</option>
+          <option value="o1">Isolate device</option>
+          <option value="o2">Contain device</option>
+          <option value="o3">Restrict app execution</option>
+          <option value="o4">Nothing yet — monitor</option>
+        </select></label>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Why that action and not the other</span>
+            <select id="isoWhy">
+          <option value="">Choose</option>
+          <option value="o1">The user must keep working and evidence must stay intact, so block the network but not execution</option>
+          <option value="o2">Containment is always the default for high severity</option>
+          <option value="o3">Isolation deletes the staged archive, which is what we want</option>
+        </select></label>
+          <label class="field"><span class="lbl">User notification</span>
+            <select id="isoNote">
+          <option value="">Choose</option>
+          <option value="o1">Send the standard isolation message with a contact and an expected duration</option>
+          <option value="o2">No message — surprise is operationally safer</option>
+        </select></label>
+        </div>
+        <fieldset><legend>Pre-flight conditions</legend>
+          <label class="check"><input type="checkbox" id="pA"><span><b>Investigation package already collected (see the live-response log)</b></span></label>
+          <label class="check"><input type="checkbox" id="pB"><span><b>Reversible action chosen; no reimaging promised</b></span></label>
+          <label class="check"><input type="checkbox" id="pC"><span><b>Help desk informed so the "machine lost the network" ticket is not triaged as a new incident</b></span></label>
+          <label class="check"><input type="checkbox" id="pD"><span><b>Rollback owner and window recorded</b></span></label>
+        </fieldset>
+        <div class="msg" id="msg-isolate" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Commit the containment decision</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="tvm" data-view-label="Vulnerabilities" hidden aria-labelledby="tvT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>Exposure management</span><span class="sep" aria-hidden="true">›</span><span>Vulnerabilities</span><span class="sep" aria-hidden="true">›</span><span class="current">Recommendations</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 6 · 15 pts</span><h1 id="tvT">The hole the intrusion walked through</h1>
+    <p class="lede">Six open recommendations touch this device. Remediate the two that are exploitable from the browser and the mail path; the rest need a window, an owner and an expiry.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="tvm">Required</span></div>
+  </div>
+  <div class="grid-2" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Recommendations on FIN-WKS-0777</span><h2>Choose exactly two to fix today</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid" id="tvmRecs" data-selectable data-multi data-grid-name="TVM recommendations" data-restore-rows>
+        <caption>Multi-select. <span class="muted" data-selection-count>No rows selected</span></caption>
+        <thead><tr><th scope="col">ID</th><th scope="col">Recommendation</th><th scope="col" data-sort="n">CVSS</th><th scope="col">Exploit</th><th scope="col">Fix</th><th scope="col">Break risk</th></tr></thead>
+        <tbody>
+          <tr data-row-id="REC-1"><td class="mono">REC-1</td><td>Edge 128 → 129 security update<span class="sub">Remote code execution via crafted PDF</span></td><td class="num">8.8</td><td><span class="tag attack">Publicly exploited</span></td><td class="mono">KB5039218</td><td>Low</td></tr>
+          <tr data-row-id="REC-2"><td class="mono">REC-2</td><td>Windows Script Host should not launch from mail clients<span class="sub">Configuration, not a patch: ASR rule to block mode</span></td><td class="num">7.4</td><td><span class="tag attack">Used in this incident</span></td><td class="mono">ASR 9e6c4e…</td><td>Medium — 2 legacy macros</td></tr>
+          <tr data-row-id="REC-3"><td class="mono">REC-3</td><td>Office 2019 → latest monthly<span class="sub">Credential leak in outlook.exe</span></td><td class="num">6.5</td><td>Unreported</td><td class="mono">Current channel</td><td>Medium — add-in testing</td></tr>
+          <tr data-row-id="REC-4"><td class="mono">REC-4</td><td>Enable EDR in block mode on FIN-WKS<span class="sub">Post-detection blocking is currently off</span></td><td class="num">8.1</td><td><span class="tag attack">Used in this incident</span></td><td class="mono">Policy: Sensor</td><td>Low</td></tr>
+          <tr data-row-id="REC-5"><td class="mono">REC-5</td><td>Remove local admin from fin.clerk<span class="sub">Elevation opportunity</span></td><td class="num">5.9</td><td>Unreported</td><td class="mono">Privileged access</td><td>High — payroll tooling</td></tr>
+          <tr data-row-id="REC-6"><td class="mono">REC-6</td><td>NetBIOS over TCP/IP should be disabled on server VLANs<span class="sub">Not applicable to this device group</span></td><td class="num">4.3</td><td>Unreported</td><td class="mono">DHCP option</td><td>Medium</td></tr>
+        </tbody></table></div>
+      <p class="small muted">CVSS alone does not order your work. "Used in this incident" and "publicly exploited" are the columns that decide the queue for today.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 6</span><h2>Remediate and except, in writing</h2></div><span class="obj-badge" data-objective-status="tvm">Required</span></div>
+      <form id="form-tvm" data-objective="tvm" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">Remediation method for the two selected rows</span>
+            <select id="tvmMethod">
+          <option value="">Choose</option>
+          <option value="o1">Assign the built-in remediation package / policy to the FIN-WKS group now, monitor from the recommendation page</option>
+          <option value="o2">Email the users and ask them to update their machines</option>
+          <option value="o3">Add a firewall rule and call it done</option>
+        </select></label>
+          <label class="field"><span class="lbl">For REC-5 (local admin), what is the correct handling today?</span>
+            <select id="tvmRec5">
+          <option value="">Choose</option>
+          <option value="o1">Create an exception with a named owner, a compensating control and an expiry date; schedule the tooling fix</option>
+          <option value="o2">Mark it remediated so the score improves</option>
+          <option value="o3">Ignore — the exposure score is advisory</option>
+        </select></label>
+        </div>
+        <label class="field"><span class="lbl">Exception expiry you will set (ISO date)</span>
+          <input id="excExpiry" type="text" class="mono" maxlength="10" placeholder="YYYY-MM-DD">
+          <span class="help">90 days is the maximum this lab accepts for a control that is used-in-incident. Format 2026-11-20.</span></label>
+        <label class="field"><span class="lbl">Exception justification (min 60 chars, no names of people)</span>
+          <textarea id="excJust" rows="3" placeholder="Business reason, compensating control, review trigger"></textarea></label>
+        <fieldset><legend>Packaging and rollout</legend>
+          <label class="check"><input type="checkbox" id="kA"><span><b>FIN-WKS-0777 goes into the pilot group first, not straight to all 118</b></span></label>
+          <label class="check"><input type="checkbox" id="kB"><span><b>Rollback criteria are written before the policy is assigned</b></span></label>
+          <label class="check"><input type="checkbox" id="kC"><span><b>Exception is reviewed by the security owner, not by the team that asked for it</b></span></label>
+        </fieldset>
+        <div class="msg" id="msg-tvm" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Assign and move to verification</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="verify" data-view-label="Verification" hidden aria-labelledby="vfT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><button type="button" data-route="scope">FIN-WKS-0777</button><span class="sep" aria-hidden="true">›</span><span class="current">Action center</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Objective 7 · 15 pts</span><h1 id="vfT">Prove it, then hand it back</h1>
+    <p class="lede">"I clicked isolate" is not an outcome. Verification is a re-scan, a sensor check, a comparison against the original alert, and a sentence a manager can read.</p></div>
+    <div class="head-actions"><span class="obj-badge" data-objective-status="verify">Required</span></div>
+  </div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Action center</span><h2>Result of your session</h2></div><span class="card-actions"><button class="btn btn--sm" type="button" data-evidence="containment">Copy evidence</button></span></div>
+      <div class="grid-wrap"><table class="data-grid" data-grid-name="Action history">
+        <thead><tr><th scope="col">Action</th><th scope="col">Status</th><th scope="col">Result</th><th scope="col">Undo</th></tr></thead>
+        <tbody>
+          <tr><td>Collect investigation package</td><td><span class="chip done">Completed</span></td><td>38 MB · retrieved 09:52</td><td class="muted">n/a</td></tr>
+          <tr><td>Isolate device</td><td><span class="chip done">Active</span></td><td>Network blocked; sensor reachable</td><td><button class="btn btn--sm" type="button">Reverse isolation</button></td></tr>
+          <tr><td>Run full antivirus scan</td><td><span class="chip done">Completed</span></td><td>2 items cleaned · 0 pending after re-scan</td><td class="muted">n/a</td></tr>
+          <tr><td>Remove item (loader path)</td><td><span class="chip warn">Approved</span></td><td>File absent on re-check; hash still in the package</td><td><button class="btn btn--sm" type="button">Restore</button></td></tr>
+          <tr><td>ASR rule → block (FIN-WKS)</td><td><span class="chip warn">Pending reboot</span></td><td>Applies at next check-in window</td><td><button class="btn btn--sm" type="button">Revert</button></td></tr>
+        </tbody></table></div>
+      <div class="notice info" style="margin-top:12px"><span class="n-ico" aria-hidden="true">i</span><div><b>Read the last row before you close anything.</b><p>A policy that is pending, or a scan whose result you have not read, is not verification. Reverse isolation only after the re-scan and the sensor check agree.</p></div></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Objective 7</span><h2>Closure record</h2></div><span class="obj-badge" data-objective-status="verify">Required</span></div>
+      <form id="form-verify" data-objective="verify" novalidate>
+        <div class="form-grid">
+          <label class="field"><span class="lbl">When may isolation be reversed?</span>
+            <select id="unisolate">
+          <option value="">Choose</option>
+          <option value="o1">Once the re-scan is clean, the persistence key is gone and the ASR policy is applied</option>
+          <option value="o2">Immediately — isolation was only ever temporary</option>
+          <option value="o3">Never; isolated machines stay isolated</option>
+        </select></label>
+          <label class="field"><span class="lbl">Residual risk statement</span>
+            <select id="residual">
+          <option value="">Choose</option>
+          <option value="o1">Rebuild from a known-clean image is still recommended; local admin on this account remains an open exception</option>
+          <option value="o2">None — the scan was clean</option>
+        </select></label>
+        </div>
+        <fieldset><legend>Verification performed</legend>
+          <label class="check"><input type="checkbox" id="vA"><span><b>Second AV scan clean, and the loader path re-checked by file query</b></span></label>
+          <label class="check"><input type="checkbox" id="vB"><span><b>Sensor healthy, clock skew under 2 minutes, no proxy errors</b></span></label>
+          <label class="check"><input type="checkbox" id="vC"><span><b>The two other devices from the KQL result are isolated or explained</b></span></label>
+          <label class="check"><input type="checkbox" id="vD"><span><b>Investigation package stored with hash and chain of custody note</b></span></label>
+          <label class="check"><input type="checkbox" id="vE"><span><b>Help desk ticket linked, so the user call does not open a duplicate incident</b></span></label>
+        </fieldset>
+        <label class="field"><span class="lbl">Final note for the asset record (min 200 chars, no addresses)</span>
+          <textarea id="vfNote" rows="5"></textarea></label>
+        <div class="msg" id="msg-verify" role="status" aria-live="polite"></div>
+        <div class="form-actions"><button class="btn btn--primary" type="submit">Close the device work and export the evidence</button>
+          <button class="btn" type="button" data-evidence="evidence">Evidence pack</button></div>
+      </form></article>
+  </div>
+</section>
+
+<section class="view" data-view="guide" data-view-label="Lab guide" hidden aria-labelledby="gdT">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><span>RCW IT Training</span><span class="sep" aria-hidden="true">›</span><span class="current">Lab guide</span></nav>
+  <div class="page-head"><div><span class="eyebrow">Reference</span><h1 id="gdT">Marking scheme, standing rules and what this lab deliberately omits</h1></div>
+    <div class="head-actions"><button class="btn btn--sm" type="button" data-route="overview">Back to the lab</button></div></div>
+  <div class="grid-2" style="align-items:start">
+    <article class="card"><div class="card-head"><div><span class="kicker">Marking</span><h2>How the 100 points are awarded</h2></div></div>
+      <div class="grid-wrap"><table class="data-grid">
+        <thead><tr><th scope="col">#</th><th scope="col">Objective</th><th scope="col">Points</th><th scope="col">What the validator actually checks</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>Scope &amp; asset context</td><td class="num">10</td><td>Correct device, correct data class, impact stated honestly, three scope acknowledgements, tags present and clean of personal data</td></tr>
+          <tr><td class="num">2</td><td>Timeline &amp; process tree</td><td class="num">15</td><td>Exactly the four supported statements, the right pivot key, the enforcement-mode answer, a note that reads like an evidence chain</td></tr>
+          <tr><td class="num">3</td><td>Blast radius in KQL</td><td class="num">15</td><td>Query runs on the right table with a bounded window and a hash filter, returns the expected devices, plus a scope answer consistent with your own result</td></tr>
+          <tr><td class="num">4</td><td>Live response</td><td class="num">20</td><td>Evidence verbs before destructive verbs, approval recorded before any destructive verb, refusal of the unapproved binary, a note a third party can follow</td></tr>
+          <tr><td class="num">5</td><td>Isolation or containment</td><td class="num">10</td><td>Action justified by continuity and reversibility, notification sent, four pre-flight conditions met</td></tr>
+          <tr><td class="num">6</td><td>Vulnerability remediation</td><td class="num">15</td><td>Exactly the two incident-linked recommendations, a real remediation method, an exception with owner, expiry and compensating control</td></tr>
+          <tr><td class="num">7</td><td>Verification &amp; closure</td><td class="num">15</td><td>Re-scan plus file re-check, sensor health, the other devices explained, custody of the package, residual risk admitted</td></tr>
+        </tbody></table></div>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Standing rules</span><h2>Read once, apply everywhere</h2></div></div>
+      <ol class="rules">
+        <li><b>Evidence before remediation.</b> A package you could not retrieve is worse than a delay; the disk-space line in objective 1 is there to make you check.</li>
+        <li><b>Disruption is a decision with a owner.</b> Isolation, containment and app-execution restriction have different blast radii; pick the smallest one that stops the outcome you are seeing.</li>
+        <li><b>Never destroy the artefact you have not copied.</b> Removing a file that is the only copy of a payload in your tenant is how investigations end early.</li>
+        <li><b>Correlation is not evidence.</b> The 08:41 RDP session and the mshta alert on another host are in this lab specifically to be resisted.</li>
+        <li><b>Fix the control, not the ticket.</b> A clean scan with audit-mode ASR rules reproduces the incident next week.</li>
+        <li><b>Exceptions expire.</b> Every accepted risk in this lab needs an owner, a date and a compensating control, or it is not an exception — it is a forgotten hole.</li>
+        <li><b>Verification is a comparison.</b> Re-scan, re-check the persistence key, re-check the other devices, then reverse isolation.</li>
+      </ol>
+      <div class="notice" style="margin-top:12px"><span class="n-ico" aria-hidden="true">§</span><div><b>Mapping used in this series</b><p>Techniques to MITRE ATT&amp;CK (T1566.002, T1204.002, T1547.001, T1071.001, T1021.001, T1560); controls to NIST SP 800-61r3 detection/containment/eradication/recovery and ISO/IEC 27001:2022 A.5.24–A.5.28; regulatory clocks to NIS2 Art. 23, DORA Art. 19 and GDPR Art. 33; vulnerability terms to PCI DSS v4.0 requirements 6.3, 6.4, 11.3, 12.10. These labs are training aids and are not certification exam prep.</p></div></div>
+    </article>
+  </div>
+  <div class="grid-2" style="align-items:start;margin-top:16px">
+    <article class="card"><div class="card-head"><div><span class="kicker">Data</span><h2>Everything in this lab is synthetic</h2></div></div>
+      <table class="data-grid"><thead><tr><th scope="col">Kind</th><th scope="col">Values used</th><th scope="col">Guarantee</th></tr></thead>
+        <tbody>
+          <tr><td>Host names</td><td class="mono">FIN-WKS-0777, PAY-SRV-0007, OPS-SRV-0102</td><td>Invented; role-prefixed</td></tr>
+          <tr><td>Accounts</td><td class="mono">fin.clerk, svc_print</td><td>No real UPNs or directories</td></tr>
+          <tr><td>Addresses</td><td class="mono">203.0.113.64, 10.20.4.19</td><td>RFC 5737 / RFC 4193 documentation ranges</td></tr>
+          <tr><td>Domains &amp; URLs</td><td class="mono">*.example</td><td>Never resolvable to real infrastructure</td></tr>
+          <tr><td>Hashes</td><td class="mono">fabricated SHA-1 / SHA-256</td><td>Not real malware fingerprints</td></tr>
+        </tbody></table>
+      <p class="small muted">State is kept in your browser only (localStorage). Nothing is uploaded; there is no analytics script, no web font and no third-party request on this page. The audit log and the exported evidence pack redact anything shaped like a real identity unless it is obviously documentation data.</p>
+    </article>
+    <article class="card"><div class="card-head"><div><span class="kicker">Access</span><h2>Keyboard and screen-reader notes</h2></div></div>
+      <ul class="rules">
+        <li>Skip link first; every view is a labelled <code>&lt;section&gt;</code> and the side nav is a real list of buttons.</li>
+        <li>Grids: arrow keys move, Space selects, Shift+Arrow extends; the selected count is announced in the caption.</li>
+        <li>The live-response terminal is focusable and its output is a polite live region; commands are also mirrored into the audit log so nothing exists only visually.</li>
+        <li>Every validation message sits inside the form it belongs to and is announced via <code>aria-live</code>; colour is never the only signal.</li>
+        <li>Escape closes the audit flyout and any open modal; <code>prefers-reduced-motion</code> and Windows high contrast are respected.</li>
+      </ul>
+      <p class="small"><a href="../microsoft-defender-labs/compliance-standards.html">Read the full compliance and accessibility standard for this series →</a></p>
+    </article>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
