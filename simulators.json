@@ -1,6 +1,18 @@
 {
   "simulators": [
     {
+      "title": "Microsoft Intune Exam Simulator — MD-102 Endpoint Administrator (400+ Questions)",
+      "category": "Microsoft Intune • MD-102 • Exam Simulator • Timed Mock • 60 Questions",
+      "badge": "INTUNE-EXAM",
+      "accent": "#0078d4",
+      "id": "microsoft-intune-exam-simulator",
+      "targetUrl": "https://www.rcwittraining.in/microsoft-intune-exam-simulator/",
+      "contentType": "Exam Simulator",
+      "technology": "Microsoft Azure",
+      "subcategory": "Certification Exam",
+      "group": "Certification Exams"
+    },
+    {
       "title": "Microsoft Intune: Windows Autopilot Hands-on Lab & Console Replica",
       "category": "Microsoft Intune \u2022 Autopilot \u2022 Console Replica \u2022 Zero Trust \u2022 Compliance",
       "badge": "INTUNE-AUTOPILOT",

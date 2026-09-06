@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+  "title": "Microsoft Intune Exam Simulator \u2014 MD-102 Endpoint Administrator (400+ Questions)",
+  "category": "Microsoft Intune \u2022 MD-102 \u2022 Exam Simulator \u2022 Timed Mock \u2022 60 Questions",
+  "badge": "INTUNE-EXAM",
+  "accent": "#0078d4",
+  "id": "microsoft-intune-exam-simulator",
+  "targetUrl": "https://www.rcwittraining.in/microsoft-intune-exam-simulator/",
+  "contentType": "Exam Simulator",
+  "technology": "Microsoft Azure",
+  "subcategory": "Certification Exam",
+  "group": "Certification Exams"
+},
+
+  {
   "title": "Microsoft Intune: Windows Autopilot Hands-on Lab & Console Replica",
   "category": "Microsoft Intune \u2022 Autopilot \u2022 Console Replica \u2022 Zero Trust \u2022 Compliance",
   "badge": "INTUNE-AUTOPILOT",
