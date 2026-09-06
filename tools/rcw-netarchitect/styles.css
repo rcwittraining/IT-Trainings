@@ -85,7 +85,7 @@ svg#canvas{width:100%;height:100%;display:block;touch-action:none;outline:none;c
 svg#canvas:focus-visible{box-shadow:inset 0 0 0 3px #f5a300}
 svg#canvas.tool-pan{cursor:grab}
 svg#canvas.tool-pan.dragging{cursor:grabbing}
-svg#canvas.tool-connect,svg#canvas.tool-shape,svg#canvas.tool-text{cursor:crosshair}
+svg#canvas.tool-connect,svg#canvas.tool-shape,svg#canvas.tool-text,svg#canvas.tool-line,svg#canvas.tool-note{cursor:crosshair}
 svg#canvas .shape{cursor:move}
 svg#canvas .shape.locked{cursor:default}
 svg#canvas .conn{cursor:pointer}
@@ -235,3 +235,11 @@ svg#canvas text{-webkit-user-select:none;user-select:none}
   .shortcuts{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---- library tools (v1.1) ---- */
+.lib-tools{display:flex;gap:4px;padding:6px 10px 0;align-items:center}
+.lib-tools select{flex:1;min-width:0;font:inherit;font-size:12px;padding:5px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.lib-tools .btn.sm{padding:4px 8px;line-height:1}
+.lib-cat summary .cnt{margin-left:auto}
+.shape.anchor{cursor:move}
+#libBody{position:relative}

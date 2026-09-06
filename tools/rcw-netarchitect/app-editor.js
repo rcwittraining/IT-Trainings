@@ -89,6 +89,10 @@
       if (!n.locked && S.sel.size === 1) {
         const pts = { nw: [n.x, n.y], n: [n.x + n.w / 2, n.y], ne: [n.x + n.w, n.y], e: [n.x + n.w, n.y + n.h / 2], se: [n.x + n.w, n.y + n.h], s: [n.x + n.w / 2, n.y + n.h], sw: [n.x, n.y + n.h], w: [n.x, n.y + n.h / 2] };
         Object.entries(pts).forEach(([k, [x, y]]) => { o += `<rect data-handle="${k}" data-node="${id}" x="${x - hs / 2}" y="${y - hs / 2}" width="${hs}" height="${hs}" fill="#fff" stroke="#078be8" stroke-width="${1.5 / z}"/>`; });
+        // rotation handle (stalk above the top-centre)
+        const rx = n.x + n.w / 2, ry = n.y - 22 / z;
+        o += `<line x1="${rx}" y1="${n.y}" x2="${rx}" y2="${ry + 6 / z}" stroke="#078be8" stroke-width="${1.2 / z}" pointer-events="none"/><circle data-rotate="1" data-node="${id}" cx="${rx}" cy="${ry}" r="${6 / z}" fill="#fff" stroke="#078be8" stroke-width="${1.5 / z}" style="cursor:grab"><title>Drag to rotate (Shift = 15° steps) · double-click to reset</title></circle>`;
+        if (n.rot) o += `<text x="${rx + 10 / z}" y="${ry + 4 / z}" font-size="${10 / z}" fill="#078be8" pointer-events="none">${Math.round(n.rot)}°</text>`;
       }
       if (n.locked) o += `<text x="${n.x + n.w - 4 / z}" y="${n.y + 12 / z}" text-anchor="end" font-size="${11 / z}" fill="#5f6c84" pointer-events="none">🔒</text>`;
     });
@@ -139,11 +143,23 @@
     S.page.nodes.push(n);
     return n;
   }
+  function rotateSel(deg) {
+    const ns = selNodes().filter(n => !n.locked); if (!ns.length) return; begin();
+    ns.forEach(n => { n.rot = deg === 0 ? 0 : (((n.rot || 0) + deg) % 360 + 360) % 360; if (!n.rot) delete n.rot; });
+    commit("rotate"); announce(deg === 0 ? "Rotation reset" : `Rotated ${deg > 0 ? "clockwise" : "anti-clockwise"}`);
+  }
+  function flipSel(axis) {
+    const ns = selNodes().filter(n => !n.locked); if (!ns.length) return; begin();
+    ns.forEach(n => { const k = axis === "h" ? "flipH" : "flipV"; if (n[k]) delete n[k]; else n[k] = true; });
+    commit("flip");
+  }
   function deleteSelection() {
     if (!S.sel.size && !S.selEdges.size) return; begin();
     const ids = new Set(); S.sel.forEach(id => { ids.add(id); C.descendants(id).forEach(d => ids.add(d.id)); });
     S.page.nodes = S.page.nodes.filter(n => !ids.has(n.id));
     S.page.edges = S.page.edges.filter(e => !S.selEdges.has(e.id) && !ids.has(e.from.node) && !ids.has(e.to.node));
+    const used = new Set(); S.page.edges.forEach(e => { used.add(e.from.node); used.add(e.to.node); });
+    S.page.nodes = S.page.nodes.filter(n => n.type !== "anchor" || used.has(n.id)); // free line end-points die with their line
     S.sel.clear(); S.selEdges.clear(); commit("delete");
   }
   function duplicateSelection(dx, dy) {
@@ -177,6 +193,7 @@
     svg.focus({ preventScroll: true });
     // handles
     if (t.dataset.handle) { const n = C.nodeById(t.dataset.node); begin(); ptrDown = { kind: "resize", handle: t.dataset.handle, n, ox: n.x, oy: n.y, ow: n.w, oh: n.h, sx: w.x, sy: w.y, children: C.descendants(n.id).map(c => ({ c, x: c.x, y: c.y, w: c.w, h: c.h })) }; svg.setPointerCapture(ev.pointerId); return; }
+    if (t.dataset.rotate) { const n = C.nodeById(t.dataset.node); begin(); ptrDown = { kind: "rotate", n, cx: n.x + n.w / 2, cy: n.y + n.h / 2, start: n.rot || 0, a0: Math.atan2(w.y - (n.y + n.h / 2), w.x - (n.x + n.w / 2)) }; svg.setPointerCapture(ev.pointerId); return; }
     if (t.dataset.port) { const n = C.nodeById(t.dataset.node); const p = C.portPoint(n, t.dataset.port); ptrDown = { kind: "connect", from: n.id, port: t.dataset.port }; S.connectDraft = { x1: p.x, y1: p.y, x2: p.x, y2: p.y }; svg.setPointerCapture(ev.pointerId); return; }
     if (t.dataset.endpoint) { const e = C.edgeById(t.dataset.edge); begin(); ptrDown = { kind: "reconnect", e, end: t.dataset.endpoint }; svg.setPointerCapture(ev.pointerId); return; }
     if (t.dataset.waypoint != null && t.dataset.edge) { const e = C.edgeById(t.dataset.edge); begin(); ptrDown = { kind: "waypoint", e, i: +t.dataset.waypoint }; svg.setPointerCapture(ev.pointerId); return; }
@@ -184,6 +201,15 @@
     // tools that place things
     if (S.tool === "shape" && S.pendingShape) { begin(); const n = addNode(S.pendingShape, w.x, w.y); S.sel = new Set([n.id]); S.selEdges.clear(); commit("add"); if (!ev.shiftKey) setTool("select"); return; }
     if (S.tool === "text") { begin(); const n = addNode("text", w.x, w.y, { label: "" }); S.sel = new Set([n.id]); S.selEdges.clear(); commit("add"); setTool("select"); startTextEdit(n); return; }
+    if (S.tool === "note") { begin(); const n = addNode("note", w.x, w.y, { label: "" }); S.sel = new Set([n.id]); S.selEdges.clear(); commit("add"); setTool("select"); startTextEdit(n); return; }
+    if (S.tool === "line") {
+      // free line / arrow: start point may be on a shape (then it glues to it), otherwise an invisible anchor is created
+      const se0 = t.closest(".shape"); const n0 = se0 ? C.nodeById(se0.dataset.id) : null;
+      let fromPort = "auto", p0 = { x: snap(w.x), y: snap(w.y) };
+      if (n0) { const np = nearestPort(n0, w.x, w.y); fromPort = n0.type === "anchor" ? "c" : np.dist < 18 / S.zoom ? np.port : "auto"; p0 = fromPort === "auto" ? { x: n0.x + n0.w / 2, y: n0.y + n0.h / 2 } : C.portPoint(n0, fromPort); }
+      ptrDown = { kind: "freeline", fromNode: n0 ? n0.id : null, fromPort, x1: p0.x, y1: p0.y };
+      S.connectDraft = { x1: p0.x, y1: p0.y, x2: p0.x, y2: p0.y }; svg.setPointerCapture(ev.pointerId); return;
+    }
     const shapeEl = t.closest(".shape"), connEl = t.closest(".conn");
     if (S.tool === "connect") {
       if (shapeEl) { const n = C.nodeById(shapeEl.dataset.id); const np = nearestPort(n, w.x, w.y); const p = C.portPoint(n, np.port); ptrDown = { kind: "connect", from: n.id, port: np.dist < 18 / S.zoom ? np.port : "auto" }; S.connectDraft = { x1: p.x, y1: p.y, x2: w.x, y2: w.y }; svg.setPointerCapture(ev.pointerId); }
@@ -261,12 +287,28 @@
       if (tgt && tgt.id !== d.from) { const np = nearestPort(tgt, w.x, w.y); if (np.dist < 18 / S.zoom) { S.hoverPort = { node: tgt.id, port: np.port }; const p = C.portPoint(tgt, np.port); S.connectDraft.x2 = p.x; S.connectDraft.y2 = p.y; } }
       renderOverlay(); return;
     }
-    if (d.kind === "reconnect") {
-      const el = document.elementFromPoint(ev.clientX, ev.clientY); const se = el && el.closest ? el.closest(".shape") : null; const tgt = se ? C.nodeById(se.dataset.id) : nodeAt(w.x, w.y);
+    if (d.kind === "freeline") {
+      let x2 = w.x, y2 = w.y;
+      if (ev.shiftKey) { const dx = x2 - d.x1, dy = y2 - d.y1; if (Math.abs(dx) > Math.abs(dy)) y2 = d.y1; else x2 = d.x1; }
+      const el = document.elementFromPoint(ev.clientX, ev.clientY); const se = el && el.closest ? el.closest(".shape") : null; const tgt = se ? C.nodeById(se.dataset.id) : null;
       S.hoverNode = tgt ? tgt.id : null; S.hoverPort = null;
-      if (tgt) { const np = nearestPort(tgt, w.x, w.y); const port = np.dist < 18 / S.zoom ? np.port : "auto"; if (port !== "auto") S.hoverPort = { node: tgt.id, port }; const other = d.end === "from" ? d.e.to.node : d.e.from.node; if (tgt.id !== other) { d.e[d.end] = { node: tgt.id, port }; } }
+      if (tgt && tgt.id !== d.fromNode) { const np = nearestPort(tgt, w.x, w.y); if (np.dist < 18 / S.zoom) { S.hoverPort = { node: tgt.id, port: np.port }; const p = C.portPoint(tgt, np.port); x2 = p.x; y2 = p.y; } }
+      else if (S.doc.settings.snap) { x2 = snap(x2); y2 = snap(y2); }
+      S.connectDraft.x2 = x2; S.connectDraft.y2 = y2; d.x2 = x2; d.y2 = y2; d.toNode = tgt && tgt.id !== d.fromNode ? tgt.id : null; d.toPort = S.hoverPort ? S.hoverPort.port : "auto";
+      renderOverlay(); return;
+    }
+    if (d.kind === "reconnect") {
+      const el = document.elementFromPoint(ev.clientX, ev.clientY); const se = el && el.closest ? el.closest(".shape") : null; let tgt = se ? C.nodeById(se.dataset.id) : nodeAt(w.x, w.y);
+      const endNode = C.nodeById(d.e[d.end].node); const other = d.end === "from" ? d.e.to.node : d.e.from.node;
+      if (d.anchorId === undefined) d.anchorId = endNode && endNode.type === "anchor" ? endNode.id : null; // remember the free end-point this end started on
+      if (tgt && (tgt.type === "anchor" || tgt.id === other)) tgt = null;
+      S.hoverNode = tgt ? tgt.id : null; S.hoverPort = null; d.moved = true; d.lastTgt = tgt;
+      if (tgt) { const np = nearestPort(tgt, w.x, w.y); const port = np.dist < 18 / S.zoom ? np.port : "auto"; if (port !== "auto") S.hoverPort = { node: tgt.id, port }; d.e[d.end] = { node: tgt.id, port }; }
+      else if (d.anchorId) { const a = C.nodeById(d.anchorId); if (a) { a.x = snap(w.x) - a.w / 2; a.y = snap(w.y) - a.h / 2; d.e[d.end] = { node: a.id, port: "c" }; } }
+      else { d.detachAt = { x: snap(w.x), y: snap(w.y) }; }
       gScene.innerHTML = C.sceneMarkup(); renderOverlay(); return;
     }
+    if (d.kind === "rotate") { const a = Math.atan2(w.y - d.cy, w.x - d.cx); let deg = d.start + (a - d.a0) * 180 / Math.PI; deg = ((deg % 360) + 360) % 360; if (ev.shiftKey || S.doc.settings.snap) deg = Math.round(deg / 15) * 15 % 360; d.n.rot = Math.round(deg * 10) / 10; if (!d.n.rot) delete d.n.rot; gScene.innerHTML = C.sceneMarkup(); renderOverlay(); $("#statPos").textContent = `${Math.round(deg)}°`; return; }
     if (d.kind === "waypoint") { d.e.points[d.i] = { x: snap(w.x), y: snap(w.y) }; gScene.innerHTML = C.sceneMarkup(); renderOverlay(); return; }
     if (d.kind === "marquee") { S.marquee.x2 = w.x; S.marquee.y2 = w.y; renderOverlay(); return; }
   }
@@ -305,7 +347,30 @@
       } else renderOverlay();
       return;
     }
-    if (d.kind === "reconnect") { S.hoverPort = null; commit("reconnect"); return; }
+    if (d.kind === "freeline") {
+      S.connectDraft = null; S.hoverPort = null;
+      const x2 = d.x2 == null ? d.x1 : d.x2, y2 = d.y2 == null ? d.y1 : d.y2;
+      if (Math.hypot(x2 - d.x1, y2 - d.y1) < 8) { renderOverlay(); return; }
+      begin();
+      const anchor = (x, y) => { const a = addNode("anchor", x, y); a.label = ""; return a; };
+      const fromId = d.fromNode || anchor(d.x1, d.y1).id, toId = d.toNode || anchor(x2, y2).id;
+      const e = { id: uid("e"), from: { node: fromId, port: d.fromNode ? (d.fromPort || "auto") : "c" }, to: { node: toId, port: d.toNode ? (d.toPort || "auto") : "c" }, points: [], label: "", srcLabel: "", dstLabel: "", style: Object.assign({ router: "straight" }, S.lastLineStyle || {}), preset: S.lastLinePreset || "plain", attrs: [] };
+      S.page.edges.push(e); S.sel.clear(); S.selEdges = new Set([e.id]); commit("line");
+      if (!ev.shiftKey) setTool("select");
+      return;
+    }
+    if (d.kind === "reconnect") {
+      S.hoverPort = null;
+      if (!d.moved) { renderOverlay(); return; }
+      if (!d.lastTgt && !d.anchorId && d.detachAt) { // dropped on empty canvas: detach this end onto a new free end-point
+        const a = addNode("anchor", d.detachAt.x, d.detachAt.y); a.label = ""; d.e[d.end] = { node: a.id, port: "c" };
+      }
+      if (d.anchorId && d.e[d.end].node !== d.anchorId) { // re-attached to a real shape: drop the orphaned end-point
+        const used = S.page.edges.some(x => x.from.node === d.anchorId || x.to.node === d.anchorId); if (!used) S.page.nodes = S.page.nodes.filter(n => n.id !== d.anchorId);
+      }
+      commit("reconnect"); return;
+    }
+    if (d.kind === "rotate") { commit("rotate"); return; }
     if (d.kind === "waypoint") { commit("waypoint"); return; }
     if (d.kind === "marquee") {
       const m = S.marquee; S.marquee = null; const x1 = Math.min(m.x1, m.x2), y1 = Math.min(m.y1, m.y2), x2 = Math.max(m.x1, m.x2), y2 = Math.max(m.y1, m.y2);
@@ -315,6 +380,7 @@
   }
   function onDblClick(ev) {
     const w = clientToWorld(ev.clientX, ev.clientY);
+    if (ev.target.dataset && ev.target.dataset.rotate) { rotateSel(0); return; }
     // the scene may have been re-rendered between the two clicks, so resolve the target from live DOM at the pointer position
     const live = document.elementFromPoint(ev.clientX, ev.clientY);
     const se = live && live.closest ? live.closest(".shape") : null, ce = live && live.closest ? live.closest(".conn") : null;
@@ -338,7 +404,7 @@
 
   /* ------------------------------------------------------------------ inline text editing */
   function startTextEdit(n) {
-    if (n.locked) return; const s = SH.get(n.type); if (s.kind === "special" && n.type !== "table") return;
+    if (n.locked || n.type === "anchor") return; const s = SH.get(n.type); if (s.kind === "special" && n.type !== "table") return;
     finishTextEdit(); S.editing = { n, prev: n.label };
     const ta = $("#textEditor"); const st = C.nodeStyle(n); const r = svg.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
     const isIcon = s.kind === "icon", isCont = s.kind === "container";
@@ -372,7 +438,7 @@
   function setTool(t, shape) {
     S.tool = t; S.pendingShape = shape || null; svg.className.baseVal = "tool-" + t;
     $$("[data-tool]").forEach(b => b.setAttribute("aria-pressed", b.dataset.tool === t ? "true" : "false"));
-    $("#statTool").textContent = t === "shape" ? "Click on canvas to place: " + (SH.get(shape) || {}).name : { select: "Select / move (V)", connect: "Connector: drag from a shape to another (C)", pan: "Pan: drag the canvas (H)", text: "Text: click to add (T)" }[t] || t;
+    $("#statTool").textContent = t === "shape" ? "Click on canvas to place: " + (SH.get(shape) || {}).name : { select: "Select / move (V)", connect: "Connector: drag from a shape to another (C)", pan: "Pan: drag the canvas (H)", text: "Text: click to add (T)", line: "Line / arrow: drag anywhere to draw a free line - it snaps to shapes if you start or end on one (A)", note: "Sticky note: click to add (N)" }[t] || t;
   }
   function syncToolbar() {
     $("#btnUndo").disabled = !S.undo.length; $("#btnRedo").disabled = !S.redo.length;
@@ -454,6 +520,7 @@
       h += `<h4>Content</h4><div class="row top"><label for="pLabel">Label</label><textarea id="pLabel" rows="2">${U.esc(n.label)}</textarea></div>`;
       if (s.kind !== "text" && s.kind !== "special") h += inp("pSub", "Sub-label", n.sub, "text", 'placeholder="hostname / model / IP"');
       if (n.type === "table" || n.type === "revtable") h += `<div class="row top"><label for="pRows">Rows</label><textarea id="pRows" rows="6" style="font-family:ui-monospace,Consolas,monospace;font-size:11.5px" spellcheck="false">${U.esc(n.props.rows || "")}</textarea></div><p class="hint">One row per line, columns separated by <b>|</b>. First line = header.</p>`;
+      if (n.type === "umlclass" || n.type === "umlinterface" || n.type === "umlentity") h += `<div class="row top"><label for="pRows">${n.type === "umlentity" ? "Columns" : "Members"}</label><textarea id="pRows" rows="7" style="font-family:ui-monospace,Consolas,monospace;font-size:11.5px" spellcheck="false">${U.esc(n.props.rows || "")}</textarea></div><p class="hint">One member per line. A line of <b>--</b> draws a separator${n.type === "umlentity" ? "; start a line with <b>PK</b> / <b>FK</b> to emphasise keys" : " (attributes above, operations below)"}. Put a stereotype like «interface» on the first label line.</p>`;
       if (n.type === "legend") h += `<div class="row"><label>Mode</label><label style="min-width:0;flex:1"><input type="checkbox" id="pLegendAuto" ${n.props.auto !== false ? "checked" : ""}> Auto-generate from page</label></div>${n.props.auto === false ? `<div class="row top"><label for="pRows">Entries</label><textarea id="pRows" rows="5" style="font-family:ui-monospace,Consolas,monospace;font-size:11.5px" spellcheck="false">${U.esc(n.props.rows || "")}</textarea></div><p class="hint">One per line: <b>Name | #colour</b></p>` : ""}`;
       if (n.type === "titleblock") h += `<p class="hint">Fields come from <b>Diagram properties</b> (deselect everything to edit them).</p>`;
       if (n.type === "image") h += `<div class="row"><label>Image</label><button type="button" class="btn sm" id="pPickImg">Choose file…</button></div>`;
@@ -472,6 +539,7 @@
     h += `<h4>Text</h4>` + colorRow("pText", "Colour", st.textColor) + `<div class="pair"><div class="row"><label for="pFont">Size</label><input id="pFont" type="number" min="6" max="72" value="${st.fontSize}"></div><div class="row"><label style="flex:0 0 auto"><input type="checkbox" id="pBold" ${st.bold ? "checked" : ""}> Bold</label></div></div>`;
     h += `<div class="row"><label>Align</label><div class="chips">${["left", "center", "right"].map(a => `<button type="button" class="chip" data-align="${a}" aria-pressed="${st.align === a}">${a}</button>`).join("")}</div></div>`;
     if (s.kind === "icon") h += sel("pLabelPos", "Label position", st.labelPos || "below", [["below", "Below"], ["right", "Right"], ["above", "Above"], ["none", "Hidden"]]);
+    h += `<h4>Rotate & flip</h4><div class="row"><label for="pRot">Angle</label><input id="pRot" type="number" min="-360" max="360" step="1" value="${multi ? "" : Math.round(n.rot || 0)}" placeholder="0" style="max-width:80px"><div class="chips" style="margin-left:6px"><button type="button" class="chip" data-rotq="90" title="Rotate 90° clockwise (Ctrl+R)">↻ 90°</button><button type="button" class="chip" data-rotq="-90" title="Rotate 90° anti-clockwise">↺ 90°</button><button type="button" class="chip" data-flipq="h" aria-pressed="${!!n.flipH}" title="Flip horizontal">⇋</button><button type="button" class="chip" data-flipq="v" aria-pressed="${!!n.flipV}" title="Flip vertical">⇅</button></div></div>`;
     if (!multi) h += `<h4>Position & size</h4><div class="pair"><div class="row"><label for="pX">X</label><input id="pX" type="number" value="${Math.round(n.x)}"></div><div class="row"><label for="pY">Y</label><input id="pY" type="number" value="${Math.round(n.y)}"></div><div class="row"><label for="pW">W</label><input id="pW" type="number" min="10" value="${Math.round(n.w)}"></div><div class="row"><label for="pH">H</label><input id="pH" type="number" min="10" value="${Math.round(n.h)}"></div></div>`;
     h += `<div class="row" style="margin-top:8px;flex-wrap:wrap;gap:5px"><button type="button" class="btn sm" id="pLock">${ns.every(x => x.locked) ? "🔓 Unlock" : "🔒 Lock"}</button><button type="button" class="btn sm" id="pDup">Duplicate</button><button type="button" class="btn sm danger" id="pDel">Delete</button></div>`;
     return h;
@@ -505,6 +573,9 @@
     on("pFont", "change", (e) => { styleAll("fontSize", clamp(+e.target.value || 12, 6, 72), false); ns.forEach(x => { if (SH.get(x.type).kind === "text") autosizeText(x); }); renderAll(); });
     on("pBold", "change", (e) => styleAll("bold", e.target.checked, false));
     $$("[data-align]").forEach(b => b.addEventListener("click", () => styleAll("align", b.dataset.align, false)));
+    $$("[data-rotq]").forEach(b => b.addEventListener("click", () => { rotateSel(+b.dataset.rotq); renderProps(true); }));
+    $$("[data-flipq]").forEach(b => b.addEventListener("click", () => { flipSel(b.dataset.flipq); renderProps(true); }));
+    on("pRot", "change", () => { const v = ((+$("#pRot").value || 0) % 360 + 360) % 360; if (ns.every(x => (x.rot || 0) === v)) return; begin(); ns.forEach(x => { if (x.locked) return; x.rot = v; if (!x.rot) delete x.rot; }); commitNow("rotate"); });
     on("pLabelPos", "change", (e) => styleAll("labelPos", e.target.value, false));
     ["X", "Y", "W", "H"].forEach(k => on("p" + k, "change", (e) => { begin(); const v = +e.target.value; const key = k.toLowerCase(); const old = n[key]; if (k === "W" || k === "H") n[key] = Math.max(10, v); else { n[key] = v; C.descendants(n.id).forEach(d => d[key] += v - old); } commitNow("geometry"); }));
     on("pLock", "click", toggleLock); on("pDup", "click", () => duplicateSelection(20, 20)); on("pDel", "click", deleteSelection);
@@ -515,7 +586,10 @@
     if (!multi) { h += `<h4>Labels</h4>` + inp("eLabel", "Label", e.label, "text", 'placeholder="e.g. 10G LACP / HTTPS 443"') + inp("eSrc", "Source end", e.srcLabel, "text", 'placeholder="Gi1/0/1"') + inp("eDst", "Target end", e.dstLabel, "text", 'placeholder="Gi1/0/48"'); h += `<p class="hint">End labels are ideal for LLD port / interface names.</p>`; }
     h += `<h4>Type & routing</h4>` + sel("ePreset", "Media / type", e.preset || "link", Object.entries(C.PRESETS).map(([k, v]) => [k, v.name]));
     h += sel("eRouter", "Routing", st.router, [["orthogonal", "Orthogonal (right angles)"], ["straight", "Straight"], ["curved", "Curved"]]);
-    h += `<div class="pair">${sel("eStart", "Start", st.startArrow, [["none", "None"], ["arrow", "Arrow"], ["open", "Open arrow"], ["dot", "Dot"], ["diamond", "Diamond"]])}${sel("eEnd", "End", st.endArrow, [["none", "None"], ["arrow", "Arrow"], ["open", "Open arrow"], ["dot", "Dot"], ["diamond", "Diamond"]])}</div>`;
+    const ARROWS = [["none", "None"], ["arrow", "Arrow (filled)"], ["open", "Open arrow"], ["triangle", "Hollow triangle (UML inherit)"], ["dot", "Dot"], ["circleopen", "Hollow circle"], ["diamond", "Hollow diamond (aggregation)"], ["diamondfilled", "Filled diamond (composition)"], ["square", "Square"], ["bar", "Bar"], ["one", "ERD: one (||)"], ["many", "ERD: many (crow's foot)"], ["cross", "Cross / blocked"]];
+    h += `<div class="pair">${sel("eStart", "Start", st.startArrow, ARROWS)}${sel("eEnd", "End", st.endArrow, ARROWS)}</div>`;
+    h += `<div class="row"><label for="eLabelT">Label position</label><input id="eLabelT" type="range" min="0.05" max="0.95" step="0.05" value="${e.labelT == null ? 0.5 : e.labelT}"><span style="min-width:24px;text-align:right">${Math.round((e.labelT == null ? 0.5 : e.labelT) * 100)}%</span></div>`;
+    h += `<div class="row"><label for="eJumps">Line jumps</label><input id="eJumps" type="checkbox" ${st.jumps !== false ? "checked" : ""}> <span class="hint" style="margin:0">hop over crossing lines</span></div>`;
     if (!multi) h += `<div class="pair">${sel("eFromPort", "From port", e.from.port, [["auto", "Auto"], ["n", "Top"], ["e", "Right"], ["s", "Bottom"], ["w", "Left"]])}${sel("eToPort", "To port", e.to.port, [["auto", "Auto"], ["n", "Top"], ["e", "Right"], ["s", "Bottom"], ["w", "Left"]])}</div>`;
     h += `<h4>Style</h4>` + colorRow("eStroke", "Colour", st.stroke) + `<div class="row"><label for="eWidth">Width</label><input id="eWidth" type="range" min="0.5" max="8" step="0.5" value="${st.width}"><span style="min-width:24px;text-align:right">${st.width}</span></div>` + sel("eDash", "Dash", st.dash || "", [["", "Solid"], ["6 4", "Dashed"], ["2 4", "Dotted"], ["8 4 2 4", "Dash-dot"], ["10 4", "Long dash"]]) + `<div class="row"><label for="eFont">Label size</label><input id="eFont" type="number" min="6" max="24" value="${st.fontSize}"></div>`;
     h += `<div class="row" style="margin-top:8px;flex-wrap:wrap;gap:5px"><button type="button" class="btn sm" id="eReverse">⇄ Reverse</button><button type="button" class="btn sm" id="eReset">Reset waypoints</button><button type="button" class="btn sm" id="eDefault">Set as default</button><button type="button" class="btn sm danger" id="eDel">Delete</button></div>`;
@@ -529,7 +603,9 @@
     on("eLabel", "input", () => { if (!S._pre) begin(); e.label = $("#eLabel").value; live(); }); on("eLabel", "change", () => commit("label"));
     on("eSrc", "input", () => { if (!S._pre) begin(); e.srcLabel = $("#eSrc").value; live(); }); on("eSrc", "change", () => commit("label"));
     on("eDst", "input", () => { if (!S._pre) begin(); e.dstLabel = $("#eDst").value; live(); }); on("eDst", "change", () => commit("label"));
-    on("ePreset", "change", (ev) => { begin(); es.forEach(x => { x.preset = ev.target.value; delete x.style.stroke; delete x.style.width; delete x.style.dash; if (C.PRESETS[x.preset].endArrow) x.style.endArrow = C.PRESETS[x.preset].endArrow; }); S.lastPreset = ev.target.value; commit("preset"); });
+    on("ePreset", "change", (ev) => { begin(); es.forEach(x => { x.preset = ev.target.value; const P = C.PRESETS[x.preset]; delete x.style.stroke; delete x.style.width; delete x.style.dash; delete x.style.startArrow; delete x.style.endArrow; delete x.style.router; if (P.endArrow) x.style.endArrow = P.endArrow; if (P.startArrow) x.style.startArrow = P.startArrow; }); if (es.every(x => C.nodeById(x.from.node) && (C.nodeById(x.from.node).type === "anchor" || C.nodeById(x.to.node).type === "anchor"))) S.lastLinePreset = ev.target.value; else S.lastPreset = ev.target.value; commit("preset"); });
+    on("eLabelT", "input", (ev) => { if (!S._pre) begin(); ev.target.nextElementSibling.textContent = Math.round(ev.target.value * 100) + "%"; es.forEach(x => { x.labelT = +ev.target.value; }); live(); }); on("eLabelT", "change", () => commit("label position"));
+    on("eJumps", "change", (ev) => styleAll("jumps", ev.target.checked, false));
     on("eRouter", "change", (ev) => styleAll("router", ev.target.value, false)); on("eStart", "change", (ev) => styleAll("startArrow", ev.target.value, false)); on("eEnd", "change", (ev) => styleAll("endArrow", ev.target.value, false));
     on("eFromPort", "change", (ev) => { begin(); e.from.port = ev.target.value; commit("port"); }); on("eToPort", "change", (ev) => { begin(); e.to.port = ev.target.value; commit("port"); });
     bindColor("eStroke", (v, l) => styleAll("stroke", v, l));
@@ -564,7 +640,7 @@
   }
   function renderOutline() {
     const ul = $("#outline"); if (!ul) return;
-    const nodes = S.page.nodes.slice().sort((a, b) => (a.parent ? 1 : 0) - (b.parent ? 1 : 0));
+    const nodes = S.page.nodes.filter(n => n.type !== "anchor").sort((a, b) => (a.parent ? 1 : 0) - (b.parent ? 1 : 0));
     ul.innerHTML = nodes.slice(0, 300).map(n => { const s = SH.get(n.type); return `<li><button type="button" data-oid="${n.id}" class="${S.sel.has(n.id) ? "sel" : ""}" style="padding-left:${n.parent ? 20 : 8}px">${SH.thumb(s).replace("<svg", '<svg width="16" height="16"')}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${U.esc((n.label || s.name).split("\n")[0])}</span>${n.locked ? "🔒" : ""}</button></li>`; }).join("") || `<li style="padding:8px;color:#5f6c84">No shapes yet</li>`;
     $$("#outline button").forEach(b => b.addEventListener("click", (ev) => { const id = b.dataset.oid; if (ev.shiftKey) { if (S.sel.has(id)) S.sel.delete(id); else S.sel.add(id); } else S.sel = new Set([id]); S.selEdges.clear(); renderOverlay(); renderOutline(); const n = C.nodeById(id); if (n) { const r = svg.getBoundingClientRect(); const cx = n.x + n.w / 2, cy = n.y + n.h / 2; const sx = S.panX + cx * S.zoom, sy = S.panY + cy * S.zoom; if (sx < 0 || sy < 0 || sx > r.width || sy > r.height) { S.panX = r.width / 2 - cx * S.zoom; S.panY = r.height / 2 - cy * S.zoom; applyView(); } } }));
   }
@@ -626,6 +702,7 @@
     if (mod && k === "x") { copySel(); deleteSelection(); ev.preventDefault(); return; }
     if (mod && k === "v") { paste(); ev.preventDefault(); return; }
     if (mod && k === "d") { duplicateSelection(20, 20); ev.preventDefault(); return; }
+    if (mod && k === "r") { rotateSel(ev.shiftKey ? -90 : 90); ev.preventDefault(); return; }
     if (mod && k === "g" && !ev.shiftKey) { groupSel(); ev.preventDefault(); return; }
     if (mod && k === "g" && ev.shiftKey) { ungroupSel(); ev.preventDefault(); return; }
     if (mod && k === "l") { toggleLock(); ev.preventDefault(); return; }
@@ -641,7 +718,7 @@
     if (ev.key.startsWith("Arrow")) { const d = ev.shiftKey ? (S.doc.settings.gridSize || 20) : 1; const dx = ev.key === "ArrowLeft" ? -d : ev.key === "ArrowRight" ? d : 0, dy = ev.key === "ArrowUp" ? -d : ev.key === "ArrowDown" ? d : 0; if (S.sel.size) { moveSel(dx, dy); ev.preventDefault(); } else { S.panX -= dx * 20; S.panY -= dy * 20; applyView(); ev.preventDefault(); } return; }
     if (ev.key === "Tab") { // cycle selection through shapes
       const nodes = C.orderedNodes(); if (!nodes.length) return; ev.preventDefault(); const cur = [...S.sel][0]; let i = nodes.findIndex(n => n.id === cur); i = ev.shiftKey ? (i <= 0 ? nodes.length - 1 : i - 1) : (i + 1) % nodes.length; S.sel = new Set([nodes[i].id]); S.selEdges.clear(); renderOverlay(); renderProps(); renderOutline(); announce(`Selected ${nodes[i].label || nodes[i].type}`); return; }
-    if (k === "v") setTool("select"); else if (k === "c") setTool("connect"); else if (k === "h") setTool("pan"); else if (k === "t") setTool("text"); else if (k === "g") { S.doc.settings.grid = !S.doc.settings.grid; drawGrid(); syncToolbar(); } else if (k === "l" ) { $("#libSearch").focus(); ev.preventDefault(); } else if (k === "?") openModal("shortcutsModal"); else if (k === "n" && !ev.shiftKey) { /* reserved */ }
+    if (k === "v") setTool("select"); else if (k === "c") setTool("connect"); else if (k === "h") setTool("pan"); else if (k === "t") setTool("text"); else if (k === "g") { S.doc.settings.grid = !S.doc.settings.grid; drawGrid(); syncToolbar(); } else if (k === "l" ) { $("#libSearch").focus(); ev.preventDefault(); } else if (k === "?") openModal("shortcutsModal"); else if (k === "n" && !ev.shiftKey) setTool("note"); else if (k === "a" && !ev.shiftKey) setTool("line");
   }
   function announce(msg) { const a = $("#a11yLive"); a.textContent = ""; setTimeout(() => a.textContent = msg, 30); }
   function showToast(msg, ms) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove("show"), ms || 2600); announce(msg); }
@@ -654,9 +731,12 @@
   /* ------------------------------------------------------------------ shape library */
   function buildLibrary() {
     const host = $("#libBody"); let html = "";
+    let libOpen = {}; try { libOpen = JSON.parse(localStorage.getItem("rcwna.libOpen") || "{}"); } catch (e) { libOpen = {}; }
+    const saveOpen = () => { const o = {}; $$(".lib-cat").forEach(d => { o[d.dataset.cat] = d.open; }); try { localStorage.setItem("rcwna.libOpen", JSON.stringify(o)); } catch (e) { } };
     SH.CATEGORIES.forEach((cat, ci) => {
       const items = SH.SHAPES.filter(s => s.cat === cat.id);
-      html += `<details class="lib-cat" data-cat="${cat.id}" ${ci < 3 ? "open" : ""}><summary>${U.esc(cat.name)}<span class="cnt">${items.length}</span></summary><div class="lib-grid">${items.map(s => `<button type="button" class="lib-item" data-type="${s.type}" data-tags="${U.esc((s.name + " " + s.tags).toLowerCase())}" title="${U.esc(s.name)} - click to place, or drag onto canvas" aria-label="${U.esc(s.name)}" draggable="false">${SH.thumb(s)}<span>${U.esc(s.name.length > 24 ? s.name.slice(0, 23) + "…" : s.name)}</span></button>`).join("")}</div></details>`;
+      if (!items.length) return;
+      html += `<details class="lib-cat" data-cat="${cat.id}" ${libOpen[cat.id] === false ? "" : "open"}><summary>${U.esc(cat.name)}<span class="cnt">${items.length}</span></summary><div class="lib-grid">${items.map(s => `<button type="button" class="lib-item" data-type="${s.type}" data-tags="${U.esc((s.name + " " + s.tags).toLowerCase())}" title="${U.esc(s.name)} - click to place, or drag onto canvas" aria-label="${U.esc(s.name)}" draggable="false">${SH.thumb(s)}<span>${U.esc(s.name.length > 24 ? s.name.slice(0, 23) + "…" : s.name)}</span></button>`).join("")}</div></details>`;
     });
     host.innerHTML = html + `<p class="lib-empty" id="libEmpty" hidden>No shapes match.</p>`;
     // click -> place at centre of view (or arm click-to-place); drag -> drop
@@ -671,6 +751,15 @@
       b.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); placeAtCentre(b.dataset.type); } });
     });
     $("#libSearch").addEventListener("input", filterLibrary);
+    $$(".lib-cat").forEach(d => d.addEventListener("toggle", saveOpen));
+    const jump = $("#libJump");
+    if (jump) {
+      const visibleCats = SH.CATEGORIES.filter(c => SH.SHAPES.some(s => s.cat === c.id));
+      jump.innerHTML = `<option value="">Jump to category…</option>` + visibleCats.map(c => `<option value="${c.id}">${U.esc(c.name)} (${SH.SHAPES.filter(s => s.cat === c.id).length})</option>`).join("");
+      jump.addEventListener("change", () => { const d = $(`.lib-cat[data-cat="${jump.value}"]`); if (d) { d.open = true; $("#libSearch").value = ""; filterLibrary(); host.scrollTop += d.getBoundingClientRect().top - host.getBoundingClientRect().top; } jump.value = ""; });
+      $("#libExpand").addEventListener("click", () => { $$(".lib-cat").forEach(d => { d.open = true; }); saveOpen(); });
+      $("#libCollapse").addEventListener("click", () => { $$(".lib-cat").forEach(d => { d.open = false; }); saveOpen(); });
+    }
   }
   function placeAtCentre(type) {
     const r = svg.getBoundingClientRect(); const w = clientToWorld(r.left + r.width / 2, r.top + r.height / 2);
@@ -725,6 +814,8 @@
     $("#tglDetail").addEventListener("click", () => { S.doc.settings.hideDetail = !S.doc.settings.hideDetail; renderAll(); syncToolbar(); schedulePersist(); showToast(S.doc.settings.hideDetail ? "HLD view: LLD detail (sub-labels, attributes, port labels) hidden on HLD pages" : "Showing all detail"); });
     $$("#segLevel button").forEach(b => b.addEventListener("click", () => { S.page.level = b.dataset.level; renderAll(); syncToolbar(); renderPages(); schedulePersist(); }));
     $$("[data-align-act]").forEach(b => b.addEventListener("click", () => align(b.dataset.alignAct)));
+    $$("[data-rot]").forEach(b => b.addEventListener("click", () => rotateSel(+b.dataset.rot)));
+    $$("[data-flip]").forEach(b => b.addEventListener("click", () => flipSel(b.dataset.flip)));
     $$("[data-dist]").forEach(b => b.addEventListener("click", () => distribute(b.dataset.dist)));
     $$("[data-z]").forEach(b => b.addEventListener("click", () => zorder(b.dataset.z)));
     $$("[data-size]").forEach(b => b.addEventListener("click", () => sameSize(b.dataset.size)));

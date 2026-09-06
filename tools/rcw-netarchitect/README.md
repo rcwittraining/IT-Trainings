@@ -54,18 +54,31 @@ Open `catalogue-data.js` and add this object anywhere inside the
   so Google indexes it faster (purely optional; robots.txt already allows it).
 * `og-image.png` is the social-share preview referenced by the page's meta tags.
 
-## What users get
+## What users get (v1.1 — expanded shape & connector library)
 
 * **9 starter templates** — Campus HLD, Hybrid cloud HLD, 3-tier web HLD, Security
   zones HLD, C4 container view, Branch office LLD, DC rack elevation LLD, blank HLD / LLD.
-* **163 stencils** — network, security, cloud (generic AWS/Azure/GCP style), compute &
-  storage, software/C4, zones & containers, LLD items (rack, patch panel, PDU, tables),
-  flowchart/basic shapes, text, notes, images.
-* **Visio-style editing** — click or drag to place, smart orthogonal / straight / curved
-  connectors with fan-out, port labels, waypoints, containers that carry children,
-  snap-to-grid, align/distribute, z-order, group duplicate, lock/hide, multi-page docs,
-  undo/redo, keyboard shortcuts, right-click menu, properties panel, LLD attributes,
-  auto legend, title block, revision table, data tables.
+* **269 stencils in 13 categories** — basic shapes (41: squares, polygons, stars, arrows,
+  brackets, callouts, banners…), lines & markers (17), network (17), security (11),
+  compute & storage (19), end-points (12), cloud (41, generic AWS/Azure/GCP style),
+  software / C4 (20), UML & data modelling (25: class, interface, ERD entity, actor,
+  use-case, package, component, node, state, lifeline, fragment, BPMN event / gateway /
+  task / pool), zones & containers (11), LLD items (10), flowchart (37, full ANSI set),
+  annotations (8).
+* **30 connector types / 13 arrow-heads** — Ethernet, fibre, WAN, VPN, wireless, trunk /
+  port-channel, HA heartbeat, storage, replication, power, console, API, async message,
+  UML dependency / association / inheritance / realisation / aggregation / composition,
+  ERD one-to-many / many-to-many (crow's foot), BPMN sequence / message, blocked flow,
+  plain. Arrow-heads: filled / open / hollow triangle, dot, hollow circle, hollow or
+  filled diamond, square, bar, ERD one, crow's foot, cross. Line jumps at crossings,
+  label position slider, per-end port pinning, waypoints, reverse.
+* **Visio-style editing** — click or drag to place, free **Line / arrow tool (A)** that
+  glues to shapes or floats anywhere, **rotate** (handle, Ctrl+R, angle field) and
+  **flip H/V**, smart orthogonal / straight / curved connectors with fan-out, port
+  labels, containers that carry children, snap-to-grid, align/distribute, z-order,
+  group duplicate, lock/hide, multi-page docs, undo/redo, keyboard shortcuts,
+  right-click menu, properties panel, LLD attributes, auto legend, title block,
+  revision table, data tables, sticky-note tool (N), shape search + category jump.
 * **Design checks** — title block / legend present, default or duplicate labels, orphaned
   shapes, LLD port / IP completeness, Internet-without-firewall, direct Internet → datastore,
   WCAG contrast, tiny fonts, off-page shapes.

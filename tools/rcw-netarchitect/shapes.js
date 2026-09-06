@@ -91,15 +91,18 @@
 
   /* ---------- categories ---------- */
   const CATEGORIES = [
+    { id: "basic", name: "Basic shapes" },
+    { id: "lines", name: "Lines, arrows & connectors" },
     { id: "network", name: "Network devices" },
     { id: "security", name: "Security" },
     { id: "compute", name: "Servers, virtualisation & storage" },
     { id: "endpoint", name: "Users & endpoints" },
     { id: "cloud", name: "Cloud services (AWS / Azure / GCP generic)" },
     { id: "software", name: "Software architecture (C4 / microservices)" },
+    { id: "uml", name: "UML & data modelling" },
     { id: "zones", name: "Zones, sites & containers" },
     { id: "lld", name: "LLD detail (racks, panels, labels)" },
-    { id: "flow", name: "Flowchart & basic shapes" },
+    { id: "flow", name: "Flowchart" },
     { id: "annot", name: "Annotation & documentation" }
   ];
 
@@ -109,7 +112,7 @@
      geo:(w,h,st)=>svg for box/container shapes
      ===================================================================== */
   const SHAPES = [];
-  function def(o) { SHAPES.push(o); }
+  function def(o) { if (o.noLabel && o.label == null) o.label = ""; SHAPES.push(o); } // pure lines / markers start with an empty label (you can still type one; it sits below the shape)
 
   /* ===================== NETWORK ===================== */
   def({ type: "router", name: "Router", cat: "network", tags: "router gateway cisco l3 wan edge", kind: "icon", w: 64, h: 64, pal: PAL.network,
@@ -451,7 +454,118 @@
   def({ type: "gcloud", name: "Cloud (generic)", cat: "flow", tags: "cloud generic", kind: "box", w: 160, h: 100, pal: PAL.generic, geo: "cloud" });
   def({ type: "blockarrow", name: "Block arrow", cat: "flow", tags: "arrow block direction flow", kind: "box", w: 140, h: 60, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "blockarrow" });
   def({ type: "pill", name: "Pill / tag", cat: "flow", tags: "pill tag badge capsule", kind: "box", w: 120, h: 40, pal: PAL.generic, geo: "pill" });
+  def({ type: "terminator", name: "Terminator (start / end)", cat: "flow", tags: "terminator start end pill flowchart", kind: "box", w: 140, h: 56, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "pill", label: "Start" });
+  def({ type: "decision", name: "Decision", cat: "flow", tags: "decision diamond yes no flowchart", kind: "box", w: 130, h: 90, pal: { fill: "#fff8e1", stroke: "#b7791f" }, geo: "diamond", label: "Decision?" });
+  def({ type: "data", name: "Data (input / output)", cat: "flow", tags: "data input output parallelogram flowchart", kind: "box", w: 150, h: 64, pal: PAL.generic, geo: "parallelogram", label: "Data" });
+  def({ type: "predefined", name: "Predefined process", cat: "flow", tags: "predefined process subroutine flowchart", kind: "box", w: 150, h: 70, pal: PAL.generic, geo: "predefined", label: "Subprocess" });
+  def({ type: "manualinput", name: "Manual input", cat: "flow", tags: "manual input keyboard flowchart", kind: "box", w: 140, h: 64, pal: PAL.generic, geo: "manualinput", label: "Manual input" });
+  def({ type: "manualop", name: "Manual operation", cat: "flow", tags: "manual operation trapezoid flowchart", kind: "box", w: 140, h: 64, pal: PAL.generic, geo: "trapezoid", label: "Manual step" });
+  def({ type: "preparation", name: "Preparation", cat: "flow", tags: "preparation hexagon setup flowchart", kind: "box", w: 150, h: 64, pal: PAL.generic, geo: "hexagon", label: "Prepare" });
+  def({ type: "delay", name: "Delay", cat: "flow", tags: "delay wait flowchart", kind: "box", w: 130, h: 64, pal: PAL.generic, geo: "delay", label: "Wait" });
+  def({ type: "storeddata", name: "Stored data", cat: "flow", tags: "stored data storage flowchart", kind: "box", w: 130, h: 64, pal: PAL.generic, geo: "storeddata", label: "Stored data" });
+  def({ type: "internalstorage", name: "Internal storage", cat: "flow", tags: "internal storage memory flowchart", kind: "box", w: 110, h: 70, pal: PAL.generic, geo: "internalstorage", label: "Memory", labelBelow: true });
+  def({ type: "multidoc", name: "Multiple documents", cat: "flow", tags: "multiple documents report flowchart", kind: "box", w: 130, h: 80, pal: PAL.generic, geo: "multidoc", label: "Reports" });
+  def({ type: "display", name: "Display", cat: "flow", tags: "display screen monitor output flowchart", kind: "box", w: 140, h: 64, pal: PAL.generic, geo: "display", label: "Display" });
+  def({ type: "card", name: "Card", cat: "flow", tags: "card punched flowchart", kind: "box", w: 130, h: 64, pal: PAL.generic, geo: "card", label: "Card" });
+  def({ type: "seqdata", name: "Sequential data (tape)", cat: "flow", tags: "sequential tape flowchart", kind: "box", w: 90, h: 90, pal: PAL.generic, geo: "tapecircle", label: "Tape", labelBelow: true });
+  def({ type: "collate", name: "Collate", cat: "flow", tags: "collate hourglass flowchart", kind: "box", w: 70, h: 90, pal: PAL.generic, geo: "collate", noLabel: true });
+  def({ type: "sort", name: "Sort", cat: "flow", tags: "sort diamond line flowchart", kind: "box", w: 80, h: 90, pal: PAL.generic, geo: "sort", noLabel: true });
+  def({ type: "merge", name: "Merge", cat: "flow", tags: "merge triangle down flowchart", kind: "box", w: 90, h: 70, pal: PAL.generic, geo: "invtriangle", noLabel: true });
+  def({ type: "extract", name: "Extract", cat: "flow", tags: "extract triangle up flowchart", kind: "box", w: 90, h: 70, pal: PAL.generic, geo: "triangle", noLabel: true });
+  def({ type: "orjunction", name: "Or junction", cat: "flow", tags: "or junction circle plus flowchart", kind: "box", w: 44, h: 44, pal: PAL.generic, geo: "orcircle", noLabel: true });
+  def({ type: "summing", name: "Summing junction", cat: "flow", tags: "summing junction circle x flowchart", kind: "box", w: 44, h: 44, pal: PAL.generic, geo: "sumcircle", noLabel: true });
+  def({ type: "annotationflow", name: "Annotation bracket", cat: "flow", tags: "annotation bracket comment flowchart", kind: "box", w: 160, h: 60, pal: { fill: "none", stroke: "#5f6c84" }, geo: "bracketl", label: "Comment", align: "left" });
+  def({ type: "loop", name: "Loop limit", cat: "flow", tags: "loop limit flowchart", kind: "box", w: 140, h: 60, pal: PAL.generic, geo: "looplimit", label: "Loop" });
+  def({ type: "database2", name: "Database (flowchart)", cat: "flow", tags: "database cylinder flowchart", kind: "box", w: 100, h: 90, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "cylinder", label: "DB" });
   def({ type: "marker", name: "Step marker (number)", cat: "flow", tags: "marker step number callout sequence", kind: "box", w: 30, h: 30, pal: { fill: "#101b3b", stroke: "#101b3b" }, textColor: "#fff", geo: "ellipse", label: "1", fontSize: 13 });
+
+  /* ===================== BASIC SHAPES ===================== */
+  def({ type: "square", name: "Square", cat: "basic", tags: "square box basic", kind: "box", w: 90, h: 90, pal: PAL.generic, geo: "rect" });
+  def({ type: "roundrect", name: "Rounded rectangle", cat: "basic", tags: "rounded rectangle box basic", kind: "box", w: 140, h: 70, pal: PAL.generic, geo: "rounded" });
+  def({ type: "bcircle", name: "Circle", cat: "basic", tags: "circle round basic", kind: "box", w: 90, h: 90, pal: PAL.generic, geo: "ellipse" });
+  def({ type: "bellipse", name: "Ellipse", cat: "basic", tags: "ellipse oval basic", kind: "box", w: 140, h: 80, pal: PAL.generic, geo: "ellipse" });
+  def({ type: "btriangle", name: "Triangle", cat: "basic", tags: "triangle basic", kind: "box", w: 100, h: 90, pal: PAL.generic, geo: "triangle", labelBelow: true });
+  def({ type: "rtriangle", name: "Right triangle", cat: "basic", tags: "right triangle basic", kind: "box", w: 100, h: 90, pal: PAL.generic, geo: "rtriangle", labelBelow: true });
+  def({ type: "bdiamond", name: "Diamond", cat: "basic", tags: "diamond rhombus basic", kind: "box", w: 110, h: 90, pal: PAL.generic, geo: "diamond" });
+  def({ type: "pentagon", name: "Pentagon", cat: "basic", tags: "pentagon basic polygon", kind: "box", w: 100, h: 96, pal: PAL.generic, geo: "pentagon" });
+  def({ type: "bhexagon", name: "Hexagon", cat: "basic", tags: "hexagon basic polygon", kind: "box", w: 110, h: 90, pal: PAL.generic, geo: "hexagon" });
+  def({ type: "octagon", name: "Octagon", cat: "basic", tags: "octagon stop basic polygon", kind: "box", w: 100, h: 100, pal: PAL.generic, geo: "octagon" });
+  def({ type: "bparallelogram", name: "Parallelogram", cat: "basic", tags: "parallelogram basic", kind: "box", w: 140, h: 70, pal: PAL.generic, geo: "parallelogram" });
+  def({ type: "trapezoid", name: "Trapezoid", cat: "basic", tags: "trapezoid basic", kind: "box", w: 140, h: 70, pal: PAL.generic, geo: "trapezoid" });
+  def({ type: "star5", name: "Star", cat: "basic", tags: "star basic rating", kind: "box", w: 100, h: 100, pal: { fill: "#ffd51d", stroke: "#8a6d00" }, geo: "star5" });
+  def({ type: "cross", name: "Cross / plus", cat: "basic", tags: "cross plus health basic", kind: "box", w: 90, h: 90, pal: PAL.generic, geo: "cross", labelBelow: true });
+  def({ type: "bcylinder", name: "Cylinder", cat: "basic", tags: "cylinder can basic", kind: "box", w: 90, h: 100, pal: PAL.generic, geo: "cylinder" });
+  def({ type: "cube", name: "Cube / 3D box", cat: "basic", tags: "cube 3d box basic", kind: "box", w: 110, h: 100, pal: PAL.generic, geo: "cube" });
+  def({ type: "bcloud", name: "Cloud", cat: "basic", tags: "cloud basic shape", kind: "box", w: 150, h: 100, pal: PAL.generic, geo: "cloud" });
+  def({ type: "heart", name: "Heart", cat: "basic", tags: "heart like basic", kind: "box", w: 100, h: 90, pal: { fill: "#ffd6dd", stroke: "#c2374f" }, geo: "heart" });
+  def({ type: "lightning", name: "Lightning bolt", cat: "basic", tags: "lightning bolt power flash basic", kind: "box", w: 70, h: 110, pal: { fill: "#ffd51d", stroke: "#8a6d00" }, geo: "lightning", labelBelow: true });
+  def({ type: "moon", name: "Moon", cat: "basic", tags: "moon crescent basic night", kind: "box", w: 90, h: 100, pal: PAL.generic, geo: "moon", labelBelow: true });
+  def({ type: "sun", name: "Sun", cat: "basic", tags: "sun basic day", kind: "box", w: 100, h: 100, pal: { fill: "#ffd51d", stroke: "#8a6d00" }, geo: "sun" });
+  def({ type: "chevron", name: "Chevron", cat: "basic", tags: "chevron arrow step process basic", kind: "box", w: 140, h: 60, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "chevron" });
+  def({ type: "arrowright", name: "Arrow (right)", cat: "basic", tags: "arrow right block basic", kind: "box", w: 140, h: 60, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "blockarrow" });
+  def({ type: "arrowleft", name: "Arrow (left)", cat: "basic", tags: "arrow left block basic", kind: "box", w: 140, h: 60, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "arrowleft" });
+  def({ type: "arrowup", name: "Arrow (up)", cat: "basic", tags: "arrow up block basic", kind: "box", w: 60, h: 140, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "arrowup", labelBelow: true });
+  def({ type: "arrowdown", name: "Arrow (down)", cat: "basic", tags: "arrow down block basic", kind: "box", w: 60, h: 140, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "arrowdown", labelBelow: true });
+  def({ type: "arrowlr", name: "Double arrow", cat: "basic", tags: "arrow double both left right bidirectional basic", kind: "box", w: 160, h: 60, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "arrowlr" });
+  def({ type: "arrowud", name: "Double arrow (vertical)", cat: "basic", tags: "arrow double up down vertical basic", kind: "box", w: 60, h: 160, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "arrowud", labelBelow: true });
+  def({ type: "uturn", name: "U-turn arrow", cat: "basic", tags: "arrow u-turn return loop back basic", kind: "box", w: 110, h: 100, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "uturn", labelBelow: true });
+  def({ type: "bracketl", name: "Bracket (left)", cat: "basic", tags: "bracket left brace group basic", kind: "box", w: 30, h: 120, pal: { fill: "none", stroke: "#101b3b" }, geo: "bracketl", labelBelow: true });
+  def({ type: "bracketr", name: "Bracket (right)", cat: "basic", tags: "bracket right brace group basic", kind: "box", w: 30, h: 120, pal: { fill: "none", stroke: "#101b3b" }, geo: "bracketr", labelBelow: true });
+  def({ type: "bracepair", name: "Brace pair", cat: "basic", tags: "brace pair curly group basic", kind: "box", w: 160, h: 60, pal: { fill: "none", stroke: "#101b3b" }, geo: "bracepair" });
+  def({ type: "frame", name: "Frame / border", cat: "basic", tags: "frame border outline empty transparent basic", kind: "box", w: 200, h: 140, pal: { fill: "none", stroke: "#101b3b" }, geo: "rect" });
+  def({ type: "roundframe", name: "Rounded frame", cat: "basic", tags: "frame border rounded outline transparent basic", kind: "box", w: 200, h: 140, pal: { fill: "none", stroke: "#101b3b" }, geo: "rounded" });
+  def({ type: "banner", name: "Banner / ribbon", cat: "basic", tags: "banner ribbon title basic", kind: "box", w: 200, h: 56, pal: { fill: "#101b3b", stroke: "#101b3b" }, textColor: "#fff", geo: "banner", bold: true });
+  def({ type: "tab", name: "Tab / folder", cat: "basic", tags: "tab folder file group basic", kind: "box", w: 160, h: 100, pal: PAL.generic, geo: "tab" });
+  def({ type: "speech", name: "Speech bubble", cat: "basic", tags: "speech bubble talk callout basic", kind: "box", w: 150, h: 90, pal: PAL.generic, geo: "callout" });
+  def({ type: "thought", name: "Thought bubble", cat: "basic", tags: "thought bubble cloud basic", kind: "box", w: 150, h: 100, pal: PAL.generic, geo: "thought" });
+  def({ type: "shield", name: "Shield", cat: "basic", tags: "shield badge protect basic", kind: "box", w: 90, h: 100, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "shield" });
+  def({ type: "pie", name: "Pie / three-quarter", cat: "basic", tags: "pie chart quarter basic", kind: "box", w: 100, h: 100, pal: PAL.generic, geo: "pie", labelBelow: true });
+  def({ type: "donut", name: "Ring / donut", cat: "basic", tags: "ring donut circle hollow basic", kind: "box", w: 100, h: 100, pal: PAL.generic, geo: "donut", labelBelow: true });
+  def({ type: "line", name: "Line", cat: "lines", tags: "line straight rule divider", kind: "box", w: 160, h: 2, pal: { fill: "none", stroke: "#101b3b" }, geo: "hline", noLabel: true });
+  def({ type: "vline", name: "Vertical line", cat: "lines", tags: "line vertical rule divider", kind: "box", w: 2, h: 160, pal: { fill: "none", stroke: "#101b3b" }, geo: "vline", noLabel: true });
+  def({ type: "dashline", name: "Dashed line", cat: "lines", tags: "line dashed divider boundary", kind: "box", w: 160, h: 2, pal: { fill: "none", stroke: "#101b3b" }, geo: "hline", dash: "8 5", noLabel: true });
+  def({ type: "arrowline", name: "Arrow line", cat: "lines", tags: "arrow line pointer direction", kind: "box", w: 160, h: 14, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "arrowline", noLabel: true });
+  def({ type: "arrowline2", name: "Double-headed arrow line", cat: "lines", tags: "arrow line both bidirectional", kind: "box", w: 160, h: 14, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "arrowline2", noLabel: true });
+  def({ type: "elbowline", name: "Elbow line", cat: "lines", tags: "elbow line bent corner", kind: "box", w: 120, h: 80, pal: { fill: "none", stroke: "#101b3b" }, geo: "elbowline", noLabel: true });
+  def({ type: "curveline", name: "Curved line", cat: "lines", tags: "curve line bezier arc", kind: "box", w: 140, h: 80, pal: { fill: "none", stroke: "#101b3b" }, geo: "curveline", noLabel: true });
+  def({ type: "zigzag", name: "Zigzag / lightning link", cat: "lines", tags: "zigzag broken line lightning serial", kind: "box", w: 160, h: 24, pal: { fill: "none", stroke: "#101b3b" }, geo: "zigzag", noLabel: true });
+  def({ type: "wave", name: "Wave / wireless link", cat: "lines", tags: "wave line wireless radio", kind: "box", w: 160, h: 24, pal: { fill: "none", stroke: "#6f42c1" }, geo: "wave", noLabel: true });
+  def({ type: "busbar", name: "Bus bar", cat: "lines", tags: "bus bar backbone thick line", kind: "box", w: 320, h: 10, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "rect", noLabel: true });
+  def({ type: "anchor", name: "Line end-point", cat: "hidden", tags: "", kind: "box", w: 10, h: 10, pal: { fill: "#078be8", stroke: "#078be8" }, geo: "ellipse", noLabel: true, label: "" });
+  def({ type: "junction", name: "Junction dot", cat: "lines", tags: "junction dot node point connection", kind: "box", w: 14, h: 14, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "ellipse", noLabel: true });
+  def({ type: "hollowdot", name: "Hollow dot / port", cat: "lines", tags: "hollow dot port circle endpoint", kind: "box", w: 14, h: 14, pal: { fill: "#fff", stroke: "#101b3b" }, geo: "ellipse", noLabel: true });
+  def({ type: "crossmark", name: "Cross mark (blocked)", cat: "lines", tags: "cross x blocked denied mark", kind: "box", w: 26, h: 26, pal: { fill: "none", stroke: "#d0463f" }, geo: "xmark", noLabel: true });
+  def({ type: "tickmark", name: "Tick mark (allowed)", cat: "lines", tags: "tick check allowed ok mark", kind: "box", w: 26, h: 26, pal: { fill: "none", stroke: "#0d7a3e" }, geo: "tick", noLabel: true });
+  def({ type: "linelabel", name: "Line label", cat: "lines", tags: "label tag line text pill", kind: "box", w: 90, h: 24, pal: { fill: "#fff", stroke: "#dce5f1" }, geo: "pill", label: "10 Gbps", fontSize: 10 });
+  def({ type: "offpage", name: "Off-page connector", cat: "lines", tags: "off page connector reference link", kind: "box", w: 90, h: 60, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "offpage", label: "A" });
+  def({ type: "onpage", name: "On-page reference", cat: "lines", tags: "on page reference circle letter", kind: "box", w: 40, h: 40, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "ellipse", label: "A", fontSize: 13, bold: true });
+
+  /* ===================== UML & DATA MODELLING ===================== */
+  def({ type: "umlclass", name: "Class", cat: "uml", tags: "uml class object entity attributes methods", kind: "special", w: 180, h: 130, pal: { fill: "#fff", stroke: "#101b3b" }, label: "ClassName", props: { rows: "+ id: int\n+ name: string\n--\n+ save(): void\n+ load(id): Class" } });
+  def({ type: "umlinterface", name: "Interface", cat: "uml", tags: "uml interface contract", kind: "special", w: 180, h: 100, pal: { fill: "#fff", stroke: "#101b3b" }, label: "<<interface>>\nIName", props: { rows: "+ operation(): void" } });
+  def({ type: "umlentity", name: "Entity / table (ERD)", cat: "uml", tags: "erd entity table database columns primary key", kind: "special", w: 180, h: 130, pal: { fill: "#fff", stroke: "#2b6cb0" }, label: "customer", props: { rows: "PK customer_id : int\nname : varchar(120)\nemail : varchar(200)\nFK region_id : int" } });
+  def({ type: "umlactor", name: "Actor", cat: "uml", tags: "uml actor user stick figure use case", kind: "box", w: 50, h: 90, pal: { fill: "#fff", stroke: "#101b3b" }, geo: "actor", label: "Actor", labelBelow: true });
+  def({ type: "umlusecase", name: "Use case", cat: "uml", tags: "uml use case ellipse", kind: "box", w: 150, h: 70, pal: PAL.generic, geo: "ellipse", label: "Use case" });
+  def({ type: "umlpackage", name: "Package", cat: "uml", tags: "uml package namespace folder module", kind: "container", w: 320, h: 220, pal: { fill: "#fafbfd", stroke: "#101b3b" }, label: "Package" });
+  def({ type: "umlcomponent", name: "Component", cat: "uml", tags: "uml component module", kind: "box", w: 160, h: 80, pal: PAL.generic, geo: "component", label: "Component" });
+  def({ type: "umlnode", name: "Node / device (deployment)", cat: "uml", tags: "uml node deployment device cube", kind: "box", w: 160, h: 100, pal: PAL.generic, geo: "cube", label: "<<device>>\nNode" });
+  def({ type: "umlartifact", name: "Artifact", cat: "uml", tags: "uml artifact file document", kind: "box", w: 120, h: 80, pal: PAL.generic, geo: "note", label: "artifact.jar" });
+  def({ type: "umlstate", name: "State", cat: "uml", tags: "uml state machine rounded", kind: "box", w: 140, h: 60, pal: { fill: "#fff8e1", stroke: "#b7791f" }, geo: "rounded", label: "State" });
+  def({ type: "umlstart", name: "Initial state", cat: "uml", tags: "uml initial start filled circle", kind: "box", w: 28, h: 28, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "ellipse", noLabel: true });
+  def({ type: "umlend", name: "Final state", cat: "uml", tags: "uml final end bullseye", kind: "box", w: 32, h: 32, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "bullseye", noLabel: true });
+  def({ type: "umlfork", name: "Fork / join bar", cat: "uml", tags: "uml fork join bar parallel", kind: "box", w: 160, h: 8, pal: { fill: "#101b3b", stroke: "#101b3b" }, geo: "rect", noLabel: true });
+  def({ type: "umldecision", name: "Decision (activity)", cat: "uml", tags: "uml decision merge diamond activity", kind: "box", w: 60, h: 60, pal: PAL.generic, geo: "diamond", noLabel: true });
+  def({ type: "umllifeline", name: "Lifeline (sequence)", cat: "uml", tags: "uml sequence lifeline object", kind: "box", w: 120, h: 300, pal: PAL.generic, geo: "lifeline", label: "Object" });
+  def({ type: "umlactivation", name: "Activation bar", cat: "uml", tags: "uml sequence activation execution bar", kind: "box", w: 14, h: 120, pal: { fill: "#e3f0fc", stroke: "#1f6fb5" }, geo: "rect", noLabel: true });
+  def({ type: "umlfragment", name: "Fragment (alt / loop)", cat: "uml", tags: "uml sequence fragment alt loop opt", kind: "container", w: 320, h: 160, pal: { fill: "none", stroke: "#101b3b" }, label: "alt" });
+  def({ type: "umlnote", name: "UML note", cat: "uml", tags: "uml note comment", kind: "box", w: 150, h: 70, pal: PAL.note, geo: "note", label: "note", align: "left" });
+  def({ type: "erdrel", name: "Relationship (ERD)", cat: "uml", tags: "erd relationship diamond chen", kind: "box", w: 130, h: 70, pal: { fill: "#e3f0fc", stroke: "#2b6cb0" }, geo: "diamond", label: "has" });
+  def({ type: "erdattr", name: "Attribute (ERD)", cat: "uml", tags: "erd attribute ellipse chen", kind: "box", w: 110, h: 50, pal: PAL.generic, geo: "ellipse", label: "attribute" });
+  def({ type: "bpmnevent", name: "Event (BPMN)", cat: "uml", tags: "bpmn start event circle", kind: "box", w: 44, h: 44, pal: { fill: "#fff", stroke: "#0d7a3e" }, geo: "ellipse", noLabel: true });
+  def({ type: "bpmnendevent", name: "End event (BPMN)", cat: "uml", tags: "bpmn end event thick circle", kind: "box", w: 44, h: 44, pal: { fill: "#fff", stroke: "#c2374f" }, geo: "thickcircle", noLabel: true });
+  def({ type: "bpmngateway", name: "Gateway (BPMN)", cat: "uml", tags: "bpmn gateway exclusive diamond x", kind: "box", w: 56, h: 56, pal: { fill: "#fff8e1", stroke: "#b7791f" }, geo: "gateway", noLabel: true });
+  def({ type: "bpmntask", name: "Task (BPMN)", cat: "uml", tags: "bpmn task activity rounded", kind: "box", w: 140, h: 70, pal: { fill: "#fff", stroke: "#1f6fb5" }, geo: "rounded", label: "Task" });
+  def({ type: "bpmnpool", name: "Pool / lane (BPMN)", cat: "uml", tags: "bpmn pool lane swimlane participant", kind: "container", w: 720, h: 160, pal: { fill: "#fafbfd", stroke: "#101b3b" }, label: "Participant" });
 
   /* ===================== ANNOTATION ===================== */
   def({ type: "text", name: "Text", cat: "annot", tags: "text label heading caption", kind: "text", w: 160, h: 32, pal: { fill: "none", stroke: "none" }, label: "Text", fontSize: 14 });
@@ -480,6 +594,65 @@
     callout: (w, h, st) => { const b = h * 0.75, r = 8; return `<path d="M${r},0 H${w - r} A${r},${r} 0 0 1 ${w},${r} V${b - r} A${r},${r} 0 0 1 ${w - r},${b} H${w * 0.35} L${w * 0.2},${h} L${w * 0.24},${b} H${r} A${r},${r} 0 0 1 0,${b - r} V${r} A${r},${r} 0 0 1 ${r},0 Z" ${fs(st)} stroke-linejoin="round"/>`; },
     blockarrow: (w, h, st) => { const hd = Math.min(w * 0.35, h), t = h * 0.25; return `<polygon points="0,${t} ${w - hd},${t} ${w - hd},0 ${w},${h / 2} ${w - hd},${h} ${w - hd},${h - t} 0,${h - t}" ${fs(st)} stroke-linejoin="round"/>`; },
     queue: (w, h, st) => `<rect x="0" y="0" width="${w}" height="${h}" rx="4" ${fs(st)}/>${[0.3, 0.5, 0.7].map(p => `<line x1="${w * p}" y1="0" x2="${w * p}" y2="${h}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}" opacity=".5"/>`).join("")}`,
+    rtriangle: (w, h, st) => `<polygon points="0,0 ${w},${h} 0,${h}" ${fs(st)} stroke-linejoin="round"/>`,
+    invtriangle: (w, h, st) => `<polygon points="0,0 ${w},0 ${w / 2},${h}" ${fs(st)} stroke-linejoin="round"/>`,
+    pentagon: (w, h, st) => `<polygon points="${w / 2},0 ${w},${h * 0.38} ${w * 0.81},${h} ${w * 0.19},${h} 0,${h * 0.38}" ${fs(st)} stroke-linejoin="round"/>`,
+    octagon: (w, h, st) => { const a = 0.29; return `<polygon points="${w * a},0 ${w * (1 - a)},0 ${w},${h * a} ${w},${h * (1 - a)} ${w * (1 - a)},${h} ${w * a},${h} 0,${h * (1 - a)} 0,${h * a}" ${fs(st)} stroke-linejoin="round"/>`; },
+    trapezoid: (w, h, st) => { const o = Math.min(w * 0.18, h * 0.6); return `<polygon points="${o},0 ${w - o},0 ${w},${h} 0,${h}" ${fs(st)} stroke-linejoin="round"/>`; },
+    star5: (w, h, st) => { const cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2, r = R * 0.42; const p = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r : R; p.push(`${cx + Math.cos(a) * rr * (w / Math.min(w, h))},${cy + Math.sin(a) * rr * (h / Math.min(w, h))}`); } return `<polygon points="${p.join(" ")}" ${fs(st)} stroke-linejoin="round"/>`; },
+    cross: (w, h, st) => { const a = w * 0.3, b = h * 0.3; return `<polygon points="${a},0 ${w - a},0 ${w - a},${b} ${w},${b} ${w},${h - b} ${w - a},${h - b} ${w - a},${h} ${a},${h} ${a},${h - b} 0,${h - b} 0,${b} ${a},${b}" ${fs(st)} stroke-linejoin="round"/>`; },
+    cube: (w, h, st) => { const d = Math.min(w, h) * 0.22; return `<polygon points="0,${d} ${w - d},${d} ${w - d},${h} 0,${h}" ${fs(st)}/><polygon points="0,${d} ${d},0 ${w},0 ${w - d},${d}" ${fs(st)} fill-opacity=".85"/><polygon points="${w - d},${d} ${w},0 ${w},${h - d} ${w - d},${h}" ${fs(st)} fill-opacity=".7"/>`; },
+    heart: (w, h, st) => `<path d="M${w / 2},${h} C${-w * 0.25},${h * 0.45} ${w * 0.05},${-h * 0.1} ${w / 2},${h * 0.25} C${w * 0.95},${-h * 0.1} ${w * 1.25},${h * 0.45} ${w / 2},${h} Z" ${fs(st)} stroke-linejoin="round"/>`,
+    lightning: (w, h, st) => `<polygon points="${w * 0.55},0 0,${h * 0.58} ${w * 0.42},${h * 0.58} ${w * 0.3},${h} ${w},${h * 0.38} ${w * 0.56},${h * 0.38}" ${fs(st)} stroke-linejoin="round"/>`,
+    moon: (w, h, st) => `<path d="M${w * 0.78},${h * 0.04} A${w * 0.48},${h * 0.48} 0 1 0 ${w * 0.78},${h * 0.96} A${w * 0.36},${h * 0.38} 0 1 1 ${w * 0.78},${h * 0.04} Z" ${fs(st)} stroke-linejoin="round"/>`,
+    sun: (w, h, st) => { const cx = w / 2, cy = h / 2, r = Math.min(w, h) * 0.26; let g = ""; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; g += `<line x1="${cx + Math.cos(a) * r * 1.35}" y1="${cy + Math.sin(a) * r * 1.35}" x2="${cx + Math.cos(a) * Math.min(w, h) * 0.48}" y2="${cy + Math.sin(a) * Math.min(w, h) * 0.48}" stroke="${st.stroke}" stroke-width="${st.strokeWidth * 1.5}" stroke-linecap="round"/>`; } return g + `<circle cx="${cx}" cy="${cy}" r="${r}" ${fs(st)}/>`; },
+    chevron: (w, h, st) => { const o = Math.min(w * 0.25, h * 0.5); return `<polygon points="0,0 ${w - o},0 ${w},${h / 2} ${w - o},${h} 0,${h} ${o},${h / 2}" ${fs(st)} stroke-linejoin="round"/>`; },
+    arrowleft: (w, h, st) => { const hd = Math.min(w * 0.35, h), t = h * 0.25; return `<polygon points="${w},${t} ${hd},${t} ${hd},0 0,${h / 2} ${hd},${h} ${hd},${h - t} ${w},${h - t}" ${fs(st)} stroke-linejoin="round"/>`; },
+    arrowup: (w, h, st) => { const hd = Math.min(h * 0.35, w), t = w * 0.25; return `<polygon points="${t},${h} ${t},${hd} 0,${hd} ${w / 2},0 ${w},${hd} ${w - t},${hd} ${w - t},${h}" ${fs(st)} stroke-linejoin="round"/>`; },
+    arrowdown: (w, h, st) => { const hd = Math.min(h * 0.35, w), t = w * 0.25; return `<polygon points="${t},0 ${t},${h - hd} 0,${h - hd} ${w / 2},${h} ${w},${h - hd} ${w - t},${h - hd} ${w - t},0" ${fs(st)} stroke-linejoin="round"/>`; },
+    arrowlr: (w, h, st) => { const hd = Math.min(w * 0.25, h), t = h * 0.25; return `<polygon points="0,${h / 2} ${hd},0 ${hd},${t} ${w - hd},${t} ${w - hd},0 ${w},${h / 2} ${w - hd},${h} ${w - hd},${h - t} ${hd},${h - t} ${hd},${h}" ${fs(st)} stroke-linejoin="round"/>`; },
+    arrowud: (w, h, st) => { const hd = Math.min(h * 0.25, w), t = w * 0.25; return `<polygon points="${w / 2},0 ${w},${hd} ${w - t},${hd} ${w - t},${h - hd} ${w},${h - hd} ${w / 2},${h} 0,${h - hd} ${t},${h - hd} ${t},${hd} 0,${hd}" ${fs(st)} stroke-linejoin="round"/>`; },
+    uturn: (w, h, st) => { const t = w * 0.16, hd = w * 0.34; return `<path d="M0,${h} V${h * 0.4} A${w * 0.36},${h * 0.4} 0 0 1 ${w * 0.72},${h * 0.4} V${h * 0.55} H${w} L${w * 0.64},${h * 0.85} L${w * 0.28},${h * 0.55} H${w * 0.72 - t * 1.4} V${h * 0.42} A${w * 0.36 - t},${h * 0.4 - t} 0 0 0 ${t},${h * 0.42} V${h} Z" ${fs(st)} stroke-linejoin="round"/>`; },
+    bracketl: (w, h, st) => `<path d="M${w},0 H${w * 0.3} Q0,0 0,${Math.min(12, h * 0.1)} V${h - Math.min(12, h * 0.1)} Q0,${h} ${w * 0.3},${h} H${w}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`,
+    bracketr: (w, h, st) => `<path d="M0,0 H${w * 0.7} Q${w},0 ${w},${Math.min(12, h * 0.1)} V${h - Math.min(12, h * 0.1)} Q${w},${h} ${w * 0.7},${h} H0" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`,
+    bracepair: (w, h, st) => { const r = Math.min(10, h * 0.2); return `<path d="M${r},0 Q0,0 0,${r} V${h / 2 - r} Q0,${h / 2} ${-r * 0.6},${h / 2} Q0,${h / 2} 0,${h / 2 + r} V${h - r} Q0,${h} ${r},${h}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/><path d="M${w - r},0 Q${w},0 ${w},${r} V${h / 2 - r} Q${w},${h / 2} ${w + r * 0.6},${h / 2} Q${w},${h / 2} ${w},${h / 2 + r} V${h - r} Q${w},${h} ${w - r},${h}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`; },
+    banner: (w, h, st) => { const n = Math.min(h * 0.5, w * 0.1); return `<polygon points="0,0 ${w},0 ${w - n},${h / 2} ${w},${h} 0,${h} ${n},${h / 2}" ${fs(st)} stroke-linejoin="round"/>`; },
+    tab: (w, h, st) => { const th = Math.min(22, h * 0.25), tw = Math.min(w * 0.4, 90); return `<path d="M0,${th} V${h} H${w} V${th} H${tw} L${tw - 8},0 H8 Q0,0 0,8 Z" ${fs(st)} stroke-linejoin="round"/><line x1="0" y1="${th}" x2="${tw}" y2="${th}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`; },
+    thought: (w, h, st) => `<ellipse cx="${w / 2}" cy="${h * 0.4}" rx="${w / 2}" ry="${h * 0.38}" ${fs(st)}/><circle cx="${w * 0.22}" cy="${h * 0.84}" r="${h * 0.08}" ${fs(st)}/><circle cx="${w * 0.12}" cy="${h * 0.95}" r="${h * 0.045}" ${fs(st)}/>`,
+    shield: (w, h, st) => `<path d="M${w / 2},0 L${w},${h * 0.18} V${h * 0.5} C${w},${h * 0.78} ${w * 0.75},${h * 0.92} ${w / 2},${h} C${w * 0.25},${h * 0.92} 0,${h * 0.78} 0,${h * 0.5} V${h * 0.18} Z" ${fs(st)} stroke-linejoin="round"/>`,
+    pie: (w, h, st) => `<path d="M${w / 2},${h / 2} L${w / 2},0 A${w / 2},${h / 2} 0 1 0 ${w},${h / 2} Z" ${fs(st)} stroke-linejoin="round"/>`,
+    donut: (w, h, st) => `<path d="M${w / 2},0 A${w / 2},${h / 2} 0 1 0 ${w / 2},${h} A${w / 2},${h / 2} 0 1 0 ${w / 2},0 Z M${w / 2},${h * 0.28} A${w * 0.22},${h * 0.22} 0 1 1 ${w / 2},${h * 0.72} A${w * 0.22},${h * 0.22} 0 1 1 ${w / 2},${h * 0.28} Z" fill-rule="evenodd" ${fs(st)}/>`,
+    hline: (w, h, st) => `<line x1="0" y1="${h / 2}" x2="${w}" y2="${h / 2}" stroke="${st.stroke}" stroke-width="${Math.max(st.strokeWidth, h)}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""} stroke-linecap="round"/>`,
+    vline: (w, h, st) => `<line x1="${w / 2}" y1="0" x2="${w / 2}" y2="${h}" stroke="${st.stroke}" stroke-width="${Math.max(st.strokeWidth, w)}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""} stroke-linecap="round"/>`,
+    arrowline: (w, h, st) => { const hd = Math.min(h * 1.1, w * 0.3); return `<line x1="0" y1="${h / 2}" x2="${w - hd + 2}" y2="${h / 2}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""} stroke-linecap="round"/><polygon points="${w},${h / 2} ${w - hd},0 ${w - hd},${h}" fill="${st.stroke}"/>`; },
+    arrowline2: (w, h, st) => { const hd = Math.min(h * 1.1, w * 0.3); return `<line x1="${hd - 2}" y1="${h / 2}" x2="${w - hd + 2}" y2="${h / 2}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""}/><polygon points="${w},${h / 2} ${w - hd},0 ${w - hd},${h}" fill="${st.stroke}"/><polygon points="0,${h / 2} ${hd},0 ${hd},${h}" fill="${st.stroke}"/>`; },
+    elbowline: (w, h, st) => `<path d="M0,0 H${w} V${h}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""} stroke-linejoin="round"/>`,
+    curveline: (w, h, st) => `<path d="M0,${h} C${w * 0.4},${h} ${w * 0.6},0 ${w},0" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"${st.dash ? ` stroke-dasharray="${st.dash}"` : ""}/>`,
+    zigzag: (w, h, st) => { const n = 8, sw = w / n; let d = `M0,${h / 2}`; for (let i = 0; i < n; i++) d += ` L${sw * (i + 0.5)},${i % 2 ? h : 0}`; d += ` L${w},${h / 2}`; return `<path d="${d}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}" stroke-linejoin="round"/>`; },
+    wave: (w, h, st) => { const n = 4, sw = w / n; let d = `M0,${h / 2}`; for (let i = 0; i < n; i++) d += ` Q${sw * (i + 0.25)},${i % 2 ? h * 1.2 : -h * 0.2} ${sw * (i + 0.5)},${h / 2} T${sw * (i + 1)},${h / 2}`; return `<path d="${d}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`; },
+    xmark: (w, h, st) => `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 - 1}" fill="#fff" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/><path d="M${w * 0.3},${h * 0.3} L${w * 0.7},${h * 0.7} M${w * 0.7},${h * 0.3} L${w * 0.3},${h * 0.7}" stroke="${st.stroke}" stroke-width="${st.strokeWidth * 1.5}" stroke-linecap="round"/>`,
+    tick: (w, h, st) => `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 - 1}" fill="#fff" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/><path d="M${w * 0.27},${h * 0.52} L${w * 0.43},${h * 0.68} L${w * 0.74},${h * 0.32}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth * 1.5}" stroke-linecap="round" stroke-linejoin="round"/>`,
+    offpage: (w, h, st) => `<polygon points="0,0 ${w},0 ${w},${h * 0.65} ${w / 2},${h} 0,${h * 0.65}" ${fs(st)} stroke-linejoin="round"/>`,
+    actor: (w, h, st) => { const r = Math.min(w, h) * 0.16, cx = w / 2; return `<circle cx="${cx}" cy="${r + 1}" r="${r}" ${fs(st)}/><path d="M${cx},${r * 2 + 1} V${h * 0.62} M${w * 0.1},${h * 0.36} H${w * 0.9} M${cx},${h * 0.62} L${w * 0.15},${h} M${cx},${h * 0.62} L${w * 0.85},${h}" fill="none" stroke="${st.stroke}" stroke-width="${st.strokeWidth}" stroke-linecap="round"/>`; },
+    component: (w, h, st) => `<rect x="${w * 0.08}" y="0" width="${w * 0.92}" height="${h}" rx="3" ${fs(st)}/><rect x="0" y="${h * 0.22}" width="${w * 0.16}" height="${h * 0.16}" ${fs(st)}/><rect x="0" y="${h * 0.56}" width="${w * 0.16}" height="${h * 0.16}" ${fs(st)}/>`,
+    bullseye: (w, h, st) => `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 - 1}" fill="#fff" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/><circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 * 0.6}" fill="${st.fill}"/>`,
+    thickcircle: (w, h, st) => `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 - 2}" fill="${st.fill}" stroke="${st.stroke}" stroke-width="${st.strokeWidth * 2.2}"/>`,
+    gateway: (w, h, st) => `<polygon points="${w / 2},0 ${w},${h / 2} ${w / 2},${h} 0,${h / 2}" ${fs(st)} stroke-linejoin="round"/><path d="M${w * 0.35},${h * 0.35} L${w * 0.65},${h * 0.65} M${w * 0.65},${h * 0.35} L${w * 0.35},${h * 0.65}" stroke="${st.stroke}" stroke-width="${st.strokeWidth * 1.4}" stroke-linecap="round"/>`,
+    lifeline: (w, h, st) => { const hh = Math.min(44, h * 0.2); return `<rect x="0" y="0" width="${w}" height="${hh}" ${fs(st)}/><line x1="${w / 2}" y1="${hh}" x2="${w / 2}" y2="${h}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}" stroke-dasharray="8 5"/>`; },
+    predefined: (w, h, st) => `<rect x="0" y="0" width="${w}" height="${h}" ${fs(st)}/><line x1="${w * 0.1}" y1="0" x2="${w * 0.1}" y2="${h}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/><line x1="${w * 0.9}" y1="0" x2="${w * 0.9}" y2="${h}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`,
+    manualinput: (w, h, st) => `<polygon points="0,${h * 0.3} ${w},0 ${w},${h} 0,${h}" ${fs(st)} stroke-linejoin="round"/>`,
+    delay: (w, h, st) => `<path d="M0,0 H${w - h / 2} A${h / 2},${h / 2} 0 0 1 ${w - h / 2},${h} H0 Z" ${fs(st)} stroke-linejoin="round"/>`,
+    storeddata: (w, h, st) => { const r = Math.min(w * 0.12, h * 0.5); return `<path d="M${r},0 H${w} A${r},${h / 2} 0 0 0 ${w},${h} H${r} A${r},${h / 2} 0 0 1 ${r},0 Z" ${fs(st)}/>`; },
+    internalstorage: (w, h, st) => `<rect x="0" y="0" width="${w}" height="${h}" ${fs(st)}/><line x1="0" y1="${h * 0.22}" x2="${w}" y2="${h * 0.22}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/><line x1="${w * 0.18}" y1="0" x2="${w * 0.18}" y2="${h}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`,
+    multidoc: (w, h, st) => { const o = Math.min(8, w * 0.06); const doc = (x, y, ww, hh) => `<path d="M${x},${y} H${x + ww} V${y + hh - hh * 0.15} C${x + ww * 0.75},${y + hh - hh * 0.35} ${x + ww * 0.25},${y + hh + hh * 0.05} ${x},${y + hh - hh * 0.15} Z" ${fs(st)}/>`; return doc(2 * o, 0, w - 2 * o, h - 2 * o) + doc(o, o, w - 2 * o, h - 2 * o) + doc(0, 2 * o, w - 2 * o, h - 2 * o); },
+    display: (w, h, st) => `<path d="M0,${h / 2} L${w * 0.15},0 H${w * 0.85} A${w * 0.15},${h / 2} 0 0 1 ${w * 0.85},${h} H${w * 0.15} Z" ${fs(st)} stroke-linejoin="round"/>`,
+    card: (w, h, st) => { const c = Math.min(w * 0.2, h * 0.35); return `<polygon points="${c},0 ${w},0 ${w},${h} 0,${h} 0,${c}" ${fs(st)} stroke-linejoin="round"/>`; },
+    tapecircle: (w, h, st) => `<path d="M${w / 2},${h} A${w / 2},${h / 2} 0 1 1 ${w * 0.85},${h * 0.85} L${w},${h * 0.85} L${w},${h} Z" ${fs(st)} stroke-linejoin="round"/>`,
+    collate: (w, h, st) => `<polygon points="0,0 ${w},0 0,${h} ${w},${h}" ${fs(st)} stroke-linejoin="round"/>`,
+    sort: (w, h, st) => `<polygon points="${w / 2},0 ${w},${h / 2} ${w / 2},${h} 0,${h / 2}" ${fs(st)} stroke-linejoin="round"/><line x1="0" y1="${h / 2}" x2="${w}" y2="${h / 2}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`,
+    orcircle: (w, h, st) => `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 - 1}" ${fs(st)}/><path d="M${w / 2},1 V${h - 1} M1,${h / 2} H${w - 1}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`,
+    sumcircle: (w, h, st) => { const k = 0.146; return `<circle cx="${w / 2}" cy="${h / 2}" r="${Math.min(w, h) / 2 - 1}" ${fs(st)}/><path d="M${w * k},${h * k} L${w * (1 - k)},${h * (1 - k)} M${w * (1 - k)},${h * k} L${w * k},${h * (1 - k)}" stroke="${st.stroke}" stroke-width="${st.strokeWidth}"/>`; },
+    looplimit: (w, h, st) => { const c = Math.min(w * 0.15, h * 0.4); return `<polygon points="${c},0 ${w - c},0 ${w},${c} ${w},${h} 0,${h} 0,${c}" ${fs(st)} stroke-linejoin="round"/>`; },
     rackdevice: (w, h, st) => `<rect x="0" y="0" width="${w}" height="${h}" rx="2" ${fs(st)}/><rect x="3" y="3" width="6" height="${Math.max(2, h - 6)}" rx="1" fill="#fff" opacity=".35"/><rect x="${w - 9}" y="3" width="6" height="${Math.max(2, h - 6)}" rx="1" fill="#fff" opacity=".35"/><circle cx="${w - 16}" cy="${h / 2}" r="2" fill="#9ee636"/>`
   };
   function fs(st) {

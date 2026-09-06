@@ -24,7 +24,27 @@
     logical: { name: "Logical / control plane", stroke: "#5f6c84", width: 1.5, dash: "6 4" },
     flow: { name: "Data flow", stroke: "#078be8", width: 2, dash: "", endArrow: "arrow" },
     power: { name: "Power", stroke: "#c93c3c", width: 2, dash: "1 3" },
-    console: { name: "Console / OOB", stroke: "#8fa3bf", width: 1.5, dash: "4 3" }
+    console: { name: "Console / OOB", stroke: "#8fa3bf", width: 1.5, dash: "4 3" },
+    trunk: { name: "Trunk / port-channel (802.1Q / LACP)", stroke: "#101b3b", width: 4, dash: "" },
+    ha: { name: "HA / heartbeat / cluster link", stroke: "#b7791f", width: 2, dash: "3 3" },
+    storage: { name: "Storage (FC / iSCSI / NVMe-oF)", stroke: "#2a9d8f", width: 2.5, dash: "" },
+    replication: { name: "Replication / sync", stroke: "#2a9d8f", width: 2, dash: "10 4 2 4", endArrow: "arrow", startArrow: "arrow" },
+    api: { name: "API call (sync)", stroke: "#101b3b", width: 1.5, dash: "", endArrow: "arrow" },
+    async: { name: "Event / message (async)", stroke: "#6b46c1", width: 1.5, dash: "6 4", endArrow: "open" },
+    dependency: { name: "Dependency (UML)", stroke: "#101b3b", width: 1.5, dash: "6 4", endArrow: "open" },
+    association: { name: "Association (UML)", stroke: "#101b3b", width: 1.5, dash: "" },
+    inheritance: { name: "Inheritance / generalisation (UML)", stroke: "#101b3b", width: 1.5, dash: "", endArrow: "triangle" },
+    realization: { name: "Realisation (UML)", stroke: "#101b3b", width: 1.5, dash: "6 4", endArrow: "triangle" },
+    composition: { name: "Composition (UML)", stroke: "#101b3b", width: 1.5, dash: "", startArrow: "diamondfilled" },
+    aggregation: { name: "Aggregation (UML)", stroke: "#101b3b", width: 1.5, dash: "", startArrow: "diamond" },
+    onetomany: { name: "One-to-many (ERD)", stroke: "#2b6cb0", width: 1.5, dash: "", startArrow: "one", endArrow: "many" },
+    manytomany: { name: "Many-to-many (ERD)", stroke: "#2b6cb0", width: 1.5, dash: "", startArrow: "many", endArrow: "many" },
+    sequence: { name: "Sequence message (UML)", stroke: "#101b3b", width: 1.5, dash: "", endArrow: "arrow", router: "straight" },
+    sequenceret: { name: "Sequence return (UML)", stroke: "#101b3b", width: 1.5, dash: "6 4", endArrow: "open", router: "straight" },
+    bpmnflow: { name: "Sequence flow (BPMN)", stroke: "#101b3b", width: 1.5, dash: "", endArrow: "arrow" },
+    bpmnmsg: { name: "Message flow (BPMN)", stroke: "#101b3b", width: 1.5, dash: "6 4", startArrow: "dot", endArrow: "open" },
+    blocked: { name: "Blocked / denied flow", stroke: "#d0463f", width: 2, dash: "4 4", endArrow: "cross" },
+    plain: { name: "Plain line (no styling)", stroke: "#101b3b", width: 1.5, dash: "" }
   };
 
   /* ------------------------------------------------------------------ state */
@@ -69,6 +89,7 @@
       case "n": return { x: b.cx, y: b.y };
       case "s": return { x: b.cx, y: b.y + b.h };
       case "w": return { x: b.x, y: b.cy };
+      case "c": return { x: b.cx, y: b.cy };
       case "e": return { x: b.x + b.w, y: b.cy };
       default: return { x: b.cx, y: b.cy };
     }
@@ -85,6 +106,7 @@
     const a = nodeById(e.from.node), b = nodeById(e.to.node);
     if (!a || !b) return null;
     let pa = e.from.port, pb = e.to.port;
+    if (a.type === "anchor") pa = "c"; if (b.type === "anchor") pb = "c";
     if (pa === "auto" || pb === "auto") { const bp = bestPorts(a, b); if (pa === "auto") pa = bp[0]; if (pb === "auto") pb = bp[1]; }
     const p1 = fanPoint(a, pa, e, true), p2 = fanPoint(b, pb, e, false);
     return { a, b, pa, pb, p1, p2 };
@@ -126,6 +148,7 @@
     const base = portPoint(node, port);
     if (!e || !e.id) return base;
     const s = SH.get(node.type); if (s && s.kind === "container") return base; // containers keep centre ports
+    if (port === "c" || node.type === "anchor") return base;
     const list = fanList(node, port);
     const i = list.findIndex(x => x.id === e.id); if (i < 0) return base;
     const n = list.length;
@@ -146,7 +169,7 @@
   }
 
   /* ------------------------------------------------------------------ routing */
-  const DIR = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0] };
+  const DIR = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0], c: [0, 0] };
   function routeEdge(e) {
     const r = resolveEnds(e); if (!r) return null;
     const st = e.style || {}, router = st.router || "orthogonal";
@@ -176,8 +199,9 @@
       pts.push(t);
     }
     pts.push(r.p2);
-    // remove duplicate consecutive points
-    return pts.filter((p, i) => i === 0 || Math.abs(p.x - pts[i - 1].x) > 0.01 || Math.abs(p.y - pts[i - 1].y) > 0.01);
+    // remove duplicate consecutive points, then drop collinear middle points (keeps corners only)
+    const dd = pts.filter((p, i) => i === 0 || Math.abs(p.x - pts[i - 1].x) > 0.01 || Math.abs(p.y - pts[i - 1].y) > 0.01);
+    return dd.filter((p, i) => { if (i === 0 || i === dd.length - 1) return true; const a = dd[i - 1], b = dd[i + 1]; const sameX = Math.abs(a.x - p.x) < 0.01 && Math.abs(b.x - p.x) < 0.01, sameY = Math.abs(a.y - p.y) < 0.01 && Math.abs(b.y - p.y) < 0.01; return !(sameX || sameY); });
   }
   function pathD(pts, router, radius) {
     if (pts.length < 2) return "";
@@ -282,16 +306,21 @@
       const geo = st.geoOverride || s.geo || "rect";
       body = SH.renderGeo(Object.assign({}, s, { geo }), n.w, n.h, Object.assign({}, st, { dash: st.dash }));
       if (st.opacity !== 1) body = `<g opacity="${st.opacity}">${body}</g>`;
-      const pad = geo === "diamond" || geo === "ellipse" ? n.w * 0.22 : geo === "hexagon" || geo === "parallelogram" ? n.w * 0.2 : 10;
-      const l2 = wrapText(n.label, Math.max(30, n.w - pad * 2), st.fontSize, st.bold, st.mono);
-      const s2 = n.sub && !hide ? wrapText(n.sub, Math.max(30, n.w - pad * 2), Math.max(8, st.fontSize - 2), false, true) : [];
+      const pad = geo === "diamond" || geo === "ellipse" ? n.w * 0.22 : geo === "hexagon" || geo === "parallelogram" || geo === "chevron" || geo === "octagon" ? n.w * 0.2 : geo === "star5" || geo === "heart" || geo === "shield" ? n.w * 0.25 : 10;
+      const outside = s.noLabel || s.labelBelow || n.w < 34 || n.h < 18; // tiny/narrow shapes and pure lines/markers: label sits below the shape instead of inside
+      const l2 = wrapText(n.label, outside ? Math.max(n.w * 1.9, 140) : Math.max(30, n.w - pad * 2), st.fontSize, st.bold, st.mono);
+      const s2 = n.sub && !hide ? wrapText(n.sub, outside ? Math.max(n.w * 1.9, 140) : Math.max(30, n.w - pad * 2), Math.max(8, st.fontSize - 2), false, true) : [];
       const dy = (s.labelDy || 0) * n.h;
-      const cy = n.h / 2 + dy - (s2.length ? (s2.length * (st.fontSize - 2) * 1.25) / 2 : 0);
+      const cy = geo === "lifeline" ? Math.min(44, n.h * 0.2) / 2 : n.h / 2 + dy - (s2.length ? (s2.length * (st.fontSize - 2) * 1.25) / 2 : 0);
       const x = st.align === "left" ? pad : st.align === "right" ? n.w - pad : n.w / 2;
       const anchor = st.align === "left" ? "start" : st.align === "right" ? "end" : "middle";
-      if (geo === "note" && st.align === "left") label = svgText(l2, 10, 8, st.fontSize, st.textColor, { valign: "top", anchor: "start", bold: st.bold, mono: st.mono });
+      if (outside) {
+        label = svgText(l2, n.w / 2, n.h + 4, st.fontSize, st.textColor === "#fff" ? "#101b3b" : st.textColor, { valign: "top", bold: st.bold, mono: st.mono });
+        if (s2.length) label += svgText(s2, n.w / 2, n.h + 4 + l2.length * st.fontSize * 1.25 + 2, Math.max(8, st.fontSize - 2), "#5f6c84", { valign: "top", mono: true });
+      }
+      else if (geo === "note" && st.align === "left") label = svgText(l2, 10, 8, st.fontSize, st.textColor, { valign: "top", anchor: "start", bold: st.bold, mono: st.mono });
       else label = svgText(l2, x, cy, st.fontSize, st.textColor, { bold: st.bold, anchor, mono: st.mono });
-      if (s2.length) label += svgText(s2, x, cy + (l2.length * st.fontSize * 1.25) / 2 + (s2.length * (st.fontSize - 2) * 1.25) / 2 + 2, Math.max(8, st.fontSize - 2), st.textColor === "#fff" ? "#e6eef9" : "#5f6c84", { anchor, mono: true });
+      if (s2.length && !outside) label += svgText(s2, x, cy + (l2.length * st.fontSize * 1.25) / 2 + (s2.length * (st.fontSize - 2) * 1.25) / 2 + 2, Math.max(8, st.fontSize - 2), st.textColor === "#fff" ? "#e6eef9" : "#5f6c84", { anchor, mono: true });
     }
     // attribute badge (LLD detail): small key/value list under the label when present
     let attrs = "";
@@ -331,12 +360,32 @@
       for (let ci = 1; ci < cols; ci++) g += `<line x1="${xs[ci]}" y1="${hh}" x2="${xs[ci]}" y2="${n.h}" stroke="#dce5f1"/>`;
       return `<g>${g}</g>`;
     }
+    if (n.type === "umlclass" || n.type === "umlinterface" || n.type === "umlentity") {
+      const rows = String((n.props && n.props.rows) || "").split(/\r?\n/);
+      const nameLines = String(n.label || "").split(/\r?\n/).filter(Boolean).slice(0, 2);
+      const hh = 12 + nameLines.length * (fs + 3), lh = fs + 5;
+      const stroke = st.stroke, fill = st.fill === "#ffffff" || st.fill === "#fff" ? "#fff" : st.fill;
+      let g = `<rect x="0" y="0" width="${n.w}" height="${n.h}" fill="${fill}" stroke="${stroke}" stroke-width="${st.strokeWidth}"/>`;
+      g += `<rect x="0" y="0" width="${n.w}" height="${hh}" fill="${n.type === "umlentity" ? "#e3f0fc" : "#f4f7fb"}" stroke="${stroke}" stroke-width="${st.strokeWidth}"/>`;
+      nameLines.forEach((l, i) => { g += `<text x="${n.w / 2}" y="${8 + (i + 0.5) * (fs + 3) - 2}" text-anchor="middle" dominant-baseline="middle" font-family="${U.FONT}" font-size="${fs + (i === nameLines.length - 1 ? 1 : -1)}" font-weight="${i === nameLines.length - 1 ? 700 : 500}" font-style="${n.type === "umlinterface" && i === nameLines.length - 1 ? "italic" : "normal"}" fill="${st.textColor === "#fff" ? "#101b3b" : st.textColor}">${U.esc(l)}</text>`; });
+      let y = hh + 4;
+      const maxc = Math.max(4, Math.floor((n.w - 12) / (fs * 0.6)));
+      rows.forEach(r => {
+        if (y > n.h - 4) return;
+        if (/^-{2,}$/.test(r.trim())) { g += `<line x1="0" y1="${y + 2}" x2="${n.w}" y2="${y + 2}" stroke="${stroke}" stroke-width="${st.strokeWidth}"/>`; y += 8; return; }
+        const t = r.length > maxc ? r.slice(0, maxc - 1) + "\u2026" : r;
+        const key = /^(PK|FK|UK)\b/.test(t.trim());
+        g += `<text x="8" y="${y + lh / 2}" dominant-baseline="middle" font-family="ui-monospace,Consolas,monospace" font-size="${Math.max(7, fs - 1)}" font-weight="${key ? 700 : 500}" text-decoration="${/^PK\b/.test(t.trim()) ? "underline" : "none"}" fill="#101b3b">${U.esc(t)}</text>`;
+        y += lh;
+      });
+      return `<g>${g}</g>`;
+    }
     if (n.type === "legend") {
       let items = [];
       if (n.props && n.props.auto === false && n.props.rows) items = String(n.props.rows).split(/\r?\n/).filter(Boolean).map(r => { const [name, c] = r.split("|").map(x => x.trim()); return { name, color: c || "#1f6fb5", kind: "swatch" }; });
       else {
         const seen = new Map();
-        S.page.nodes.forEach(m => { const ms = SH.get(m.type); if (!ms || ms.kind === "special" || ms.kind === "text" || ms.kind === "container") return; if (!seen.has(m.type)) seen.set(m.type, { name: ms.name, shape: ms, style: nodeStyle(m), kind: "icon" }); });
+        S.page.nodes.forEach(m => { const ms = SH.get(m.type); if (!ms || ms.kind === "special" || ms.kind === "text" || ms.kind === "container" || ms.cat === "hidden" || ms.cat === "lines" || ms.noLabel) return; if (!seen.has(m.type)) seen.set(m.type, { name: ms.name, shape: ms, style: nodeStyle(m), kind: "icon" }); });
         const presets = new Map();
         S.page.edges.forEach(e => { const p = e.preset || "link"; if (!presets.has(p)) presets.set(p, { name: PRESETS[p] ? PRESETS[p].name : p, preset: Object.assign({}, PRESETS[p] || PRESETS.link, e.style || {}), kind: "line" }); });
         items = [...seen.values(), ...presets.values()];
@@ -377,11 +426,62 @@
   /* ------------------------------------------------------------------ edge rendering */
   function edgeStyle(e) {
     const p = PRESETS[e.preset || "link"] || PRESETS.link;
-    return Object.assign({ stroke: p.stroke, width: p.width, dash: p.dash, startArrow: "none", endArrow: p.endArrow || "none", router: "orthogonal", fontSize: 10, labelBg: true }, e.style || {});
+    return Object.assign({ stroke: p.stroke, width: p.width, dash: p.dash, startArrow: p.startArrow || "none", endArrow: p.endArrow || "none", router: p.router || "orthogonal", fontSize: 10, labelBg: true, jumps: true }, e.style || {});
   }
+  /* Line jumps: where this orthogonal edge crosses an earlier orthogonal edge, hop over it with a small arc. */
+  function segCross(a, b, c, d2) { // axis-aligned segments only; returns intersection point or null
+    const ah = Math.abs(a.y - b.y) < 0.01, ch = Math.abs(c.y - d2.y) < 0.01;
+    if (ah === ch) return null;
+    const h1 = ah ? [a, b] : [c, d2], v1 = ah ? [c, d2] : [a, b];
+    const x = v1[0].x, y = h1[0].y;
+    const xmin = Math.min(h1[0].x, h1[1].x), xmax = Math.max(h1[0].x, h1[1].x), ymin = Math.min(v1[0].y, v1[1].y), ymax = Math.max(v1[0].y, v1[1].y);
+    if (x > xmin + 2 && x < xmax - 2 && y > ymin + 2 && y < ymax - 2) return { x, y, onHoriz: ah };
+    return null;
+  }
+  function pathWithJumps(pts, others, radius, corner) {
+    corner = corner == null ? 8 : corner;
+    const n = pts.length;
+    const rr = pts.map((p, i) => { if (i === 0 || i === n - 1) return 0; const p0 = pts[i - 1], p2 = pts[i + 1]; const l1 = Math.hypot(p.x - p0.x, p.y - p0.y), l2 = Math.hypot(p2.x - p.x, p2.y - p.y); const r = Math.min(corner, l1 / 2, l2 / 2); return r < 1 ? 0 : r; });
+    let d = `M${pts[0].x},${pts[0].y}`;
+    for (let i = 0; i < n - 1; i++) {
+      const a = pts[i], b = pts[i + 1]; const L = Math.hypot(b.x - a.x, b.y - a.y); if (L < 0.01) continue;
+      const ux = (b.x - a.x) / L, uy = (b.y - a.y) / L;
+      const segStart = { x: a.x + ux * rr[i], y: a.y + uy * rr[i] }, segEnd = { x: b.x - ux * rr[i + 1], y: b.y - uy * rr[i + 1] };
+      const horiz = Math.abs(uy) < 0.01, vert = Math.abs(ux) < 0.01;
+      const hops = [];
+      if (horiz || vert) others.forEach(op => { for (let k = 0; k < op.length - 1; k++) { const c = segCross(a, b, op[k], op[k + 1]); if (c && (horiz ? c.onHoriz : !c.onHoriz)) hops.push(c); } });
+      if (i > 0 && rr[i] > 0) d += ` Q${a.x},${a.y} ${segStart.x},${segStart.y}`;
+      if (hops.length) {
+        const key = horiz ? "x" : "y", dir = (b[key] - a[key]) >= 0 ? 1 : -1, sweep = dir > 0 ? 1 : 0;
+        hops.sort((p, q) => (p[key] - q[key]) * dir);
+        let cur = segStart;
+        hops.forEach(hp => {
+          const before = { x: hp.x, y: hp.y }, after = { x: hp.x, y: hp.y };
+          before[key] -= radius * dir; after[key] += radius * dir;
+          if ((before[key] - cur[key]) * dir <= 0 || (segEnd[key] - after[key]) * dir <= 0) return;
+          d += ` L${before.x},${before.y} A${radius},${radius} 0 0 ${sweep} ${after.x},${after.y}`;
+          cur = after;
+        });
+      }
+      d += ` L${segEnd.x},${segEnd.y}`;
+    }
+    return d;
+  }
+  function ptsBox(pts) { let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity; pts.forEach(p => { if (p.x < x1) x1 = p.x; if (p.x > x2) x2 = p.x; if (p.y < y1) y1 = p.y; if (p.y > y2) y2 = p.y; }); return { x1, y1, x2, y2 }; }
+  let jumpCtx = null; // { seen: [{pts, bb}...] } set by sceneMarkup while rendering edges in order
   function renderEdge(e, selected) {
     const r = routeEdge(e); if (!r) return "";
-    const st = edgeStyle(e), d = pathD(r.pts, r.router);
+    const st = edgeStyle(e);
+    let d = pathD(r.pts, r.router);
+    if (jumpCtx) {
+      const bb = ptsBox(r.pts);
+      if (st.jumps !== false && r.router === "orthogonal") { // line jumps: hop over earlier orthogonal connectors that this one crosses
+        const near = jumpCtx.seen.filter(o => o.bb.x1 <= bb.x2 && o.bb.x2 >= bb.x1 && o.bb.y1 <= bb.y2 && o.bb.y2 >= bb.y1).map(o => o.pts);
+        const hasCross = near.some(op => { for (let i = 0; i < r.pts.length - 1; i++) for (let k = 0; k < op.length - 1; k++) if (segCross(r.pts[i], r.pts[i + 1], op[k], op[k + 1])) return true; return false; });
+        if (hasCross) d = pathWithJumps(r.pts, near, Math.max(5, st.width * 2.2));
+      }
+      if (r.router === "orthogonal") jumpCtx.seen.push({ pts: r.pts, bb });
+    }
     const mid = polyMid(r.pts, e.labelT == null ? 0.5 : e.labelT);
     const hide = S.doc.settings.hideDetail && S.page.level === "HLD";
     const markerId = (kind, color) => `m-${kind}-${color.replace("#", "")}`;
@@ -417,6 +517,22 @@
       d += `<marker id="m-dot-s-${id}" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto" markerUnits="strokeWidth"><circle cx="5" cy="5" r="4" fill="${c}"/></marker>`;
       d += `<marker id="m-diamond-${id}" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="9" markerHeight="8" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,5 L6,0 L12,5 L6,10 z" fill="#fff" stroke="${c}" stroke-width="1.5"/></marker>`;
       d += `<marker id="m-diamond-s-${id}" viewBox="0 0 12 10" refX="1" refY="5" markerWidth="9" markerHeight="8" orient="auto" markerUnits="strokeWidth"><path d="M0,5 L6,0 L12,5 L6,10 z" fill="#fff" stroke="${c}" stroke-width="1.5"/></marker>`;
+      d += `<marker id="m-triangle-${id}" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M1,1 L11,6 L1,11 z" fill="#fff" stroke="${c}" stroke-width="1.2"/></marker>`;
+      d += `<marker id="m-triangle-s-${id}" viewBox="0 0 12 12" refX="1" refY="6" markerWidth="10" markerHeight="10" orient="auto" markerUnits="strokeWidth"><path d="M11,1 L1,6 L11,11 z" fill="#fff" stroke="${c}" stroke-width="1.2"/></marker>`;
+      d += `<marker id="m-diamondfilled-${id}" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="9" markerHeight="8" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0,5 L6,0 L12,5 L6,10 z" fill="${c}"/></marker>`;
+      d += `<marker id="m-diamondfilled-s-${id}" viewBox="0 0 12 10" refX="1" refY="5" markerWidth="9" markerHeight="8" orient="auto" markerUnits="strokeWidth"><path d="M0,5 L6,0 L12,5 L6,10 z" fill="${c}"/></marker>`;
+      d += `<marker id="m-bar-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="8" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M8,0 V10" stroke="${c}" stroke-width="1.6"/></marker>`;
+      d += `<marker id="m-bar-s-${id}" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="8" orient="auto" markerUnits="strokeWidth"><path d="M2,0 V10" stroke="${c}" stroke-width="1.6"/></marker>`;
+      d += `<marker id="m-one-${id}" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M4,1 V11 M8,1 V11" stroke="${c}" stroke-width="1.4" fill="none"/></marker>`;
+      d += `<marker id="m-one-s-${id}" viewBox="0 0 12 12" refX="1" refY="6" markerWidth="9" markerHeight="9" orient="auto" markerUnits="strokeWidth"><path d="M4,1 V11 M8,1 V11" stroke="${c}" stroke-width="1.4" fill="none"/></marker>`;
+      d += `<marker id="m-many-${id}" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M1,6 L11,1 M1,6 L11,11 M1,6 H11 M3,1 V11" stroke="${c}" stroke-width="1.3" fill="none"/></marker>`;
+      d += `<marker id="m-many-s-${id}" viewBox="0 0 12 12" refX="1" refY="6" markerWidth="10" markerHeight="10" orient="auto" markerUnits="strokeWidth"><path d="M11,6 L1,1 M11,6 L1,11 M11,6 H1 M9,1 V11" stroke="${c}" stroke-width="1.3" fill="none"/></marker>`;
+      d += `<marker id="m-cross-${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M4,1 L10,9 M10,1 L4,9" stroke="${c}" stroke-width="1.6" fill="none"/></marker>`;
+      d += `<marker id="m-cross-s-${id}" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="8" markerHeight="8" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L6,9 M6,1 L0,9" stroke="${c}" stroke-width="1.6" fill="none"/></marker>`;
+      d += `<marker id="m-square-${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse" markerUnits="strokeWidth"><rect x="1" y="1" width="8" height="8" fill="${c}"/></marker>`;
+      d += `<marker id="m-square-s-${id}" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6" markerHeight="6" orient="auto" markerUnits="strokeWidth"><rect x="1" y="1" width="8" height="8" fill="${c}"/></marker>`;
+      d += `<marker id="m-circleopen-${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="strokeWidth"><circle cx="5" cy="5" r="3.5" fill="#fff" stroke="${c}" stroke-width="1.3"/></marker>`;
+      d += `<marker id="m-circleopen-s-${id}" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto" markerUnits="strokeWidth"><circle cx="5" cy="5" r="3.5" fill="#fff" stroke="${c}" stroke-width="1.3"/></marker>`;
     });
     return d;
   }
@@ -430,22 +546,33 @@
   }
 
   /* ------------------------------------------------------------------ full scene markup (shared by canvas & export) */
+  /* transform for a node: translate + optional rotation / flips about the shape centre */
+  function nodeTransform(n) {
+    let t = `translate(${n.x},${n.y})`;
+    const rot = n.rot || 0, fx = n.flipH ? -1 : 1, fy = n.flipV ? -1 : 1;
+    if (rot || fx < 0 || fy < 0) t += ` translate(${n.w / 2},${n.h / 2})${rot ? ` rotate(${rot})` : ""}${fx < 0 || fy < 0 ? ` scale(${fx},${fy})` : ""} translate(${-n.w / 2},${-n.h / 2})`;
+    return t;
+  }
   function sceneMarkup(opts) {
     opts = opts || {};
     fanCache.tick++; // positions may have changed since the last render: recompute connector fan-out
     const nodes = orderedNodes();
-    let out = "";
+    let out = "", anchors = "";
     nodes.forEach(n => {
       if (n.hidden) return;
+      if (n.type === "anchor") { if (!opts.forExport) anchors += `<g class="shape anchor" data-id="${n.id}" transform="translate(${n.x},${n.y})"><circle cx="${n.w / 2}" cy="${n.h / 2}" r="${n.w / 2 + 3}" fill="transparent"/><circle cx="${n.w / 2}" cy="${n.h / 2}" r="${n.w / 2}" fill="#078be8" fill-opacity=".15" stroke="#078be8" stroke-opacity=".6" stroke-width="1"/></g>`; return; }
       const r = renderNode(n, opts.forExport);
-      out += `<g class="shape${n.locked ? " locked" : ""}" data-id="${n.id}" transform="translate(${n.x},${n.y})" ${n.link ? `data-link="${U.esc(n.link)}"` : ""}>${r.body}${r.label}</g>`;
+      out += `<g class="shape${n.locked ? " locked" : ""}" data-id="${n.id}" transform="${nodeTransform(n)}" ${n.link ? `data-link="${U.esc(n.link)}"` : ""}>${r.body}${r.label}</g>`;
     });
+    jumpCtx = S.doc.settings.lineJumps === false ? null : { seen: [] };
     S.page.edges.forEach(e => {
       const r = renderEdge(e); if (!r) return;
       out += `<g class="conn" data-id="${e.id}">${opts.forExport ? "" : `<path d="${r.d}" fill="none" stroke="transparent" stroke-width="14" class="hit"/>`}${r.g}</g>`;
     });
-    return out;
+    jumpCtx = null;
+    return out + anchors;
   }
 
-  window.RCW_CORE = { S, SH, U, NS, $, $$, PAGE_SIZES, STORAGE_KEY, PRESETS, uid, clamp, pageSize, nodeById, edgeById, bbox, descendants, isContainer, nodeStyle, portPoint, resolveEnds, routeEdge, pathD, polyMid, wrapText, svgText, renderNode, renderEdge, edgeStyle, markerDefs, orderedNodes, sceneMarkup };
+  window.RCW_CORE = { S, SH, U, NS, $, $$, PAGE_SIZES, STORAGE_KEY, PRESETS, uid, clamp, pageSize, nodeById, edgeById, bbox, descendants, isContainer, nodeStyle, portPoint, resolveEnds, routeEdge, pathD, polyMid, wrapText, svgText, renderNode, renderEdge, edgeStyle, markerDefs, orderedNodes, sceneMarkup, nodeTransform
+  };
 })();
