@@ -766,7 +766,7 @@
     // offset a little if something is already there
     let x = w.x, y = w.y; let tries = 0; while (tries++ < 12 && S.page.nodes.some(n => Math.abs(n.x + n.w / 2 - x) < 12 && Math.abs(n.y + n.h / 2 - y) < 12)) { x += 30; y += 30; }
     begin(); const n = addNode(type, x, y); S.sel = new Set([n.id]); S.selEdges.clear(); commit("add"); announce(`Added ${SH.get(type).name}. Use arrow keys to move it.`);
-    if (window.matchMedia("(max-width:980px)").matches) $("#workspace").classList.remove("lib-open");
+    if (window.matchMedia("(max-width:980px)").matches) { $("#workspace").classList.remove("lib-open"); const mb = $("#mobShapes"); if (mb) mb.setAttribute("aria-expanded", "false"); }
   }
   function filterLibrary() {
     const q = $("#libSearch").value.trim().toLowerCase(); let any = false;
@@ -833,10 +833,19 @@
     $("#btnClearLocal").addEventListener("click", () => { if (confirm("Clear the locally saved diagram from this browser and start blank? Download a copy first if you need it.")) { localStorage.removeItem(C.STORAGE_KEY); newDoc("blank-hld"); closeAllModals(); showToast("Local data cleared"); } });
     $$("[data-close]").forEach(b => b.addEventListener("click", () => closeModal(b.closest(".modal-backdrop"))));
     $$(".modal-backdrop").forEach(m => { m.addEventListener("pointerdown", ev => { if (ev.target === m) closeModal(m); }); m.addEventListener("keydown", ev => { if (ev.key === "Escape") { closeModal(m); ev.stopPropagation(); } if (ev.key === "Tab") { const f = $$("button:not([disabled]),input,select,textarea,[href]", m).filter(x => x.offsetParent); if (!f.length) return; if (ev.shiftKey && document.activeElement === f[0]) { f[f.length - 1].focus(); ev.preventDefault(); } else if (!ev.shiftKey && document.activeElement === f[f.length - 1]) { f[0].focus(); ev.preventDefault(); } } }); });
-    $("#btnToggleLib").addEventListener("click", () => { const w = $("#workspace"); if (window.matchMedia("(max-width:980px)").matches) { w.classList.toggle("lib-open"); w.classList.remove("props-open"); } else w.classList.toggle("lib-closed"); renderOverlay(); });
-    $("#btnToggleProps").addEventListener("click", () => { const w = $("#workspace"); if (window.matchMedia("(max-width:980px)").matches) { w.classList.toggle("props-open"); w.classList.remove("lib-open"); } else w.classList.toggle("props-closed"); renderOverlay(); });
-    $("#libClose").addEventListener("click", () => { const w = $("#workspace"); w.classList.remove("lib-open"); if (!window.matchMedia("(max-width:980px)").matches) w.classList.add("lib-closed"); });
-    $("#propsClose").addEventListener("click", () => { const w = $("#workspace"); w.classList.remove("props-open"); if (!window.matchMedia("(max-width:980px)").matches) w.classList.add("props-closed"); });
+    const isNarrow = () => window.matchMedia("(max-width:980px)").matches;
+    const syncDrawerBtns = () => { const w = $("#workspace"); const a = $("#mobShapes"), b = $("#mobProps"); if (a) a.setAttribute("aria-expanded", String(w.classList.contains("lib-open"))); if (b) b.setAttribute("aria-expanded", String(w.classList.contains("props-open"))); };
+    const toggleLib = () => { const w = $("#workspace"); if (isNarrow()) { w.classList.toggle("lib-open"); w.classList.remove("props-open"); } else w.classList.toggle("lib-closed"); syncDrawerBtns(); renderOverlay(); };
+    const toggleProps = () => { const w = $("#workspace"); if (isNarrow()) { w.classList.toggle("props-open"); w.classList.remove("lib-open"); } else w.classList.toggle("props-closed"); syncDrawerBtns(); renderOverlay(); };
+    $("#btnToggleLib").addEventListener("click", toggleLib); $("#btnToggleProps").addEventListener("click", toggleProps);
+    // small-screen drawer buttons (no inline handlers: the page CSP forbids them)
+    if ($("#mobShapes")) $("#mobShapes").addEventListener("click", toggleLib);
+    if ($("#mobProps")) $("#mobProps").addEventListener("click", toggleProps);
+    // tapping the canvas closes an open drawer; on a phone the library opens by itself the first time
+    $("#canvas").addEventListener("pointerdown", () => { if (isNarrow()) { const w = $("#workspace"); if (w.classList.contains("lib-open") || w.classList.contains("props-open")) { w.classList.remove("lib-open", "props-open"); syncDrawerBtns(); } } }, true);
+    window.addEventListener("resize", syncDrawerBtns);
+    $("#libClose").addEventListener("click", () => { const w = $("#workspace"); w.classList.remove("lib-open"); if (!isNarrow()) w.classList.add("lib-closed"); syncDrawerBtns(); });
+    $("#propsClose").addEventListener("click", () => { const w = $("#workspace"); w.classList.remove("props-open"); if (!isNarrow()) w.classList.add("props-closed"); syncDrawerBtns(); });
     $("#hintTemplates").addEventListener("click", () => openModal("templatesModal")); $("#hintLib").addEventListener("click", () => { $("#workspace").classList.add("lib-open"); $("#workspace").classList.remove("lib-closed"); $("#libSearch").focus(); });
     $("#checksAuto").addEventListener("change", () => { if ($("#checksAuto").checked) window.RCW_CHECKS.run(false); });
     // file drop (JSON / images)

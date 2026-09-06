@@ -106,7 +106,7 @@
   </aside>
 
   <main class="canvas-wrap" id="canvasWrap">
-    <div class="canvas-toggles"><button type="button" class="btn sm" onclick="document.getElementById('btnToggleLib').click()">Shapes</button><button type="button" class="btn sm" onclick="document.getElementById('btnToggleProps').click()">Properties</button></div>
+    <div class="canvas-toggles"><button type="button" class="btn sm primary" id="mobShapes" aria-controls="libPanel" aria-expanded="false">▦ Shapes</button><button type="button" class="btn sm" id="mobProps" aria-controls="propsPanel" aria-expanded="false">Properties</button></div>
     <svg id="canvas" tabindex="0" role="application" aria-label="Diagram canvas. Use the shape library to add shapes; Tab cycles selection; arrow keys move; Enter edits label; C then drag connects shapes." xmlns="http://www.w3.org/2000/svg">
       <defs>
         <pattern id="gridPat" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20,0 L0,0 0,20" fill="none" stroke="#e3e9f2" stroke-width="1"/></pattern>

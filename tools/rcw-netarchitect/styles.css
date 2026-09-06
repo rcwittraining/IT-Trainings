@@ -243,3 +243,9 @@ svg#canvas text{-webkit-user-select:none;user-select:none}
 .lib-cat summary .cnt{margin-left:auto}
 .shape.anchor{cursor:move}
 #libBody{position:relative}
+/* ---- small-screen drawers (v1.1.1) ---- */
+@media (max-width:980px){
+  .canvas-toggles .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .canvas-toggles .btn[aria-expanded="true"]{box-shadow:inset 0 0 0 2px var(--navy)}
+  .panel.left .panel-head::after{content:"tap a shape to add it";font-size:11px;color:var(--muted);font-weight:400;margin-left:auto;margin-right:6px}
+}
