@@ -133,6 +133,18 @@
       "group": "Tools"
     },
     {
+      "title": "RCW - NetArchitect \u2014 HLD & LLD Diagram Studio",
+      "category": "IT Architecture \u2022 Network / Cloud / Software diagrams \u2022 Visio-style \u2022 Offline",
+      "badge": "HLD/LLD",
+      "accent": "#078be8",
+      "id": "rcw-netarchitect",
+      "targetUrl": "https://www.rcwittraining.in/tools/rcw-netarchitect/",
+      "contentType": "Tool",
+      "technology": "IT Architecture",
+      "subcategory": "Design & Documentation",
+      "group": "Tools"
+    },
+    {
       "title": "RCW-NixPriv \u2014 Sudo Privilege Delegation Manager",
       "category": "Linux \u2022 Security \u2022 Offline",
       "badge": "SUDO",
@@ -2801,5 +2813,5 @@
       "group": "Technology Labs"
     }
   ],
-  "updatedAt": "2026-09-05T12:00:00Z"
+  "updatedAt": "2026-09-06T07:00:00Z"
 }

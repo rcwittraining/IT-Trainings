@@ -123,6 +123,18 @@ window.RCW_CATALOGUE = Object.freeze([
     "group": "Tools"
   },
   {
+    "title": "RCW - NetArchitect \u2014 HLD & LLD Diagram Studio",
+    "category": "IT Architecture \u2022 Network / Cloud / Software diagrams \u2022 Visio-style \u2022 Offline",
+    "badge": "HLD/LLD",
+    "accent": "#078be8",
+    "id": "rcw-netarchitect",
+    "targetUrl": "https://www.rcwittraining.in/tools/rcw-netarchitect/",
+    "contentType": "Tool",
+    "technology": "IT Architecture",
+    "subcategory": "Design & Documentation",
+    "group": "Tools"
+  },
+  {
     "title": "RCW-NixPriv — Sudo Privilege Delegation Manager",
     "category": "Linux • Security • Offline",
     "badge": "SUDO",
@@ -2839,7 +2851,7 @@ window.RCW_CATALOGUE = Object.freeze([
     "subcategory": "Incident Response",
     "group": "Technology Labs"
   },
-  ,{
+  {
     "title": "Citrix Virtual Apps & Desktops",
     "category": "Virtualisation \u2022 Practice Labs",
     "badge": "CITRIX",
@@ -2851,4 +2863,4 @@ window.RCW_CATALOGUE = Object.freeze([
     "subcategory": "Virtual Apps & Desktops",
     "group": "Technology Labs"
   }
-];
+]);

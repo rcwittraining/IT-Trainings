@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="../../rcw-consent.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.google.com https://*.googleadservices.com https://*.doubleclick.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.google.com https://*.doubleclick.net https://*.googlesyndication.com; frame-src https://www.youtube-nocookie.com https://*.google.com https://*.googlesyndication.com https://*.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#061633">
+<title>RCW - NetArchitect | Free online HLD &amp; LLD network diagram tool | RCW IT Training</title>
+<meta name="description" content="Draw professional High-Level (HLD) and Low-Level (LLD) network, cloud and software architecture diagrams online for free. 100+ vendor-neutral stencils, HLD/LLD templates, title blocks, legends, design checks and PNG/SVG/PDF/JSON export. Runs entirely in your browser - nothing is uploaded.">
+<meta name="keywords" content="network diagram tool, HLD diagram, LLD diagram, architecture diagram online, free Visio alternative, network topology drawing, cloud architecture diagram, RCW IT Training">
+<link rel="canonical" href="https://www.rcwittraining.in/tools/rcw-netarchitect/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RCW - NetArchitect | Free online HLD &amp; LLD diagram tool">
+<meta property="og:description" content="Draw HLD and LLD network, cloud and software architecture diagrams in your browser. Free, private, exports to PNG / SVG / PDF / JSON.">
+<meta property="og:url" content="https://www.rcwittraining.in/tools/rcw-netarchitect/">
+<meta property="og:image" content="https://www.rcwittraining.in/tools/rcw-netarchitect/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"RCW - NetArchitect","applicationCategory":"DesignApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript. Works offline after first load.","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"description":"Free online HLD and LLD network, cloud and software architecture diagram editor. Vendor-neutral stencils, templates, title blocks, legends, design checks and PNG/SVG/PDF/JSON export. All processing happens in the browser.","url":"https://www.rcwittraining.in/tools/rcw-netarchitect/","author":{"@type":"Organization","name":"RCW IT Training","url":"https://www.rcwittraining.in/"},"featureList":["HLD and LLD templates","100+ network, security, cloud and software stencils","Orthogonal connectors with port labels","Title block, legend and revision history","Design and accessibility checks","Export PNG, JPEG, SVG, PDF, JSON, CSV"]}
+</script>
+</head>
+<body>
+<a class="skip" href="#canvas">Skip to canvas</a>
+<div id="a11yLive" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<header class="app-header" role="banner">
+  <a class="brand" href="https://www.rcwittraining.in/" title="RCW IT Training home"><span class="logo" aria-hidden="true">RCW</span></a>
+  <div class="app-name">RCW - NetArchitect<small>HLD &amp; LLD diagram studio</small></div>
+  <div class="doc-title"><label for="docTitle" class="sr-only">Diagram title</label><input id="docTitle" type="text" placeholder="Diagram title" maxlength="120" autocomplete="off"></div>
+  <div class="header-actions">
+    <button type="button" class="hbtn" id="btnNew" title="New diagram from template"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 12v6M9 15h6"/></svg><span class="lbl">New</span></button>
+    <button type="button" class="hbtn" id="btnOpen" title="Open a saved .json diagram (Ctrl+O)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="lbl">Open</span></button>
+    <button type="button" class="hbtn" id="btnSave" title="Download editable JSON (Ctrl+S)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg><span class="lbl">Save</span></button>
+    <button type="button" class="hbtn" id="btnPrint" title="Print / Save as PDF (Ctrl+P)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg><span class="lbl">PDF</span></button>
+    <button type="button" class="hbtn primary" id="btnExport" title="Export PNG / SVG / JPEG / CSV (Ctrl+E)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg><span class="lbl">Download</span></button>
+    <button type="button" class="hbtn" id="btnShortcuts" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg></button>
+    <button type="button" class="hbtn" id="btnAbout" title="About, privacy &amp; standards" aria-label="About, privacy and standards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+    <a class="back" href="https://www.rcwittraining.in/">&larr; Back to catalogue</a>
+  </div>
+</header>
+
+<nav class="toolbar" aria-label="Editing tools">
+  <button type="button" class="tbtn" data-tool="select" aria-pressed="true" title="Select / move (V)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2l16 9-7 2-3 7z"/></svg><span class="kbd">V</span></button>
+  <button type="button" class="tbtn" data-tool="connect" aria-pressed="false" title="Connector (C) - drag from one shape to another"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="5" r="2.5"/><path d="M7 17L17 7"/></svg><span class="kbd">C</span></button>
+  <button type="button" class="tbtn" data-tool="text" aria-pressed="false" title="Text (T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 5h14M12 5v14M9 19h6"/></svg><span class="kbd">T</span></button>
+  <button type="button" class="tbtn" data-tool="pan" aria-pressed="false" title="Pan (H) - or hold Space / middle mouse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 0 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg><span class="kbd">H</span></button>
+  <span class="sep" role="separator"></span>
+  <button type="button" class="tbtn" id="btnUndo" title="Undo (Ctrl+Z)" aria-label="Undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+  <button type="button" class="tbtn" id="btnRedo" title="Redo (Ctrl+Y)" aria-label="Redo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+  <span class="sep" role="separator"></span>
+  <button type="button" class="tbtn" id="btnDup" title="Duplicate (Ctrl+D)" aria-label="Duplicate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+  <button type="button" class="tbtn" id="btnDelete" title="Delete (Del)" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button>
+  <span class="sep" role="separator"></span>
+  <div class="dropdown"><button type="button" class="tbtn" aria-haspopup="true" aria-expanded="false" title="Align &amp; distribute"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 3v18M8 7h12M8 12h8M8 17h12"/></svg>Arrange ▾</button>
+    <div class="menu" role="menu">
+      <div class="mtitle">Align</div>
+      <button type="button" role="menuitem" data-align-act="left">⇤ Align left</button><button type="button" role="menuitem" data-align-act="hcenter">↔ Align centre</button><button type="button" role="menuitem" data-align-act="right">⇥ Align right</button>
+      <button type="button" role="menuitem" data-align-act="top">⤒ Align top</button><button type="button" role="menuitem" data-align-act="vcenter">↕ Align middle</button><button type="button" role="menuitem" data-align-act="bottom">⤓ Align bottom</button>
+      <hr><div class="mtitle">Distribute &amp; size</div>
+      <button type="button" role="menuitem" data-dist="h">⇹ Distribute horizontally</button><button type="button" role="menuitem" data-dist="v">⇳ Distribute vertically</button>
+      <button type="button" role="menuitem" data-size="both">⊞ Same size as first</button><button type="button" role="menuitem" data-size="w">Same width</button><button type="button" role="menuitem" data-size="h">Same height</button>
+      <hr><div class="mtitle">Order</div>
+      <button type="button" role="menuitem" data-z="front">Bring to front <span class="kbd">Ctrl+Shift+]</span></button><button type="button" role="menuitem" data-z="forward">Bring forward <span class="kbd">Ctrl+]</span></button><button type="button" role="menuitem" data-z="backward">Send backward <span class="kbd">Ctrl+[</span></button><button type="button" role="menuitem" data-z="back">Send to back <span class="kbd">Ctrl+Shift+[</span></button>
+      <hr><button type="button" role="menuitem" id="btnGroup">Group into zone <span class="kbd">Ctrl+G</span></button><button type="button" role="menuitem" id="btnUngroup">Ungroup <span class="kbd">Ctrl+Shift+G</span></button><button type="button" role="menuitem" id="btnLock">Lock / unlock <span class="kbd">Ctrl+L</span></button>
+      <hr><button type="button" role="menuitem" id="btnLayout">✨ Auto-layout (layered)</button>
+    </div>
+  </div>
+  <span class="sep" role="separator"></span>
+  <button type="button" class="tbtn" id="tglGrid" aria-pressed="true" title="Show grid (G)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Grid</button>
+  <button type="button" class="tbtn" id="tglSnap" aria-pressed="true" title="Snap to grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3v7a6 6 0 0 0 12 0V3M4 21h16"/></svg>Snap</button>
+  <button type="button" class="tbtn" id="tglGuides" aria-pressed="true" title="Smart alignment guides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v18M3 12h18" stroke-dasharray="3 3"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>Guides</button>
+  <button type="button" class="tbtn" id="tglDetail" aria-pressed="false" title="Hide LLD detail (sub-labels, attributes, port labels) on HLD pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Hide LLD detail</button>
+  <span class="sep" role="separator"></span>
+  <div class="seg" id="segLevel" role="group" aria-label="Design level of this page"><button type="button" data-level="HLD" aria-pressed="true" title="Mark this page as High-Level Design">HLD</button><button type="button" data-level="LLD" aria-pressed="false" title="Mark this page as Low-Level Design">LLD</button></div>
+  <span class="sep" role="separator"></span>
+  <button type="button" class="tbtn" id="btnChecks" title="Run design &amp; documentation checks">✓ Checks <span class="badge" id="checksBadge" style="background:#eef4fb;color:#5f6c84">–</span></button>
+  <button type="button" class="tbtn" id="btnTemplates" title="Templates">📐 Templates</button>
+  <span style="flex:1"></span>
+  <button type="button" class="tbtn" id="btnZoomOut" title="Zoom out (Ctrl+-)" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
+  <button type="button" class="tbtn zoom-val" id="zoomVal" title="Reset zoom to 100%">100%</button>
+  <button type="button" class="tbtn" id="btnZoomIn" title="Zoom in (Ctrl++)" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+  <button type="button" class="tbtn" id="btnFit" title="Fit page (Ctrl+0)">Fit page</button>
+  <button type="button" class="tbtn" id="btnFitC" title="Fit content (Ctrl+Shift+0)">Fit content</button>
+  <span class="sep" role="separator"></span>
+  <button type="button" class="tbtn" id="btnToggleLib" title="Toggle shape library" aria-label="Toggle shape library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+  <button type="button" class="tbtn" id="btnToggleProps" title="Toggle properties panel" aria-label="Toggle properties panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></button>
+</nav>
+
+<div class="workspace" id="workspace">
+  <aside class="panel left" id="libPanel" aria-label="Shape library">
+    <div class="panel-head">Shapes <button type="button" class="close" id="libClose" aria-label="Close shape library">×</button></div>
+    <div style="padding:8px 10px 0"><label for="libSearch" class="sr-only">Search shapes</label><input class="search" id="libSearch" type="search" placeholder="Search shapes… (L)" autocomplete="off"></div>
+    <div class="panel-body" id="libBody"></div>
+    <p class="lib-hint" style="padding:0 10px 8px">Click a shape to add it at the centre, or drag it onto the canvas. Drop inside a zone to nest it.</p>
+  </aside>
+
+  <main class="canvas-wrap" id="canvasWrap">
+    <div class="canvas-toggles"><button type="button" class="btn sm" onclick="document.getElementById('btnToggleLib').click()">Shapes</button><button type="button" class="btn sm" onclick="document.getElementById('btnToggleProps').click()">Properties</button></div>
+    <svg id="canvas" tabindex="0" role="application" aria-label="Diagram canvas. Use the shape library to add shapes; Tab cycles selection; arrow keys move; Enter edits label; C then drag connects shapes." xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="gridPat" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20,0 L0,0 0,20" fill="none" stroke="#e3e9f2" stroke-width="1"/></pattern>
+        <pattern id="gridPatBig" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100,0 L0,0 0,100" fill="none" stroke="#d3dce9" stroke-width="1"/></pattern>
+        <g id="dyn-defs"></g>
+      </defs>
+      <g id="world"><g id="page"></g><g id="grid"></g><g id="scene"></g><g id="overlay"></g></g>
+    </svg>
+    <textarea id="textEditor" class="text-editor" aria-label="Edit label. Ctrl+Enter or click elsewhere to finish; Esc cancels." rows="1"></textarea>
+    <div class="empty-hint" id="emptyHint"><div class="box"><h2>Start your diagram</h2><p>Pick a shape from the library on the left, or begin from a professional template.</p><div class="btns"><button type="button" class="btn primary" id="hintTemplates">📐 Choose a template</button><button type="button" class="btn" id="hintLib">Open shape library</button></div><p style="margin-top:12px;font-size:12px">Tip: hover a shape and drag from its blue port dots to draw a connector.</p></div></div>
+    <div class="ctx" id="ctx" role="menu"></div>
+    <div class="toast" id="toast" role="status"></div>
+  </main>
+
+  <aside class="panel right props" id="propsPanel" aria-label="Properties">
+    <div class="panel-head">Properties <button type="button" class="close" id="propsClose" aria-label="Close properties">×</button></div>
+    <div class="panel-body">
+      <div id="propsBody"></div>
+      <details id="checksDetails" style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#5f6c84">Design &amp; documentation checks</summary>
+        <div class="checks-summary" id="checksSummary">Click "Checks" in the toolbar to review this page.</div>
+        <label style="font-size:12px;display:flex;gap:6px;align-items:center;margin:4px 0"><input type="checkbox" id="checksAuto" checked> Re-run automatically as I edit</label>
+        <ul class="checks" id="checksBody"></ul>
+        <p class="hint">Checks cover documentation completeness (title block, legend, versioning, classification), HLD vs LLD conventions (unique hostnames, interface labels, addressing), basic security-architecture sanity and WCAG colour contrast. They are guidance, not a substitute for peer review.</p>
+      </details>
+    </div>
+  </aside>
+</div>
+
+<footer class="statusbar" role="contentinfo">
+  <div class="pages" id="pages" role="tablist" aria-label="Pages"></div>
+  <span class="badge hld" id="pageBadge">HLD</span>
+  <span id="statTool">Select</span>
+  <div class="status-right"><span id="statCounts"></span><span id="statPos" style="font-family:ui-monospace,Consolas,monospace;min-width:80px"></span><span id="saveState" class="saved"></span></div>
+</footer>
+
+<div id="dragGhost" class="drag-ghost" aria-hidden="true"></div>
+<div id="printArea" aria-hidden="true"></div>
+
+<!-- Templates modal -->
+<div class="modal-backdrop" id="templatesModal" role="dialog" aria-modal="true" aria-labelledby="tplTitle" aria-hidden="true">
+  <div class="modal"><button type="button" class="x" data-close aria-label="Close">×</button>
+    <h2 id="tplTitle">Start from a template</h2><p class="lead">Professional HLD and LLD starting points with title block, legend and notation already in place. Every shape and label is editable.</p>
+    <div class="tpl-grid" id="tplGrid"></div>
+    <div class="actions"><button type="button" class="btn" id="btnClearLocal">Clear locally saved diagram</button><button type="button" class="btn" data-close>Continue current diagram</button></div>
+  </div>
+</div>
+
+<!-- Export modal -->
+<div class="modal-backdrop" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="expH" aria-hidden="true">
+  <div class="modal narrow"><button type="button" class="x" data-close aria-label="Close">×</button>
+    <h2 id="expH">Download diagram</h2><p class="lead" id="expTitle"></p>
+    <div class="form-grid">
+      <label>Format</label><div class="radios" role="radiogroup" aria-label="Format"><label><input type="radio" name="expFmt" value="png" checked>PNG</label><label><input type="radio" name="expFmt" value="svg">SVG (vector)</label><label><input type="radio" name="expFmt" value="jpg">JPEG</label><label><input type="radio" name="expFmt" value="pdf">PDF (print)</label><label><input type="radio" name="expFmt" value="json">JSON (editable)</label><label><input type="radio" name="expFmt" value="csv">CSV schedules</label></div>
+      <label>Area</label><div class="radios" role="radiogroup" aria-label="Area"><label><input type="radio" name="expArea" value="page" checked>Whole page</label><label><input type="radio" name="expArea" value="content">Content bounds</label></div>
+      <label for="expPages">Pages</label><select id="expPages"></select>
+      <label for="expScale" id="expRaster">Resolution</label><select id="expScale" aria-labelledby="expRaster"><option value="1">1× (96 dpi, screen)</option><option value="2" selected>2× (192 dpi, documents)</option><option value="3">3× (288 dpi, print)</option><option value="4">4× (384 dpi, large format)</option></select>
+      <label id="expTransparentRow">Background</label><label style="font-size:13px"><input type="checkbox" id="expTransparent"> Transparent (PNG / SVG)</label>
+      <label>Attribution</label><label style="font-size:13px"><input type="checkbox" id="expWatermark" checked> Small "Created with RCW - NetArchitect" footer</label>
+    </div>
+    <p class="notice ok" style="margin-top:14px" id="expInfo"></p>
+    <div class="actions"><button type="button" class="btn" data-close>Cancel</button><button type="button" class="btn primary" id="expGo">Download</button></div>
+  </div>
+</div>
+
+<!-- Shortcuts modal -->
+<div class="modal-backdrop" id="shortcutsModal" role="dialog" aria-modal="true" aria-labelledby="scH" aria-hidden="true">
+  <div class="modal"><button type="button" class="x" data-close aria-label="Close">×</button>
+    <h2 id="scH">Keyboard shortcuts &amp; tips</h2>
+    <div class="shortcuts">
+      <h3>Tools</h3>
+      <div><span>Select / move</span><span class="kbd">V</span></div><div><span>Connector</span><span class="kbd">C</span></div><div><span>Text</span><span class="kbd">T</span></div><div><span>Pan</span><span class="kbd">H</span> / middle-drag / Alt-drag</div><div><span>Focus shape search</span><span class="kbd">L</span></div><div><span>Toggle grid</span><span class="kbd">G</span></div>
+      <h3>Editing</h3>
+      <div><span>Undo / Redo</span><span><span class="kbd">Ctrl+Z</span> / <span class="kbd">Ctrl+Y</span></span></div><div><span>Copy / Cut / Paste</span><span><span class="kbd">Ctrl+C</span> <span class="kbd">Ctrl+X</span> <span class="kbd">Ctrl+V</span></span></div><div><span>Duplicate</span><span class="kbd">Ctrl+D</span></div><div><span>Delete</span><span class="kbd">Del</span></div><div><span>Edit label</span><span class="kbd">Enter</span> / <span class="kbd">F2</span> / double-click</div><div><span>Finish editing</span><span class="kbd">Ctrl+Enter</span> / <span class="kbd">Esc</span></div><div><span>Select all</span><span class="kbd">Ctrl+A</span></div><div><span>Cycle selection</span><span class="kbd">Tab</span> / <span class="kbd">Shift+Tab</span></div><div><span>Nudge 1 px / 1 grid</span><span class="kbd">Arrows</span> / <span class="kbd">Shift+Arrows</span></div><div><span>Add to selection</span><span class="kbd">Shift+click</span> or marquee</div>
+      <h3>Arrange</h3>
+      <div><span>Group into zone / Ungroup</span><span><span class="kbd">Ctrl+G</span> / <span class="kbd">Ctrl+Shift+G</span></span></div><div><span>Lock / unlock</span><span class="kbd">Ctrl+L</span></div><div><span>Bring to front / send to back</span><span><span class="kbd">Ctrl+Shift+]</span> / <span class="kbd">Ctrl+Shift+[</span></span></div><div><span>Keep aspect ratio while resizing</span><span class="kbd">Shift+drag</span></div><div><span>Constrain move to axis</span><span class="kbd">Shift+drag</span></div><div><span>Ignore snapping while resizing</span><span class="kbd">Alt+drag</span></div>
+      <h3>View &amp; files</h3>
+      <div><span>Zoom</span><span><span class="kbd">Ctrl+wheel</span> / <span class="kbd">Ctrl +</span> <span class="kbd">Ctrl -</span></span></div><div><span>Fit page / fit content</span><span><span class="kbd">Ctrl+0</span> / <span class="kbd">Ctrl+Shift+0</span></span></div><div><span>Save JSON / Open</span><span><span class="kbd">Ctrl+S</span> / <span class="kbd">Ctrl+O</span></span></div><div><span>Export / Print</span><span><span class="kbd">Ctrl+E</span> / <span class="kbd">Ctrl+P</span></span></div><div><span>This help</span><span class="kbd">?</span></div><div><span>Follow a shape hyperlink</span><span class="kbd">Ctrl+click</span></div>
+    </div>
+    <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#5f6c84;margin:16px 0 6px">Connector tips</h3>
+    <ul style="font-size:13px;margin:0;padding-left:18px;line-height:1.6"><li>Hover a shape → drag from a blue <b>port dot</b> to another shape. Drop on a specific port to pin that side, or anywhere on the shape for auto-routing.</li><li>Drag a connector's end from the empty canvas to <b>auto-create a linked copy</b> of the source shape (fast for access-switch fan-outs).</li><li>Select a connector → drag the centre dot to add a <b>waypoint</b>; use "Reset waypoints" to return to automatic routing.</li><li>For LLD, fill in <b>Source end / Target end</b> labels (Gi1/0/1 ↔ Gi1/0/48) and choose the <b>media type</b> so the legend stays accurate.</li></ul>
+    <div class="actions"><button type="button" class="btn primary" data-close>Close</button></div>
+  </div>
+</div>
+
+<!-- About modal -->
+<div class="modal-backdrop" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="abH" aria-hidden="true">
+  <div class="modal narrow about"><button type="button" class="x" data-close aria-label="Close">×</button>
+    <h2 id="abH">About RCW - NetArchitect</h2>
+    <p>A free, browser-based studio for <b>High-Level Design (HLD)</b> and <b>Low-Level Design (LLD)</b> diagrams - network topologies, security zones, hybrid-cloud connectivity, rack elevations and software architecture (C4-style). Built by <a href="https://www.rcwittraining.in/">RCW IT Training</a>.</p>
+    <h3 style="font-size:13px;margin:14px 0 4px">Privacy &amp; data</h3>
+    <ul><li><b>Nothing you draw is uploaded.</b> Rendering, export and checks run entirely in your browser; there is no back-end and no account.</li><li>Your work is auto-saved to this browser's local storage only, so you can continue later on the same device. Use <b>Save</b> (JSON) to keep a portable copy or move between devices.</li><li>Opened files are strictly validated (typed schema, size limits, escaped text) before rendering.</li><li>The site's cookie / analytics choices apply as described in the <a href="https://www.rcwittraining.in/privacy.html#privacy-choices">privacy policy</a>; the editor itself sets no additional cookies.</li></ul>
+    <h3 style="font-size:13px;margin:14px 0 4px">Standards &amp; conventions</h3>
+    <ul><li><b>Notation:</b> vendor-neutral symbol set following common industry conventions (router = circle with arrows, switch = box with arrows, firewall = brick wall, zones as dashed regions). Cloud stencils are generic so one diagram can describe AWS, Azure or GCP. Cisco, AWS, Microsoft, Google, VMware and others are trademarks of their respective owners; this tool is not affiliated with them.</li><li><b>Documentation:</b> title block (title, version, author, date, status, classification), legend, revision history and detail tables follow typical enterprise design-document (HLD/LLD) practice.</li><li><b>Software architecture:</b> C4 model person / system / container / component conventions.</li><li><b>Accessibility:</b> designed to WCAG 2.1 AA - full keyboard operation, visible focus, screen-reader announcements, colour-contrast checks on your diagram, and exported SVGs carry &lt;title&gt;/&lt;desc&gt; metadata.</li><li><b>Interchange:</b> open JSON format, SVG 1.1 with Dublin Core metadata, PNG/JPEG, PDF via the browser print engine, CSV inventory &amp; connection schedules.</li></ul>
+    <p style="font-size:12px;color:#5f6c84">Version 1.0.0 · © RCW IT Training · Free to use for personal and commercial diagrams. Provided "as is" without warranty; always peer-review designs before implementation.</p>
+    <div class="actions"><button type="button" class="btn primary" data-close>Close</button></div>
+  </div>
+</div>
+
+<script src="shapes.js"></script>
+<script src="templates.js"></script>
+<script src="app-core.js"></script>
+<script src="app-editor.js"></script>
+<script src="app-io.js"></script>
+</body>
+</html>
