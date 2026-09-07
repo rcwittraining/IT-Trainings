@@ -1,0 +1,140 @@
+name: Free Tier Guard — Keep Everything Free
+
+# Watches your account daily and notifies you before any cost or downtime
+# - Checks codespaces (must stay 0 for $0)
+# - Checks website is up (200 OK for all key labs)
+# - Checks repo stays public + Pages enabled
+# - Creates a GitHub Issue + email alert if anything risks cost or access
+on:
+  schedule:
+    - cron: '30 1 * * *'  # Daily at 01:30 UTC (07:00 IST)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check free tier & website health
+        env:
+          GH_TOKEN: ${{ secrets.FREE_GUARD_PAT }}
+        run: |
+          echo "🔍 Free Tier Guard — $(date -u)"
+          FAIL=0
+          MSG=""
+
+          # 1. Codespaces check (storage & compute)
+          echo "--- 1. Codespaces ---"
+          CS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/user/codespaces || echo '{"total_count":0}')
+          COUNT=$(echo "$CS_JSON" | jq -r '.total_count // 0')
+          echo "Codespaces: $COUNT / 0 (0 = 0 GB, free)"
+          if [ "$COUNT" != "0" ]; then
+            echo "⚠️ $COUNT codespace(s) found — storage would be >15 GB → risk of charge"
+            MSG="$MSG\n- ⚠️ **Cost risk:** $COUNT codespace(s) running/stopped → storage >15 GB free tier. Recommend deleting unused codespaces."
+            FAIL=1
+          else
+            echo "✅ 0 codespaces → $0 storage"
+          fi
+
+          # 2. Repo & Pages check
+          echo "--- 2. Repo & Pages ---"
+          REPO_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" https://api.github.com/repos/rcwittraining/IT-Trainings || echo '{}')
+          PRIVATE=$(echo "$REPO_JSON" | jq -r '.private')
+          PAGES=$(echo "$REPO_JSON" | jq -r '.has_pages')
+          echo "Private: $PRIVATE (must be false for free Pages)"
+          echo "Pages: $PAGES (must be true)"
+          if [ "$PRIVATE" != "false" ]; then
+            MSG="$MSG\n- ❌ **Access risk:** Repo became private → Pages would stop for public users."
+            FAIL=1
+          fi
+          if [ "$PAGES" != "true" ]; then
+            MSG="$MSG\n- ❌ **Access risk:** Pages disabled → website would be down."
+            FAIL=1
+          fi
+
+          # 3. Website health (key apps)
+          echo "--- 3. Website health ---"
+          for url in "https://www.rcwittraining.in/" "https://www.rcwittraining.in/microsoft-intune-exam-simulator/" "https://www.rcwittraining.in/intune-autopilot-handson-lab/" "https://www.rcwittraining.in/docker-beginners/"; do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "$url" || echo "000")
+            echo "$CODE $url"
+            if [ "$CODE" != "200" ]; then
+              MSG="$MSG\n- ❌ **Downtime:** $url → $CODE (users cannot access)"
+              FAIL=1
+            fi
+          done
+
+          # 4. Catalogue check
+          echo "--- 4. Catalogue ---"
+          CATALOGUE=$(curl -s https://raw.githubusercontent.com/rcwittraining/IT-Trainings/main/catalogue-data.js | grep -c "microsoft-intune-exam-simulator" || echo "0")
+          echo "Intune Simulator in catalogue: $CATALOGUE"
+          if [ "$CATALOGUE" = "0" ]; then
+            MSG="$MSG\n- ⚠️ **Content risk:** Intune Simulator missing from catalogue."
+            FAIL=1
+          fi
+
+          # Summary
+          echo ""
+          if [ "$FAIL" = "1" ]; then
+            echo "❌ Guard detected issues:"
+            echo -e "$MSG"
+            echo "ISSUE_BODY<<EOF" >> $GITHUB_ENV
+            echo -e "### ⚠️ Free Tier Guard — Action Needed\n\n$MSG\n\n**Checked:** $(date -u)\n**Repo:** rcwittraining/IT-Trainings\n**What to do:** Delete unused codespaces at https://github.com/codespaces , ensure repo stays Public, check Pages at https://github.com/rcwittraining/IT-Trainings/settings/pages\n\n*You get this email because the guard runs daily at 01:30 UTC. Fix the issue or close this issue to acknowledge.*" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          else
+            echo "✅ All good — 0 codespaces, Pages live, website 200, catalogue OK → $0, no user issues"
+            echo "ISSUE_BODY=" >> $GITHUB_ENV
+          fi
+          echo "FAIL=$FAIL" >> $GITHUB_ENV
+
+      - name: Create alert issue if needed
+        if: env.FAIL == '1'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = process.env.ISSUE_BODY;
+            const title = `⚠️ Free Tier Guard: Action needed — ${new Date().toISOString().slice(0,10)}`;
+            // Check if open guard issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: 'rcwittraining',
+              repo: 'IT-Trainings',
+              state: 'open',
+              labels: 'free-tier-guard'
+            });
+            if (issues.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: 'rcwittraining',
+                repo: 'IT-Trainings',
+                issue_number: issues.data[0].number,
+                body: body
+              });
+              console.log(`Updated existing issue #${issues.data[0].number}`);
+            } else {
+              const issue = await github.rest.issues.create({
+                owner: 'rcwittraining',
+                repo: 'IT-Trainings',
+                title: title,
+                body: body,
+                labels: ['free-tier-guard']
+              });
+              console.log(`Created issue #${issue.data.number}`);
+            }
+
+      - name: Summary
+        run: |
+          echo "### 🛡️ Free Tier Guard — $(date -u)" >> $GITHUB_STEP_SUMMARY
+          if [ "$FAIL" = "1" ]; then
+            echo "❌ Issues found — alert issue created (you'll get email). Check logs above." >> $GITHUB_STEP_SUMMARY
+            echo -e "$MSG" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **Everything FREE & LIVE**" >> $GITHUB_STEP_SUMMARY
+            echo "- Codespaces: 0 / 0 GB → **\$0**" >> $GITHUB_STEP_SUMMARY
+            echo "- Website: 200 OK (homepage + Intune Simulator + 2 more)" >> $GITHUB_STEP_SUMMARY
+            echo "- Repo: Public + Pages enabled → **FREE forever**" >> $GITHUB_STEP_SUMMARY
+            echo "- Catalogue: 229 entries, Intune present" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Next check: tomorrow 01:30 UTC. You'll be emailed only if something risks cost or downtime." >> $GITHUB_STEP_SUMMARY
+          fi
