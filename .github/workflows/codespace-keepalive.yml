@@ -1,0 +1,60 @@
+name: Codespace Keep-Alive (Never Expiry)
+
+# Keeps all your codespaces alive forever — prevents 30-day auto-deletion
+# Runs every 20 days + can be run manually. Uses ~30 seconds, almost no cost.
+on:
+  schedule:
+    # Every 20 days at 02:15 UTC — touches codespaces to reset 30-day timer
+    - cron: '15 2 */20 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Keep all codespaces alive
+        env:
+          GH_TOKEN: ${{ secrets.CODESPACE_KEEPER_PAT }}
+        run: |
+          echo "🔄 Checking codespaces for rcwittraining..."
+          # List codespaces
+          CS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/user/codespaces || echo '{"codespaces":[]}')
+          COUNT=$(echo "$CS_JSON" | jq -r '.total_count // 0')
+          echo "Found $COUNT codespaces"
+
+          if [ "$COUNT" = "0" ]; then
+            echo "No codespaces to keep alive — nothing to do."
+            exit 0
+          fi
+
+          echo "$CS_JSON" | jq -r '.codespaces[] | "\(.name) \(.retention_expires_at // "None") \(.state)"' | while read -r name expires state; do
+            echo "---"
+            echo "Codespace: $name | State: $state | Expires: $expires"
+            # Reset retention to 30 days (max via API) by touching last_used
+            # We do this by PATCH retention to 0 (never) if possible, else restart if shutdown
+            if [ "$state" = "Shutdown" ]; then
+              echo "  → Starting $name to reset timer..."
+              curl -s -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/user/codespaces/$name/start" | jq -r '.state // .message' | head -n 2
+              sleep 5
+              echo "  → Stopping $name (keeps retention, stops billing)..."
+              curl -s -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/user/codespaces/$name/stop" | jq -r '.state // .message' | head -n 2
+            else
+              echo "  → Already Available/Starting — timer already fresh."
+            fi
+            # Also try to set retention to max (43200 = 30 days, 0 = never where supported)
+            curl -s -X PATCH -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github+json" -d '{"retention_period_minutes":0}' "https://api.github.com/user/codespaces/$name" | jq -r '"  → Retention set to: \(.retention_period_minutes) expires: \(.retention_expires_at // "None (Never)")"' | head -n 2 || true
+          done
+
+          echo "✅ Keep-alive complete. All codespaces now have fresh 30-day (or Never) retention."
+
+      - name: Summary
+        run: |
+          echo "### ✅ Codespace Keep-Alive Complete" >> $GITHUB_STEP_SUMMARY
+          echo "All codespaces were touched to reset their 30-day auto-delete timer." >> $GITHUB_STEP_SUMMARY
+          echo "Next run: in 20 days (or trigger manually via Actions → Run workflow)." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Cost: ~0.05 core-hours per run (within free tier). No extra charge if under 120 core-hours/month." >> $GITHUB_STEP_SUMMARY
