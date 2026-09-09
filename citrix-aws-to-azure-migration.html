@@ -1,0 +1,621 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>How to Assess, Plan and Migrate Citrix Workloads from AWS to Azure | RCW IT Training</title><meta name="description" content="A step-by-step technical guide to assessing, planning and executing a migration of Citrix Virtual Apps and Desktops (CVAD / Citrix DaaS) workloads from AWS to Microsoft Azure — discovery, design, sizing, cutover waves and post-migration optimization. Migration scenario."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/citrix-aws-to-azure-migration.html"><style>:root{--n:#061633;--i:#101b3b;--b:#078be8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1}*{box-sizing:border-box}body{margin:0;background:var(--p);color:var(--i);font:16px/1.68 Inter,system-ui,sans-serif}.top{background:linear-gradient(112deg,#020a18,#06142c);border-bottom:4px solid var(--b);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}.mark{border:1px solid var(--c);border-radius:10px;color:var(--c);font-size:11px;font-weight:900;padding:10px 7px}.brand{font-weight:800}.brand small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.6px;text-transform:uppercase}.home{margin-left:auto;color:var(--c);font-size:14px;font-weight:700;text-decoration:none}.wrap{max-width:920px;margin:auto;padding:34px 22px 64px}.hero,.card{background:#fff;border:1px solid var(--l);border-radius:20px;padding:34px;box-shadow:0 10px 28px #081f4515}.ey{color:#0769be;font-size:12px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:10px}h1{font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-1px;margin:0 0 16px}h2{font-size:25px;line-height:1.22;margin:40px 0 14px;letter-spacing:-.3px}.lead{font-size:19px;color:#42516b}.meta{color:var(--m);font-size:14px;margin:18px 0 0}.take{margin-top:40px;padding:26px 28px;border-radius:18px;background:var(--n);color:#fff;line-height:1.6}.take strong{color:#4bd7ff}@media(max-width:550px){.hero,.card{padding:24px}.top{padding:13px 16px}}
+  :root{
+    --ink:#101b3b; --muted:#5f6c84; --brand:#0758c8; --brand2:#4bd7ff;
+    --accent:#078be8; --soft:#eef4fb; --line:#dce5f1; --chip:#e5f1fa;
+    --good:#0e7a4a; --goodbg:#e7f6ee; --warn:#8a4b0f; --warnbg:#fdf3e4; --danger:#a12235; --dangerbg:#fdecef;
+    --codebg:#f4f7fb; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#f4f7fb;color:var(--ink);font:16px/1.7 Inter,system-ui,sans-serif -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .page{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 40px rgba(20,40,60,.06)}
+  header.hero{padding:40px 48px 34px;border-bottom:1px solid var(--line);background:
+     linear-gradient(180deg,#0b3d5c 0%,#0f5e8a 55%,#0b8a8f 140%);
+     color:#fff}
+  .crumb{font-size:13px;letter-spacing:.04em;color:#cfe7f4;margin-bottom:18px}
+  .crumb a{color:#cfe7f4;text-decoration:none}
+  .crumb a:hover{text-decoration:underline}
+  .crumb .sep{margin:0 8px;opacity:.6}
+  .cat{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+     color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+     padding:5px 12px;border-radius:999px;margin-bottom:16px}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fd4ee;font-weight:600;margin:0 0 10px}
+  h1.title{font-size:40px;line-height:1.15;margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
+  .deck{font-size:18.5px;color:#e3f0f8;max-width:760px;margin:0 0 20px;line-height:1.55}
+  .meta{font-size:13.5px;color:#bcd9ea;display:flex;flex-wrap:wrap;gap:6px 20px;border-top:1px solid rgba(255,255,255,.22);padding-top:14px}
+  .meta b{color:#eaf5fb;font-weight:600}
+  main{padding:34px 48px 56px}
+  @media(max-width:720px){ header.hero{padding:28px 22px} main{padding:22px 20px 40px} h1.title{font-size:30px} .page{max-width:100%} }
+  h2{font-size:25px;margin:52px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--line);color:var(--brand);font-weight:750}
+  h2 .ph{display:inline-block;background:var(--brand);color:#fff;font-size:15px;font-weight:700;border-radius:8px;padding:3px 10px;margin-right:10px;vertical-align:3px}
+  h3{font-size:20px;margin:30px 0 10px;color:#123a56;font-weight:700}
+  h4{font-size:17px;margin:22px 0 8px;color:#20465f;font-weight:650}
+  p{margin:0 0 14px}
+  a{color:var(--accent)}
+  ul,ol{margin:0 0 16px;padding-left:24px}
+  li{margin:5px 0}
+  strong{color:#0d2c42}
+  hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+  .toc{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:0 0 6px}
+  .toc h4{margin:0 0 8px;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:var(--muted)}
+  .toc ol{margin:0;columns:2;column-gap:36px;font-size:14.5px}
+  .toc li{margin:4px 0;break-inside:avoid}
+  .toc a{color:#0f4c73;text-decoration:none}
+  .toc a:hover{text-decoration:underline}
+  @media(max-width:720px){ .toc ol{columns:1} }
+  table{border-collapse:collapse;width:100%;margin:14px 0 22px;font-size:14.5px;line-height:1.5}
+  th{background:#0f4c73;color:#fff;text-align:left;padding:9px 12px;font-weight:600;font-size:13.5px}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafc}
+  .wrap{overflow-x:auto}
+  .callout{border-radius:10px;padding:14px 18px;margin:16px 0 20px;font-size:15.5px;border:1px solid}
+  .callout .lbl{font-weight:700;display:block;margin-bottom:4px}
+  .callout p{margin:0 0 6px}.callout p:last-child{margin:0}
+  .info{background:var(--soft);border-color:#c6e0f0}
+  .tip{background:var(--goodbg);border-color:#bfe6cd}
+  .tip .lbl{color:var(--good)}
+  .warn{background:var(--warnbg);border-color:#efd9ae}
+  .warn .lbl{color:var(--warn)}
+  .danger{background:var(--dangerbg);border-color:#f2c7cd}
+  .danger .lbl{color:var(--danger)}
+  code{font-family:var(--mono);font-size:13.5px;background:var(--codebg);border:1px solid #e3e9ef;border-radius:5px;padding:1px 5px;color:#b3345c}
+  pre{background:#152231;color:#e8f1f7;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.6;margin:12px 0 20px}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  pre .c{color:#7fd3a0}
+  pre .k{color:#6fc3f0}
+  .kv{display:flex;gap:12px;background:var(--soft);border-left:4px solid var(--brand);border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-size:14.5px;align-items:flex-start}
+  .kv b{flex:0 0 170px;color:#0f4c73}
+  .pill{display:inline-block;background:var(--chip);color:#0f4c73;border:1px solid #c9e2ef;border-radius:999px;padding:1px 10px;font-size:13px;margin:2px 2px}
+  .chk{list-style:none;padding-left:4px}
+  .chk li{position:relative;padding-left:26px}
+  .chk li::before{content:"\2610";position:absolute;left:0;color:var(--brand);font-weight:700}
+  .done li::before{content:"\2611";color:var(--good)}
+  .score{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+  @media(max-width:720px){ .score{grid-template-columns:1fr} }
+  .card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fbfdfe;font-size:14.5px}
+  .card b{color:#0f4c73}
+  figure{margin:0 0 18px}
+  .diagram{border:1px solid var(--line);border-radius:10px;padding:0;overflow:hidden}
+  .stepnum{display:inline-block;width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;text-align:center;font-weight:700;font-size:14px;line-height:26px;margin-right:8px}
+  .lead{font-size:18px;color:#33465a}
+  .tagrow{margin:14px 0 0;font-size:13px;color:var(--muted)}
+  footer{background:#0f2434;color:#b9cddd;font-size:13.5px;padding:24px 48px;line-height:1.6}
+  footer b{color:#e8f1f7}
+  .nobrk{white-space:nowrap}
+  .small{font-size:13.5px;color:var(--muted)}
+</style></head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs & simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Migration scenario · Citrix · AWS → Azure</div><h1>How to Assess, Plan &amp; Migrate Citrix Workloads from AWS to Azure</h1><p class="lead">A field-tested methodology for moving a Citrix Virtual Apps and Desktops (CVAD / Citrix DaaS) estate from Amazon Web Services to Microsoft Azure — covering assessment, target-state design, sizing, wave-based cutover and post-migration optimization.</p><p class="meta">Published September 9, 2026 · RCW IT Training · Category: Migration scenario</p></div>
+
+<div class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#s0">Understand what you are moving</a></li>
+    <li><a href="#s1">Phase 1 &mdash; Assessment</a></li>
+    <li><a href="#s2">Phase 2 &mdash; Target design &amp; planning</a></li>
+    <li><a href="#s3">Phase 3 &mdash; Migration execution</a></li>
+    <li><a href="#s4">Phase 4 &mdash; Optimize &amp; operate</a></li>
+    <li><a href="#s5">Common pitfalls to avoid</a></li>
+    <li><a href="#s6">Tools &amp; resources cheat-sheet</a></li>
+    <li><a href="#s7">Realistic timeline &amp; exit criteria</a></li>
+  </ol>
+</div>
+
+
+<h2 id="s0"><span class="ph">Step 0</span>Understand what you are actually moving</h2>
+
+<p>Before any tool is deployed, classify the source estate. The single biggest cause of failed Citrix cloud migrations is treating catalogs of machines as the unit of migration. The correct mental model is three planes:</p>
+
+<ul>
+  <li><strong>Control plane (broker):</strong> Where Delivery Controllers / Citrix Cloud, StoreFront, NetScaler/Gateway, License Server, and SQL Server live.</li>
+  <li><strong>Workload plane (machines):</strong> Session hosts / VDAs (Server OS or Desktop OS), machine catalogs, master images, and provisioning (MCS or PVS). This is usually the &ldquo;Citrix workload on AWS&rdquo; you literally see as EC2 instances.</li>
+  <li><strong>User state plane (identity + data):</strong> Active Directory / Entra ID, user profiles (UPM or profile containers), folder redirection, and the backend apps &amp; data the sessions talk to.</li>
+</ul>
+
+<div class="callout info"><span class="lbl">Two realistic target scenarios &mdash; decide early</span>
+<p><strong>Scenario A (keep Citrix, change the substrate):</strong> Citrix Cloud / CVAD continues to broker, but the resource location moves from an AWS region/VPC to an Azure region/VNet. You keep NetScaler, HDX, and all Citrix features, and simply re-provision machines in Azure with MCS.</p>
+<p><strong>Scenario B (platform consolidation to AVD):</strong> You use the migration as the trigger to retire the Citrix layer and standardize on Azure Virtual Desktop (Windows 10/11 multi-session, FSLogix, App Attach, Intune).</p>
+<p>This guide keeps <strong>Scenario A as the main path</strong> (it answers &ldquo;migrate Citrix workloads to Azure&rdquo; literally) and flags the decision points where Scenario B diverges. A hybrid &mdash; AVD for some users, Citrix DaaS on Azure for GPU/specialized users &mdash; is increasingly common as an end state.</p></div>
+
+<h4>Typical Citrix-on-AWS topologies you will encounter</h4>
+<div class="wrap"><table>
+<thead><tr><th>Source topology on AWS</th><th>What it implies for migration</th></tr></thead>
+<tbody>
+<tr><td><strong>Citrix DaaS (Citrix Cloud) with AWS resource locations</strong> &mdash; delivery controllers in Citrix Cloud, Cloud Connectors + MCS-provisioned VDAs in AWS VPCs</td><td>Cleanest path: add an Azure resource location + hosting connection, re-provision catalogs in Azure, migrate users/data, then delete the AWS resource location.</td></tr>
+<tr><td><strong>Self-managed CVAD site in AWS</strong> &mdash; Delivery Controllers, StoreFront, SQL, NetScaler VPX and VDAs all on EC2 in a VPC</td><td>Either (a) lift the control plane to Azure VMs or (b) move to Citrix Cloud first, then migrate machines to Azure. Choose before anything else &mdash; it drives the whole plan.</td></tr>
+<tr><td><strong>Hybrid</strong> &mdash; AWS Citrix with on-premises backends and AD joined via Direct Connect/VPN</td><td>Coexistence networking and latency to backend apps become the dominant design constraints (see Phase 2).</td></tr>
+</tbody>
+</table></div>
+
+<h4>High-level AWS &rarr; Azure mapping reference</h4>
+<div class="wrap"><table>
+<thead><tr><th>Citrix layer</th><th>AWS construct</th><th>Azure construct</th></tr></thead>
+<tbody>
+<tr><td>Broker / control plane</td><td>Citrix Cloud or EC2 CVAD site</td><td>Same Citrix Cloud, or new CVAD site on Azure VMs / in Citrix Cloud</td></tr>
+<tr><td>Resource location anchor</td><td>VPC + Cloud Connectors on EC2</td><td>VNet + Cloud Connectors on Azure VMs</td></tr>
+<tr><td>Machine provisioning</td><td>MCS catalogs, EC2 AMIs, PVS</td><td>MCS catalogs, Azure Compute Gallery images (formerly Shared Image Gallery), PVS</td></tr>
+<tr><td>Session hosts / VDAs</td><td>EC2 instances (e.g., m5, c5, g4dn for GPU)</td><td>Azure VMs (D-/E-/F-series; NVv4 / NVads A10 v5 for GPU)</td></tr>
+<tr><td>User profiles / data</td><td>EFS/FSx, EBS volumes, user home dirs</td><td>Azure Files Premium / Azure NetApp Files, managed disks</td></tr>
+<tr><td>Identity</td><td>AWS Managed AD or AD in EC2</td><td>Active Directory DS on Azure VMs, Entra ID (hybrid or cloud-only)</td></tr>
+<tr><td>Remote access</td><td>NetScaler VPX in AWS / Citrix Gateway Service</td><td>NetScaler VPX in Azure or Citrix Gateway Service</td></tr>
+<tr><td>Load balancing / DNS</td><td>ALB/NLB, Route 53</td><td>Azure Load Balancer / Application Gateway, Azure DNS (or Private DNS)</td></tr>
+<tr><td>Monitoring</td><td>Citrix Director/Monitor, CloudWatch</td><td>Citrix Monitor, Azure Monitor / Log Analytics, Microsoft Intune + Endpoint Analytics (AVD path)</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<h2 id="s1"><span class="ph">Phase 1</span>Assessment &mdash; establish the baseline with data</h2>
+
+<p>Assessment is where you de-risk the entire program. Budget <strong>2&ndash;4 weeks</strong> of wall-clock time; every hour invested here removes rework in later phases. The output is a <strong>discovery workbook</strong> containing inventory, utilization baselines, persona segmentation, an application register, licensing status, cost baseline, and a risk register. The workbook is the single source of truth that every later design decision cites.</p>
+
+<h3>1.1 Inventory every Citrix component</h3>
+<p>Create a component inventory using Citrix Studio/Console exports, the Citrix PowerShell SDK, and AWS inventory sources (EC2 console, Tag Editor, AWS Config, or AWS Systems Manager). For each component capture: version/patch level, role, location (region/AZ), instance type, CPU/RAM/disk, network placement, and how it is provisioned (MCS/PVS/manual, persistent/non-persistent).</p>
+
+<div class="wrap"><table>
+<thead><tr><th>Component group</th><th>Inventory items to capture</th><th>Primary source</th></tr></thead>
+<tbody>
+<tr><td>Delivery / brokering</td><td>Delivery Controllers or Citrix Cloud account, sites, Delivery Groups, Application Groups, policies, StoreFront stores</td><td>Citrix Studio / Console, <code>Get-BrokerSite</code>, <code>Get-BrokerDesktopGroup</code></td></tr>
+<tr><td>Machine catalogs &amp; images</td><td>Catalog names, machine count, OS, VDA version, provisioning type (MCS/PVS), master image / AMI, persistent or pooled</td><td>Citrix Studio, MCS/PVS consoles, AWS AMI inventory</td></tr>
+<tr><td>Access layer</td><td>NetScaler VPX/MPX version and config, Gateway vServers, StoreFront version, certificates, URLs, Workspace app versions, Citrix Workspace / Receiver client estate</td><td>NetScaler config exports (<code>ns.conf</code>), StoreFront console</td></tr>
+<tr><td>Identity &amp; directory</td><td>AD domains/forests, domain controllers (AWS Managed AD or EC2), OU structure, AD groups used for delivery-group membership, GPOs that touch VDAs</td><td>ADUC, GPMC, Citrix policies</td></tr>
+<tr><td>User environment</td><td>Profile solution (UPM, FSLogix, Citrix Profile Management, roaming profiles), profile stores &amp; sizes, folder-redirection targets</td><td>GPO review, file-server inventory, profile-size sampling</td></tr>
+<tr><td>Published apps</td><td>Full list of published apps per delivery group, delivery method (installed in image, App Layering layers, App-V/MSIX, streaming), publisher &amp; license type, actual usage</td><td>Studio export cross-referenced with Citrix Director/Monitor usage logs</td></tr>
+<tr><td>Backends &amp; data</td><td>Application servers, databases (e.g., the CVAD SQL Server itself), file servers, print servers, any AWS-hosted dependency the sessions use</td><td>Network flows, app teams, AWS service maps</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout tip"><span class="lbl">Assessment accelerators</span>
+<p><strong>Automate the dump:</strong> script <code>Get-BrokerMachine</code>, <code>Get-BrokerCatalog</code>, <code>Get-BrokerDesktopGroup</code>, <code>Get-ConfigSite</code>, and StoreFront/NetScaler export endpoints so the workbook refreshes nightly during the project &mdash; do not rely on a one-time screenshot.</p>
+<p><strong>Cloud-era discovery:</strong> if the estate is large, stand up <strong>Azure Migrate</strong> discovery (agent-based) against the AWS VMs early. It profiles CPU/memory utilization history that you will reuse for Azure sizing, and it doubles as the server-migration tool for any VMs you genuinely lift (see Section 3.8).</p></div>
+
+<h3>1.2 Capture utilization baselines &mdash; you cannot size Azure without them</h3>
+<p>Pull 4&ndash;12 weeks of history from Citrix Director/Monitor and the OS performance counters before anything is turned off. These baselines later become the <strong>acceptance criteria</strong> for the Azure environment.</p>
+
+<div class="wrap"><table>
+<thead><tr><th>Baseline metric</th><th>Why it matters</th><th>Where to get it</th></tr></thead>
+<tbody>
+<tr><td>Peak concurrent sessions &amp; session-count curve by hour/day</td><td>Sizes catalogs, sets Autoscale schedules, drives licensing and reservations</td><td>Citrix Director/Monitor &ldquo;Trends&rdquo;</td></tr>
+<tr><td>CPU / memory utilization per host (avg + P95)</td><td>Directly translated to Azure VM size and concurrency density</td><td>Performance Monitor (host), Citrix Director</td></tr>
+<tr><td>Logon duration (components: GPO, profile, apps, connectivity)</td><td>Defines the UX KPI the Azure estate must match or beat</td><td>Citrix Director &ldquo;Logon Duration&rdquo; breakdown</td></tr>
+<tr><td>ICA RTT / WAN latency, session input delay</td><td>Validates Azure region choice and network path design</td><td>Citrix Director session details, user probes</td></tr>
+<tr><td>Profile size (avg, median, P90) and logon profile load time</td><td>Sizes FSLogix/UPM storage tier and IOPS requirements</td><td>UPM logging, file-server enumeration, Director</td></tr>
+<tr><td>Application launch time and failure rates</td><td>Feeds the app register &ldquo;keep / fix / retire&rdquo; decision</td><td>Director app trends, app team telemetry</td></tr>
+<tr><td>Disk IOPS/latency and storage used per catalog</td><td>Sizes managed disks, Azure Files Premium vs. NetApp, cache disks</td><td>CloudWatch/perfmon, storage inventory</td></tr>
+<tr><td>Network throughput per session &amp; total east-west</td><td>Sizes ExpressRoute/VPN and gateway tiers</td><td>NetScaler and VPC flow logs</td></tr>
+<tr><td>Power-on/off patterns, idle ratio</td><td>Validates Autoscale and reserved-instance economics</td><td>CloudWatch / EC2 billing data, Director</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout warn"><span class="lbl">Common sizing mistake</span>
+<p>Never size Azure from <em>configured</em> AWS instance specs (e.g., &ldquo;we have m5.2xlarge hosts, buy the Azure equivalent&rdquo;). EC2 instances in VDI fleets are routinely over-provisioned. Size from <strong>measured utilization</strong>: if P95 CPU is 25% on a 8 vCPU host serving 12 sessions, the Azure equivalent is smaller or denser &mdash; typically worth a <em>right-sizing pass before</em> migration to avoid carrying overpaid compute into Azure.</p></div>
+
+<h3>1.3 Map dependencies and network flows</h3>
+<p>Every Citrix estate is a spiderweb of flows: VDA&rarr;broker, VDA&rarr;SQL (for the CVAD site database), VDA&rarr;profile store, VDA&rarr;backend apps, client&rarr;gateway, and AD replication. Produce a flow map and label each dependency as <strong>stays in AWS during coexistence</strong>, <strong>moves to Azure with the workload</strong>, or <strong>is on-premises and never moves</strong>.</p>
+
+<ul>
+  <li>Identify the SQL Servers (Citrix site database, any app DBs), file servers, and LOB backends that require low latency.</li>
+  <li>Measure <strong>RTT from each candidate Azure region to each backend location</strong> using <code>Test-NetConnection</code>, <code>ping</code>, <code>psping</code>, or Azure Network Watcher connectivity checks. The rule of thumb for a good Citrix session is ICA RTT well under ~150 ms end-to-end, and app-specific flows can be far stricter.</li>
+  <li>Note which apps call back to AWS or on-premises: if a legacy app backend stays behind, plan the coexistence network path (Section 2.4) and its latency budget explicitly.</li>
+  <li>Document DNS: internal names/zones (AD-integrated), StoreFront URLs, and the public DNS (Route&nbsp;53) that clients resolve.</li>
+</ul>
+
+<h3>1.4 Segment users into personas &mdash; design units, not &ldquo;users&rdquo;</h3>
+<p>Group users by workload intensity and device profile so each segment can be assigned a purpose-built Azure catalog. This is the input for both sizing and wave planning.</p>
+
+<div class="wrap"><table>
+<thead><tr><th>Persona (example)</th><th>Typical workload</th><th>Shared or private</th><th>Candidate Azure VM family</th></tr></thead>
+<tbody>
+<tr><td>Task worker</td><td>Browser, thin client, one or two light apps</td><td>Pooled shared (Server OS or Win multi-session)</td><td>Small F-series / low-D-series with high session density</td></tr>
+<tr><td>Knowledge worker</td><td>Office suite, browser, email, line-of-business apps</td><td>Pooled shared</td><td>D-series (e.g., D4s_v5-class), 4&ndash;8 vCPU hosts</td></tr>
+<tr><td>Power / developer</td><td>Heavy Excel, IDEs, multiple VMs/tools</td><td>Private or small pooled</td><td>F-series / D-series, more RAM, faster disks</td></tr>
+<tr><td>Graphics / 3D (CAD, GIS, media)</td><td>AutoCAD, Revit, Esri, Adobe CC</td><td>Private, GPU-enabled</td><td>NVv4 (AMD) or NVads A10 v5 (NVIDIA) &mdash; pilot-prove GPU codec path</td></tr>
+<tr><td>Contractor / occasional</td><td>Light access from personal devices</td><td>Pooled, autoscaled aggressively</td><td>Smallest SKU that meets latency; schedule-based Autoscale</td></tr>
+</tbody>
+</table></div>
+
+<h3>1.5 Audit applications</h3>
+<ul>
+  <li><strong>Usage reality check:</strong> export published apps from Studio and compare against Director usage data. Retire or park apps with near-zero launches instead of carrying them forward.</li>
+  <li><strong>Packaging method:</strong> note which apps are baked into the master image, layered (App Layering), or streamed (App-V). This decides whether the app is re-baked into the new Azure master image, re-created as a layer, or converted to MSIX App Attach (AVD path).</li>
+  <li><strong>Licensing compliance:</strong> verify each app&rsquo;s EULA for <strong>virtualization rights, multi-session use, and cloud/VM licensing</strong>. On-prem server-license-based products and AWS-specific licensing can bite in Azure.</li>
+  <li><strong>Compatibility flags:</strong> record known hooks into the OS image, print drivers, antivirus, and endpoint agents (e.g., DLP, encryption) that must be re-certified on the new image.</li>
+</ul>
+
+<h3>1.6 Assess profiles, user data, and storage</h3>
+<ul>
+  <li>Identify the profile solution in use (UPM, FSLogix, roaming, local-only) and its GPO/policy configuration.</li>
+  <li>Sample profile sizes and folder-redirection targets; quantify total user-data volume and file counts (this sizes the data-migration tool: AzCopy, Azure Data Box, or storage sync).</li>
+  <li>List UNC paths and permissions, mapped drives, and drive maps users rely on.</li>
+  <li>Quantify storage growth rate so target Azure storage (Azure Files Premium / NetApp / managed disks) is sized with headroom.</li>
+</ul>
+
+<h3>1.7 Licensing &amp; commercials &mdash; resolve before you design</h3>
+<div class="wrap"><table>
+<thead><tr><th>License type</th><th>Migration impact &mdash; key questions to settle with vendor/CSA</th></tr></thead>
+<tbody>
+<tr><td><strong>Citrix (CVAD / Citrix DaaS)</strong></td><td>If you are already on Citrix Cloud DaaS, workload licenses move with the user counts &mdash; adding an Azure resource location needs no new Citrix licenses. If self-managed CVAD (perpetual/ULA or user/device subscription), confirm coverage for Azure-hosted VDAs and whether migrating is the moment to move to Citrix Cloud / subscription licensing.</td></tr>
+<tr><td><strong>Microsoft Windows / VDA</strong></td><td>Windows Server session hosts: Windows Server license + RDS CALs. Windows 10/11 Enterprise multi-session on Azure: eligibility comes from Microsoft 365 E3/E5 (or Windows E3/E5) VDA entitlements and may be delivered via AVD <em>or</em> Citrix DaaS on Azure. Verify eligibility and CAL coverage per named user before committing to an OS/image strategy.</td></tr>
+<tr><td><strong>Azure services</strong></td><td>Azure Hybrid Benefit (AHB) for Windows Server reduces per-core cost on eligible images; confirm the source estate&rsquo;s Windows licenses qualify (Software Assurance / E3+).</td></tr>
+<tr><td><strong>Third-party apps</strong></td><td>Check licensing for cloud hosting, multi-session, and per-user vs. per-device models (Section 1.5).</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout warn"><span class="lbl">Do not guess &mdash; get it in writing</span>
+<p>Citrix and Microsoft licensing rules for cross-cloud moves change over time and interact (e.g., multi-session image entitlements, RDS CAL scope, Azure Hybrid Benefit rules). Confirm specifics with your Citrix and Microsoft account teams and your software-asset-management partner before the design freeze. Nothing stalls a migration at cutover like a license-compliance surprise.</p></div>
+
+<h3>1.8 Capture the cost baseline (TCO)</h3>
+<p>Build a full-cost baseline of the AWS estate, not just raw EC2: instance costs, EBS/EFS/FSx storage, data-transfer and NAT-gateway charges, marketplace/Citrix consumption, support, and the operational labor of managing the estate. You need this number twice: once to validate the Azure business case, and once as the &ldquo;before&rdquo; side of the post-migration cost review. Use the <strong>Azure Pricing Calculator</strong> and <strong>TCO calculator</strong> to model the target and capture assumptions (reservations, savings plans, Autoscale power-off savings, egress elimination).</p>
+
+<h3>1.9 Assessment sign-off checklist</h3>
+<ul class="chk">
+  <li>Component inventory exported and maintained in a live workbook</li>
+  <li>Utilization baselines captured (sessions, CPU/RAM, logon, ICA RTT, profiles) for &ge;4 weeks</li>
+  <li>Dependency/flow map complete, with backend locations and latency measurements</li>
+  <li>Persona segmentation agreed with business units</li>
+  <li>Application register with keep/retire/repack decisions drafted</li>
+  <li>Profile &amp; data volume quantified; profile solution chosen at high level</li>
+  <li>Licensing position documented for Citrix, Microsoft, and top apps</li>
+  <li>Cost baseline and target-state cost model reviewed with finance</li>
+  <li>Risks logged with owners (top risks: app compatibility, profile migration, latency to backends, printing, licensing)</li>
+</ul>
+
+<div class="callout info"><span class="lbl">Gate: what a good assessment lets you say</span>
+<p>After Phase 1 you should be able to state, with evidence: total users and personas; number/type of catalogs to build in Azure; target VM SKUs per persona with density; target Azure region and network path; profile/data volume to migrate; the app list that needs repackaging; the license plan; and a first cost model with &plusmn;15% confidence.</p></div>
+
+<hr>
+
+
+<h2 id="s2"><span class="ph">Phase 2</span>Target design &amp; migration planning</h2>
+
+<p>Design freezes happen <em>before</em> any Azure subscription is built. The outputs of this phase are: an architecture document (landing zone, network, identity, image/provisioning, sizing, storage, access, HA/DR, security, monitoring), a licensing/costing model, and the wave &amp; release plan with success criteria. Use Microsoft&rsquo;s <strong>Cloud Adoption Framework</strong> (CAF) as the scaffold &mdash; it maps cleanly onto Citrix-on-Azure deployments.</p>
+
+<h3>2.1 Decide the target architecture (Scenario A vs. B vs. hybrid)</h3>
+<div class="wrap"><table>
+<thead><tr><th>Decision</th><th>Stay with Citrix on Azure (A)</th><th>Consolidate to AVD (B)</th></tr></thead>
+<tbody>
+<tr><td>Brokering &amp; features</td><td>Keep HDX, NetScaler, App Layering, all Citrix policies &mdash; minimal user-visible change</td><td>Standardize on Windows App + Entra ID + Intune + FSLogix</td></tr>
+<tr><td>Effort &amp; risk</td><td>Lower: re-provision machines, preserve broker logic</td><td>Higher: rebuild policies, app delivery, profiles, monitoring; new support model</td></tr>
+<tr><td>Licensing outcome</td><td>Retain Citrix subscription/entitlements; Azure footprint changes only</td><td>Exit Citrix spend; depends on M365 E3/E5 eligibility and app licensing</td></tr>
+<tr><td>When it wins</td><td>GPU/3D, complex App Layering, HDX-dependent apps, quick de-risk move, contractual Citrix commitments</td><td>Simple 1&ndash;2 app estates, strong M365/Intune maturity, desire to cut the Citrix layer and consolidate on native tooling</td></tr>
+</tbody>
+</table></div>
+
+<p>Choose per persona if needed &mdash; there is no rule that everyone must land on the same platform. Whatever the mix, the <strong>sequence in this guide is identical for the layers that matter</strong>: landing zone, image, catalog provisioning, profiles, apps, and cutover.</p>
+
+<h3>2.2 Landing zone design (governance &amp; subscriptions)</h3>
+<ul>
+  <li><strong>Subscription model:</strong> use management-group hierarchy with separate subscriptions (or resource groups with tight policy) for connectivity, identity, and each Citrix workload environment (Prod / Non-prod / DR). Follow Citrix reference guidance: up to ~2,500 VDAs can sit comfortably in a well-structured single subscription; larger estates should use a hub-and-spoke subscription model to stay inside Azure and MCS scale limits (<code>5,000 VDAs per subscription per region</code> is Citrix&rsquo;s recommended ceiling &mdash; see its DaaS limits documentation).</li>
+  <li><strong>Region selection:</strong> choose the region nearest the <em>users</em> and the <em>backend data</em>. Where user groups span geography, prefer multi-region resource locations over one distant region. Check vCPU quota in the target region early &mdash; VDI fleets routinely need quota-increase requests for hundreds of vCPUs.</li>
+  <li><strong>Resource organization:</strong> dedicated resource groups per catalog/role with <code>tags</code> (cost-center, persona, wave, environment). Keep MCS-managed resource groups untouched by hand.</li>
+  <li><strong>RBAC &amp; service principals:</strong> create a service principal for Citrix with <em>least-privilege</em> permissions to create/manage VMs, disks, NICs, and resource groups in the Citrix subscriptions (Citrix provides an ARM template that creates a minimal-role for the host connection). Separate SAs for image automation and Azure DevOps pipelines.</li>
+  <li><strong>Azure Policy &amp; governance:</strong> enforce allowed VM SKUs/regions, require diagnostic settings, mandate tags, deny public IPs on VDAs, require disk encryption. These policies later become your automated guardrails.</li>
+</ul>
+
+<div class="kv"><div><b>Example SKU check</b></div><div>MCS on Azure creates 2&ndash;3 disks per VDA (OS + identity disk, plus optional write-cache for pooled machines). A 2,000-VDA catalog is therefore 4,000&ndash;6,000 managed disks: verify subscription and regional disk/quota limits, and consider MCS <em>on-demand provisioning</em>, which creates machines only on power-on and cuts storage cost and quota pressure dramatically.</div></div>
+
+<h3>2.3 Identity architecture</h3>
+<ul>
+  <li><strong>Domain join:</strong> VDAs and Cloud Connectors must reach an AD domain. If the current AD is in AWS or on-premises, you either replicate/stand up domain controllers in Azure (joined over ExpressRoute/VPN to the forest) or use AWS Managed AD&rarr;Entra Domain Services&ndash;style equivalents where architecture allows. Cloud-only / Entra-joined endpoints matter for the AVD path.</li>
+  <li><strong>Identity flow:</strong> Citrix on Azure works with AD joined VMs and (for Citrix DaaS) Entra ID integration for authentication/SSO and MFA through the gateway. For AVD: native Entra ID join, single sign-on, and Conditional Access.</li>
+  <li><strong>Groups:</strong> mirror AD groups that grant access to delivery groups into target-side groups; keep naming consistent so cutover scripts can map users 1:1 (e.g., <code>DG-Sales-AWS</code> &rarr; <code>DG-Sales-Azure</code>).</li>
+  <li><strong>GPO vs. policy engine:</strong> inventory every VDA-applicable GPO, Citrix policy, and (if AVD) Intune configuration profile. Map each to its target equivalent and identify which ones need re-creation from scratch. This is routinely underestimated.</li>
+  <li><strong>MFA / Conditional Access:</strong> design the new gateway authentication stack (NetScaler nFactor / Citrix Gateway Service, or Entra ID Conditional Access for AVD) in parallel &mdash; do not carry weak legacy auth forward.</li>
+</ul>
+
+<h3>2.4 Network &amp; connectivity design</h3>
+<ul>
+  <li><strong>Hub-and-spoke VNets:</strong> a connectivity hub hosts ExpressRoute/VPN gateways, Azure Firewall, and DNS forwarding. Spokes host identity, Citrix infrastructure, and VDA catalogs, peered to the hub.</li>
+  <li><strong>Backend reachability:</strong> route VDA traffic to on-premises/other-cloud backends over ExpressRoute (preferred for latency-sensitive and large data flows) or Site-to-Site VPN. For the transition window you will also need AWS&harr;Azure connectivity (Section 3.1).</li>
+  <li><strong>Internal DNS:</strong> deploy conditional forwarders in Azure so VDAs resolve internal names to AD/backend zones; keep split-horizon DNS for StoreFront URLs identical to today where possible to minimize endpoint changes.</li>
+  <li><strong>Security boundaries:</strong> NSGs on subnets (deny inbound from internet on VDA subnets), no public IPs on VDAs, Azure Bastion for admin access, private endpoints for Azure Files and other PaaS storage used for profiles/data.</li>
+  <li><strong>Remote access:</strong> deploy NetScaler VPX in Azure in HA (active-passive across availability zones) fronted by Azure Load Balancer, or move to Citrix Gateway Service to remove the NetScaler VM footprint entirely. Plan TLS certificates and public DNS (Route&nbsp;53 &rarr; Azure DNS, or keep DNS where it is and point records at Azure).</li>
+  <li><strong>Capacity:</strong> size the ExpressRoute/VPN for <em>peak concurrent</em> traffic &mdash; a Citrix estate moving to Azure concentrates media, profile, and app traffic that previously spread across AWS and on-prem paths.</li>
+</ul>
+
+<h3>2.5 Image strategy &amp; machine provisioning</h3>
+<ul>
+  <li><strong>Master image per persona:</strong> build one golden image per OS/persona combination (e.g., Windows 11 multi-session for knowledge workers, Windows Server 2022 for task/RDS-style, Windows 11 + GPU drivers for graphics) with the current <strong>Citrix VDA (LTSR recommended)</strong>, core apps, agents, and security tooling.</li>
+  <li><strong>Image lifecycle:</strong> publish images as versions to <strong>Azure Compute Gallery</strong> (formerly Shared Image Gallery) so the same image is replicated across regions for HA/DR and can be versioned for patching. Use an image-builder pipeline (Packer in Azure DevOps, Azure Image Builder) so the &ldquo;build once &rarr; validate &rarr; publish&rdquo; loop is repeatable monthly/quarterly.</li>
+  <li><strong>Provisioning choice:</strong> MCS is the default on Azure and handles most deployments cleanly. Keep PVS only where there is a strong reason (existing PVS investment, specific update patterns). For pooled catalogs use <strong>MCS on-demand provisioning</strong> and non-persistent machines where app/profile design allows &mdash; it is cheaper and more predictable than persistent VDI.</li>
+  <li><strong>Which machines to truly migrate:</strong> in general, do <em>not</em> replicate session hosts. Non-persistent machines are rebuilt from a new Azure image anyway; persistent/static machines and any genuinely lift-and-shift backends are the only candidates for VM replication (Section 3.6).</li>
+</ul>
+
+<h3>2.6 Sizing the Azure estate</h3>
+<p>Translate the utilization baselines (Section 1.2) into Azure VM SKUs per persona, then validate in the pilot with a load test. Guidance below is a starting point &mdash; always confirm with measured data and Citrix reference architectures, since SKU naming and density recommendations evolve.</p>
+
+<div class="wrap"><table>
+<thead><tr><th>Role / persona</th><th>Typical AWS source</th><th>Azure target examples</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Delivery Controllers / Cloud Connectors</td><td>m5.large&ndash;m5.xlarge</td><td>D2s/D4s_v3/v5 (DS-series) with Premium SSD</td><td>Citrix recommends &ge;2 Cloud Connectors per resource location; scale to 4 for large estates.</td></tr>
+<tr><td>Task / shared, high density</td><td>c5/m5 hosts</td><td>F8s_v2, F4s_v2 (compute-optimized) or D8s_v5</td><td>More, smaller hosts &rarr; Autoscale powers off faster and shrinks failure domains; lowest $/user tends to be larger F- or D-family hosts serving 15&ndash;30 sessions &mdash; balance with blast-radius.</td></tr>
+<tr><td>Knowledge / power workers</td><td>m5.xlarge&ndash;2xlarge</td><td>D4s_v5 / D8s_v5 (or E-series if RAM-heavy)</td><td>Density 4&ndash;8 sessions per 8 vCPU host for Office+LOB typical; validate with load test.</td></tr>
+<tr><td>GPU / 3D</td><td>g4dn.xlarge and up</td><td>NV6ads_A10_v5&ndash;NV36ads_A10_v5 (NVIDIA A10); NVv4 (AMD) for lighter needs</td><td>Prove the HDX 3D Pro / hardware-encode path and driver support in the pilot before committing SKU.</td></tr>
+<tr><td>Broker SQL / infra backends</td><td>r5/m5</td><td>D- or E-series with Premium SSD / Azure SQL</td><td>Place the CVAD site database close to controllers (low ms).</td></tr>
+</tbody>
+</table></div>
+
+<ul>
+  <li><strong>Storage per machine:</strong> OS disks on Standard SSD or Premium SSD; pooled machines can use small OS disks + FSLogix for profile state, keeping disks lean. Enable ephemeral/on-demand provisioning where supported to cut storage spend.</li>
+  <li><strong>Compute economics:</strong> pair <strong>Citrix Autoscale</strong> (schedule + load based) with <strong>Azure Reserved Instances / Savings Plans</strong> for the always-on baseline, and pay-as-you-go for the elastic peak. RIs require matching region + OS + SKU, so freeze SKUs early and let Autoscale handle the time dimension.</li>
+  <li><strong>Right-size during migration:</strong> as with AWS, do not faithfully copy over-provisioned instance sizes into Azure; the migration is the cheapest moment to re-shape.</li>
+</ul>
+
+<h3>2.7 Profiles, user data &amp; storage design</h3>
+<ul>
+  <li><strong>Profile container standard:</strong> adopt <strong>FSLogix profile containers</strong> on the target (works whether you land on Citrix DaaS on Azure or AVD, so it is future-proof). If you must keep Citrix UPM in the interim, plan the eventual FSLogix conversion as a follow-on workstream.</li>
+  <li><strong>Storage tier for profiles:</strong> <strong>Azure Files Premium</strong> (SMB, low latency, 100 TiB, private endpoints) is the default for most estates. Use <strong>Azure NetApp Files</strong> where you need higher IOPS/latency guarantees, larger scale, or strong NFS/SMB feature parity with existing filers.</li>
+  <li><strong>Folder redirection:</strong> redirect Documents/Desktop/Downloads to the same profile share or an Azure Files share per user to keep login times low.</li>
+  <li><strong>Data migration mechanics:</strong> plan AzCopy/robocopy parallel copies of user data to Azure storage during the build window, with a delta pass before each wave&rsquo;s cutover, and Azure Data Box for any multi-TB estate where WAN copy is impractical.</li>
+  <li><strong>Printing:</strong> decide the print architecture early (Universal Print, NetScaler/print-server redirection, or a print server VM in Azure) &mdash; printing is one of the top three cutover surprises.</li>
+</ul>
+
+<h3>2.8 High availability, backup &amp; disaster recovery</h3>
+<ul>
+  <li><strong>In-region HA:</strong> place Cloud Connectors and VDAs across <strong>Availability Zones</strong>; use flexible scale sets for catalogs where you want zone distribution with MCS. Multiple StoreFront/NetScaler instances behind a load balancer for the access layer.</li>
+  <li><strong>Cross-region DR:</strong> replicate the golden images via Azure Compute Gallery to a secondary region, keep FSLogix shares replicated (Azure Files geo/zone redundancy or NetApp cross-region replication), and define a DR runbook with a target RTO/RPO. Persistent desktops and the CVAD SQL layer can use Azure Site Recovery or native DB replication.</li>
+  <li><strong>Backups:</strong> Azure Backup for any persistent VMs and file shares; snapshots or versioning for images. Document restore testing in the runbooks.</li>
+</ul>
+
+<h3>2.9 Security &amp; compliance design</h3>
+<ul>
+  <li>Layer identity-centric controls: Conditional Access, MFA, and session policies at the gateway; RBAC least privilege inside Azure.</li>
+  <li>Protect VDAs with Microsoft Defender for Cloud / Defender for Servers (or your existing EDR) <em>before</em> first user wave; keep agent deployment in the golden image.</li>
+  <li>Encryption at rest (SSE, disk encryption), TLS everywhere in flight, private endpoints for profile/back-end storage, no public IPs on VDAs, and Azure Policy to keep drift from re-introducing exposures.</li>
+  <li>Confirm data-residency and compliance requirements (Sovereignty, regional data) against the chosen Azure region, and record evidence in the architecture document.</li>
+</ul>
+
+<h3>2.10 Monitoring &amp; operations model</h3>
+<ul>
+  <li>Monitor the Citrix layer with <strong>Citrix Monitor</strong> (Director successor) &mdash; session trends, logon breakdown, ICA RTT, app failures &mdash; plus Citrix Analytics for user-behavior/experience signals if licensed.</li>
+  <li>Monitor Azure with Log Analytics/Application Insights: VM health, guest OS counters, Autoscale/power state, quota &amp; cost alerts. Ship Citrix VDA and infrastructure logs to a central workspace and build dashboards that reproduce the AWS-era operational reports.</li>
+  <li><strong>Patching cadence:</strong> for non-persistent catalogs, patch by <strong>image refresh</strong> (quarterly OS+Citrix VDA updates published to the gallery and re-provisioned), which is simpler and more consistent than in-place patching of hundreds of VDAs. Keep an always-on maintenance/seed catalog for emergency in-place patching if needed.</li>
+  <li>Define runbooks, on-call ownership, and a Sev1/2 escalation path <em>before</em> pilot starts. Decide who owns Citrix vs. Azure vs. network vs. identity tickets in the new model.</li>
+</ul>
+
+<h3>2.11 Wave &amp; release planning</h3>
+<ul>
+  <li><strong>Wave definition:</strong> group users by business unit/region rather than by convenience &mdash; each wave should be able to run a complete business cycle and its own UAT. Typical shape: Wave&nbsp;0 (IT/early adopters, 20&ndash;50 users) &rarr; Wave&nbsp;1 (pilot BU, 5&ndash;10% of users) &rarr; Waves 2..n (10&ndash;25% each) &rarr; tail (problem users, execs) &mdash; the last waves should be the least risky, not the most senior.</li>
+  <li><strong>Coexistence window:</strong> plan for AWS and Azure estates running <em>in parallel</em> during waves (this is your rollback insurance). Cost the double-running period explicitly &mdash; it is a feature, not waste.</li>
+  <li><strong>Cutover pattern per wave:</strong> because both environments can be live, wave cutover is usually &ldquo;flip the user&rsquo;s access&rdquo; rather than &ldquo;move the machine&rdquo;: add the user/group to the Azure delivery group, remove from the AWS delivery group (or point the client to the new store/gateway), and validate. Keep AWS memberships intact for 48&ndash;72h of hypercare so rollback is one click/command.</li>
+  <li><strong>Success criteria &amp; KPIs:</strong> agree measurable gates before Go: logon duration within X% of baseline (or &lt; defined seconds), ICA RTT under threshold, UAT defect rate, helpdesk ticket volume per 100 users, app-launch success &ge; baseline, cost/user within model &plusmn;10%.</li>
+  <li><strong>RACI &amp; staffing:</strong> name owners for Citrix engineering, Azure networking, identity, app teams, helpdesk/change, and each wave&rsquo;s BU liaison. Schedule hypercare teams for every cutover window.</li>
+  <li><strong>Communications:</strong> per-wave user comms &mdash; what changes (store URL/client, if any), what does not (apps, credentials, data), when, and who to call. Under-communication is the #1 source of negative user sentiment in VDI migrations.</li>
+</ul>
+
+<div class="callout danger"><span class="lbl">Design-freeze gate</span>
+<p>Do not begin Phase 3 until these are approved: target architecture &amp; landing zone diagram; region &amp; network topology with IP plan; identity design; image/provisioning plan; VM SKU &amp; storage bill of materials with cost model; profile &amp; data-migration plan; security &amp; compliance sign-off; monitoring/ops runbooks; wave plan with dates and KPIs; rollback plan; RACI and communications plan.</p></div>
+
+<hr>
+
+
+<h2 id="s3"><span class="ph">Phase 3</span>Migration execution &mdash; build, pilot, wave rollout</h2>
+
+<p>Execution is deliberately boring and repeatable. Build the foundation once, prove it with a ruthless pilot, then run the same cutover playbook wave after wave. Protect the plan with three rules: <strong>one wave at a time</strong>, <strong>every wave has a rollback path</strong>, and <strong>nothing changes without a change record</strong>.</p>
+
+<h3>3.0 Pre-flight: governance &amp; tooling setup (Week 0&ndash;1)</h3>
+<ul>
+  <li>Provision the management group / subscription hierarchy, RBAC, service principals, and Azure Policy assignments from the design.</li>
+  <li>Deploy the connectivity hub (ExpressRoute/VPN gateways, Azure Firewall, DNS forwarders) and spoke VNets; create the AWS&harr;Azure interconnect for coexistence (e.g., Site-to-Site VPN or Direct Connect Gateway / ExpressRoute to AWS Direct Connect). Validate routing tables both ways with test VMs.</li>
+  <li>Stand up the identity layer in Azure (domain controllers replicating the AD forest, or Entra ID + Domain Services per design) and confirm AD replication, DNS resolution of internal names from Azure, and GPO readiness.</li>
+  <li>Create the Azure Compute Gallery, image-builder pipeline, Log Analytics workspace, and alerting skeleton.</li>
+  <li>Stand up target-side file shares (Azure Files Premium / NetApp) with private endpoints, and stub the folder-redirection &amp; FSLogix structure.</li>
+</ul>
+
+<h3>3.1 Establish AWS&harr;Azure coexistence connectivity</h3>
+<p>During wave migration you will run two estates against the same backend apps, AD, and user data. Options (in ascending cost/effort): a temporary Site-to-Site VPN between VPC and VNet; Direct Connect Gateway + ExpressRoute if the org already uses DX; or routing both clouds through the existing on-premises hub if backends live there. Whatever the mechanism, validate three things with real traffic before building anything on it:</p>
+<div class="kv"><div><b>Latency</b></div><div>ICA RTT between the Azure test VDA and AWS/on-prem backends must meet the app performance budget (target comfortably under ~150 ms ICA RTT; app-dependent flows tighter).</div></div>
+<div class="kv"><div><b>Throughput</b></div><div>Saturate the path with a large file copy to confirm sustained bandwidth for profile/data migration and daily use.</div></div>
+<div class="kv"><div><b>Routing/DNS</b></div><div>Confirm the Azure VNet can resolve and reach every internal name the VDAs depend on, with no asymmetric routes back to AWS.</div></div>
+
+<h3>3.2 Build golden images &amp; validate (Week 2&ndash;4)</h3>
+<ol>
+  <li>Install a clean Windows Server or Windows 10/11 multi-session OS (eligible per licensing review) in Azure.</li>
+  <li>Apply OS optimization for the target use (Citrix&rsquo;s image-optimization guidance / Microsoft&rsquo;s AVD optimization where relevant), all current security patches, and your EDR/agents.</li>
+  <li>Install the matching <strong>Citrix VDA</strong> (LTSR current) with the correct delivery type (Citrix DaaS / CVAD), then core apps per persona.</li>
+  <li>Generalize, publish to Azure Compute Gallery with version naming, and build a Machine Catalog in the <em>non-prod</em> resource location first.</li>
+  <li>Run a structured smoke test: boot, broker registration, logon, profile attach, app launch, print, clipboard/redirection, HDX features, and performance counters. Fix image issues <em>in the image</em>, not on individual machines.</li>
+</ol>
+
+<h3>3.3 Stand up the target control plane</h3>
+<ul>
+  <li><strong>Scenario A (Citrix Cloud / CVAD on Azure):</strong> add a new <strong>Azure resource location</strong> with &ge;2 Cloud Connectors per location (spread across zones), add an Azure hosting connection for the Citrix service principal, and connect the site database/controllers per design. Register VDAs from the test catalog to validate end-to-end brokering.</li>
+  <li><strong>Scenario A self-managed CVAD:</strong> if controllers move as VMs, install/restore the new site on Azure VMs (or migrate the existing site database and point new controllers at it) and stage StoreFront &amp; NetScaler in Azure.</li>
+  <li><strong>Scenario B (AVD):</strong> create host pools, workspace(s), application groups, session-host registration using the FSLogix + multi-session stack, and Entra ID/Intune policies.</li>
+  <li>Validate <strong>end-to-end user flow</strong>: endpoint &rarr; gateway (NetScaler VPX in Azure / Citrix Gateway Service / Windows App) &rarr; StoreFront/feed &rarr; broker &rarr; VDA &rarr; profile share &rarr; backend. Measure logon time and ICA RTT against baseline.</li>
+</ul>
+
+<h3>3.4 Provision production catalogs in Azure (Weeks 4&ndash;6)</h3>
+<ul>
+  <li>Create the Machine Catalogs and Delivery Groups per persona with the agreed SKUs and Autoscale schedules, in the Prod resource location.</li>
+  <li>Re-create Citrix policies (or map GPOs) at target parity &mdash; session, bandwidth/HDX, security, printing. Compare policy sets side-by-side so nothing is silently dropped.</li>
+  <li>Map AD groups: source delivery-group memberships &rarr; target groups. Automate the mapping table so each wave only flips membership flags.</li>
+  <li>Enable Autoscale per schedule/load from the utilization baselines; run a dry power-cycle test.</li>
+  <li>For any machines that must be migrated rather than re-provisioned (persistent desktops, backends &mdash; Section 3.6), prepare the replication pipelines now, before wave 1.</li>
+</ul>
+
+<h3>3.5 Profile &amp; user-data migration pipeline</h3>
+<ol>
+  <li>Build the profile-conversion process: <strong>Citrix UPM &rarr; FSLogix</strong> (or direct folder-redirection + FSLogix). Use Citrix&rsquo;s profile-migration tooling or a documented robocopy/AzCopy recipe; never let users log on to the Azure estate before their profile data lands.</li>
+  <li>Classify users by data volume (from Phase 1) into: <em>small</em> (copy at wave cutover), <em>medium</em> (pre-copy night before + delta), <em>large / multi-TB</em> (continuous sync via Azure File Sync or Data Box for the seed + sync until cutover).</li>
+  <li>Automate per-wave data moves with a scripted pipeline that: stops the user&rsquo;s AWS session, does the final delta copy, verifies checksums/file counts, marks the user &ldquo;ready,&rdquo; and updates the access groups. Record start/end time and bytes moved in the wave log for audit.</li>
+  <li>Validate profile conversion with a pilot set: logon time, app data intact, redirected folders present, permission integrity (ACLs preserved).</li>
+</ol>
+
+<div class="callout tip"><span class="lbl">Keep both copies until hypercare closes</span>
+<p>Do not delete AWS profile stores or user data until each wave has passed 72 hours of hypercare and rollback insurance has lapsed. Storage is cheap during a migration; a user&rsquo;s irreplaceable data is not.</p></div>
+
+<h3>3.6 The Wave 0 + pilot (Weeks 6&ndash;8) &mdash; the gate that matters most</h3>
+<p><strong>Wave 0 (IT/eager users, ~20&ndash;50)</strong> proves plumbing. <strong>Pilot wave (5&ndash;10% of the user base)</strong> proves the product &mdash; run it for at least one full business cycle (2&ndash;4 weeks). During pilot:</p>
+<ul>
+  <li>Compare measured KPIs to baselines: logon duration breakdown, ICA RTT, app launch, session reliability, print.</li>
+  <li>Run a <strong>load test</strong> against the pilot catalogs (Citrix load-testing tools or scripted synthetic load) to validate concurrency assumptions and Autoscale behavior at the wave-1 scale.</li>
+  <li>Instrument helpdesk: log every pilot ticket with category; track defects to root cause in image, policy, profile, or network.</li>
+  <li>Test rollback for real: flip one pilot user back to AWS for a day to prove the mechanism and rebuild confidence.</li>
+</ul>
+
+<div class="callout danger"><span class="lbl">Pilot exit criteria (all must pass)</span>
+<p>Logon time within target (and not worse than AWS baseline); ICA RTT within budget; UAT pass rate agreed with the BU; no Sev1/2 defects open; helpdesk volume at or below comparable AWS rates; rollback drill succeeded; Autoscale &amp; reservations behavior confirmed; cost model on track.</p></div>
+
+<h3>3.7 Wave rollout &amp; cutover playbook (Weeks 9&ndash;16+)</h3>
+<p>Each wave follows the identical runbook. Freeze the playbook after pilot; changes to it between waves are a process-change request, not a spontaneous tweak.</p>
+<ol>
+  <li><strong>Prepare (T-7 days):</strong> notify users, update helpdesk, pre-copy user data, snapshot target catalog state, confirm backend capacity for the wave&rsquo;s concurrent load.</li>
+  <li><strong>Stage (T-1 day):</strong> final delta sync of profiles/data; verify target delivery group has capacity for the wave&rsquo;s peak concurrency; warm Autoscale hosts if needed.</li>
+  <li><strong>Cutover (T-0, off-peak window):</strong> move the wave&rsquo;s users to the Azure delivery group / new store (remove or re-scope AWS memberships), flip public DNS/URL if the store URL changed, and re-test a sample of users end-to-end.</li>
+  <li><strong>Hypercare (T+0 &rarr; T+72h):</strong> dedicated support channel; monitor logons, failures, app errors, and ICA RTT in real time; on Sev1 or prolonged outage, execute the documented rollback for the wave (re-add to AWS groups, re-point DNS), then return the wave to a later slot.</li>
+  <li><strong>Close (T+5 days):</strong> BU sign-off on the wave&rsquo;s success criteria; retro notes folded back into the playbook; AWS resources for the wave marked for decommission (not yet deleted).</li>
+</ol>
+
+<div class="wrap"><table>
+<thead><tr><th>Wave</th><th>Composition</th><th>Size</th><th>Duration</th><th>Key objective</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>IT team, early adopters</td><td>20&ndash;50</td><td>1&ndash;2 wk</td><td>Prove plumbing end-to-end</td></tr>
+<tr><td>Pilot</td><td>One representative business unit</td><td>5&ndash;10%</td><td>2&ndash;4 wk</td><td>Validate UX, KPIs, rollback, load model</td></tr>
+<tr><td>1&ndash;3</td><td>Business units by persona mix</td><td>10&ndash;25% each</td><td>1&ndash;2 wk each</td><td>Scale with repeatable playbook</td></tr>
+<tr><td>Final</td><td>Remainder incl. execs, remote-heavy groups</td><td>Tail</td><td>1 wk</td><td>Complete cutover; start decommission</td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Wave pacing guidance:</strong> allow 2&ndash;5 business days of steady-state observation between waves. If a wave fails its criteria, pause the program &mdash; do not accelerate to &ldquo;make up time.&rdquo; The program is done when the last wave closes, not when the calendar says so.</p>
+
+<h3>3.8 Special cases: persistent desktops &amp; lift-and-shift servers</h3>
+<p>Not everything should be re-provisioned. For persistent (static) desktops and non-VDI servers you genuinely keep (e.g., the CVAD SQL server, print server, file server, or LOB app VMs that must move with the estate), use a replication-based migration:</p>
+<ul>
+  <li><strong>Azure Migrate (agent-based or agentless)</strong> replicates AWS EC2 VMs to Azure: set up an Azure Migrate project, add the AWS account/credentials as a discovery source, replicate chosen VMs to the target VNet, test-recover, then migrate in the wave window. Agent-based replication also covers VMs running in on-premises or other clouds.</li>
+  <li>Right-size during replication (choose the Azure SKU and disk type from utilization, not source size).</li>
+  <li>Always do a <strong>test failover</strong> into an isolated test VNet, validate DNS/AD/backends, then schedule the final cutover. Keep the AWS source running until hypercare passes.</li>
+  <li>For persistent desktops, plan the profile/data handling separately &mdash; replicating the VM does <em>not</em> automatically give you a clean FSLogix profile layout on the target.</li>
+</ul>
+
+<div class="callout info"><span class="lbl">Replication vs. re-provisioning decision rule</span>
+<p><strong>Re-provision</strong> (build from a new Azure image): non-persistent session hosts, pooled desktops &mdash; the large majority of a typical Citrix estate. <strong>Replicate</strong> (Azure Migrate): persistent machines with significant local state, domain controllers &amp; identity servers, the SQL/broker database if you are not going to Citrix Cloud, and any app/back-end VM that must physically move.</p></div>
+
+<h3>3.9 Testing &amp; UAT architecture</h3>
+<ul>
+  <li>Stand up a mirrored non-prod environment in Azure from the same images and IaC as prod so every release is validated before production change.</li>
+  <li>Build a <strong>user acceptance test pack</strong> per persona (logon, the persona&rsquo;s top 5 apps, print, files, clipboard, USB/redirection, VPN/off-net access) and require BU sign-off per wave.</li>
+  <li>Automate the repeatable checks (image build, broker registration, FSLogix attach, autoscale cycle, failover drill) in CI/CD &mdash; e.g., GitHub Actions/Azure DevOps pipelines running Packer + PowerShell + Bicep/Terraform.</li>
+</ul>
+
+<hr>
+
+
+<h2 id="s4"><span class="ph">Phase 4</span>Optimize &amp; operate the Azure estate</h2>
+
+<h3>4.1 Post-migration optimization loop</h3>
+<ul>
+  <li><strong>Right-size continuously:</strong> after 4&ndash;6 weeks of steady state, re-analyze utilization in Azure (Azure Monitor + Citrix Monitor). Expect density to change as Autoscale settles and users adjust &mdash; adjust SKUs and Autoscale policies rather than leaving the pilot sizing in place forever.</li>
+  <li><strong>Cost governance:</strong> review Azure Cost Management monthly against the cost baseline; check reservation utilization, storage costs per catalog, and egress. In particular, watch <strong>unused persistent disks</strong> and orphaned MCS resources &mdash; they silently inflate the bill.</li>
+  <li><strong>Image hygiene:</strong> refresh golden images on a quarterly cadence (security patches + Citrix VDA LTSR updates) through the automated pipeline and re-provision non-persistent catalogs from the new versions. Confirm the patching SLA with security teams.</li>
+  <li><strong>UX telemetry:</strong> tune Citrix Monitor/Endpoint Analytics thresholds; build alerts for logon-time regressions, app failures, and session drops. Run a regular sampling of ICA RTT from representative endpoint locations to catch network drift early.</li>
+</ul>
+
+<h3>4.2 Decommissioning the AWS estate</h3>
+<p>Decommission in deliberate order, gated on hypercare closure and data-retention policy, never all at once:</p>
+<ol>
+  <li>After each wave&rsquo;s hypercare + BU sign-off: remove user access from AWS delivery groups; keep machines running but idle for the retention window.</li>
+  <li>After the final wave closes and the full parallel-run window ends: snapshot/bill, then power off AWS catalogs. Retain powered-off for one patch-cycle (or per policy), then delete MCS catalogs, EC2 instances, and Cloud Connectors.</li>
+  <li>Decommission the AWS resource location / CVAD site only after confirming no user, no app, and no monitoring still depends on it. Retire the AWS&harr;Azure interconnect and related Route&nbsp;53/NAT/peering entries last, after DNS cutover is fully proven.</li>
+  <li>Archive the assessment workbook, wave logs, and cost baseline in your CMDB/docs for audit and future migrations.</li>
+</ol>
+
+<div class="callout tip"><span class="lbl">The exit-criteria checklist for closing the program</span>
+<ul class="chk" style="margin-bottom:2px">
+  <li>100% of users served from Azure; AWS delivery groups empty and decommissioned</li>
+  <li>All KPIs meet or beat baseline for 2+ full business cycles</li>
+  <li>Profiles/data fully migrated with ACL integrity; AWS profile stores deleted per retention policy</li>
+  <li>Backup &amp; DR runbooks tested on the Azure estate</li>
+  <li>Monitoring/alerting, patching, and support runbooks owned by the operations team</li>
+  <li>Monthly Azure cost within &plusmn;10% of the validated model (reconcile and explain variance)</li>
+  <li>Licensing position confirmed and documented (Citrix, Microsoft, third-party)</li>
+</ul></div>
+
+<hr>
+
+<h2 id="s5"><span class="ph">Watch-outs</span>Top pitfalls &mdash; and how to avoid them</h2>
+<div class="wrap"><table>
+<thead><tr><th>#</th><th>Pitfall</th><th>Why it hurts</th><th>Prevention</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Sizing from AWS <em>configured</em> specs instead of utilization</td><td>Over-provisioned Azure estate from day one; budget overrun and poor Autoscale</td><td>Size from Director/perfmon baselines; load-test the pilot; right-size during replication</td></tr>
+<tr><td>2</td><td>Treating catalogs/machines as the migration unit</td><td>Misses identity, profiles, apps, GPOs &mdash; the layers that actually break users</td><td>Use the three-plane model (control, workload, user state); run the full layer-by-layer assessment</td></tr>
+<tr><td>3</td><td>Underestimating GPO / Citrix policy &amp; Intune re-creation</td><td>Silently different user environments &mdash; random app failures, print and drive-map breaks at cutover</td><td>Inventory and map every policy to its target equivalent before wave 0; parity review gate</td></tr>
+<tr><td>4</td><td>Latency surprises to backends that stay in AWS/on-prem</td><td>Slow apps, poor ICA UX, users revolt in the pilot</td><td>Measure RTT to every backend before design freeze; pick region + ExpressRoute/interconnect accordingly</td></tr>
+<tr><td>5</td><td>Cutting over without a real rollback path</td><td>One bad wave erodes all stakeholder confidence</td><td>Coexistence window, group-membership flips (not deletions), tested rollback drill in pilot</td></tr>
+<tr><td>6</td><td>Printing &amp; peripheral redirection left to the last minute</td><td>Top source of helpdesk tickets in the first weeks</td><td>Decide print architecture in design; test print in wave 0 and every wave&rsquo;s UAT pack</td></tr>
+<tr><td>7</td><td>Profile conversion done ad hoc per user</td><td>Data loss or corruption edge cases; no audit trail</td><td>Automate UPM&rarr;FSLogix with a scripted, logged pipeline; delta pass before each cutover</td></tr>
+<tr><td>8</td><td>Ignoring Azure quotas, SKU availability, and subscription limits</td><td>Catalog provisioning fails mid-wave; scramble for quota increases</td><td>Request vCPU quota early; check SKU availability in the region; design within Citrix MCS limits</td></tr>
+<tr><td>9</td><td>No image lifecycle / patching model before going live</td><td>Security debt builds on hundreds of VDAs; every patch becomes a fire drill</td><td>Azure Compute Gallery + automated image builder + quarterly re-provision rhythm</td></tr>
+<tr><td>10</td><td>Ambiguous support ownership post-migration</td><td>Users ping-pong between Citrix, Azure, network, and app teams</td><td>Publish the ops model and RACI before pilot; align helpdesk scripts and escalation paths</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<h2 id="s6"><span class="ph">Reference</span>Tools &amp; resources cheat-sheet</h2>
+<div class="wrap"><table>
+<thead><tr><th>Job</th><th>Primary tools</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Discovery &amp; inventory (Citrix)</td><td>Citrix Studio/Console exports, Citrix PowerShell SDK (<code>Get-Broker*</code>, <code>Get-Config*</code>), Citrix Director/Monitor, Citrix Scout</td><td>Script nightly refreshes into the discovery workbook</td></tr>
+<tr><td>Discovery (AWS)</td><td>EC2 console / Tag Editor, AWS Config, AWS Systems Manager Inventory, AWS Cost Explorer</td><td>Cross-check instance specs, tagging, and cost attribution</td></tr>
+<tr><td>Cloud-scale discovery &amp; replication</td><td><strong>Azure Migrate</strong> (agent-based or agentless discovery/replication of AWS VMs), AWS Application Migration Service (reverse path)</td><td>Agent-based replication covers on-prem/other-cloud sources too</td></tr>
+<tr><td>Utilization baselines</td><td>Citrix Director/Monitor trends, Performance Monitor counters, NetScaler/CloudWatch flow logs</td><td>Capture &ge;4 weeks before any decommission</td></tr>
+<tr><td>Data &amp; profile migration</td><td>AzCopy, robocopy (multi-threaded), Azure File Sync, Azure Data Box (large estates), Citrix profile-migration tooling, FSLogix</td><td>Always checksum/file-count verify; keep source until hypercare closes</td></tr>
+<tr><td>Image build</td><td>Packer + Azure Compute Gallery, Azure Image Builder, Sysprep, Citrix VDA LTSR media</td><td>One reproducible pipeline per persona image; version every change</td></tr>
+<tr><td>Infrastructure-as-Code</td><td>Bicep, Terraform, Azure DevOps / GitHub Actions, Azure Policy, ARM templates (Citrix hosting-connection setup)</td><td>Everything in the landing zone is code; changes go through PR + CI</td></tr>
+<tr><td>Machine provisioning</td><td>Citrix MCS on Azure (on-demand provisioning), Citrix Autoscale, PowerShell SDK</td><td>Match catalogs to personas; enable on-demand where pooled</td></tr>
+<tr><td>Monitoring &amp; ops</td><td>Citrix Monitor &amp; Analytics, Azure Monitor/Log Analytics/Application Insights, Microsoft Intune + Endpoint Analytics (AVD path)</td><td>Dashboards must reproduce AWS-era operational reports</td></tr>
+<tr><td>Cost &amp; commercials</td><td>Azure Pricing Calculator, Azure TCO calculator, Azure Cost Management + Billing, Citrix/Microsoft licensing docs</td><td>Baseline the AWS bill first; model reservations &amp; Autoscale savings</td></tr>
+<tr><td>Design references</td><td>Citrix Tech Zone (Reference Architecture: Citrix DaaS on Azure; size &amp; scale), Citrix DaaS limits docs, Microsoft Cloud Adoption Framework &amp; AVD enterprise-scale architecture</td><td>Check dates &mdash; SKUs, limits, and entitlements evolve</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout info"><span class="lbl">Be careful with older search results</span>
+<p>Cloud and Citrix guidance dates quickly. Whenever you research sizing, SKU availability, limits, or licensing entitlements, prefer sources published within the last 12&ndash;18 months (Citrix Tech Zone / docs.citrix.com, Microsoft Learn, official reference architectures). A reference architecture from a previous generation will quote SKUs and density figures that no longer reflect current hardware or licensing.</p></div>
+
+<hr>
+
+<h2 id="s7"><span class="ph">Timeline</span>Realistic timeline, roles &amp; final checklist</h2>
+
+<h3>Indicative program timeline (mid-size estate, ~500&ndash;2,000 users, Scenario A)</h3>
+<div class="wrap"><table>
+<thead><tr><th>Phase</th><th>Typical duration</th><th>Critical path</th></tr></thead>
+<tbody>
+<tr><td>Assessment (discovery, baselines, personas, licensing, cost)</td><td>3&ndash;5 weeks</td><td>Licensing resolution; baseline capture window</td></tr>
+<tr><td>Design &amp; planning (architecture, landing zone, wave plan)</td><td>3&ndash;4 weeks</td><td>Design freeze sign-off; quota &amp; region decisions</td></tr>
+<tr><td>Foundation build (connectivity, identity, images, control plane)</td><td>3&ndash;5 weeks</td><td>ExpressRoute/VPN &amp; DNS; AD replication; image pipeline</td></tr>
+<tr><td>Pilot (wave 0 + pilot BU, full business cycle)</td><td>4&ndash;6 weeks</td><td>Pilot exit criteria; load test; rollback drill</td></tr>
+<tr><td>Wave rollout (3&ndash;6 waves incl. hypercare)</td><td>6&ndash;12 weeks</td><td>Per-wave sign-off gates</td></tr>
+<tr><td>Optimization &amp; decommission</td><td>4&ndash;8 weeks</td><td>Decommission AWS in gated order after retention windows</td></tr>
+</tbody>
+</table></div>
+<p class="small">Total for this profile: roughly <strong>5&ndash;8 months</strong> wall clock. Smaller estates (1&ndash;3 hundred users, simple apps) can compress toward 2&ndash;3 months; very large or GPU-heavy estates stretch longer. The sequence does not compress well &mdash; the pilot is the gate, not a speed bump.</p>
+
+<h3>Team roles that make it succeed</h3>
+<div class="score">
+  <div class="card"><b>Program / migration lead</b> &mdash; owns the wave plan, gates, and stakeholder comms.</div>
+  <div class="card"><b>Citrix/EUC architect &amp; engineers</b> &mdash; images, catalogs, policies, Citrix Cloud/CVAD on Azure.</div>
+  <div class="card"><b>Azure platform engineer</b> &mdash; landing zone, networking, ExpressRoute/VPN, IaC, quotas, policy.</div>
+  <div class="card"><b>Identity &amp; security SME</b> &mdash; AD/Entra ID, GPO/Intune parity, Conditional Access, compliance evidence.</div>
+  <div class="card"><b>Data &amp; storage engineer</b> &mdash; FSLogix/Azure Files/NetApp, AzCopy/robocopy pipeline, Azure File Sync/Data Box.</div>
+  <div class="card"><b>App owners &amp; packaging team</b> &mdash; app register, repackaging, UAT sign-off per BU.</div>
+  <div class="card"><b>Service desk / hypercare</b> &mdash; wave support, ticket triage, user comms.</div>
+  <div class="card"><b>Finance / procurement</b> &mdash; cost model, reservations, licensing, chargeback tagging.</div>
+</div>
+
+<h3>One-page final checklist</h3>
+<ul class="chk">
+  <li>Discovery workbook with live inventory + &ge;4 weeks utilization baselines</li>
+  <li>Licensing confirmed in writing (Citrix, Microsoft VDI/RDS, third-party, Azure Hybrid Benefit)</li>
+  <li>Target architecture + landing zone diagram approved; region chosen by user/backend proximity</li>
+  <li>Azure quotas requested; SKU availability verified in target region</li>
+  <li>Coexistence connectivity AWS&harr;Azure validated (latency, throughput, DNS)</li>
+  <li>Golden images built in Azure Compute Gallery with automated lifecycle</li>
+  <li>Pilot exit criteria met (logon, ICA RTT, UAT, helpdesk, rollback drill, cost)</li>
+  <li>Wave plan frozen; playbook versioned; hypercare &amp; rollback per wave</li>
+  <li>Profile/data pipeline automated and verified (ACLs, checksums, retention)</li>
+  <li>Monitoring, patching, DR, and support runbooks owned and tested</li>
+  <li>Cost model reconciled monthly; decommission of AWS in gated order</li>
+</ul>
+
+<p style="margin-top:28px"><strong>Bottom line:</strong> migrating Citrix from AWS to Azure is not a virtualization exercise &mdash; it is a <em>layered platform migration</em> where the machine re-provisioning is the easy part and the assessments, identity/policy parity, profile data, network path, and wave discipline are the actual project. Follow the four phases with evidence-based gates, and the move becomes a repeatable playbook rather than a leap of faith.</p>
+
+<div class="take"><strong>Key takeaway:</strong> Migrating Citrix from AWS to Azure is a layered platform migration — the machine re-provisioning is the easy part. The assessment baselines, identity and policy parity, profile data path, coexistence network, and wave discipline are the actual project. Run the four phases with evidence-based gates and the move becomes a repeatable playbook rather than a leap of faith.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>
