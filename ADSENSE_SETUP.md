@@ -1,113 +1,143 @@
-# Google AdSense deployment checklist
+# Google AdSense deployment and policy checklist
 
 Publisher: `ca-pub-8225059092422989`
 
 Site: `https://www.rcwittraining.in/`
 
-Last updated: 28 August 2026
+Last reviewed: 10 September 2026
 
-## Website implementation
+> This checklist improves the repository's implementation and publication
+> hygiene. It cannot guarantee AdSense approval. Google makes the final
+> decision after reviewing the live site, account, traffic, content, and
+> regional privacy configuration.
 
-- [x] Add the AdSense loader to the public catalogue homepage (`index.html`).
-- [x] Add the loader to all informational content pages (troubleshooting guides,
-      design guides, RHCSA pages, and the technology/patch roundups).
-- [x] Do not add AdSense to `open.html`, `/admin/`, timed challenges, lab interfaces, or certificate views.
-- [x] Publish root `/ads.txt` with the exact publisher ID.
-- [x] Add the 21 previously unlisted informational pages to `sitemap.xml`.
+## What the repository now does
 
-### Correction, 28 August 2026
+- The AdSense loader uses the standard publisher parameter:
+  `client=ca-pub-8225059092422989`.
+- Static AdSense tags are limited to the public catalogue and longer original
+  instructional/troubleshooting/design guides that are suitable for
+  advertising.
+- AdSense is removed from drafts, daily security-patch roundups, vendor/event
+  roundups, `rhcsa-videos.html` (primarily a YouTube directory), and shorter
+  guide/about pages that need more depth before monetisation.
+- `open.html`, interactive labs, timed challenges, admin/restricted tools,
+  certificate/assessment flows, and legal/privacy pages remain ad-free.
+- `/ads.txt` contains the seller authorization line for this publisher.
+- `privacy.html` describes AdSense, YouTube click-to-load behavior, privacy
+  choices, regional rights, and the privacy contact.
+- `rcw-consent.js` does not inject an AdSense tag, set a custom advertising
+  consent cookie, or load analytics. It initializes Google's supported
+  `googlefc.callbackQueue`, provides the CMP revocation bridge, and keeps
+  YouTube embeds click-to-load.
+- Draft pages have `noindex,nofollow` and are blocked by `robots.txt`; daily
+  roundup pages have `noindex,follow` and are not in the sitemap.
 
-The checklist previously claimed the AdSense code was already present on the
-homepage, the RHCSA page, and the privacy page. **It was not present in any HTML
-file in this repository.** The script was only injected at runtime by
-`rcw-consent.js`, and only after a visitor clicked *Accept all*:
+Run the repository audit before deployment:
 
-```js
-if (choice === "accepted") { loadAdsense(); }
+```bash
+python3 tests/adsense_audit.py
 ```
 
-A crawler never clicks *Accept all*, so `adsbygoogle.js` was never requested, the
-site generated no ad requests, and Google never crawled `ads.txt` — which is why
-AdSense reported *"ads.txt not found / last crawled: not applicable"*.
+## Required account-side actions
 
-The loader is now a static `<head>` tag on the informational pages, so Google can
-verify `ads.txt` regardless of consent. Ad **personalisation** remains gated by
-Consent Mode v2 in `rcw-consent.js`. `loadAdsense()` is now idempotent and will
-not inject a second copy where the static tag already exists.
+The following cannot be completed by editing this repository:
 
-Note on `privacy.html`: the loader is deliberately **not** placed there, matching
-the Auto ads exclusion table below. Google's consent-revocation link comes from
-the certified CMP, not from the ad script, so nothing is lost.
-- [x] Publish a dedicated privacy and cookie policy.
-- [x] Add persistent Privacy and cookie settings links.
-- [x] Correct the older disclaimer wording that said no information was collected.
+1. Sign in to the AdSense account that owns `ca-pub-8225059092422989`.
+2. In **Sites**, add or verify `rcwittraining.in` using the live homepage.
+3. Confirm that `https://www.rcwittraining.in/ads.txt` returns HTTP 200 and
+   contains the exact authorized seller line.
+4. In **Privacy & messaging**, create and publish the applicable Google-
+   certified consent message for this site. Set the site's privacy-policy URL
+   to `https://www.rcwittraining.in/privacy.html`.
+5. Offer the legally required choices for the visitor's region, including a
+   clear decline option and a manage-options path where applicable. Review the
+   partners and purposes before publishing.
+6. Configure the applicable advertising Consent Mode and US-state opt-out
+   settings in the Google CMP dashboard. Do not enable analytics purposes for
+   this site unless analytics is intentionally added and the privacy policy is
+   changed.
+7. In **Ads → Edit site → Page exclusions**, exclude the ad-free sections and
+   flows listed below, even though the repository does not place static tags
+   there. Dashboard exclusions are defense in depth if Auto ads settings
+   change later.
+8. Only after the live checks pass, request AdSense review from the account.
 
-The website code is complete. The account-side steps below must be completed by the AdSense account owner.
+Do not store Google passwords, one-time codes, payment details, recovery
+information, or private credentials in this repository.
 
-## Connect and request review
+## Auto ads page exclusions
 
-1. Sign in to Google AdSense.
-2. Go to **Sites** and select `rcwittraining.in`.
-3. Use **AdSense code snippet** as the verification method.
-4. Select **Verify** after this website update is live.
-5. Confirm that the displayed publisher ID is `pub-8225059092422989`.
-6. Check that AdSense can read `https://www.rcwittraining.in/ads.txt`.
-7. Select **Request review**.
+If Auto ads is enabled, configure exclusions for at least:
 
-## Google-certified CMP and Consent Mode
-
-Use Google's CMP rather than a custom banner.
-
-1. In AdSense, open **Privacy & messaging**.
-2. Open the **European regulations** card.
-3. Create or open the message for `rcwittraining.in`.
-4. Set the privacy policy URL to `https://www.rcwittraining.in/privacy.html`.
-5. Select the three-choice design: **Consent**, **Do not consent**, and **Manage options**.
-6. Review the ad partners shown in the message. Keep only partners intended for use.
-7. Publish the message.
-8. Return to the European regulations card and open **Settings**.
-9. Enable **Consent mode for advertising purposes**. This supplies the Consent Mode advertising signals for ad storage, ad personalization, and ad user data.
-10. Leave **Consent mode for analytics purposes** disabled while the site does not use Google Analytics. Enable it only if analytics is intentionally added and the privacy policy is updated.
-11. Confirm that consent revocation is active. Google can add its own footer revocation link; the site's **Privacy and cookie settings** links also call Google's revocation API.
-12. If AdSense offers to create a European regulations message during site review, choose Google's CMP and then verify the settings above.
-
-Also review **US state regulations** in Privacy & messaging and publish the applicable opt-out message if Google indicates that it applies to site traffic.
-
-## Auto ads scope and exclusions
-
-Prefer Auto ads only on the catalogue and informational content. Do not place ads inside tasks, timed incidents, secure launchers, or certificate flows.
-
-In **Ads → Edit site → Page exclusions**, add these safeguards if Auto ads is enabled globally:
-
-| URL or section | Exclusion type |
+| URL or section | Exclusion |
 |---|---|
 | `https://www.rcwittraining.in/open.html` | This page only |
-| `https://www.rcwittraining.in/technical-quiz-agent/` | All pages under section |
 | `https://www.rcwittraining.in/admin/` | All pages under section |
-| `https://www.rcwittraining.in/linux-challenge-1/` | All pages under section |
-| `https://www.rcwittraining.in/linux-challenge-2/` | All pages under section |
-| `https://www.rcwittraining.in/linux-challenge-3/` | All pages under section |
-| `https://www.rcwittraining.in/linux-challenge-4/` | All pages under section |
+| `https://www.rcwittraining.in/admin-restricted-tools/` | All pages under section |
+| `https://www.rcwittraining.in/downloads/` | All pages under section |
+| `https://www.rcwittraining.in/labs/` | All pages under section |
+| `https://www.rcwittraining.in/technical-quiz-agent/` | All pages under section |
+| `https://www.rcwittraining.in/linux-challenge-1/` through `linux-challenge-10/` | All pages under each section |
 | `https://www.rcwittraining.in/aws-cloud-challenge-1/` | All pages under section |
 | `https://www.rcwittraining.in/production-outage-game/` | All pages under section |
+| `https://www.rcwittraining.in/certification.html` | This page only |
 | `https://www.rcwittraining.in/privacy.html` | This page only |
 | `https://www.rcwittraining.in/disclaimer.html` | This page only |
+| `https://www.rcwittraining.in/terms-of-use.html` | This page only |
+| `/drafts/` | All draft pages |
+| `*roundup*` and `rhcsa-videos.html` | Keep excluded from advertising unless a future content review establishes substantial original value |
 
-The current repository does not include the AdSense tag on the launcher, admin, or interactive challenge pages. The dashboard exclusions provide defense in depth if site-wide code is added later.
+The exact dashboard UI may group exclusions differently. Confirm exclusions
+with the live preview tools before enabling Auto ads.
 
-*29 August 2026:* `rcw-consent.js` no longer injects the AdSense script at all. Only the approved informational pages carry the static loader, so with Auto ads enabled, ads can only ever appear on those pages; labs, challenges, admin and certificate flows cannot receive injected ads regardless of dashboard settings.
+## Content and publication rules
+
+- Monetize only pages with substantial, original instructional value and a
+  clear purpose for the reader. The current conservative set contains 35
+  pages, including the catalogue and longer guides. Do not treat a high page
+  count as a reason to add ads.
+- Shorter guides are still public for readers, but remain ad-free until they
+  receive enough original explanation, examples, and practical context to
+  justify a separate content review.
+- Do not monetize pages that are mostly copied/aggregated links, automated
+  feeds, video indexes, thin navigation, or unfinished drafts.
+- Keep ads visually separate from buttons, answer controls, lab commands,
+  timers, download links, and other elements that could cause accidental
+  clicks.
+- Never ask visitors to click ads, compensate them for ad interactions, or
+  place ads where a user could mistake them for a control or a training result.
+- Keep product and certification claims accurate, distinguish independent
+  RCW content from vendor material, and maintain the legal/privacy links.
+- Review each new article before adding an AdSense tag. A static tag is not an
+  approval or a guarantee that the page is suitable for ads.
 
 ## Post-deployment checks
 
-- [ ] `https://www.rcwittraining.in/ads.txt` returns HTTP 200 and the exact publisher line.
-- [ ] The homepage source contains `ca-pub-8225059092422989` once.
-- [ ] The launcher and interactive lab source do not contain AdSense code.
-- [ ] The privacy policy is linked from the homepage.
-- [ ] An EEA/UK/Swiss location receives the published European regulations message.
-- [ ] **Do not consent** and **Manage options** are available.
-- [ ] **Privacy and cookie settings** reopens the Google consent message after an initial choice.
-- [ ] AdSense reports the site as verified and `ads.txt` as authorized.
-- [ ] Auto ads exclusions are applied before Auto ads is enabled.
-- [ ] Check desktop and mobile layouts for accidental-click risk and disruptive placements.
+- [ ] `https://www.rcwittraining.in/ads.txt` returns HTTP 200 with the exact
+      publisher line.
+- [ ] Live page source uses `client=ca-pub-8225059092422989`; no page uses the
+      old `client=pub-...` form.
+- [ ] The homepage initializes `rcw-consent.js` before its AdSense loader.
+- [ ] Drafts, roundup pages, `rhcsa-videos.html`, privacy/legal pages, labs,
+      challenges, tools, and certificate flows contain no AdSense loader.
+- [ ] Every monetized page links to the privacy policy and a privacy-settings
+      control in its footer.
+- [ ] The published Google CMP appears in a test region where it applies.
+- [ ] Consent, decline, and manage-options behavior is tested on desktop and
+      mobile; privacy settings successfully reopens the Google message after
+      an initial choice.
+- [ ] Dashboard page exclusions are applied before Auto ads is enabled.
+- [ ] No ad appears inside an interactive task, timed challenge, restricted
+      tool, certificate flow, or near a control where accidental clicks are
+      likely.
+- [ ] AdSense reports the site and `ads.txt` as eligible/authorized in the
+      account. This is an account result, not a repository test.
 
-Do not store Google passwords, one-time codes, payment details, recovery information, or private credentials in this repository.
+## References
+
+- [Google Publisher Policies](https://support.google.com/adsense/answer/10502938)
+- [Google AdSense placement policies](https://support.google.com/adsense/answer/1346295)
+- [Google Privacy & Messaging JavaScript API](https://developers.google.com/funding-choices/fc-api-docs)
+- [How Google uses information from sites or apps that use its services](https://policies.google.com/technologies/partner-sites)
+- [Google advertising technologies](https://policies.google.com/technologies/ads)

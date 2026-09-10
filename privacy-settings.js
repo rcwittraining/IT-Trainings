@@ -1,43 +1,63 @@
+/* Open the consent controls supplied by Google's published Privacy & Messaging CMP. */
 (function () {
   "use strict";
 
-  function showStatus(message) {
-    var status = document.getElementById("privacy-settings-status");
-    if (!status) return;
-    status.hidden = false;
-    status.textContent = message;
-    status.focus();
+  var PROMPT_URL = "/index.html?privacy-settings=1#privacy-choices";
+  var QUEUED = "__rcwPrivacyPromptQueued";
+
+  function ensureGoogleFc() {
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    return window.googlefc;
   }
 
-  function openGooglePrivacySettings(control, attempt) {
-    var googlefc = window.googlefc;
-    if (googlefc && Array.isArray(googlefc.callbackQueue) &&
-        typeof googlefc.showRevocationMessage === "function") {
-      googlefc.callbackQueue.push(googlefc.showRevocationMessage);
-      return;
+  function requestGoogleSettings() {
+    var googlefc = ensureGoogleFc();
+
+    if (typeof googlefc.showRevocationMessage === "function") {
+      googlefc.showRevocationMessage();
+      return true;
     }
 
-    if (attempt < 10) {
-      window.setTimeout(function () {
-        openGooglePrivacySettings(control, attempt + 1);
-      }, 100);
-      return;
+    if (!window[QUEUED]) {
+      window[QUEUED] = true;
+      googlefc.callbackQueue.push({
+        "CONSENT_API_READY": function () {
+          if (window.googlefc && typeof window.googlefc.showRevocationMessage === "function") {
+            window.googlefc.showRevocationMessage();
+          }
+        }
+      });
     }
 
-    var destination = control.getAttribute("href") || "privacy.html#privacy-choices";
-    if (/privacy\.html$/i.test(window.location.pathname)) {
-      showStatus("The site consent panel is not available yet. It becomes available after the Google privacy message is published. You can still manage ad personalization using the Google Ads Settings link below.");
-      return;
+    return true;
+  }
+
+  function routeToPublishedCmp() {
+    // Privacy/legal pages do not load AdSense, so the CMP API may not exist on
+    // them. The homepage initializes the callback queue before its AdSense tag.
+    window.location.href = PROMPT_URL;
+  }
+
+  function openSettings(event) {
+    event.preventDefault();
+    var hasAdSenseTag = !!document.querySelector(
+      'script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]'
+    );
+
+    if (hasAdSenseTag) {
+      requestGoogleSettings();
+    } else {
+      routeToPublishedCmp();
     }
-    window.location.href = destination;
   }
 
   document.addEventListener("click", function (event) {
     var target = event.target;
-    var control = target && typeof target.closest === "function" ?
+    var link = target && typeof target.closest === "function" ?
       target.closest("[data-privacy-settings]") : null;
-    if (!control) return;
-    event.preventDefault();
-    openGooglePrivacySettings(control, 0);
+    if (link) {
+      openSettings(event);
+    }
   });
-})();
+}());

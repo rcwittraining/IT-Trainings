@@ -4,8 +4,8 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 
 ## Files
 
-- `index.html` — public lab catalogue and approved AdSense content page
-- `rhcsa-videos.html` — informational training content and approved AdSense content page
+- `index.html` — public lab catalogue and selected AdSense page (subject to account review)
+- `rhcsa-videos.html` — YouTube lesson directory; intentionally excluded from AdSense
 - `open.html` — same-domain simulator launcher; intentionally has no AdSense tag
 - `technical-quiz-agent/` — Raju Rishi Dev adaptive 20-question technical quiz
 - `aws-bedrock-lab/` — browser-local, console-style Amazon Bedrock end-to-end GUI lab with responsible-AI controls, RAG, Agent testing, evidence export, and PDF certificate
@@ -33,9 +33,9 @@ The public page contains no link to `/admin/`, and the admin page has `noindex`/
 
 ## Google AdSense and privacy
 
-The public catalogue and all informational content pages contain the public AdSense publisher tag for `ca-pub-8225059092422989`. Interactive labs, the secure launcher, the admin page, legal pages, and certificate workflows intentionally do not contain the tag. Ad personalisation stays gated by the consent layer in `rcw-consent.js`.
+The public catalogue and selected longer original instructional guides contain the AdSense publisher tag `ca-pub-8225059092422989`. Shorter guides/about pages, drafts, automated/vendor roundups, the YouTube directory, interactive labs, the secure launcher, admin/restricted tools, legal pages, and certificate workflows intentionally do not contain the tag. `rcw-consent.js` initializes Google's CMP callback queue, provides the revocation bridge, and does not inject ads or load analytics.
 
-Before enabling Auto ads, complete the Google-certified CMP, Consent Mode, and page-exclusion steps in [`ADSENSE_SETUP.md`](ADSENSE_SETUP.md). The account owner must perform those settings in the AdSense dashboard; no password, payment information, or private credential belongs in this repository.
+Before enabling Auto ads, complete the Google-certified CMP, Consent Mode, and page-exclusion steps in [`ADSENSE_SETUP.md`](ADSENSE_SETUP.md). The account owner must perform those settings in the AdSense dashboard; no password, payment information, or private credential belongs in this repository. Run `python3 tests/adsense_audit.py` before publishing.
 
 ## Create the restricted publishing credential
 
