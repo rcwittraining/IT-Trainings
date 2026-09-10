@@ -114,6 +114,8 @@ def main() -> int:
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     if index.index("rcw-consent.js") > index.index(ADSENSE_LOADER):
         fail(errors, "index.html: consent queue is initialized after the AdSense loader")
+    if "microsoft-security-patch-roundup-" in index or "vendor-tech-certification-webinar-roundup-" in index:
+        fail(errors, "index.html: automated roundup is linked from the main article catalogue")
 
     ads_txt = (ROOT / "ads.txt").read_text(encoding="utf-8").strip()
     expected_ads_txt = "google.com, pub-8225059092422989, DIRECT, f08c47fec0942fa0"
