@@ -1,0 +1,538 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Designing a Two-Site Citrix Infrastructure with Citrix ADC: High Availability &amp; Resilience Blueprint | RCW IT Training</title><meta name="description" content="A complete design guide for a resilient two-site Citrix Virtual Apps and Desktops environment — Citrix ADC high availability and GSLB, StoreFront, Delivery Controllers, SQL Always On, zones, licensing and documented failover behaviour. Design scenario."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/citrix-adc-multi-site-high-availability-design.html"><style>:root{--n:#061633;--i:#101b3b;--b:#078be8;--c:#4bd7ff;--p:#f4f7fb;--m:#5f6c84;--l:#dce5f1}*{box-sizing:border-box}body{margin:0;background:var(--p);color:var(--i);font:16px/1.68 Inter,system-ui,sans-serif}.top{background:linear-gradient(112deg,#020a18,#06142c);border-bottom:4px solid var(--b);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}.mark{border:1px solid var(--c);border-radius:10px;color:var(--c);font-size:11px;font-weight:900;padding:10px 7px}.brand{font-weight:800}.brand small{display:block;color:#9eb6d7;font-size:11px;letter-spacing:.6px;text-transform:uppercase}.home{margin-left:auto;color:var(--c);font-size:14px;font-weight:700;text-decoration:none}.wrap{max-width:920px;margin:auto;padding:34px 22px 64px}.hero,.card{background:#fff;border:1px solid var(--l);border-radius:20px;padding:34px;box-shadow:0 10px 28px #081f4515}.ey{color:#0769be;font-size:12px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:10px}h1{font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-1px;margin:0 0 16px}h2{font-size:25px;line-height:1.22;margin:40px 0 14px;letter-spacing:-.3px}.lead{font-size:19px;color:#42516b}.meta{color:var(--m);font-size:14px;margin:18px 0 0}.take{margin-top:40px;padding:26px 28px;border-radius:18px;background:var(--n);color:#fff;line-height:1.6}.take strong{color:#4bd7ff}@media(max-width:550px){.hero,.card{padding:24px}.top{padding:13px 16px}}
+  :root{
+    --ink:#101b3b; --muted:#5f6c84; --brand:#0758c8; --brand2:#4bd7ff;
+    --accent:#078be8; --soft:#eef4fb; --line:#dce5f1; --chip:#e5f1fa;
+    --good:#0e7a4a; --goodbg:#e7f6ee; --warn:#8a4b0f; --warnbg:#fdf3e4; --danger:#a12235; --dangerbg:#fdecef;
+    --codebg:#f4f7fb; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#f4f7fb;color:var(--ink);font:16px/1.7 Inter,system-ui,sans-serif -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .page{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 40px rgba(20,40,60,.06)}
+  header.hero{padding:40px 48px 34px;border-bottom:1px solid var(--line);background:
+     linear-gradient(180deg,#0b3d5c 0%,#0f5e8a 55%,#0b8a8f 140%);
+     color:#fff}
+  .crumb{font-size:13px;letter-spacing:.04em;color:#cfe7f4;margin-bottom:18px}
+  .crumb a{color:#cfe7f4;text-decoration:none}
+  .crumb a:hover{text-decoration:underline}
+  .crumb .sep{margin:0 8px;opacity:.6}
+  .cat{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+     color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+     padding:5px 12px;border-radius:999px;margin-bottom:16px}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fd4ee;font-weight:600;margin:0 0 10px}
+  h1.title{font-size:40px;line-height:1.15;margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
+  .deck{font-size:18.5px;color:#e3f0f8;max-width:760px;margin:0 0 20px;line-height:1.55}
+  .meta{font-size:13.5px;color:#bcd9ea;display:flex;flex-wrap:wrap;gap:6px 20px;border-top:1px solid rgba(255,255,255,.22);padding-top:14px}
+  .meta b{color:#eaf5fb;font-weight:600}
+  main{padding:34px 48px 56px}
+  @media(max-width:720px){ header.hero{padding:28px 22px} main{padding:22px 20px 40px} h1.title{font-size:30px} .page{max-width:100%} }
+  h2{font-size:25px;margin:52px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--line);color:var(--brand);font-weight:750}
+  h2 .ph{display:inline-block;background:var(--brand);color:#fff;font-size:15px;font-weight:700;border-radius:8px;padding:3px 10px;margin-right:10px;vertical-align:3px}
+  h3{font-size:20px;margin:30px 0 10px;color:#123a56;font-weight:700}
+  h4{font-size:17px;margin:22px 0 8px;color:#20465f;font-weight:650}
+  p{margin:0 0 14px}
+  a{color:var(--accent)}
+  ul,ol{margin:0 0 16px;padding-left:24px}
+  li{margin:5px 0}
+  strong{color:#0d2c42}
+  hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+  .toc{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:0 0 6px}
+  .toc h4{margin:0 0 8px;text-transform:uppercase;letter-spacing:.06em;font-size:12.5px;color:var(--muted)}
+  .toc ol{margin:0;columns:2;column-gap:36px;font-size:14.5px}
+  .toc li{margin:4px 0;break-inside:avoid}
+  .toc a{color:#0f4c73;text-decoration:none}
+  .toc a:hover{text-decoration:underline}
+  @media(max-width:720px){ .toc ol{columns:1} }
+  table{border-collapse:collapse;width:100%;margin:14px 0 22px;font-size:14.5px;line-height:1.5}
+  th{background:#0f4c73;color:#fff;text-align:left;padding:9px 12px;font-weight:600;font-size:13.5px}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafc}
+  .wrap{overflow-x:auto}
+  .callout{border-radius:10px;padding:14px 18px;margin:16px 0 20px;font-size:15.5px;border:1px solid}
+  .callout .lbl{font-weight:700;display:block;margin-bottom:4px}
+  .callout p{margin:0 0 6px}.callout p:last-child{margin:0}
+  .info{background:var(--soft);border-color:#c6e0f0}
+  .tip{background:var(--goodbg);border-color:#bfe6cd}
+  .tip .lbl{color:var(--good)}
+  .warn{background:var(--warnbg);border-color:#efd9ae}
+  .warn .lbl{color:var(--warn)}
+  .danger{background:var(--dangerbg);border-color:#f2c7cd}
+  .danger .lbl{color:var(--danger)}
+  code{font-family:var(--mono);font-size:13.5px;background:var(--codebg);border:1px solid #e3e9ef;border-radius:5px;padding:1px 5px;color:#b3345c}
+  pre{background:#152231;color:#e8f1f7;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.6;margin:12px 0 20px}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  pre .c{color:#7fd3a0}
+  pre .k{color:#6fc3f0}
+  .kv{display:flex;gap:12px;background:var(--soft);border-left:4px solid var(--brand);border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-size:14.5px;align-items:flex-start}
+  .kv b{flex:0 0 170px;color:#0f4c73}
+  .pill{display:inline-block;background:var(--chip);color:#0f4c73;border:1px solid #c9e2ef;border-radius:999px;padding:1px 10px;font-size:13px;margin:2px 2px}
+  .chk{list-style:none;padding-left:4px}
+  .chk li{position:relative;padding-left:26px}
+  .chk li::before{content:"\2610";position:absolute;left:0;color:var(--brand);font-weight:700}
+  .done li::before{content:"\2611";color:var(--good)}
+  .score{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+  @media(max-width:720px){ .score{grid-template-columns:1fr} }
+  .card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fbfdfe;font-size:14.5px}
+  .card b{color:#0f4c73}
+  figure{margin:0 0 18px}
+  .diagram{border:1px solid var(--line);border-radius:10px;padding:0;overflow:hidden}
+  .stepnum{display:inline-block;width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;text-align:center;font-weight:700;font-size:14px;line-height:26px;margin-right:8px}
+  .lead{font-size:18px;color:#33465a}
+  .tagrow{margin:14px 0 0;font-size:13px;color:var(--muted)}
+  footer{background:#0f2434;color:#b9cddd;font-size:13.5px;padding:24px 48px;line-height:1.6}
+  footer b{color:#e8f1f7}
+  .nobrk{white-space:nowrap}
+  .small{font-size:13.5px;color:var(--muted)}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Designing a Two-Site Citrix Infrastructure with Citrix ADC: High Availability & Resilience Blueprint",
+  "description": "A complete design guide for a resilient two-site Citrix Virtual Apps and Desktops environment — Citrix ADC high availability and GSLB, StoreFront, Delivery Controllers, SQL Always On, zones, licensing and documented failover behaviour.",
+  "author": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in/"},
+  "publisher": {"@type": "Organization", "name": "RCW IT Training"},
+  "datePublished": "2026-09-11",
+  "dateModified": "2026-09-11",
+  "mainEntityOfPage": "https://www.rcwittraining.in/citrix-adc-multi-site-high-availability-design.html"
+}
+</script>
+  <script src="privacy-settings.js"></script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs & simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Design scenario · Citrix · ADC &amp; CVAD · Multi-site</div><h1>Designing a Two-Site Citrix Infrastructure with Citrix ADC: High Availability &amp; Resilience Blueprint</h1><p class="lead">A reference design for running Citrix Virtual Apps and Desktops across two data centres — Citrix ADC high availability and GSLB at the edge, redundant StoreFront, Delivery Controllers, SQL Always On and licensing, plus the exact failover behaviour you should expect when each layer breaks.</p><p class="meta">Published September 11, 2026 · RCW IT Training · Category: Design scenario</p></div>
+
+<div class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#s0">Requirements &amp; design principles</a></li>
+    <li><a href="#s1">Choose the multi-site pattern</a></li>
+    <li><a href="#s2">High-level architecture</a></li>
+    <li><a href="#s3">Edge layer: Citrix ADC per site</a></li>
+    <li><a href="#s4">GSLB &amp; DNS: steering users between sites</a></li>
+    <li><a href="#s5">Citrix Gateway &amp; remote access</a></li>
+    <li><a href="#s6">StoreFront layer</a></li>
+    <li><a href="#s7">Brokering: Delivery Controllers &amp; zones</a></li>
+    <li><a href="#s8">Site database: SQL Always On, LHC &amp; Connection Leasing</a></li>
+    <li><a href="#s9">Licensing resilience</a></li>
+    <li><a href="#s10">Workloads: VDAs, catalogs &amp; images in both sites</a></li>
+    <li><a href="#s11">Failure &amp; failover behaviour matrix</a></li>
+    <li><a href="#s12">Network, latency budget &amp; port plan</a></li>
+    <li><a href="#s13">Security hardening notes</a></li>
+    <li><a href="#s14">Monitoring, operations &amp; DR drills</a></li>
+    <li><a href="#s15">Final checklist</a></li>
+  </ol>
+</div>
+
+<h2 id="s0"><span class="ph">1</span>Requirements &amp; design principles</h2>
+
+<p>This blueprint assumes a typical enterprise profile. Adjust the numbers, but keep the principles: every component that users must touch on the logon path exists in both sites, and no single device, server, database or WAN link can take the service down.</p>
+
+<div class="kv"><b>Scenario</b><span>Around 3,000 concurrent users: pooled desktops, published line-of-business applications and a small pool of persistent desktops for power users.</span></div>
+<div class="kv"><b>Sites</b><span>Site A (primary data centre) and Site B (secondary data centre), roughly 40 km apart, connected by two diverse metro fibre paths with an RTT of about 2&ndash;4 ms between them.</span></div>
+<div class="kv"><b>Targets</b><span>RTO &le; 15 minutes for a full site failure, RPO &asymp; 0 for the Site database, no planned-downtime window needed for patching individual components, and zero user-visible impact for any single server or appliance failure.</span></div>
+<div class="kv"><b>Users</b><span>Mostly on the corporate LAN split across both sites, plus roughly 15% remote users entering through Citrix Gateway.</span></div>
+
+<h3>Design principles</h3>
+<ul>
+  <li><strong>Failure domains, not just redundancy.</strong> Two of everything is not enough if both copies share a power feed, an uplink or a rack. Each site is a full failure domain; inside each site, pair members sit on separate hosts, storage and power.</li>
+  <li><strong>Protect the logon path end to end.</strong> A user who cannot reach DNS, ADC, StoreFront, a controller, or the Site database cannot start work. Every hop on that path is load-balanced and duplicated.</li>
+  <li><strong>Protect running sessions separately.</strong> Session Reliability and client auto-reconnect absorb network blips; capacity headroom and machine catalogs in both sites absorb host and site failures.</li>
+  <li><strong>Fail over automatically where it is safe, deliberately where it is not.</strong> ADC HA, SQL Always On and GSLB health checks are automatic. Declaring a full site dead is a deliberate human decision, executed against a written runbook.</li>
+  <li><strong>Design for the failure you fear, then test it.</strong> If a failure mode has never been simulated, assume it will not work the way the diagram says. Section <a href="#s14">14</a> turns every arrow in the design into a test case.</li>
+</ul>
+
+<div class="callout warn"><span class="lbl">Define “site failure” before you design for it</span>
+<p>A “site failure” means different things to different teams: total power loss, core switch failure, WAN isolation (site alive but unreachable), or a ransomware event. This design treats total loss of Site A as the governing case. WAN-isolation cases (a site up but cut off) are covered in the failover matrix in section <a href="#s11">11</a> because they need different handling &mdash; you must not run both halves of a split-brain environment against one database.</p></div>
+
+<h2 id="s1"><span class="ph">2</span>Choose the multi-site pattern first</h2>
+
+<p>Three credible patterns exist for two sites. The choice drives everything else, so make it explicitly and record the reasoning.</p>
+
+<div class="wrap"><table>
+<thead><tr><th>Pattern</th><th>How it works</th><th>When it is the right choice</th><th>Watch out for</th></tr></thead>
+<tbody>
+<tr><td><strong>A. One stretched CVAD site</strong> &mdash; a single Citrix Virtual Apps and Desktops site spanning both data centres</td><td>Controllers, StoreFront and VDAs in both DCs belong to one site; the Site database runs as a SQL Always On availability group stretched across the DCs; zones split per data centre.</td><td>Metro-distance DCs with low, stable latency (&le; 5 ms RTT between components). Simplest operations: one Studio, one catalog model, one monitoring view.</td><td>The whole estate shares one database fate. Inter-DC latency must stay LAN-like; if the link degrades, SQL synchronous commit stalls writes.</td></tr>
+<tr><td><strong>B. Two independent sites</strong> &mdash; each DC is a complete CVAD site with its own database</td><td>Users are steered to one site or the other by GSLB DNS. Each site can run with no dependency on the other; catalogs are duplicated in both.</td><td>Long distances, separate administrative teams, or a true active/standby DR requirement. Strongest isolation between sites.</td><td>Two control planes to run and patch; user-to-site affinity needs governance; shared resources (file servers, printers) must be reachable from both.</td></tr>
+<tr><td><strong>C. Citrix DaaS with two resource locations</strong> &mdash; control plane in Citrix Cloud</td><td>Two Cloud Connectors per site anchor two on-premises resource locations; Citrix Cloud brokers across them; StoreFront can be replaced by Citrix Gateway Service / Workspace.</td><td>Organizations moving to cloud-managed control planes; removes the Site database and controller estate from your availability scope.</td><td>Cloud Connector availability becomes your responsibility (2+ per resource location); outbound 443 from the sites to Citrix Cloud must be resilient; licensing moves to Citrix Cloud subscriptions.</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout tip"><span class="lbl">Recommendation for this blueprint</span>
+<p>For two metro data centres 40 km apart with 2&ndash;4 ms RTT, <strong>Pattern A &mdash; one stretched CVAD site</strong> &mdash; gives the best blend of resilience and operational simplicity, and it is what the rest of this article designs in detail. If your sites are hundreds of kilometres apart or owned by different operational teams, use Pattern B (or C) and apply sections <a href="#s3">3</a>&ndash;<a href="#s6">6</a>, <a href="#s9">9</a> and <a href="#s11">11</a>&ndash;<a href="#s15">15</a> unchanged; they are pattern-independent.</p></div>
+
+<h2 id="s2"><span class="ph">3</span>High-level architecture</h2>
+
+<p>The diagram below shows the target state: users arrive through a single global FQDN resolved by GSLB, land on the surviving site&rsquo;s Citrix ADC pair, and are steered through StoreFront and Delivery Controllers to VDAs in either zone. The Site database is a stretched SQL Always On group; licensing, monitoring and backups are site-resilient too.</p>
+
+<figure class="diagram">
+<svg viewBox="0 0 1000 640" role="img" aria-label="Two-site Citrix architecture: users reach a GSLB name that resolves to the Citrix ADC pair of Site A or Site B; each site hosts StoreFront, Delivery Controllers, VDAs and one replica of the SQL Always On database; the sites are joined by diverse metro fibre links." style="width:100%;height:auto;display:block;background:#fbfdfe">
+  <defs>
+    <style>
+      .t{font-family:Inter,system-ui,sans-serif}
+      .hdr{fill:#0f4c73}
+      .hdrt{fill:#ffffff;font-size:15px;font-weight:700}
+      .box{fill:#eef4fb;stroke:#0f4c73;stroke-width:1.2;rx:8px}
+      .adc{fill:#0758c8}
+      .adct{fill:#ffffff;font-size:12.5px;font-weight:600}
+      .lbl{fill:#10314a;font-size:12.5px}
+      .sml{fill:#5f6c84;font-size:11px}
+      .ln{stroke:#0f4c73;stroke-width:1.6;fill:none}
+      .wan{stroke:#078be8;stroke-width:2.4;stroke-dasharray:7 5;fill:none}
+    </style>
+  </defs>
+
+  <!-- Users + GSLB -->
+  <rect class="box" x="330" y="16" width="340" height="44" rx="10"/>
+  <text class="t lbl" x="500" y="34" text-anchor="middle" font-weight="700">Users — corporate LAN and remote</text>
+  <text class="t sml" x="500" y="50" text-anchor="middle">Single FQDN: gateway.corp.example (TLS everywhere)</text>
+
+  <rect class="box" x="365" y="82" width="270" height="40" rx="10"/>
+  <text class="t lbl" x="500" y="99" text-anchor="middle" font-weight="700">GSLB DNS (Citrix ADC)</text>
+  <text class="t sml" x="500" y="114" text-anchor="middle">Health-aware · proximity + monitor · TTL 60 s</text>
+
+  <line class="ln" x1="500" y1="60" x2="500" y2="82"/>
+  <line class="ln" x1="420" y1="122" x2="265" y2="170"/>
+  <line class="ln" x1="580" y1="122" x2="735" y2="170"/>
+  <text class="t sml" x="305" y="146" text-anchor="middle">Site A VIP</text>
+  <text class="t sml" x="695" y="146" text-anchor="middle">Site B VIP</text>
+
+  <!-- Site A panel -->
+  <rect x="40" y="170" width="440" height="330" rx="12" fill="#ffffff" stroke="#0f4c73" stroke-width="1.4"/>
+  <rect class="hdr" x="40" y="170" width="440" height="34" rx="12"/>
+  <rect class="hdr" x="40" y="190" width="440" height="14"/>
+  <text class="t hdrt" x="260" y="192" text-anchor="middle">SITE A — primary data centre (Zone A)</text>
+
+  <rect class="adc" x="62" y="218" width="396" height="56" rx="8"/>
+  <text class="t adct" x="260" y="240" text-anchor="middle">Citrix ADC HA pair (active / standby)</text>
+  <text class="t" x="260" y="258" text-anchor="middle" fill="#dceefd" font-size="11.5">Gateway VIP 443 · StoreFront LB VIP · STA · monitors</text>
+
+  <rect class="box" x="62" y="288" width="192" height="62" rx="8"/>
+  <text class="t lbl" x="158" y="312" text-anchor="middle" font-weight="700">StoreFront × 2</text>
+  <text class="t sml" x="158" y="330" text-anchor="middle">One server group,</text>
+  <text class="t sml" x="158" y="343" text-anchor="middle">shared base URL</text>
+
+  <rect class="box" x="266" y="288" width="192" height="62" rx="8"/>
+  <text class="t lbl" x="362" y="312" text-anchor="middle" font-weight="700">Delivery Controllers × 2</text>
+  <text class="t sml" x="362" y="330" text-anchor="middle">XML / STA · Director</text>
+  <text class="t sml" x="362" y="343" text-anchor="middle">Local Host Cache</text>
+
+  <rect class="box" x="62" y="364" width="192" height="54" rx="8"/>
+  <text class="t lbl" x="158" y="386" text-anchor="middle" font-weight="700">SQL primary replica</text>
+  <text class="t sml" x="158" y="404" text-anchor="middle">Always On AG · sync commit</text>
+
+  <rect class="box" x="266" y="364" width="192" height="54" rx="8"/>
+  <text class="t lbl" x="362" y="386" text-anchor="middle" font-weight="700">VDAs — Zone A</text>
+  <text class="t sml" x="362" y="404" text-anchor="middle">Pooled desktops + app delivery</text>
+
+  <text class="t sml" x="260" y="446" text-anchor="middle">License Server (clustered) · Monitoring collectors</text>
+  <text class="t sml" x="260" y="462" text-anchor="middle">Master images replicated to this site</text>
+
+  <!-- Site B panel -->
+  <rect x="520" y="170" width="440" height="330" rx="12" fill="#ffffff" stroke="#0f4c73" stroke-width="1.4"/>
+  <rect class="hdr" x="520" y="170" width="440" height="34" rx="12"/>
+  <rect class="hdr" x="520" y="190" width="440" height="14"/>
+  <text class="t hdrt" x="740" y="192" text-anchor="middle">SITE B — secondary data centre (Zone B)</text>
+
+  <rect class="adc" x="542" y="218" width="396" height="56" rx="8"/>
+  <text class="t adct" x="740" y="240" text-anchor="middle">Citrix ADC HA pair (active / standby)</text>
+  <text class="t" x="740" y="258" text-anchor="middle" fill="#dceefd" font-size="11.5">Gateway VIP 443 · StoreFront LB VIP · STA · monitors</text>
+
+  <rect class="box" x="542" y="288" width="192" height="62" rx="8"/>
+  <text class="t lbl" x="638" y="312" text-anchor="middle" font-weight="700">StoreFront × 2</text>
+  <text class="t sml" x="638" y="330" text-anchor="middle">Same server group</text>
+  <text class="t sml" x="638" y="343" text-anchor="middle">as Site A</text>
+
+  <rect class="box" x="746" y="288" width="192" height="62" rx="8"/>
+  <text class="t lbl" x="842" y="312" text-anchor="middle" font-weight="700">Delivery Controllers × 2</text>
+  <text class="t sml" x="842" y="330" text-anchor="middle">XML / STA · Director</text>
+  <text class="t sml" x="842" y="343" text-anchor="middle">Local Host Cache</text>
+
+  <rect class="box" x="542" y="364" width="192" height="54" rx="8"/>
+  <text class="t lbl" x="638" y="386" text-anchor="middle" font-weight="700">SQL secondary replica</text>
+  <text class="t sml" x="638" y="404" text-anchor="middle">Always On AG · sync commit</text>
+
+  <rect class="box" x="746" y="364" width="192" height="54" rx="8"/>
+  <text class="t lbl" x="842" y="386" text-anchor="middle" font-weight="700">VDAs — Zone B</text>
+  <text class="t sml" x="842" y="404" text-anchor="middle">Pooled desktops + app delivery</text>
+
+  <text class="t sml" x="740" y="446" text-anchor="middle">License Server (cluster peer) · Monitoring collectors</text>
+  <text class="t sml" x="740" y="462" text-anchor="middle">Master images replicated to this site</text>
+
+  <!-- Inter-site links -->
+  <path class="wan" d="M 480 300 H 520"/>
+  <path class="wan" d="M 480 391 H 520"/>
+  <text class="t sml" x="500" y="330" text-anchor="middle">Diverse</text>
+  <text class="t sml" x="500" y="343" text-anchor="middle">metro fibre</text>
+  <text class="t sml" x="500" y="356" text-anchor="middle">RTT 2–4 ms</text>
+
+  <!-- Bottom bar -->
+  <rect class="box" x="40" y="530" width="920" height="86" rx="10"/>
+  <text class="t lbl" x="500" y="552" text-anchor="middle" font-weight="700">Shared resilience services</text>
+  <text class="t sml" x="500" y="572" text-anchor="middle">Citrix ADM for ADC fleet monitoring · Director for sessions · SQL Agent + backup/restore tested quarterly</text>
+  <text class="t sml" x="500" y="588" text-anchor="middle">Runbooks: ADC HA failover · SQL failover · GSLB site failover · full-site evacuation drill</text>
+</svg>
+</figure>
+<p class="small">Illustrative topology. Replace the example FQDNs and platform models with your own; the component roles and their redundancy relationships are the part that matters.</p>
+
+<h2 id="s3"><span class="ph">4</span>Edge layer: a Citrix ADC high-availability pair per site</h2>
+
+<p>Citrix ADC (formerly NetScaler) is the front door: it terminates TLS, load-balances StoreFront, fronts Citrix Gateway, and hosts the health monitors that GSLB uses. Design one HA pair per site, not one pair stretched across sites.</p>
+
+<h3>Per-site HA pair</h3>
+<ul>
+  <li><strong>Two appliances in active/standby HA</strong> on the same Layer-2 segment (hardware MPX, virtual VPX, or SDX-hosted). Keep the pair in the same DC: stretched HA across 40 km adds failover complexity without adding resilience &mdash; GSLB already handles the site level.</li>
+  <li><strong>Independent Network Configuration (INC)</strong> so the standby node keeps its own server-side IP configuration; a failover then needs no routing changes upstream.</li>
+  <li><strong>Dedicated NSIP per node plus a shared SNIP</strong> for server-side traffic; management access only through the NSIP and jump hosts, never through the data path.</li>
+  <li><strong>Separate failure domains:</strong> the two nodes on different hypervisors/chassis, power feeds and uplink switches. An ADC pair sharing one switch stack is a single point of failure wearing a costume.</li>
+  <li><strong>Identical configuration, licensed capacity and firmware</strong> on both nodes. Keep configurations in a versioned backup exported after every change; HA sync hides configuration drift until the day it matters.</li>
+</ul>
+
+<h3>What each pair serves</h3>
+<div class="wrap"><table>
+<thead><tr><th>Virtual server</th><th>Purpose</th><th>Key settings</th></tr></thead>
+<tbody>
+<tr><td><code>GW_VIP</code> (443/TCP)</td><td>Citrix Gateway for remote users; ICA proxy and HDX over SSL</td><td>SSL bridge or offload with TLS 1.2+ cipher groups; Session Reliability enabled; modern TLS profile</td></tr>
+<tr><td><code>SF_VIP</code> (443/TCP)</td><td>Load-balances the local StoreFront servers</td><td>STOREFRONT health monitor; <code>SOURCEIP</code> persistence; SSL bridge</td></tr>
+<tr><td><code>XML/STA targets</code></td><td>Health probes and ticket validation to Delivery Controllers</td><td>HTTP-ECV monitor against the XML service; controllers registered as STA</td></tr>
+</tbody>
+</table></div>
+
+<p>An abbreviated configuration sketch (names illustrative):</p>
+<pre><code>add lb monitor MON-SF STOREFRONT -storename Store -sitepath /Citrix/Store -secure YES
+add serviceGroup SG-SF-A HTTP-SSL -maxClient 0
+bind serviceGroup SG-SF-A 10.20.4.11 443
+bind serviceGroup SG-SF-A 10.20.4.12 443
+bind serviceGroup SG-SF-A -monitorName MON-SF
+add lb vserver VS-SF-A SSL 10.20.8.30 443 -persistenceType SOURCEIP
+bind lb vserver VS-SF-A SG-SF-A
+
+add gslb service GS-GW-A 10.20.8.25 -monitorName MON-GW-A -siteName SITE-A
+add gslb service GS-GW-B 10.30.8.25 -monitorName MON-GW-B -siteName SITE-B
+add gslb vserver GSLB-GW DNS -domainName gateway.corp.example -lbMethod RTT
+bind gslb vserver GSLB-GW -serviceName GS-GW-A
+bind gslb vserver GSLB-GW -serviceName GS-GW-B</code></pre>
+
+<div class="callout tip"><span class="lbl">Sizing the ADC platform</span>
+<p>Size on three numbers: peak concurrent ICA/HDX connections through Gateway, SSL transactions per second at logon bursts (09:00 Monday is the real test), and total throughput with room to double. A single ADC node must be able to carry the full site load alone &mdash; HA capacity is not a license to run at 95% on the active node.</p></div>
+
+<h2 id="s4"><span class="ph">5</span>GSLB &amp; DNS: steering users between sites</h2>
+
+<p>Users know exactly one name: <code>gateway.corp.example</code> for remote access and a matching internal name for LAN users. Global Server Load Balancing on the Citrix ADC decides which site answers, based on health first and proximity second.</p>
+
+<h3>Design decisions</h3>
+<ul>
+  <li><strong>Active/active steering during normal operations.</strong> Both sites serve users in steady state (proximity/RTT-based method sends Site A LAN users to Site A and Site B LAN users to Site B). Capacity is used efficiently, and &ldquo;failover&rdquo; is already happening every day at small scale.</li>
+  <li><strong>Health before proximity.</strong> Each GSLB service is bound to a monitor that performs a real HTTPS check against the site&rsquo;s Gateway/StoreFront path. A site whose logon path is broken stops receiving new users automatically.</li>
+  <li><strong>DNS TTL of 60 seconds</strong> on the GSLB records, so steering changes take effect quickly; keep the appliance&rsquo;s DNS retry/timeout settings consistent with your corporate resolvers.</li>
+  <li><strong>Remote users (Gateway FQDN):</strong> delegated to or answered by the ADC&rsquo;s GSLB AD (Authoritative DNS) or via CNAME to the GSLB name.</li>
+  <li><strong>Internal users (StoreFront base URL):</strong> resolve the StoreFront FQDN through AD-integrated DNS with <strong>DNS policies or subnet-based records</strong> so each site&rsquo;s clients reach their local StoreFront VIP. Internal traffic should never be forced across the inter-site link to log on.</li>
+</ul>
+
+<div class="callout info"><span class="lbl">What GSLB does and does not move</span>
+<p>GSLB steers <em>new</em> connections. It does not move established ICA sessions, and it does not &ldquo;fail over&rdquo; a user mid-session &mdash; that job belongs to Session Reliability, client auto-reconnect and capacity in the surviving site (sections <a href="#s5">5</a> and <a href="#s10">10</a>). Set that expectation with stakeholders early: DNS-based failover means a brief reconnection window of one to two TTL periods during a site event.</p></div>
+
+<h3>Failover behaviour to expect</h3>
+<ul>
+  <li><strong>Single ADC node failure:</strong> HA failover in seconds; the VIP does not change; users see nothing.</li>
+  <li><strong>Site A outage:</strong> monitors fail the GSLB services; new DNS answers point to Site B within ~1&ndash;2 minutes; clients retry and land on Site B. Existing sessions on Site A VDAs drop and users re-launch into Site B capacity.</li>
+  <li><strong>WAN isolation of Site A (site up, link down):</strong> Site A keeps serving its own LAN users locally; GSLB stops sending remote users there. Do <em>not</em> declare full site failover for a WAN-only event &mdash; see the matrix in section <a href="#s11">11</a>.</li>
+</ul>
+
+<h2 id="s5"><span class="ph">6</span>Citrix Gateway &amp; remote access</h2>
+
+<p>Citrix Gateway runs on each site&rsquo;s ADC pair and gives remote users the same StoreFront experience as LAN users, with HDX tunneled over TLS 443.</p>
+
+<ul>
+  <li><strong>ICA proxy mode</strong> with SSL bridge: the ADC validates the launch ticket against a Delivery Controller (STA) and then brokers the ICA/HDX connection to the VDA.</li>
+  <li><strong>Register controllers from both sites as STAs</strong> on both Gateways, and configure the same STA list in StoreFront. A launch ticket issued by a Site A controller can then be validated by Site B&rsquo;s Gateway during a steering change, avoiding spurious &ldquo;ticket cannot be validated&rdquo; errors while both sites are alive.</li>
+  <li><strong>Session Reliability on</strong> (TCP 2598 inside the SSL session): short network blips freeze the screen instead of dropping the session, and the session resumes without a re-launch.</li>
+  <li><strong>Client auto-reconnect</strong> with a bounded retry count: if the connection really dies, the Workspace app re-establishes through whichever site GSLB now serves &mdash; this is the mechanism that makes a site failover feel like a hiccup rather than an outage for remote users.</li>
+  <li><strong>Authentication:</strong> nFactor flow with MFA (RADIUS to your NPS/MFA platform or SAML to the IdP). Apply endpoint analysis (EPA) or conditional posture checks where policy requires them.</li>
+  <li><strong>Session limits and timeout policies</strong> tuned per delivery group so a single account cannot exhaust pooled capacity from outside.</li>
+</ul>
+
+<div class="callout warn"><span class="lbl">If a site dies, its sessions die with it</span>
+<p>There is no such thing as live-migrating an ICA session from a VDA in Site A to a VDA in Site B. Sessions that were running on failed hardware are gone. Resilience for remote users therefore means: quick DNS steering + auto-reconnect + guaranteed capacity in the surviving site. Budget that capacity (section <a href="#s10">10</a>) or the failover will be technically perfect and operationally useless.</p></div>
+
+<h2 id="s6"><span class="ph">7</span>StoreFront layer</h2>
+
+<p>StoreFront is the most sensitive hop on the logon path: enumeration, authentication hand-off, subscription store and launch tickets all live here. The resilient pattern is one server group spanning both sites.</p>
+
+<ul>
+  <li><strong>Four StoreFront servers: two per site, one server group.</strong> All servers in a group replicate configuration, subscriptions and resource lists to each other, so users see an identical store whichever server (or site) they land on.</li>
+  <li><strong>One shared base URL</strong> (e.g., <code>https://storefront.corp.example</code>) fronted by each site&rsquo;s <code>SF_VIP</code>. Internal DNS resolves the base URL to the local site&rsquo;s VIP (section <a href="#s4">5</a>); remote users reach StoreFront through Gateway.</li>
+  <li><strong>Load balancing with STOREFRONT monitors</strong> &mdash; the built-in monitor performs a real logon-path check, not just a TCP handshake. Add <code>SOURCEIP</code> persistence so a user&rsquo;s enumeration and launch stay on one server within a session.</li>
+  <li><strong>Open the group-sync port between sites:</strong> StoreFront servers in a group communicate over TCP 808; firewall it across the inter-site link in both directions, or the group will silently split and subscriptions will drift.</li>
+  <li><strong>Keep the Windows tier current:</strong> StoreFront servers are Windows servers &mdash; patch them in rolling fashion (one at a time, removed from the ADC rotation first). Two servers per site means one can be patched with zero user impact.</li>
+</ul>
+
+<h2 id="s7"><span class="ph">8</span>Brokering: Delivery Controllers &amp; zone design</h2>
+
+<h3>Delivery Controllers</h3>
+<ul>
+  <li><strong>Two controllers per site, four in the site overall.</strong> Every VDA registers with all controllers listed in its VDA installation; controllers share the brokering load and any one of them can be lost without impact.</li>
+  <li><strong>StoreFront talks to controllers over the XML service (80/443).</strong> Point StoreFront at all four controllers (or at an XML load-balancing VIP if you prefer to hide the list).</li>
+  <li><strong>Director</strong> runs on the controllers; expose it through the local ADC or an internal FQDN so helpdesk access survives any single server loss.</li>
+  <li><strong>Register controllers on separate hypervisor hosts</strong>, and ideally separate shared storage, within each site.</li>
+</ul>
+
+<h3>Zones</h3>
+<p>Create one zone per data centre &mdash; <strong>Zone A (primary)</strong> and <strong>Zone B (secondary)</strong> &mdash; inside the single CVAD site. Zones give you three things:</p>
+<ul>
+  <li><strong>VDA registration locality:</strong> VDAs prefer controllers in their own zone, keeping registration traffic and brokering decisions local; they fall back to the other zone automatically if their local controllers disappear.</li>
+  <li><strong>Home-zone user preference:</strong> assign users a home zone so launches prefer VDAs in their own data centre &mdash; better app latency and less inter-site traffic &mdash; while still allowing cross-zone launches when local capacity is full.</li>
+  <li><strong>Local Host Cache boundaries:</strong> during a database outage, each zone can keep operating independently against its own controllers&rsquo; Local Host Cache (next section).</li>
+</ul>
+
+<h2 id="s8"><span class="ph">9</span>Site database: SQL Always On, Local Host Cache and Connection Leasing</h2>
+
+<p>The Site database is the one component the whole site genuinely shares. Protect it in two layers: keep it available, and make the estate able to limp along if it is not.</p>
+
+<h3>Layer 1 — keep the database available</h3>
+<ul>
+  <li><strong>SQL Server Always On availability group</strong> with one replica in each DC, <strong>synchronous commit</strong>, automatic failover, and a listener (or distributed listener) that controllers connect to. Add <code>MultiSubnetFailover=True</code> in the controller connection strings.</li>
+  <li><strong>Latency budget:</strong> Citrix controllers are chatty with the database during brokering. Keep controller-to-SQL RTT comfortably under 5 ms, and verify that synchronous-commit write latency added by the AG stays around 1 ms at your inter-site distance. At 2&ndash;4 ms metro RTT this is realistic; beyond ~10 ms, reconsider the pattern (use section <a href="#s1">2</a> Pattern B).</li>
+  <li><strong>Backups that are tested:</strong> full + log backups of the Site DB, and a documented restore drill performed at least quarterly. An untested backup is a hope, not a design.</li>
+  <li><strong>Maintain the databases</strong> (index/stats hygiene) on a schedule; a slow Site DB shows up as slow logons for everyone.</li>
+</ul>
+
+<h3>Layer 2 — survive a database outage anyway</h3>
+<ul>
+  <li><strong>Local Host Cache (LHC):</strong> each controller keeps a local copy of site data. If all controllers lose contact with the SQL replicas simultaneously, existing sessions keep running, and users can connect to already-allocated resources.</li>
+  <li><strong>Connection Leasing</strong> (used automatically with LHC): users can reconnect to recently used desktops and published apps during the outage, based on their connection history. New, never-launched resources are the gap &mdash; expect degraded-but-alive, not business-as-usual.</li>
+  <li><strong>Design consequence:</strong> an SQL failure is an event, not an outage. Staff should still page, but users keep working &mdash; that is the correct bar for a brokered desktop estate.</li>
+</ul>
+
+<div class="callout info"><span class="lbl">Citrix DaaS variant</span>
+<p>With Pattern C (Citrix DaaS), the Site database lives in Citrix Cloud and this section becomes a cloud provider SLA; your equivalent of LHC is the Cloud Connector&rsquo;s local host cache behavior. Run at least two Cloud Connectors per resource location, on separate hosts, with resilient outbound HTTPS.</p></div>
+
+<h2 id="s9"><span class="ph">10</span>Licensing resilience</h2>
+
+<p>VDAs check out licenses when sessions start. If licensing is unreachable, existing sessions keep running and Citrix&rsquo;s grace period (30 days) covers a prolonged outage &mdash; but new launches eventually fail, so design licensing like everything else: redundant, and tested.</p>
+
+<ul>
+  <li><strong>Preferred: Windows Server Failover Cluster for the License Server role</strong> with shared storage, one node per DC, fronted by a clustered FQDN. Failover is automatic and invisible.</li>
+  <li><strong>Alternative: two independent license servers</strong> (primary and secondary). Configure VDAs with both servers; they use the primary when reachable. Manually reconcile the license files on both.</li>
+  <li><strong>Back up the license files</strong> with the same discipline as the Site database; losing the files during a rebuild is a self-inflicted outage.</li>
+  <li><strong>Monitor license consumption</strong> (Citrix ADM / Studio licensing view) and alert at 85&ndash;90% so exhaustion never coincides with a failover event.</li>
+</ul>
+
+<h2 id="s10"><span class="ph">11</span>Workloads: VDAs, machine catalogs and images in both sites</h2>
+
+<p>The edge and control layers only matter because VDAs run sessions. Resilience at this layer is a capacity and locality problem.</p>
+
+<ul>
+  <li><strong>Machine catalogs exist in both zones</strong> for every delivery group that must survive a site loss. A catalog living only in Zone A makes Site B a spectator during a Site A failure.</li>
+  <li><strong>Buffer capacity:</strong> plan each site to absorb its own users <em>plus</em> the displaced users from the other site &mdash; at reduced comfort if budget demands, but with a written number. A common model: each site sized for 100% of steady-state load, with autoscale absorbing the surge; at minimum, never size below ~65&ndash;70% peak utilization per site.</li>
+  <li><strong>Autoscale</strong> for pooled catalogs: power-manage idle machines down during the day, keep a warm buffer, and define time/power schemes that react to load spikes during failover.</li>
+  <li><strong>Provisioning:</strong> MCS with a master image replicated to both sites (image lifecycle managed in one pipeline so both zones run identical builds). If you use PVS, run a full PVS farm per site with vDisk stores replicated between them &mdash; streaming traffic must stay inside its own site; PVS streams do not cross the WAN.</li>
+  <li><strong>Persistent desktops</strong> are the awkward case: the VM and its disk live in one site. Protect them with storage replication and treat their RTO as the storage-replication failover time; communicate that their resilience profile differs from pooled sessions.</li>
+  <li><strong>User data:</strong> profiles (Citrix UPM or container-based) and home data on storage that is itself replicated or multi-site; a VDA in Site B is useless to a user whose profile store died with Site A.</li>
+  <li><strong>App backends:</strong> published apps are only as available as the databases and file servers behind them. Include backend owners in the DR design, or the Citrix estate will &ldquo;succeed&rdquo; its failover test while users still cannot work.</li>
+</ul>
+
+<h2 id="s11"><span class="ph">12</span>Failure &amp; failover behaviour matrix</h2>
+
+<p>This matrix is the contract between the design and the operations team. Every row should eventually have a test record attached (section <a href="#s14">14</a>).</p>
+
+<div class="wrap"><table>
+<thead><tr><th>Failure</th><th>Detection</th><th>Automatic response</th><th>User impact</th><th>Expected RTO</th></tr></thead>
+<tbody>
+<tr><td>One ADC node in a site</td><td>HA heartbeat loss</td><td>Standby assumes the VIPs</td><td>None (a few in-flight TLS handshakes retry)</td><td>Seconds</td></tr>
+<tr><td>One StoreFront server</td><td>STOREFRONT monitor fails</td><td>ADC removes it from rotation</td><td>None</td><td>&lt; 30 s</td></tr>
+<tr><td>One Delivery Controller</td><td>VDAs/controllers detect loss</td><td>Remaining controllers broker; VDAs re-register if needed</td><td>None</td><td>&lt; 1 min</td></tr>
+<tr><td>SQL primary replica</td><td>WSFC/AG health checks</td><td>AG automatic failover to Site B replica; listener follows</td><td>Brief logon delay during failover</td><td>&lt; 1 min</td></tr>
+<tr><td>All SQL replicas unreachable</td><td>Controller DB connection loss</td><td>Local Host Cache + Connection Leasing take over</td><td>Existing and recently used resources keep working; brand-new launches limited</td><td>n/a (degraded mode until DB returns)</td></tr>
+<tr><td>License server unreachable</td><td>VDA license checks / monitoring</td><td>Grace period covers operation; cluster failover if clustered</td><td>None for 30 days; new launches fail afterwards</td><td>Seconds if clustered</td></tr>
+<tr><td>Inter-site link loss</td><td>Routing/monitoring alerts</td><td>Each site keeps serving local users; SQL AG suspends (tune AG behavior to avoid write stalls); GSLB keeps remote users on reachable site</td><td>Cross-zone launches pause; local service continues</td><td>n/a (operate split until link restored)</td></tr>
+<tr><td>Full Site A loss</td><td>GSLB monitors + human confirmation</td><td>GSLB steers all users to Site B; SQL replica promoted; runbook-driven evacuation</td><td>Active sessions on Site A drop and relaunch; reconnection window 1&ndash;2 min after DNS change</td><td>&le; 15 min target</td></tr>
+<tr><td>DNS resolver outage (corporate)</td><td>Client resolution failures</td><td>Clients retry alternate resolvers; cached records still resolve</td><td>New logons delayed until resolution recovers; cached entries keep working</td><td>Minutes</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout danger"><span class="lbl">Split-brain guardrail</span>
+<p>In the full-site-loss row, Site B must be certain Site A is dead before promoting the SQL replica and accepting steering for <em>everything</em>. Two live halves writing to diverged databases is far worse than the outage. Encode the declaration (&ldquo;who decides, with what evidence&rdquo;) in the runbook, and make the promotion step manual where automatic failover cannot prove site death.</p></div>
+
+<h2 id="s12"><span class="ph">13</span>Network, latency budget &amp; port plan</h2>
+
+<h3>Inter-site link requirements</h3>
+<ul>
+  <li><strong>Two diverse paths</strong> (different fibre routes/providers where possible) with dynamic routing (BGP/OSPF) so a cut cable is a routing event, not a project.</li>
+  <li><strong>Bandwidth sized for:</strong> SQL synchronous-commit traffic, StoreFront group sync, ADC health/monitor traffic, cross-zone session launches, plus image/catalog replication bursts. Profile for two weeks before cutting over.</li>
+  <li><strong>Latency budget:</strong> keep controller&harr;SQL and VDA&harr;controller RTT &le; 5 ms; at 40 km of metro fibre you have comfortable headroom (fibre adds roughly 0.2 ms per 40 km round trip before equipment latency).</li>
+  <li><strong>QoS:</strong> prioritize SQL AG, StoreFront sync and ICA/HDX flows over bulk replication.</li>
+</ul>
+
+<h3>Essential ports (verify against current Citrix documentation at build time)</h3>
+<div class="wrap"><table>
+<thead><tr><th>Flow</th><th>Ports</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Remote users &rarr; Gateway VIP</td><td>TCP 443</td><td>HDX over SSL; Session Reliability uses 2598 inside the tunnel</td></tr>
+<tr><td>ADC &rarr; StoreFront servers</td><td>TCP 443</td><td>Load-balanced, STOREFRONT monitor</td></tr>
+<tr><td>StoreFront &harr; StoreFront (group sync)</td><td>TCP 808</td><td>Both directions across the inter-site link</td></tr>
+<tr><td>StoreFront/ADC &rarr; Delivery Controllers</td><td>TCP 80 / 443</td><td>XML service and STA validation</td></tr>
+<tr><td>Controllers &harr; SQL replicas</td><td>TCP 1433</td><td>Listener on both subnets; MultiSubnetFailover</td></tr>
+<tr><td>Controllers &harr; VDAs</td><td>TCP 80 / 443</td><td>Registration and brokering</td></tr>
+<tr><td>Gateway &rarr; VDAs</td><td>TCP 1494 / 2598</td><td>ICA/HDX session traffic (direct or via Gateway as configured)</td></tr>
+<tr><td>VDAs &rarr; License Server</td><td>TCP 27000&ndash;27009</td><td>License checkout; web console separately</td></tr>
+<tr><td>Everything &rarr; monitoring/ADM</td><td>TCP 443</td><td>ADC management, Director/telemetry egress</td></tr>
+</tbody>
+</table></div>
+
+<h2 id="s13"><span class="ph">14</span>Security hardening notes</h2>
+
+<ul>
+  <li><strong>TLS everywhere:</strong> TLS 1.2 minimum (1.3 preferred) on Gateway, StoreFront VIPs and internal XML if you bind it to 443; modern cipher groups; HSTS on user-facing vServers.</li>
+  <li><strong>One SAN certificate per site pair</strong> covering the Gateway and StoreFront FQDNs &mdash; identical names in both sites keep failover invisible. Track expiry in monitoring; certificate expiry is a classic self-inflicted multi-site outage.</li>
+  <li><strong>MFA on all remote access</strong> (nFactor + RADIUS/SAML); consider per-group policies and EPA scans for contractors.</li>
+  <li><strong>ADC management locked down:</strong> NSIP only from jump hosts, TACACS+/AD admin auth with least privilege, management-plane rate limiting, and no admin access from the internet.</li>
+  <li><strong>Gateway exposure review:</strong> disable legacy ciphers/protocols, enable bot/Rate Limiting protection if licensed, and keep ADC firmware on a supported, patched release &mdash; internet-facing ADCs are a frequent attack target.</li>
+  <li><strong>Segmentation:</strong> keep the StoreFront/Controller tier in its own VLANs with only the flows from section <a href="#s12">13</a> permitted; VDAs in restricted segments that cannot initiate connections to the management tier.</li>
+</ul>
+
+<h2 id="s14"><span class="ph">15</span>Monitoring, operations &amp; DR drills</h2>
+
+<h3>Monitoring</h3>
+<ul>
+  <li><strong>Citrix ADM</strong> for the ADC fleet: appliance health, vServer response times, Gateway session counts, certificate expiry, HA state changes.</li>
+  <li><strong>Director</strong> for session health: logon duration trends (early warning for StoreFront/SQL trouble), failed logon spikes, machine registration counts per zone.</li>
+  <li><strong>Synthetic logon tests</strong> ( scripted Workspace-app logons or equivalent) from each site every few minutes &mdash; they detect logon-path failures faster than any component metric.</li>
+  <li><strong>SQL AG health:</strong> replica state, synchronization lag and listener reachability on both subnets; alert on anything but SYNCHRONIZED outside a change window.</li>
+  <li><strong>Alert on HA state itself:</strong> an ADC pair sitting in active/standby is fine; an unnoticed double failure is not. Every HA failover should page someone.</li>
+</ul>
+
+<h3>Drill program (each drill produces a signed record)</h3>
+<div class="wrap"><table>
+<thead><tr><th>Drill</th><th>What you do</th><th>Pass criteria</th><th>Frequency</th></tr></thead>
+<tbody>
+<tr><td>ADC HA failover</td><td>Force failover of each site&rsquo;s pair during a change window</td><td>No user-visible impact; VIPs answer within seconds; no config drift</td><td>Quarterly, alternating sites</td></tr>
+<tr><td>SQL AG failover</td><td>Fail the listener to the other replica</td><td>Logon delay &lt; 60 s; no failed launches after failover</td><td>Quarterly</td></tr>
+<tr><td>StoreFront/controller rolling patch</td><td>Remove one server from rotation, patch, re-add, repeat</td><td>Zero user impact through the full cycle</td><td>Every patch cycle</td></tr>
+<tr><td>GSLB site failover (remote users)</td><td>Disable Site A&rsquo;s GSLB services; verify steering and reconnection</td><td>Remote users reconnect via Site B within ~2 minutes</td><td>Half-yearly</td></tr>
+<tr><td>Database outage simulation</td><td>Block controller&harr;SQL traffic; observe LHC + Connection Leasing</td><td>Existing sessions survive; reconnects work; recovery clean when unblocked</td><td>Half-yearly</td></tr>
+<tr><td>Full-site evacuation tabletop &rarr; live</td><td>Walk the runbook, then (annually) perform a scheduled evacuation to Site B</td><td>All services from Site B only; RTO &le; 15 min; clean return</td><td>Annual</td></tr>
+</tbody>
+</table></div>
+
+<div class="callout tip"><span class="lbl">Operate the design, don&rsquo;t just own it</span>
+<p>Every runbook referenced above should live in the same change system as the firewall rules, with named owners. The most common cause of extended multi-site outages is not a second failure &mdash; it is the team losing 45 minutes deciding what the first failure means.</p></div>
+
+<h2 id="s15"><span class="ph">16</span>Final checklist</h2>
+
+<ul class="chk">
+  <li>Multi-site pattern chosen (stretched site vs two sites vs DaaS) and rationale recorded</li>
+  <li>ADC HA pair per site: INC, separate failure domains, identical config/firmware, single-node capacity proven</li>
+  <li>GSLB serving one Gateway FQDN; health monitors bound; TTL 60 s; internal DNS routes LAN users to their local StoreFront VIP</li>
+  <li>Gateway: ICA proxy, STAs from both sites registered, Session Reliability and auto-reconnect verified from outside the LAN</li>
+  <li>StoreFront: 4 servers, one group, one base URL, STOREFRONT monitors, TCP 808 open across sites</li>
+  <li>Controllers: 2+ per site; zones per DC; home-zone preferences set; Director reachable after single-server loss</li>
+  <li>SQL Always On: synchronous commit, automatic failover, listener with MultiSubnetFailover, tested backups</li>
+  <li>LHC + Connection Leasing behavior validated in a controlled outage test</li>
+  <li>Licensing redundant (cluster or dual servers) and monitored; license files backed up</li>
+  <li>Catalogs in both zones; each site can absorb the other&rsquo;s users; autoscale tuned; images identical across sites</li>
+  <li>Port matrix implemented and reviewed by the firewall team; inter-site bandwidth profiled under load</li>
+  <li>Certificates: SAN covering both sites&rsquo; FQDNs, expiry monitored</li>
+  <li>Monitoring + synthetic logons live; HA state changes alert</li>
+  <li>Failover matrix printed into runbooks; drills scheduled with named owners</li>
+</ul>
+
+<div class="take"><strong>Key takeaway:</strong> A resilient two-site Citrix design is a stack of small guarantees — ADC HA at each edge, GSLB steering between sites, redundant StoreFront and controllers, a SQL Always On database with Local Host Cache as the safety net, licensing that survives failover, and machine catalogs with real capacity in both zones. None of it counts until the failure matrix has been rehearsed: run the drills, measure the RTOs, and treat every untested arrow in the diagram as broken by default.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>
