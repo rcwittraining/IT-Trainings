@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Match &amp; Apply Kit — find roles that fit your resume, prepare every application | RCW IT Training</title>
+<meta name="description" content="Free browser tool for infrastructure, cloud and IT operations roles: parse your resume, score live job listings against it, and build a tailored cover letter, portal answers and autofill sheet for every match. Your resume never leaves your device.">
+<meta name="keywords" content="job matcher, resume keyword matcher, ATS resume score, cover letter generator, Linux jobs India, infrastructure engineer jobs, cloud jobs remote, application tracker">
+<meta name="theme-color" content="#061633">
+<link rel="canonical" href="https://www.rcwittraining.in/job-matcher/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Job Match &amp; Apply Kit — find roles that fit your resume">
+<meta property="og:description" content="Parse your resume locally, score real listings against it, and get a send-ready application packet for every match. No sign-up, no upload, no server.">
+<meta property="og:url" content="https://www.rcwittraining.in/job-matcher/">
+<meta property="og:image" content="https://www.rcwittraining.in/og-scorecard.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+<link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Job Match & Apply Kit",
+  "url": "https://www.rcwittraining.in/job-matcher/",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any (modern browser)",
+  "description": "Scores job listings against a resume and assembles application packets (cover letter, portal answers, autofill sheet). Runs entirely in the browser; resume text is never uploaded.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+  "featureList": [
+    "Local resume parsing from PDF, DOCX, RTF or pasted text",
+    "Skill taxonomy for Linux, VMware, cloud, storage, endpoint and security roles",
+    "Explainable match score with matched and missing requirements",
+    "ATS readiness review of the resume itself",
+    "Cover letter, application answers and autofill sheet per job",
+    "Application pipeline tracker with CSV and JSON export"
+  ],
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in/" }
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#workbench">Skip to the tool</a>
+
+<header class="site-bar">
+  <div class="bar-inner">
+    <a class="back" href="https://www.rcwittraining.in/">← All labs &amp; tools</a>
+    <div class="bar-title">RCW IT Training · Free tools</div>
+    <div class="bar-actions">
+      <button type="button" class="bar-btn" id="btnExport" title="Download your profile, matches and tracker as one JSON file">Save workspace</button>
+      <button type="button" class="bar-btn" id="btnImport" title="Restore a previously saved workspace JSON">Restore</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="topic-pill">CAREER TOOL · RUNS IN YOUR BROWSER</p>
+    <h1>Job Match &amp; Apply Kit <span>— every listing, scored against your resume</span></h1>
+    <p class="lede">Point it at your CV, set the roles you actually want, and it pulls live listings from public job APIs,
+      ranks them by real skill overlap, then writes the application packet for each match: tailored cover letter,
+      portal answers, and a field-by-field sheet you can paste into any application form.</p>
+
+    <div class="promise">
+      <div class="promise-item good">
+        <h3>What it does, automatically</h3>
+        <ul>
+          <li>Searches several public sources at once, de-duplicates, re-scores on every filter change</li>
+          <li>Explains every score: which requirement matched, which is missing, what to do about it</li>
+          <li>Generates a cover letter per job from evidence found in <em>your</em> resume</li>
+          <li>Batch-prepares packets for every job above your threshold — the part that takes the hours</li>
+          <li>Tracks the pipeline and exports it to CSV for your own spreadsheet</li>
+        </ul>
+      </div>
+      <div class="promise-item limit">
+        <h3>What it deliberately does not do</h3>
+        <ul>
+          <li>It never logs into Naukri, LinkedIn, Indeed or any portal, and never submits on your behalf. Those
+            platforms prohibit automation in their terms, accounts get restricted for it, and an unreviewed
+            application is the fastest way to be filtered out at the screening call.</li>
+          <li>It never invents employers, dates, degrees or certifications. Anything your resume does not say
+            arrives as a <code>[FILL]</code> marker you have to answer.</li>
+          <li>No server, no upload, no login, no analytics: parsing, scoring and storage all happen in this tab.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <span><b id="statMatches">0</b> scored listings</span>
+      <span><b id="statPackets">0</b> packets ready</span>
+      <span><b id="statApplied">0</b> tracked applications</span>
+      <span>Free · no sign-up · works offline for the sample set</span>
+    </div>
+  </div>
+</section>
+
+<nav class="tabs" aria-label="Tool sections">
+  <div class="tabs-inner" role="tablist">
+    <button role="tab" class="tab active" data-tab="resume" aria-selected="true"><i>1</i> Resume</button>
+    <button role="tab" class="tab" data-tab="targets" aria-selected="false"><i>2</i> Targets</button>
+    <button role="tab" class="tab" data-tab="jobs" aria-selected="false"><i>3</i> Find jobs <em id="tabJobCount" class="tab-count"></em></button>
+    <button role="tab" class="tab" data-tab="packets" aria-selected="false"><i>4</i> Packets <em id="tabPacketCount" class="tab-count"></em></button>
+    <button role="tab" class="tab" data-tab="tracker" aria-selected="false"><i>5</i> Tracker <em id="tabTrackCount" class="tab-count"></em></button>
+    <button role="tab" class="tab" data-tab="sources" aria-selected="false"><i>6</i> Sources &amp; privacy</button>
+  </div>
+</nav>
+
+<main class="workbench" id="workbench">
+
+  <!-- ============================================================ 1 · RESUME -->
+  <section class="panel active" id="panel-resume" role="tabpanel">
+    <div class="panel-head">
+      <h2>1 · Your resume</h2>
+      <p>Read locally in this tab. The file is never sent anywhere — there is no endpoint to send it to.</p>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h3>Load a resume</h3>
+        <label class="drop" id="drop">
+          <input type="file" id="fileInput" accept=".txt,.md,.markdown,.rtf,.docx,.pdf,.json,text/plain">
+          <span class="drop-icon" aria-hidden="true">⤓</span>
+          <span class="drop-main">Drop a <b>PDF, DOCX, RTF or TXT</b> here, or click to choose</span>
+          <span class="drop-sub">Scanned/image-only PDFs cannot be read — use the text box below instead (Ctrl+A in the PDF, copy, paste).</span>
+        </label>
+
+        <label class="field-label" for="pasteBox">…or paste the text</label>
+        <textarea id="pasteBox" class="code" rows="8" spellcheck="false" placeholder="Paste your full resume text here — sections, dates, everything."></textarea>
+
+        <div class="btn-row">
+          <button class="btn primary" id="btnParse" type="button">Parse resume</button>
+          <button class="btn" id="btnSeed" type="button">Load the RCW founder draft</button>
+          <button class="btn ghost" id="btnClearResume" type="button">Clear</button>
+        </div>
+        <p class="hint" id="parseNote"></p>
+
+        <div class="callout info">
+          <b>“Load the RCW founder draft”</b> fills the tool with a starting profile assembled from the public pages
+          of this site (title, 19+ years, the technology coverage). It is a shape to edit, not a CV: employers, dates,
+          degrees and certifications stay as <code>[FILL]</code> markers, because a website must not invent those for a person.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Profile the matcher will use</h3>
+        <div class="profile-grid">
+          <label>Name<input id="pName" type="text" autocomplete="name"></label>
+          <label>Headline / target title<input id="pHeadline" type="text"></label>
+          <label>Email<input id="pEmail" type="email" autocomplete="email"></label>
+          <label>Phone<input id="pPhone" type="tel" autocomplete="tel"></label>
+          <label>Based in<input id="pLocation" type="text" placeholder="Chennai, India"></label>
+          <label>Years of experience<input id="pYears" type="number" min="0" max="45" step="0.5"></label>
+          <label>LinkedIn<input id="pLinkedin" type="url" placeholder="https://www.linkedin.com/in/you"></label>
+          <label>Portfolio / site<input id="pWebsite" type="url" placeholder="https://…"></label>
+          <label>Notice period<input id="pNotice" type="text" placeholder="60 days, negotiable"></label>
+          <label>Current CTC<input id="pCurrent" type="text" placeholder="₹18 LPA"></label>
+          <label>Expected CTC<input id="pExpected" type="text" placeholder="₹26 LPA or negotiable"></label>
+          <label>Work authorisation<input id="pVisa" type="text" placeholder="India citizen / no sponsorship needed"></label>
+        </div>
+        <p class="hint">These fields are what the autofill sheet and cover letters use. Edit here once, and every packet follows.</p>
+        <div class="btn-row"><button class="btn" id="btnSaveProfile" type="button">Save profile</button></div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h3>Skills found <span class="muted" id="skillCount"></span></h3>
+        <p class="hint">Untick anything that is not true any more — a skill you cannot discuss for ten minutes should not
+          be driving your matches. Add anything the parser missed; it counts as weight 2.</p>
+        <div class="add-skill">
+          <input id="extraSkill" type="text" placeholder="Add a skill, e.g. Proxmox, NetBackup, VCDX…">
+          <button class="btn small" id="btnAddSkill" type="button">Add</button>
+        </div>
+        <div class="skill-cloud" id="skillCloud"></div>
+      </div>
+
+      <div class="card">
+        <h3>ATS readiness of the file you loaded</h3>
+        <div class="ats-top">
+          <div class="ring" id="atsRing" role="img" aria-label="ATS readiness score"><b id="atsScore">–</b><small>/100</small></div>
+          <div><p class="ats-verdict" id="atsVerdict">Load a resume to check it.</p>
+            <p class="hint" id="atsMeta"></p></div>
+        </div>
+        <ul class="checks" id="atsChecks"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 · TARGETS -->
+  <section class="panel" id="panel-targets" role="tabpanel">
+    <div class="panel-head">
+      <h2>2 · What you are targeting</h2>
+      <p>Everything here is saved as you type and re-scored against whatever is loaded. Narrow targets beat a wide net:
+        15 good applications out-perform 300 spray-and-pray ones.</p>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h3>Role families</h3>
+        <p class="hint">A posting’s title is mapped to these. Untick the ones that would waste your time.</p>
+        <div class="chip-grid" id="roleChips"></div>
+
+        <h3 class="sub-h">Search phrases used against the job APIs</h3>
+        <textarea id="tKeywords" class="code" rows="3" spellcheck="false"></textarea>
+        <p class="hint">One phrase per line. Sources that accept a query get the first line; the rest feed the ranking.</p>
+
+        <h3 class="sub-h">Must-have skills (hard filter)</h3>
+        <div class="add-skill">
+          <input id="mustHaveInput" type="text" placeholder="e.g. RHEL, Ansible, vSphere">
+          <button class="btn small" id="btnAddMust" type="button">Add</button>
+        </div>
+        <div class="chip-row" id="mustHaveChips"></div>
+        <label class="switch"><input type="checkbox" id="tMustBlock" checked> <span>Hide jobs missing a must-have entirely</span></label>
+      </div>
+
+      <div class="card">
+        <h3>Where, and on what terms</h3>
+        <div class="field">
+          <span class="field-label">Regions</span>
+          <div class="chip-grid" id="regionChips"></div>
+        </div>
+        <div class="two-col">
+          <label class="field-label">Work mode
+            <select id="tRemote">
+              <option value="any">Any</option>
+              <option value="remote">Remote or hybrid only</option>
+              <option value="hybrid">Hybrid only</option>
+              <option value="onsite">On-site only</option>
+            </select>
+          </label>
+          <label class="field-label">Max listing age
+            <select id="tAge">
+              <option value="7">Last 7 days</option>
+              <option value="14">Last 14 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="45" selected>Last 45 days</option>
+              <option value="3650">Any age (incl. cached)</option>
+            </select>
+          </label>
+        </div>
+        <div class="two-col">
+          <label class="field-label">Score floor for the “jobs” list
+            <input id="tMinScore" type="range" min="0" max="90" step="5">
+            <span class="range-readout"><b id="tMinScoreVal">55</b>/100</span>
+          </label>
+          <label class="field-label">Salary floor (₹ LPA, 0 = ignore)
+            <input id="tSalary" type="number" min="0" max="200" step="1">
+          </label>
+        </div>
+        <label class="switch"><input type="checkbox" id="tRelocate"> <span>Open to relocation (removes the location penalty)</span></label>
+        <label class="switch"><input type="checkbox" id="tIndiaOnly"> <span>India + remote-India only</span></label>
+
+        <h3 class="sub-h">Exclude jobs containing</h3>
+        <textarea id="tExclude" class="code" rows="2" spellcheck="false"></textarea>
+        <p class="hint">Comma or newline separated. Applied to title and location only — excluding on the whole
+          description kills too many good listings.</p>
+
+        <h3 class="sub-h">Cover letter voice</h3>
+        <select id="tTone">
+          <option value="concise">Concise — 3 short paragraphs, for portal text boxes</option>
+          <option value="standard" selected>Standard — the default, fits most ATS forms</option>
+          <option value="detailed">Detailed — for email to a hiring manager or referral</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== 3 · JOBS -->
+  <section class="panel" id="panel-jobs" role="tabpanel">
+    <div class="panel-head">
+      <h2>3 · Find jobs</h2>
+      <p><span id="sourceSummary">No sources loaded yet.</span></p>
+    </div>
+
+    <div class="card toolbar">
+      <div class="btn-row">
+        <button class="btn primary lg" id="btnSearch" type="button">Find jobs now</button>
+        <button class="btn" id="btnSearchForce" type="button">Force refresh (ignore cache)</button>
+        <button class="btn" id="btnDemo" type="button">Load sample set (offline)</button>
+        <label class="switch inline"><input type="checkbox" id="tAuto"> <span id="autoLabel">Auto-refresh while this tab is open</span></label>
+      </div>
+      <div class="src-status" id="sourceStatus"></div>
+    </div>
+
+    <div class="card filters">
+      <div class="two-col">
+        <label class="field-label">Filter listings
+          <input id="jobFilter" type="search" placeholder="company, title, or a keyword">
+        </label>
+        <label class="field-label">Only show
+          <select id="showWhich">
+            <option value="matches" selected>Matches above my score floor</option>
+            <option value="all">Everything found, including weak</option>
+            <option value="strong">Strong fit only (80+)</option>
+            <option value="blocked">Blocked by my filters</option>
+            <option value="packet">Already have a packet</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="bulk-bar" id="bulkBar">
+      <div>
+        <b id="bulkCount">0</b> listings above your floor.
+        <span class="muted">Packets are generated in your browser — a queue of 25 takes a few seconds.</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" id="btnBulkPackets" type="button">Prepare packets for all of these</button>
+        <button class="btn" id="btnBulkTrack" type="button">Add all to tracker</button>
+      </div>
+    </div>
+    <p class="hint" id="bulkProgress" aria-live="polite"></p>
+
+    <div class="job-list" id="jobList"></div>
+    <div class="empty" id="jobEmpty">
+      <h3>Nothing scored yet</h3>
+      <p>Load a resume, set your targets, then either <b>Find jobs now</b> (uses public job APIs from your browser) or
+        <b>Load sample set</b> to see the whole flow with synthetic listings and no network at all.</p>
+    </div>
+
+    <div class="card import">
+      <h3>Have listings somewhere the APIs cannot reach?</h3>
+      <p class="hint">Naukri, LinkedIn and company career pages keep their data behind logins — this tool will not go
+        there, by design. What works instead: copy the listings you care about (or export from a portal, or a JSON/CSV
+        file) and import them here. You still get scoring, ranking, packets and tracking for them.</p>
+      <textarea id="importBox" class="code" rows="5" spellcheck="false" placeholder="One listing per blank-line block:&#10;Senior Linux Administrator | Northwind (demo) | Chennai&#10;900 RHEL hosts, Ansible, Veeam. https://example.com/apply/123"></textarea>
+      <div class="btn-row">
+        <button class="btn" id="btnImportJobs" type="button">Import pasted listings</button>
+        <label class="btn ghost file-btn" for="importFile">Import JSON / CSV file
+          <input type="file" id="importFile" accept=".json,.csv,.txt,text/plain,application/json,text/csv">
+        </label>
+      </div>
+      <p class="hint">Accepted JSON shape: <code>[{"title":"","company":"","location":"","applyUrl":"","description":"","tags":[],"posted":"ISO date"}]</code></p>
+    </div>
+  </section>
+
+  <!-- ========================================================== 4 · PACKETS -->
+  <section class="panel" id="panel-packets" role="tabpanel">
+    <div class="panel-head">
+      <h2>4 · Application packets</h2>
+      <p>One packet per job: the letter, the form answers, and the paste-ready field sheet. Read it before you send it —
+        you are the one who has to survive the interview.</p>
+    </div>
+
+    <div class="split packets">
+      <aside class="card packet-list">
+        <h3>Queue <span class="muted" id="packetCount"></span></h3>
+        <input id="packetFilter" type="search" class="mini-search" placeholder="Filter by title or company">
+        <div class="packet-items" id="packetItems"></div>
+      </aside>
+
+      <div class="card packet-detail" id="packetDetail">
+        <div class="empty-inline" id="packetEmpty">
+          <h3>No packet selected</h3>
+          <p>Generate one from a job in step 3, or use <b>Prepare packets for all</b> to do the whole queue at once.</p>
+        </div>
+        <div id="packetBody" class="hidden">
+          <div class="packet-head">
+            <div>
+              <h3 id="pkTitle">—</h3>
+              <p class="muted" id="pkMeta">—</p>
+            </div>
+            <div class="pk-score" id="pkScore"></div>
+          </div>
+
+          <div class="notice" id="pkNotice"></div>
+
+          <h4 class="sec">Cover letter <span class="muted">(editable — edit it, it stays saved for this job)</span></h4>
+          <div class="btn-row tight">
+            <button class="btn small" data-tone="concise" type="button">Concise</button>
+            <button class="btn small" data-tone="standard" type="button">Standard</button>
+            <button class="btn small" data-tone="detailed" type="button">Detailed</button>
+            <button class="btn small ghost" id="btnRegen" type="button">Regenerate from resume</button>
+            <button class="btn small ghost" id="btnCopyLetter" type="button">Copy letter</button>
+            <button class="btn small ghost" id="btnDownloadLetter" type="button">Download .txt</button>
+          </div>
+          <textarea id="pkLetter" class="code letter" rows="18" spellcheck="true"></textarea>
+          <p class="hint"><b id="pkBlanks">0</b> <code>[FILL]</code> marker(s) left in this packet. The two that matter most:
+            the “why this company” line, and any number you are not ready to defend out loud.</p>
+
+          <h4 class="sec">Answers for the form questions</h4>
+          <div class="answers" id="pkAnswers"></div>
+
+          <h4 class="sec">Autofill sheet — paste column into the portal’s fields</h4>
+          <div class="btn-row tight">
+            <button class="btn small" id="btnCopySheet" type="button">Copy whole sheet (TSV)</button>
+          </div>
+          <div class="sheet" id="pkSheet"></div>
+
+          <h4 class="sec">Keywords this posting uses that should appear in your CV</h4>
+          <p class="hint" id="pkKeywordNote"></p>
+          <div class="chip-row" id="pkKeywords"></div>
+          <div class="btn-row tight"><button class="btn small ghost" id="btnCopyKeywords" type="button">Copy paste-line</button></div>
+
+          <h4 class="sec">Gap plan <span class="muted">(this is where the free labs come in)</span></h4>
+          <ul class="gaps" id="pkGaps"></ul>
+
+          <div class="packet-actions">
+            <a class="btn primary" id="pkOpen" href="#" target="_blank" rel="noopener noreferrer nofollow">Open the application page ↗</a>
+            <button class="btn" id="btnMarkApplied" type="button">I submitted it — mark applied</button>
+            <button class="btn ghost" id="btnDropPacket" type="button">Remove packet</button>
+          </div>
+          <p class="hint">The link is the employer’s own page. You press send; the tool stays out of it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== 5 · TRACKER -->
+  <section class="panel" id="panel-tracker" role="tabpanel">
+    <div class="panel-head">
+      <h2>5 · Pipeline</h2>
+      <p>Stored in this browser. Export it whenever you like — a CSV you own beats a tool you depend on.</p>
+    </div>
+
+    <div class="stat-row" id="trackStats"></div>
+
+    <div class="card toolbar">
+      <div class="btn-row">
+        <select id="trackFilter">
+          <option value="all">All statuses</option>
+        </select>
+        <button class="btn" id="btnExportCsv" type="button">Export CSV</button>
+        <button class="btn" id="btnExportJson" type="button">Export JSON</button>
+        <button class="btn ghost" id="btnWipeTracker" type="button">Clear tracker</button>
+      </div>
+      <p class="hint">Follow-up rule of thumb: no reply in 10 working days → one polite nudge, then move on. Track the
+        nudge date in the notes column.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="pipe" id="pipeTable">
+        <thead>
+          <tr><th>Status</th><th>Role</th><th>Company</th><th>Score</th><th>Added</th><th>Updated</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody id="pipeBody"></tbody>
+      </table>
+    </div>
+    <p class="hint" id="trackEmpty"></p>
+  </section>
+
+  <!-- ==================================================== 6 · SOURCES / PRIVACY -->
+  <section class="panel" id="panel-sources" role="tabpanel">
+    <div class="panel-head">
+      <h2>6 · Sources, keys and privacy</h2>
+      <p>Which APIs this tab calls, what it needs from you, and the rules it will not break.</p>
+    </div>
+
+    <div class="card">
+      <h3>Job sources</h3>
+      <p class="hint">Only public APIs that permit browser calls are listed. Sources without a key are free to use; the
+        two aggregate search APIs need a free key of <em>your own</em>, kept in this browser and sent only to that API.</p>
+      <div class="source-list" id="sourceList"></div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h3>Company career boards (Greenhouse / Lever / SmartRecruiters)</h3>
+        <p class="hint">These are the employers’ own official APIs — the cleanest listings you can get, straight from
+          the ATS, with a real apply link. Add the board slug for a company, one per line.</p>
+        <label class="field-label">Greenhouse board tokens
+          <textarea id="ghCompanies" class="code" rows="4" spellcheck="false" placeholder="cloudflare&#10;gitlab&#10;datadog"></textarea>
+        </label>
+        <p class="hint">Slug = the word in <code>boards.greenhouse.io/&lt;slug&gt;</code>. Greenhouse asks that you link
+          back to the posting, which the tool does by keeping the company’s own URL on every card.</p>
+        <label class="field-label">Lever slugs
+          <textarea id="leverCompanies" class="code" rows="3" spellcheck="false" placeholder="plausible&#10;mistral"></textarea>
+        </label>
+        <label class="field-label">SmartRecruiters identifiers
+          <textarea id="srCompanies" class="code" rows="3" spellcheck="false" placeholder="bosch&#10;holmes"></textarea>
+        </label>
+        <div class="btn-row"><button class="btn" id="btnSaveSources" type="button">Save sources</button></div>
+      </div>
+
+      <div class="card">
+        <h3>Optional API keys</h3>
+        <p class="hint">Never required. Stored in <code>localStorage</code> on this device only, sent to the named API
+          alone, and never logged anywhere by this site — this site has no server.</p>
+        <label class="field-label">Adzuna app_id <input id="keyAdzunaId" type="text" autocomplete="off" spellcheck="false"></label>
+        <label class="field-label">Adzuna app_key <input id="keyAdzunaKey" type="text" autocomplete="off" spellcheck="false"></label>
+        <label class="field-label">Adzuna country <input id="keyAdzunaCountry" type="text" placeholder="in" maxlength="3"></label>
+        <label class="field-label">JSearch RapidAPI key <input id="keyJsearch" type="text" autocomplete="off" spellcheck="false"></label>
+        <label class="field-label">JSearch location <input id="keyJsearchLoc" type="text" placeholder="India"></label>
+        <label class="switch"><input type="checkbox" id="keyJsearchRemote"> <span>JSearch: remote postings only</span></label>
+        <div class="btn-row">
+          <button class="btn" id="btnSaveKeys" type="button">Save keys</button>
+          <button class="btn ghost" id="btnClearKeys" type="button">Delete keys</button>
+        </div>
+        <p class="hint">If a key-based source fails with a CORS error, that provider does not allow direct browser calls —
+          the source list will say so, and nothing else breaks.</p>
+
+        <h3 class="sub-h">Refresh etiquette</h3>
+        <label class="field-label">Auto-refresh interval (hours)
+          <input id="autoHours" type="number" min="1" max="48" step="1">
+        </label>
+        <p class="hint" id="etiquetteNote"></p>
+        <div class="btn-row">
+          <button class="btn ghost" id="btnClearCache" type="button">Clear cached listings</button>
+          <button class="btn danger" id="btnWipeAll" type="button">Delete everything this tool stored</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card policy">
+      <h3>How this tool behaves, in writing</h3>
+      <ul class="rules">
+        <li><b>No credential handling.</b> There is no login form, no cookie set by us, and nothing that accepts a
+          password. If a tool asks for your Naukri or LinkedIn password, that is a scam — including if the tool looks
+          like this one.</li>
+        <li><b>No automated submission.</b> Filling and sending forms on job portals breaks their terms, gets accounts
+          restricted, and — when a template is wrong — puts a fabricated application in front of an employer. The tool
+          prepares; you press send.</li>
+        <li><b>No scraping of login-walled sites.</b> Only documented public APIs, with their stated etiquette: Remotive
+          asks for attribution and a few calls a day, so the tool caches, labels each listing with its source and rate
+          limits itself.</li>
+        <li><b>Local-only storage.</b> Profile, targets, listings cache, packets and tracker live in your browser under
+          <code>rcwjm.v1.*</code>. “Delete everything” is the button above. No copy goes to this site, because there is
+          no backend to receive it.</li>
+        <li><b>Advertising and consent.</b> This tool page carries no ad units. Site-wide policy, including how to
+          change consent choices, is in the <a href="https://www.rcwittraining.in/privacy.html">privacy policy</a>.</li>
+        <li><b>Honesty beats hit rate.</b> The generator marks what it does not know instead of guessing. A match you
+          cannot defend in an interview costs you the interview <em>and</em> the employer’s trust in your other
+          applications.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Built by RCW IT Training</h3>
+      <p class="hint">Questions, corrections, or a source you would like added: <a href="mailto:info@rcwittraining.in">info@rcwittraining.in</a>.
+        The matching logic is plain JavaScript in this page’s folder — read it, argue with it, reuse it.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="container">
+    <p>A free tool from <a href="https://www.rcwittraining.in/">RCW IT Training</a>. Job listings belong to their
+      sources; apply links go to the employer’s own page. This site is independent and is not affiliated with,
+      endorsed by, or sponsored by Red Hat, VMware, Microsoft, Amazon, Google, Citrix, Veeam, Cisco, NetApp, Dell
+      Technologies, Workday, Greenhouse, Lever, SmartRecruiters, LinkedIn, Indeed or Naukri; all trademarks are the
+      property of their owners and are named for identification only.</p>
+    <p class="foot-links"><a href="https://www.rcwittraining.in/privacy.html">Privacy</a> ·
+      <a href="https://www.rcwittraining.in/disclaimer.html">Disclaimer</a> ·
+      <a href="https://www.rcwittraining.in/terms-of-use.html">Terms</a> ·
+      <a href="https://www.rcwittraining.in/privacy.html#privacy-choices" data-privacy-settings>Privacy and cookie settings</a></p>
+  </div>
+</footer>
+
+<input type="file" id="workspaceFile" accept=".json,application/json" hidden>
+
+<noscript><div class="noscript">This tool runs entirely in your browser, so it needs JavaScript enabled. Nothing is uploaded either way.</div></noscript>
+
+<script src="lib/text.js"></script>
+<script src="lib/skills.js"></script>
+<script src="lib/resume.js"></script>
+<script src="lib/matcher.js"></script>
+<script src="lib/feeds.js"></script>
+<script src="lib/packets.js"></script>
+<script src="lib/store.js"></script>
+<script src="data/seed-profile.js"></script>
+<script src="data/sample-jobs.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
