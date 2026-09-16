@@ -11,6 +11,10 @@ This folder is ready to publish from the root of the GitHub Pages repository for
 - `aws-bedrock-lab/` — browser-local, console-style Amazon Bedrock end-to-end GUI lab with responsible-AI controls, RAG, Agent testing, evidence export, and PDF certificate
 - `aws-ecs-gui-lab/` — browser-local, console-style Amazon ECS/Fargate end-to-end GUI lab with mandatory security controls, multi-AZ service design, rollback and scaling drills, evidence export, detailed guide, and PDF certificate
 - `simulators.json` — simulator data and GitHub Pages targets
+- `job-matcher/` — **Job Match & Apply Kit** at `/job-matcher/`: parses a resume locally (PDF, DOCX, RTF or pasted text),
+  scores live listings from public job APIs against it, and builds a per-job application packet (cover letter,
+  form answers, autofill sheet) plus a pipeline tracker. No backend, no upload, no automated submission — see
+  [`job-matcher/README.md`](job-matcher/README.md)
 - `privacy.html` — advertising, cookie, consent, and privacy disclosures
 - `privacy-settings.js` — opens the Google CMP consent-revocation flow
 - `ads.txt` — authorized Google advertising seller for the configured publisher

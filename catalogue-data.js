@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "Job Match & Apply Kit — Score Any Job Listing Against Your Resume",
+    "category": "Career Tool • Resume Parser • Job Matcher • Cover Letter Builder • Application Tracker",
+    "badge": "JOB-MATCH",
+    "accent": "#0f766e",
+    "id": "job-matcher",
+    "targetUrl": "https://www.rcwittraining.in/job-matcher/",
+    "contentType": "Free Tool",
+    "technology": "Career & Interviews",
+    "subcategory": "Job Search",
+    "group": "Career Tools"
+  },
+
+  {
   "title": "Microsoft Intune Exam Simulator \u2014 MD-102 Endpoint Administrator (400+ Questions)",
   "category": "Microsoft Intune \u2022 MD-102 \u2022 Exam Simulator \u2022 Timed Mock \u2022 60 Questions",
   "badge": "INTUNE-EXAM",
