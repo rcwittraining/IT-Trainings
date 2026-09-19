@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RCW Job Agent — Software Jobs in Chennai + Remote India</title>
+<meta name="description" content="Free AI job agent: upload resume, find software jobs in Chennai + Remote India, match-score, auto-apply kit, tracker. 100% browser-based.">
+<style>
+/* RCW Job Agent — styles (no external dependencies, system fonts) */
+:root{
+  --bg:#0b1020; --bg2:#111936; --card:#151f45; --card2:#1b2760;
+  --line:rgba(255,255,255,.12); --txt:#eef2ff; --mut:#a5b0d6;
+  --acc:#6c8cff; --acc2:#22d3a5; --warn:#fbbf24; --bad:#fb7185;
+  --r:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#24306e 0%,var(--bg) 55%) fixed,var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--acc)}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 80px}
+header.top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-size:24px;box-shadow:0 8px 30px rgba(108,140,255,.35)}
+.brand h1{font-size:20px;margin:0}
+.brand p{margin:2px 0 0;color:var(--mut);font-size:13px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:rgba(255,255,255,.06);padding:6px 11px;border-radius:999px;font-size:12px;color:var(--txt)}
+.pill.live{border-color:rgba(34,211,165,.5);color:#b9f5e3}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:14px}
+@media(max-width:960px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.card h2{font-size:15px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.card h3{font-size:13px;margin:14px 0 8px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+label.lbl{display:block;font-size:12px;color:var(--mut);margin:10px 0 5px}
+input[type=text],input[type=number],select,textarea{width:100%;background:#0d1440;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 10px;font-size:13px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{resize:vertical;min-height:84px}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:#22306e;color:#fff;border-radius:11px;padding:10px 13px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.btn.primary{background:linear-gradient(135deg,#5b7cff,#22d3a5);border:none}
+.btn.ghost{background:rgba(255,255,255,.06)}
+.btn.small{padding:7px 10px;font-size:12px;border-radius:9px}
+.btn.warn{background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.5);color:#fde68a}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:rgba(108,140,255,.16);border:1px solid rgba(108,140,255,.45);padding:4px 9px;border-radius:999px;font-size:12px}
+.chip button{background:none;border:none;color:#cdd6ff;cursor:pointer;margin-left:4px}
+.tabs{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--txt);padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.tab.active{background:linear-gradient(135deg,#5b7cff,#22d3a5);border:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:20px}
+.stat span{font-size:11px;color:var(--mut)}
+.jobs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.jobs{grid-template-columns:1fr}}
+.job{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.job h4{margin:0;font-size:15px}
+.job .co{font-size:12px;color:var(--mut)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.tag.remote{background:rgba(34,211,165,.15);border-color:rgba(34,211,165,.5);color:#a7f3d0}
+.tag.chennai{background:rgba(251,191,36,.13);border-color:rgba(251,191,36,.5);color:#fde68a}
+.matchbar{height:8px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.matchbar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:99px}
+.matchrow{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+.job p.desc{font-size:12.5px;color:#d5dbf5;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.job .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.kit{background:#0d1440;border:1px dashed rgba(108,140,255,.5);border-radius:10px;padding:10px;font-size:12px;white-space:pre-wrap;max-height:220px;overflow:auto}
+.tracker-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:900px){.tracker-cols{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.tracker-cols{grid-template-columns:1fr}}
+.tcol{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:120px}
+.tcol h5{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+.titem{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:9px;padding:8px;margin-bottom:7px;font-size:12px}
+.titem b{display:block;font-size:12.5px}
+.titem .mv{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.titem .mv button{font-size:11px;padding:4px 7px;border-radius:7px;border:1px solid var(--line);background:#22306e;color:#fff;cursor:pointer}
+.chatbox{display:flex;flex-direction:column;gap:10px}
+#chatLog{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:12px;height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:85%;padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.45}
+.msg.bot{background:rgba(108,140,255,.16);border:1px solid rgba(108,140,255,.4);align-self:flex-start;border-top-left-radius:4px}
+.msg.me{background:rgba(34,211,165,.15);border:1px solid rgba(34,211,165,.4);align-self:flex-end;border-top-right-radius:4px}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.note{font-size:12px;color:var(--mut);background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3);padding:9px 11px;border-radius:10px;line-height:1.5}
+.ok{font-size:12px;color:#a7f3d0}
+footer{margin-top:26px;text-align:center;color:var(--mut);font-size:12px}
+.hidden{display:none!important}
+.portal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(max-width:560px){.portal-grid{grid-template-columns:1fr}}
+.portal{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:11px;padding:9px 11px;font-size:13px;text-decoration:none;color:var(--txt)}
+.portal:hover{border-color:var(--acc)}
+.portal span{font-size:18px}
+dialog{background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:14px;max-width:640px;width:92vw;padding:18px}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">💼</div>
+      <div>
+        <h1>RCW Job Agent</h1>
+        <p>Software jobs · Chennai + Remote India · 100% free &amp; browser-based</p>
+      </div>
+    </div>
+    <div class="pills">
+      <span class="pill live">● Live: Remotive + Arbeitnow APIs</span>
+      <span class="pill">Chennai portals 1-click</span>
+      <span class="pill">No login · resume stays private</span>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-find" onclick="showTab('find')">🔍 Find Jobs</button>
+    <button class="tab" id="tab-tracker" onclick="showTab('tracker')">📋 Tracker</button>
+    <button class="tab" id="tab-chat" onclick="showTab('chat')">🤖 Agent Chat</button>
+    <button class="tab" id="tab-setup" onclick="showTab('setup')">⚙️ Setup &amp; Keys</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="st-found">0</b><span>jobs found</span></div>
+    <div class="stat"><b id="st-avg">0%</b><span>avg match</span></div>
+    <div class="stat"><b id="st-applied">0</b><span>applied</span></div>
+    <div class="stat"><b id="st-skills">0</b><span>your skills</span></div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: profile -->
+    <aside class="card">
+      <h2>👤 Your Profile</h2>
+      <div id="dropzone" style="border:1.5px dashed rgba(108,140,255,.6);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:13px">📄 Drop resume here or</div>
+        <button class="btn ghost small" id="browse-btn" style="margin-top:8px">Choose PDF / TXT</button>
+        <input type="file" id="f-file" accept=".pdf,.txt,.md,.doc,.docx" class="hidden">
+        <div style="font-size:11px;color:var(--mut);margin-top:6px">PDF parsed in-browser · nothing uploaded</div>
+      </div>
+      <label class="lbl">Resume text (paste if no file)</label>
+      <textarea id="f-resume" placeholder="Paste your resume text here…"></textarea>
+      <button class="btn primary" id="analyze-btn" style="width:100%;margin-top:8px">✨ Analyze Resume</button>
+
+      <h3>Details</h3>
+      <label class="lbl">Full name</label><input type="text" id="f-name" placeholder="e.g. Arun Kumar">
+      <div class="row">
+        <div><label class="lbl">Email</label><input type="text" id="f-email" placeholder="you@mail.com"></div>
+        <div><label class="lbl">Phone</label><input type="text" id="f-phone" placeholder="+91 …"></div>
+      </div>
+      <div class="row">
+        <div><label class="lbl">Base location</label><input type="text" id="f-location" placeholder="Chennai"></div>
+        <div><label class="lbl">Experience</label><input type="text" id="f-exp" placeholder="e.g. 2 years / Fresher"></div>
+      </div>
+      <div class="row">
+        <div><label class="lbl">Notice period</label><input type="text" id="f-notice" placeholder="Immediate / 30 days"></div>
+        <div><label class="lbl">Expected CTC</label><input type="text" id="f-salary" placeholder="e.g. 6 LPA"></div>
+      </div>
+
+      <h3>Target jobs</h3>
+      <label class="lbl">Keywords (role / stack)</label>
+      <input type="text" id="f-keywords" placeholder="software developer">
+      <div class="row">
+        <div><label class="lbl">Location pref</label>
+          <select id="f-pref">
+            <option value="both">Chennai + Remote</option>
+            <option value="chennai">Chennai only</option>
+            <option value="remote">Remote only</option>
+          </select>
+        </div>
+        <div><label class="lbl">Job type</label>
+          <select id="f-type">
+            <option value="full-time">Full-time</option>
+            <option value="contract">Contract</option>
+            <option value="internship">Internship</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>Skills (<span id="skill-count">0 skills</span>)</h3>
+      <div class="row">
+        <input type="text" id="skill-input" placeholder="add skill + Enter">
+        <button class="btn ghost small" id="add-skill-btn" style="flex:0 0 52px">＋</button>
+      </div>
+      <div class="chips" id="skill-chips"></div>
+
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary" id="find-btn">🔍 Find Jobs</button>
+        <button class="btn warn" id="auto-btn">🤖 Autopilot</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost small" id="export-btn">⬇ Backup</button>
+        <button class="btn ghost small" id="reset-btn">↺ Reset</button>
+      </div>
+    </aside>
+
+    <!-- RIGHT: panes -->
+    <main>
+      <!-- FIND -->
+      <section id="pane-find">
+        <div class="card" style="margin-bottom:12px">
+          <h2>🔗 Chennai + Remote portals <span style="font-weight:400;font-size:12px;color:var(--mut)">(your keywords pre-filled)</span></h2>
+          <div class="portal-grid" id="portals"></div>
+        </div>
+        <div class="card">
+          <h2>🎯 Matched jobs <span id="result-info" style="font-weight:400;font-size:12px;color:var(--mut)"></span></h2>
+          <div class="jobs" id="jobs"></div>
+        </div>
+      </section>
+
+      <!-- TRACKER -->
+      <section id="pane-tracker" class="hidden">
+        <div class="card">
+          <h2>📋 Application tracker <span style="font-weight:400;font-size:12px;color:var(--mut)">(auto-saved in this browser)</span></h2>
+          <div class="tracker-cols" id="tracker-cols"></div>
+        </div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="pane-chat" class="hidden">
+        <div class="card">
+          <h2>🤖 Agent chat</h2>
+          <div class="chatbox">
+            <div id="chatLog"></div>
+            <div class="quick">
+              <button class="btn ghost small" data-q="Find jobs for me">🔍 Find jobs</button>
+              <button class="btn ghost small" data-q="How do I upload my resume?">📄 Resume help</button>
+              <button class="btn ghost small" data-q="Open the apply kit for my top job">⚡ Apply kit</button>
+              <button class="btn ghost small" data-q="Chennai job tips">📍 Chennai tips</button>
+              <button class="btn ghost small" data-q="Remote job tips">🌍 Remote tips</button>
+            </div>
+            <div class="row">
+              <input type="text" id="chat-input" placeholder="Ask the agent… e.g. 'find remote react jobs'">
+              <button class="btn primary" id="chat-send" style="flex:0 0 90px">Send</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETUP -->
+      <section id="pane-setup" class="hidden">
+        <div class="card">
+          <h2>⚙️ Setup &amp; API keys (optional)</h2>
+          <div class="note">The agent works with <b>zero keys</b> (Remotive + Arbeitnow + portal links). Add free <b>Adzuna</b> keys to unlock extra India/Chennai listings. Get them at <b>developer.adzuna.com</b> (free tier).</div>
+          <label class="lbl">Adzuna App ID</label><input type="text" id="adz-id" placeholder="optional">
+          <label class="lbl">Adzuna App Key</label><input type="text" id="adz-key" placeholder="optional">
+          <button class="btn primary small" id="save-keys" style="margin-top:10px">💾 Save keys</button>
+          <h3>Publish on your website</h3>
+          <div class="note">1) Upload this <b>job-agent/</b> folder to your site repo → it goes live at <b>/job-agent/</b>.<br>2) Add the floating widget to any page:<br><code>&lt;script src="/job-agent/embed.js" data-agent-url="https://www.rcwittraining.in/job-agent/"&gt;&lt;/script&gt;</code><br>Full steps in <b>README-DEPLOY.md</b>.</div>
+          <h3>About auto-apply (honest)</h3>
+          <div class="note">LinkedIn / Naukri / Indeed need <b>your login + sometimes captcha</b>, so no tool can safely auto-submit there. This agent automates everything up to the submit click: finding, scoring, cover letters, email drafts, tracking — you review + click Apply. Maximum automation, zero account risk.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>RCW Job Agent · free · resume never leaves your browser · made for rcwittraining.in 💼</footer>
+</div>
+
+<dialog id="kit-modal">
+  <h3 id="kit-title" style="margin-top:0">⚡ Auto-Apply Kit</h3>
+  <label class="lbl">Cover letter (tailored)</label>
+  <div class="kit" id="kit-cl"></div>
+  <div class="row" style="margin:8px 0"><button class="btn ghost small" id="kit-copy-cl">📋 Copy cover letter</button></div>
+  <label class="lbl">Resume tweaks for this job</label>
+  <div class="kit" id="kit-rb"></div>
+  <label class="lbl">Email draft</label>
+  <div class="kit" id="kit-em"></div>
+  <div class="row" style="margin:8px 0"><button class="btn ghost small" id="kit-copy-em">📋 Copy email</button></div>
+  <div class="row" style="margin-top:12px">
+    <button class="btn primary" id="kit-open">↗ Open Apply page + mark Applied</button>
+    <button class="btn ghost" onclick="document.getElementById('kit-modal').close()">Close</button>
+  </div>
+</dialog>
+
+<div id="toast" class="hidden" style="position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1b2760;border:1px solid rgba(108,140,255,.6);padding:10px 16px;border-radius:999px;font-size:13px;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,.5)"></div>
+
+<script>
+/* RCW Job Agent — core logic. 100% client-side. No build step. */
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+var LS_KEY = 'rcw_job_agent_v1';
+
+/* ---------- state ---------- */
+var defaultState = {
+  profile: { name:'', email:'', phone:'', location:'Chennai', experience:'', notice:'', salary:'',
+             resumeText:'', skills:['javascript','react','python'], keywords:'software developer',
+             prefLocation:'both', // chennai | remote | both
+             jobType:'full-time', remoteOnly:false },
+  jobs: [], tracker: { saved:[], applied:[], interview:[], offer:[] },
+  lastFetch: null, autopilot: false, adzuna: { app_id:'', app_key:'' }
+};
+var S = load() || JSON.parse(JSON.stringify(defaultState));
+function load(){ try{ var raw = localStorage.getItem(LS_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+/* ---------- skill vocabulary ---------- */
+var SKILLS = ('javascript typescript python java c# c++ c php ruby go golang rust kotlin swift '
++'react angular vue nextjs nodejs express django flask spring springboot laravel rails '
++'html css sass tailwind bootstrap redux graphql rest api microservices '
++'sql mysql postgres postgresql mongodb redis elasticsearch firebase supabase '
++'aws azure gcp docker kubernetes terraform jenkins cicd git github gitlab '
++'linux windows networking ccna rhcsa itil servicenow '
++'selenium testing qa manual-testing automation postman '
++'machine-learning ml ai data-science pandas numpy tensorflow pytorch nlp '
++'powerbi excel tableau '
++'android ios flutter react-native '
++'figma ui ux photoshop '
++'agile scrum jira '
++'cybersecurity soc siem splunk wireshark ceh '
++'intune mdm entra azure-ad active-directory office365 m365 powershell bash '
++'devops sre support l1 l2 helpdesk').split(' ');
+
+/* ---------- tabs ---------- */
+function showTab(name){
+  var tabs = ['find','tracker','chat','setup'];
+  tabs.forEach(function(t){
+    $('tab-'+t).classList.toggle('active', t===name);
+    $('pane-'+t).classList.toggle('hidden', t!==name);
+  });
+  if(name==='tracker') renderTracker();
+}
+
+/* ---------- profile form ---------- */
+function bindProfile(){
+  var p = S.profile;
+  $('f-name').value = p.name||''; $('f-email').value = p.email||'';
+  $('f-phone').value = p.phone||''; $('f-location').value = p.location||'Chennai';
+  $('f-exp').value = p.experience||''; $('f-notice').value = p.notice||'';
+  $('f-salary').value = p.salary||''; $('f-keywords').value = p.keywords||'software developer';
+  $('f-resume').value = p.resumeText||'';
+  $('f-pref').value = p.prefLocation||'both'; $('f-type').value = p.jobType||'full-time';
+  $('adz-id').value = (S.adzuna&&S.adzuna.app_id)||''; $('adz-key').value = (S.adzuna&&S.adzuna.app_key)||'';
+  renderSkillChips();
+  ['f-name','f-email','f-phone','f-location','f-exp','f-notice','f-salary','f-keywords','f-resume'].forEach(function(id){
+    $(id).addEventListener('input', collectProfile);
+  });
+  $('f-pref').addEventListener('change', collectProfile);
+  $('f-type').addEventListener('change', collectProfile);
+  $('skill-input').addEventListener('keydown', function(e){
+    if(e.key==='Enter'){ e.preventDefault(); addSkill($('skill-input').value); $('skill-input').value=''; }
+  });
+  $('add-skill-btn').onclick = function(){ addSkill($('skill-input').value); $('skill-input').value=''; };
+  $('save-keys').onclick = function(){
+    S.adzuna = { app_id: $('adz-id').value.trim(), app_key: $('adz-key').value.trim() };
+    save(); toast('Adzuna keys saved. They unlock extra India listings on next search.');
+  };
+}
+function collectProfile(){
+  S.profile.name = $('f-name').value.trim(); S.profile.email = $('f-email').value.trim();
+  S.profile.phone = $('f-phone').value.trim(); S.profile.location = $('f-location').value.trim();
+  S.profile.experience = $('f-exp').value.trim(); S.profile.notice = $('f-notice').value.trim();
+  S.profile.salary = $('f-salary').value.trim(); S.profile.keywords = $('f-keywords').value.trim();
+  S.profile.resumeText = $('f-resume').value;
+  S.profile.prefLocation = $('f-pref').value; S.profile.jobType = $('f-type').value;
+  save();
+}
+function addSkill(v){
+  v = String(v||'').trim().toLowerCase();
+  if(!v) return;
+  if(S.profile.skills.indexOf(v)===-1) S.profile.skills.push(v);
+  save(); renderSkillChips();
+}
+function renderSkillChips(){
+  var el = $('skill-chips'); el.innerHTML='';
+  S.profile.skills.forEach(function(sk){
+    var c = document.createElement('span'); c.className='chip'; c.textContent = sk;
+    var x = document.createElement('button'); x.textContent='✕'; x.title='remove';
+    x.onclick = function(){ S.profile.skills = S.profile.skills.filter(function(k){return k!==sk;}); save(); renderSkillChips(); };
+    c.appendChild(x); el.appendChild(c);
+  });
+  $('skill-count').textContent = S.profile.skills.length + ' skills';
+}
+
+/* ---------- resume upload ---------- */
+function bindResume(){
+  var dz = $('dropzone'), fi = $('f-file');
+  $('browse-btn').onclick = function(){ fi.click(); };
+  fi.addEventListener('change', function(){ if(fi.files[0]) readResumeFile(fi.files[0]); });
+  ['dragover','dragenter'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.style.borderColor='#22d3a5'; }); });
+  ['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.style.borderColor=''; }); });
+  dz.addEventListener('drop', function(e){ var f = e.dataTransfer.files[0]; if(f) readResumeFile(f); });
+  $('analyze-btn').onclick = analyzeResume;
+}
+function readResumeFile(f){
+  toast('Reading ' + f.name + ' …');
+  var ext = (f.name.split('.').pop()||'').toLowerCase();
+  if(ext==='pdf' && window.pdfjsLib){
+    var r = new FileReader();
+    r.onload = function(){
+      var typed = new Uint8Array(r.result);
+      window.pdfjsLib.getDocument({data: typed}).promise.then(function(pdf){
+        var jobs = []; for(var i=1;i<=Math.min(pdf.numPages,6);i++){ jobs.push(pdf.getPage(i).then(function(pg){ return pg.getTextContent().then(function(tc){ return tc.items.map(function(it){return it.str;}).join(' '); }); })); }
+        Promise.all(jobs).then(function(pages){
+          $('f-resume').value = pages.join('\n'); collectProfile(); analyzeResume();
+        });
+      }).catch(function(){ toast('PDF parse failed — please paste resume text manually.'); });
+    };
+    r.readAsArrayBuffer(f);
+  } else if(ext==='pdf' && !window.pdfjsLib){
+    toast('PDF library still loading (needs internet once). Paste resume text below for now.');
+  } else {
+    var r2 = new FileReader();
+    r2.onload = function(){ $('f-resume').value = String(r2.result||'').slice(0,20000); collectProfile(); analyzeResume(); };
+    r2.readAsText(f);
+  }
+}
+function analyzeResume(){
+  var t = ($('f-resume').value||'').toLowerCase();
+  if(t.trim().length < 60){ toast('Paste more resume text first (at least a few lines).'); return; }
+  // name guess: first non-empty line
+  var lines = $('f-resume').value.split('\n').map(function(x){return x.trim();}).filter(Boolean);
+  if(lines[0] && !$('f-name').value && lines[0].length<60 && lines[0].split(' ').length<=5){ $('f-name').value = lines[0]; }
+  // email / phone guess
+  var em = t.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/); if(em && !$('f-email').value) $('f-email').value = em[0];
+  var ph = $('f-resume').value.match(/(\+91[\s-]?)?[6-9]\d{9}/); if(ph && !$('f-phone').value) $('f-phone').value = ph[0];
+  // exp guess
+  var ex = t.match(/(\d+)\s*\+?\s*years?/); if(ex && !$('f-exp').value) $('f-exp').value = ex[1]+' years';
+  // skills
+  var found = [];
+  SKILLS.forEach(function(sk){
+    var pat = new RegExp('(^|[^a-z0-9#+])'+sk.replace(/[#+]/g,'\\$&')+'([^a-z0-9]|$)');
+    if(pat.test(t) && S.profile.skills.indexOf(sk)===-1){ S.profile.skills.push(sk); found.push(sk); }
+  });
+  collectProfile(); renderSkillChips();
+  botSay('Resume analyzed ✅ — found <b>'+found.length+' new skills</b>'+(found.length?(': '+esc(found.slice(0,12).join(', '))):'')+'. '+( $('f-name').value?('Nice to meet you, <b>'+esc($('f-name').value.split(' ')[0])+'</b>! '):'')+'Hit <b>Find Jobs</b> and I\'ll score every job against your profile.');
+  toast('Resume analyzed: +' + found.length + ' skills detected.');
+  showTab('find');
+}
+
+/* ---------- job fetching ---------- */
+function fetchWithTimeout(url, ms){
+  ms = ms || 12000;
+  return Promise.race([
+    fetch(url).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }),
+    new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('timeout')); }, ms); })
+  ]);
+}
+function normRemotive(j){
+  var loc = (j.candidate_required_location||'') + ' ' + (j.job_type||'');
+  var isRemote = /remote/i.test(loc) || true;
+  var india = /india/i.test(j.candidate_required_location||'') || /india/i.test(j.description||'');
+  return { id:'rem-'+j.id, source:'Remotive', title:j.title||'Role', company:j.company_name||'Company',
+    location: j.candidate_required_location||'Remote', url:j.url, desc: stripHtml(j.description||''),
+    tags:(j.tags||[]).slice(0,6), remote:isRemote, india:india, salary:j.salary||'', posted:(j.publication_date||'').slice(0,10) };
+}
+function normArbeitnow(j){
+  var loc = [j.location,j.remote?'Remote':''].filter(Boolean).join(' · ')||'Remote';
+  return { id:'arb-'+String(j.slug||j.title).slice(0,60), source:'Arbeitnow', title:j.title||'Role',
+    company:j.company_name||'Company', location:loc, url:j.url, desc:stripHtml(j.description||''),
+    tags:(j.tags||[]).slice(0,6), remote:/remote/i.test(loc), india:/india/i.test(loc+' '+(j.description||'')), salary:'', posted:'' };
+}
+function stripHtml(h){ var d=document.createElement('div'); d.innerHTML=String(h||''); return (d.textContent||'').replace(/\s+/g,' ').trim().slice(0,1200); }
+
+function demoJobs(){
+  var kw = S.profile.keywords || 'software developer';
+  var li = function(q,loc){ return 'https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(q)+'&location='+encodeURIComponent(loc); };
+  var nk = function(q,loc){ return 'https://www.naukri.com/'+encodeURIComponent(q.toLowerCase().replace(/\s+/g,'-'))+'-jobs-in-'+encodeURIComponent(loc.toLowerCase().replace(/\s+/g,'-'))+'?q='+encodeURIComponent(q); };
+  return [
+    {id:'demo-c1',source:'Chennai · Portal',title:'Frontend Developer (React) — '+kw,company:'Multiple openings · Chennai',location:'Chennai, Tamil Nadu',url:li(kw,'Chennai, Tamil Nadu, India'),desc:'Live LinkedIn results for "'+kw+'" in Chennai. Openings across product companies and IT services. Use the Auto-Apply Kit to generate your cover letter, then apply on LinkedIn.',tags:['chennai','react','javascript','onsite/hybrid'],remote:false,india:true,salary:'',posted:'live'},
+    {id:'demo-c2',source:'Chennai · Portal',title:'Software Engineer — '+kw,company:'Multiple openings · Chennai',location:'Chennai, Tamil Nadu',url:nk(kw,'Chennai'),desc:'Live Naukri results for "'+kw+'" in Chennai. Naukri is the #1 source for Chennai IT hiring — keep your profile updated and apply within 24h of posting for best response.',tags:['chennai','naukri','software'],remote:false,india:true,salary:'',posted:'live'},
+    {id:'demo-r1',source:'Remote India · Portal',title:'Remote '+kw+' (India)',company:'Multiple openings · Remote',location:'Remote · India',url:li('remote '+kw,'India'),desc:'Live LinkedIn results for remote "'+kw+'" roles hiring in India. Remote roles get 200+ applicants fast — apply early with a tailored cover letter from the kit.',tags:['remote','india','linkedin'],remote:true,india:true,salary:'',posted:'live'},
+    {id:'demo-r2',source:'Chennai · Portal',title:kw+' — fresher friendly',company:'Cutshort · Wellfound · Foundit',location:'Chennai / Remote',url:'https://cutshort.io/jobs?search='+encodeURIComponent(kw),desc:'Startup-focused boards (Cutshort, Wellfound) that hire freshers and junior devs in Chennai + remote. Smaller applicant pools = higher reply rates.',tags:['startup','fresher','cutshort'],remote:true,india:true,salary:'',posted:'live'}
+  ];
+}
+
+function findJobs(){
+  collectProfile();
+  showTab('find');
+  var btn = $('find-btn'); btn.disabled = true; btn.textContent = '🔍 Agent searching…';
+  $('jobs').innerHTML = '<div class="note">🤖 Agent is searching Remotive + Arbeitnow + Chennai portals for <b>'+esc(S.profile.keywords||'software')+'</b>…</div>';
+  var q = encodeURIComponent(S.profile.keywords||'software developer');
+  var calls = [
+    fetchWithTimeout('https://remotive.com/api/remote-jobs?search='+q+'&limit=40').then(function(d){ return (d.jobs||[]).map(normRemotive); }).catch(function(e){ return {__err:'Remotive: '+e.message}; }),
+    fetchWithTimeout('https://www.arbeitnow.com/api/job-board-api').then(function(d){ return (d.data||[]).map(normArbeitnow); }).catch(function(e){ return {__err:'Arbeitnow: '+e.message}; })
+  ];
+  // optional Adzuna (India)
+  if(S.adzuna && S.adzuna.app_id && S.adzuna.app_key){
+    var aq = 'https://api.adzuna.com/v1/api/jobs/in/search/1?app_id='+encodeURIComponent(S.adzuna.app_id)+'&app_key='+encodeURIComponent(S.adzuna.app_key)+'&what='+q+'&where=Chennai&results_per_page=20&content-type=application/json';
+    calls.push(fetchWithTimeout(aq).then(function(d){
+      return (d.results||[]).map(function(j,i){ return {id:'adz-'+i+'-'+Date.now(),source:'Adzuna',title:j.title,company:(j.company&&j.company.display_name)||'Company',location:(j.location&&j.location.display_name)||'Chennai',url:j.redirect_url,desc:stripHtml(j.description),tags:(j.category?[(j.category.label||'').toLowerCase()]:[]),remote:/remote/i.test(j.title+' '+j.description),india:true,salary:'',posted:(j.created||'').slice(0,10)}; });
+    }).catch(function(e){ return {__err:'Adzuna: '+e.message}; }));
+  }
+  Promise.all(calls).then(function(parts){
+    var errs = [];
+    var all = [];
+    parts.forEach(function(p){ if(p && p.__err) errs.push(p.__err); else if(Array.isArray(p)) all = all.concat(p); });
+    // location preference filter
+    var pref = S.profile.prefLocation||'both';
+    var filtered = all.filter(function(j){
+      var text = ((j.title||'')+' '+(j.location||'')+' '+(j.desc||'')).toLowerCase();
+      var chennaiHit = /chennai|tamil nadu/.test(text) || /chennai/i.test(j.location||'');
+      var remoteHit = j.remote || /remote/.test(text);
+      var indiaHit = j.india || /india/.test(text);
+      if(pref==='chennai') return chennaiHit || (indiaHit && !/only|usa|uk|europe/.test(text));
+      if(pref==='remote') return remoteHit && (indiaHit || /worldwide|anywhere|global|asia/.test(text));
+      return chennaiHit || remoteHit || indiaHit;
+    });
+    // score + sort
+    filtered.forEach(function(j){ j.match = scoreJob(j); });
+    filtered.sort(function(a,b){ return b.match-a.match; });
+    var jobs = filtered.slice(0,30);
+    // always include chennai portal deep-links on top
+    var seeded = demoJobs();
+    seeded.forEach(function(j){ j.match = scoreJob(j); });
+    S.jobs = seeded.concat(jobs);
+    S.lastFetch = new Date().toISOString();
+    save(); renderJobs(); renderStats();
+    btn.disabled = false; btn.textContent = '🔍 Find Jobs';
+    var msg = 'Search done ✅ — <b>'+S.jobs.length+' jobs</b> ('+seeded.length+' Chennai/portal links + '+jobs.length+' live API results). Top match: <b>'+S.jobs[0].match+'%</b>. Open the <b>Auto-Apply Kit</b> on any card to apply in 1 click.'
+      + (errs.length?('<br><span style="opacity:.8">Note: '+esc(errs.join(' · '))+' — showing portal links + cached results. Check internet / AdBlock if APIs fail.</span>'):'');
+    botSay(msg);
+  });
+}
+
+/* ---------- match scoring ---------- */
+function scoreJob(j){
+  var resume = (S.profile.resumeText||'').toLowerCase();
+  var skills = S.profile.skills.map(function(s){return s.toLowerCase();});
+  var text = ((j.title||'')+' '+(j.desc||'')+' '+(j.tags||[]).join(' ')).toLowerCase();
+  var kw = (S.profile.keywords||'').toLowerCase().split(/\s+/).filter(function(w){return w.length>2;});
+  var score = 30, hits = [];
+  skills.forEach(function(sk){
+    if(sk && text.indexOf(sk)>-1){ score += 6; hits.push(sk); }
+  });
+  kw.forEach(function(w){ if(text.indexOf(w)>-1) score += 4; });
+  if(resume){
+    var rwords = resume.split(/[^a-z0-9#+]+/).filter(function(w){return w.length>3;});
+    var set = {}; rwords.forEach(function(w){ set[w]=1; });
+    var overlap = 0;
+    text.split(/[^a-z0-9#+]+/).forEach(function(w){ if(w.length>3 && set[w]) overlap++; });
+    score += Math.min(20, Math.round(overlap/3));
+  }
+  var pref = S.profile.prefLocation||'both';
+  if(pref==='chennai' && /chennai/.test(text)) score += 8;
+  if(pref==='remote' && /remote/.test(text)) score += 8;
+  if(/india/.test(text)) score += 4;
+  if(j.posted==='live') score += 2;
+  j.hitSkills = hits.slice(0,8);
+  return Math.max(5, Math.min(98, score));
+}
+
+/* ---------- render jobs ---------- */
+function renderJobs(){
+  var el = $('jobs'); el.innerHTML = '';
+  if(!S.jobs.length){
+    el.innerHTML = '<div class="note">No jobs yet. Set your keywords on the left and hit <b>🔍 Find Jobs</b>. The agent searches live remote APIs + Chennai portals.</div>';
+    return;
+  }
+  S.jobs.forEach(function(j){
+    var d = document.createElement('div'); d.className='job';
+    var locCls = /remote/i.test(j.location||'') ? 'remote' : (/chennai/i.test(j.location||'') ? 'chennai' : '');
+    d.innerHTML =
+      '<div class="matchrow"><span>📡 '+esc(j.source)+'</span><span><b>'+j.match+'%</b> match</span></div>'
+      + '<div class="matchbar"><i style="width:'+j.match+'%"></i></div>'
+      + '<h4>'+esc(j.title)+'</h4>'
+      + '<div class="co">🏢 '+esc(j.company)+' &nbsp;·&nbsp; 📍 '+esc(j.location)+(j.posted?' &nbsp;·&nbsp; 🗓 '+esc(j.posted):'')+'</div>'
+      + '<div class="tags">'+(j.tags||[]).map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join('')+'<span class="tag '+locCls+'">'+esc(j.location||'')+'</span></div>'
+      + ((j.hitSkills&&j.hitSkills.length)?'<div class="ok">✓ matches your skills: '+esc(j.hitSkills.join(', '))+'</div>':'')
+      + '<p class="desc">'+esc(j.desc||'No description.')+'</p>'
+      + '<div class="acts"></div>';
+    var acts = d.querySelector('.acts');
+    var bKit = mkBtn('⚡ Auto-Apply Kit','btn primary small',function(){ openKit(j); });
+    var bSave = mkBtn('💾 Save','btn ghost small',function(){ moveTo(j,'saved'); });
+    var bApply = mkBtn('↗ Apply ↗','btn small',function(){ window.open(j.url,'_blank'); moveTo(j,'applied',true); });
+    acts.appendChild(bKit); acts.appendChild(bApply); acts.appendChild(bSave);
+    el.appendChild(d);
+  });
+  var info = $('result-info');
+  if(info) info.textContent = S.jobs.length+' jobs · updated '+(S.lastFetch?new Date(S.lastFetch).toLocaleString():'—');
+}
+function mkBtn(t,cls,fn){ var b=document.createElement('button'); b.className=cls; b.textContent=t; b.onclick=fn; return b; }
+function renderStats(){
+  var applied = S.tracker.applied.length, saved=S.tracker.saved.length, iv=S.tracker.interview.length, of=S.tracker.offer.length;
+  var avg = S.jobs.length? Math.round(S.jobs.reduce(function(a,j){return a+(j.match||0);},0)/S.jobs.length):0;
+  $('st-found').textContent = S.jobs.length;
+  $('st-avg').textContent = avg+'%';
+  $('st-applied').textContent = applied;
+  $('st-skills').textContent = S.profile.skills.length;
+}
+
+/* ---------- cover letter + kit ---------- */
+function coverLetter(j){
+  var p = S.profile;
+  var name = p.name||'[Your Name]', skills = p.skills.slice(0,6).join(', ')||'relevant skills';
+  var exp = p.experience||'fresher / early-career';
+  return 'Dear Hiring Manager at '+j.company+',\n\n'
+    + 'I am applying for the '+j.title+' role ('+j.location+'). I am a '+exp+' software professional based in '+(p.location||'Chennai')+', skilled in '+skills+'.\n\n'
+    + 'Why I fit: '+(j.hitSkills&&j.hitSkills.length?('my experience with '+j.hitSkills.join(', ')+' directly matches your requirements. '):'my background closely matches your requirements. ')
+    + 'I learn fast, ship reliably, and would love to contribute from day one'+(/remote/i.test(j.location||'')?' (fully equipped for remote work)':'')+'.\n\n'
+    + (p.notice?('Availability: '+p.notice+'. '):'I can join at short notice. ')
+    + (p.salary?('Expected CTC: '+p.salary+'. '):'')
+    + '\nResume attached. I would welcome a short call to discuss the role.\n\nThank you,\n'+name
+    + (p.phone?('\n📞 '+p.phone):'') + (p.email?('\n✉️ '+p.email):'');
+}
+function resumeBullets(j){
+  var hits = (j.hitSkills&&j.hitSkills.length?j.hitSkills:S.profile.skills.slice(0,4));
+  return 'Add these 3 tweaks to your resume for "'+j.title+'" @ '+j.company+':\n'
+    + '1. Headline: "'+(S.profile.keywords||'Software Developer')+' | '+hits.slice(0,3).join(' · ')+' | '+(S.profile.location||'Chennai')+'"\n'
+    + '2. Add bullet: "Built/shipped projects using '+hits.slice(0,3).join(', ')+' (see portfolio/GitHub)."\n'
+    + '3. Skills section: move '+hits.slice(0,4).join(', ')+' to the top so ATS + recruiters see them first.';
+}
+function emailDraft(j){
+  var p=S.profile;
+  return 'To: (paste recruiter email from the job post)\nSubject: Application — '+j.title+' | '+(p.name||'Candidate')+' | '+(p.skills.slice(0,3).join(', ')||'Software')+'\n\nHi,\n\nI am '+(p.name||'[Your Name]')+', a '+(p.experience||'software')+' professional from '+(p.location||'Chennai')+'. I would like to apply for '+j.title+' at '+j.company+' ('+j.location+').\n\nSnapshot: '+p.skills.slice(0,6).join(', ')+' · '+(p.notice||'can join quickly')+(p.phone?' · '+p.phone:'')+'.\n\nResume attached. Happy to do a task/round at your convenience.\n\nThanks,\n'+(p.name||'[Your Name]');
+}
+function openKit(j){
+  var dlg = $('kit-modal');
+  $('kit-title').textContent = '⚡ Auto-Apply Kit — ' + j.title + ' @ ' + j.company + ' ('+j.match+'% match)';
+  $('kit-cl').textContent = coverLetter(j);
+  $('kit-rb').textContent = resumeBullets(j);
+  $('kit-em').textContent = emailDraft(j);
+  $('kit-copy-cl').onclick = function(){ copyText(coverLetter(j),'Cover letter copied! Paste it into the job application.'); };
+  $('kit-copy-em').onclick = function(){ copyText(emailDraft(j),'Email draft copied!'); };
+  $('kit-open').onclick = function(){ window.open(j.url,'_blank'); moveTo(j,'applied',true); toast('Opening Apply page + moved to Applied ✅'); dlg.close(); };
+  if(typeof dlg.showModal==='function') dlg.showModal(); else toast('Modal not supported — kit printed to chat.'), botSay('<pre style="white-space:pre-wrap">'+esc(coverLetter(j))+'</pre>');
+}
+function copyText(t,msg){
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast(msg||'Copied!');}).catch(function(){fallbackCopy(t);toast(msg||'Copied!');}); }
+  else fallbackCopy(t), toast(msg||'Copied!');
+}
+function fallbackCopy(t){ var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
+
+/* ---------- tracker ---------- */
+function moveTo(j,stage,silent){
+  ['saved','applied','interview','offer'].forEach(function(k){
+    S.tracker[k] = (S.tracker[k]||[]).filter(function(x){return x.id!==j.id;});
+  });
+  S.tracker[stage] = S.tracker[stage]||[];
+  S.tracker[stage].unshift({id:j.id,title:j.title,company:j.company,url:j.url,location:j.location,match:j.match,at:new Date().toISOString()});
+  save(); renderTracker(); renderStats();
+  if(!silent) toast('Moved to '+stage+' ✅');
+}
+function renderTracker(){
+  var stages=[['saved','💾 Saved'],['applied','📨 Applied'],['interview','🎤 Interview'],['offer','🏆 Offer']];
+  var el=$('tracker-cols'); el.innerHTML='';
+  stages.forEach(function(st){
+    var col=document.createElement('div'); col.className='tcol';
+    col.innerHTML='<h5>'+st[1]+' ('+(S.tracker[st[0]]||[]).length+')</h5>';
+    (S.tracker[st[0]]||[]).forEach(function(x){
+      var d=document.createElement('div'); d.className='titem';
+      d.innerHTML='<b>'+esc(x.title)+'</b><span>'+esc(x.company)+' · '+esc(x.location||'')+' · '+esc(x.match||'')+'%</span>';
+      var mv=document.createElement('div'); mv.className='mv';
+      stages.forEach(function(s2){ if(s2[0]!==st[0]){ var b=document.createElement('button'); b.textContent='→ '+s2[0]; b.onclick=function(){ moveTo(x,s2[0]); }; mv.appendChild(b); } });
+      var open=document.createElement('button'); open.textContent='↗ open'; open.onclick=function(){window.open(x.url,'_blank');}; mv.appendChild(open);
+      var del=document.createElement('button'); del.textContent='✕'; del.onclick=function(){ S.tracker[st[0]]=S.tracker[st[0]].filter(function(y){return y.id!==x.id;}); save(); renderTracker(); renderStats(); }; mv.appendChild(del);
+      d.appendChild(mv); col.appendChild(d);
+    });
+    el.appendChild(col);
+  });
+}
+
+/* ---------- portals ---------- */
+function renderPortals(){
+  var q = S.profile.keywords||'software developer';
+  var links = [
+    ['💼','Naukri · Chennai','https://www.naukri.com/'+encodeURIComponent(q.toLowerCase().replace(/\s+/g,'-'))+'-jobs-in-chennai?q='+encodeURIComponent(q)],
+    ['🔗','LinkedIn · Chennai','https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(q)+'&location=Chennai%2C%20Tamil%20Nadu%2C%20India'],
+    ['🔎','Indeed · Chennai','https://in.indeed.com/jobs?q='+encodeURIComponent(q)+'&l=Chennai%2C+Tamil+Nadu'],
+    ['🚀','Cutshort · Chennai/Remote','https://cutshort.io/jobs?search='+encodeURIComponent(q)],
+    ['🌱','Wellfound · Remote India','https://wellfound.com/jobs?query='+encodeURIComponent(q)],
+    ['🌍','LinkedIn · Remote India','https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent('remote '+q)+'&location=India']
+  ];
+  var el=$('portals'); el.innerHTML='';
+  links.forEach(function(l){
+    var a=document.createElement('a'); a.className='portal'; a.href=l[2]; a.target='_blank'; a.rel='noopener';
+    a.innerHTML='<span>'+l[0]+'</span><span>'+esc(l[1])+' ↗</span>';
+    el.appendChild(a);
+  });
+}
+
+/* ---------- chat ---------- */
+function botSay(html){ var log=$('chatLog'); var d=document.createElement('div'); d.className='msg bot'; d.innerHTML=html; log.appendChild(d); log.scrollTop=log.scrollHeight; }
+function meSay(t){ var log=$('chatLog'); var d=document.createElement('div'); d.className='msg me'; d.textContent=t; log.appendChild(d); log.scrollTop=log.scrollHeight; }
+function chatReply(text){
+  var t=text.toLowerCase();
+  if(/hello|hi\b|hey|namaste|vanakkam/.test(t)) return 'Vanakkam! 🙏 I am your job agent. Tell me: <b>1)</b> paste/upload resume, <b>2)</b> confirm keywords (e.g. "react developer"), <b>3)</b> hit Find Jobs. Want me to run a search now?';
+  if(/find|search|job/.test(t)){ setTimeout(findJobs,400); return 'On it — searching live jobs for <b>'+esc(S.profile.keywords||'software')+'</b> in Chennai + Remote India… 🔍'; }
+  if(/resume|upload|cv/.test(t)) return 'Upload your resume (PDF/TXT) in the left panel, or paste the text. Then click <b>Analyze Resume</b> — I\'ll extract skills + guess contact details automatically. Nothing leaves your browser.';
+  if(/cover|letter|apply/.test(t)){
+    if(!S.jobs.length) return 'No jobs loaded yet — hit <b>Find Jobs</b> first, then open the ⚡ Auto-Apply Kit on any card.';
+    var j=S.jobs[0]; setTimeout(function(){openKit(j);},400); return 'Opening the Auto-Apply Kit for your top match (<b>'+esc(j.title)+' @ '+esc(j.company)+'</b>)… ⚡';
+  }
+  if(/remote/.test(t)) return 'For Remote India roles: Remotive + Arbeitnow APIs are live in this agent, plus LinkedIn Remote-India deep links. Tip: remote posts get 200+ applicants — apply within 24h with a tailored cover letter.';
+  if(/chennai/.test(t)) return 'For Chennai: Naukri + LinkedIn Chennai links are in the Portals section with your keywords pre-filled. Chennai IT corridors to target: OMR, Guindy, DLF Cybercity, Navalur. Want me to search now?';
+  if(/fresher|experience|salary/.test(t)) return 'Chennai fresher reality check (2026): IT services ₹3–4.5 LPA, product/startups ₹5–10 LPA for strong portfolios, remote ₹6–15 LPA but competitive. A GitHub + 2 deployed projects doubles replies. Want resume tweak tips for your top job?';
+  if(/interview|prepare/.test(t)) return 'Tell me which job card you want to prep for — meanwhile: revise the job\'s hit-skills, prepare 2 project stories (problem→action→result), and 3 questions for them. Your tracker\'s Interview column is ready.';
+  if(/thank/.test(t)) return 'You\'re welcome! 🙌 Pro tip: apply to 5+ matched jobs daily + refresh your Naukri profile weekly. Consistency beats everything.';
+  if(/who|pradeep|rcw/.test(t)) return 'This agent lives on RCW IT Training — free hands-on labs by Pradeep Raju. The agent itself is 100% free and browser-based too. 🙂';
+  return 'Got it. I can: <b>find jobs</b>, <b>analyze your resume</b>, <b>open the apply kit</b>, or explain <b>Chennai vs Remote</b> strategy. What shall we do? (Try the quick buttons below 👇)';
+}
+function bindChat(){
+  $('chat-send').onclick = sendChat;
+  $('chat-input').addEventListener('keydown',function(e){ if(e.key==='Enter') sendChat(); });
+  document.querySelectorAll('#pane-chat .quick button').forEach(function(b){
+    b.onclick=function(){ $('chat-input').value=b.getAttribute('data-q'); sendChat(); };
+  });
+}
+function sendChat(){
+  var v=$('chat-input').value.trim(); if(!v) return;
+  meSay(v); $('chat-input').value='';
+  setTimeout(function(){ botSay(chatReply(v)); },350);
+}
+
+/* ---------- misc ---------- */
+function toast(msg){
+  var t=$('toast'); t.textContent=msg; t.classList.remove('hidden');
+  clearTimeout(t._h); t._h=setTimeout(function(){t.classList.add('hidden');},3200);
+}
+function autopilot(){
+  findJobs();
+  setTimeout(function(){
+    if(!S.jobs.length) return;
+    var top=S.jobs.slice(0,3);
+    botSay('🤖 <b>Autopilot run:</b> I scored '+S.jobs.length+' jobs. Top 3 matches:<br>'+top.map(function(j,i){return (i+1)+'. <b>'+esc(j.title)+'</b> @ '+esc(j.company)+' — '+j.match+'%';}).join('<br>')+'<br>Opening the kit for #1 — copy the cover letter, then Apply. Repeating for #2 and #3 gives you 3 tailored applications in ~5 minutes. ⚡');
+    openKit(top[0]);
+    top.forEach(function(j){ moveTo(j,'saved',true); });
+    renderTracker(); renderStats();
+  }, 4500);
+}
+function exportData(){
+  collectProfile();
+  var blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rcw-job-agent-backup.json'; a.click();
+  toast('Backup downloaded ✅');
+}
+function resetAll(){ if(confirm('Reset agent (clear profile + tracker)?')){ localStorage.removeItem(LS_KEY); location.reload(); } }
+
+/* ---------- init ---------- */
+function init(){
+  window.showTab = showTab;
+  bindProfile(); bindResume(); bindChat();
+  $('find-btn').onclick = findJobs;
+  $('auto-btn').onclick = autopilot;
+  $('export-btn').onclick = exportData;
+  $('reset-btn').onclick = resetAll;
+  renderPortals(); renderJobs(); renderTracker(); renderStats();
+  $('f-keywords').addEventListener('input', function(){ S.profile.keywords=$('f-keywords').value; save(); renderPortals(); });
+  botSay('Vanakkam! 🙏 I\'m the <b>RCW Job Agent</b> — I find <b>Software jobs in Chennai + Remote India</b> and apply with you. Steps: <b>1)</b> upload/paste resume → Analyze, <b>2)</b> set keywords, <b>3)</b> hit <b>🔍 Find Jobs</b>. Or press <b>🤖 Autopilot</b> and I\'ll do it in one go.');
+  // pdf.js lazy loader (needs internet once; optional)
+  var sc=document.createElement('script');
+  sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  sc.onload=function(){ if(window.pdfjsLib){ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } };
+  document.head.appendChild(sc);
+}
+document.addEventListener('DOMContentLoaded', init);
+})();
+
+</script>
+</body>
+</html>
