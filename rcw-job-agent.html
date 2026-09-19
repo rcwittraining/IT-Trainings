@@ -95,6 +95,8 @@ footer{margin-top:26px;text-align:center;color:var(--mut);font-size:12px}
 .portal span{font-size:18px}
 dialog{background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:14px;max-width:640px;width:92vw;padding:18px}
 dialog::backdrop{background:rgba(0,0,0,.6)}
+#q-body .qjob{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;font-size:13px}
+#email-log .titem{margin-top:6px}
 
 </style>
 </head>
@@ -149,6 +151,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
         <div><label class="lbl">Email</label><input type="text" id="f-email" placeholder="you@mail.com"></div>
         <div><label class="lbl">Phone</label><input type="text" id="f-phone" placeholder="+91 …"></div>
       </div>
+      <label style="display:flex;gap:8px;align-items:center;font-size:12px;margin-top:8px"><input type="checkbox" id="f-notify" checked style="width:auto"> 📧 Email me confirmation for every apply</label>
       <div class="row">
         <div><label class="lbl">Base location</label><input type="text" id="f-location" placeholder="Chennai"></div>
         <div><label class="lbl">Experience</label><input type="text" id="f-exp" placeholder="e.g. 2 years / Fresher"></div>
@@ -159,7 +162,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
       </div>
 
       <h3>Target jobs</h3>
-      <label class="lbl">Keywords (role / stack)</label>
+      <label class="lbl">Keywords (auto-set from resume — editable)</label>
       <input type="text" id="f-keywords" placeholder="software developer">
       <div class="row">
         <div><label class="lbl">Location pref</label>
@@ -185,10 +188,15 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
       </div>
       <div class="chips" id="skill-chips"></div>
 
+      <h3>🔑 Resume keywords (<span id="kw-count">0 active</span>)</h3>
+      <div class="chips" id="kw-chips"></div>
+      <div style="font-size:11px;color:var(--mut);margin-top:4px">Auto-detected from resume · click to toggle · used to search + rank jobs</div>
+
       <div class="row" style="margin-top:14px">
         <button class="btn primary" id="find-btn">🔍 Find Jobs</button>
         <button class="btn warn" id="auto-btn">🤖 Autopilot</button>
       </div>
+      <button class="btn primary" id="qstart-btn" style="width:100%;margin-top:8px">🚀 Guided Apply: Top 5</button>
       <div class="row" style="margin-top:8px">
         <button class="btn ghost small" id="export-btn">⬇ Backup</button>
         <button class="btn ghost small" id="reset-btn">↺ Reset</button>
@@ -212,7 +220,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
       <!-- TRACKER -->
       <section id="pane-tracker" class="hidden">
         <div class="card">
-          <h2>📋 Application tracker <span style="font-weight:400;font-size:12px;color:var(--mut)">(auto-saved in this browser)</span></h2>
+          <h2>📋 Application tracker <span style="font-weight:400;font-size:12px;color:var(--mut)">(auto-saved in this browser)</span> <span id="tracker-mail" style="font-weight:400;font-size:12px;color:#a7f3d0"></span></h2>
           <div class="tracker-cols" id="tracker-cols"></div>
         </div>
       </section>
@@ -228,7 +236,7 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
               <button class="btn ghost small" data-q="How do I upload my resume?">📄 Resume help</button>
               <button class="btn ghost small" data-q="Open the apply kit for my top job">⚡ Apply kit</button>
               <button class="btn ghost small" data-q="Chennai job tips">📍 Chennai tips</button>
-              <button class="btn ghost small" data-q="Remote job tips">🌍 Remote tips</button>
+              <button class="btn ghost small" data-q="Start guided apply">🚀 Guided apply</button>
             </div>
             <div class="row">
               <input type="text" id="chat-input" placeholder="Ask the agent… e.g. 'find remote react jobs'">
@@ -246,10 +254,14 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
           <label class="lbl">Adzuna App ID</label><input type="text" id="adz-id" placeholder="optional">
           <label class="lbl">Adzuna App Key</label><input type="text" id="adz-key" placeholder="optional">
           <button class="btn primary small" id="save-keys" style="margin-top:10px">💾 Save keys</button>
+          <h3>📧 Email confirmations</h3>
+          <div class="note">Every 1-Click Apply emails a confirmation (job + cover letter used) to your Profile email. <b>First time only:</b> you'll get a FormSubmit <b>activation mail</b> — click Activate once, then confirmations flow automatically. Check spam if missing.</div>
+          <button class="btn ghost small" id="test-email" style="margin:8px 0">✉️ Send test email</button>
+          <div id="email-log"></div>
           <h3>Publish on your website</h3>
           <div class="note">1) Upload this <b>job-agent/</b> folder to your site repo → it goes live at <b>/job-agent/</b>.<br>2) Add the floating widget to any page:<br><code>&lt;script src="/job-agent/embed.js" data-agent-url="https://www.rcwittraining.in/job-agent/"&gt;&lt;/script&gt;</code><br>Full steps in <b>README-DEPLOY.md</b>.</div>
           <h3>About auto-apply (honest)</h3>
-          <div class="note">LinkedIn / Naukri / Indeed need <b>your login + sometimes captcha</b>, so no tool can safely auto-submit there. This agent automates everything up to the submit click: finding, scoring, cover letters, email drafts, tracking — you review + click Apply. Maximum automation, zero account risk.</div>
+          <div class="note">LinkedIn / Naukri / Indeed need <b>your login + sometimes captcha</b>, so no tool can safely auto-submit there. <b>What 1-Click Apply does:</b> copies your tailored cover letter → opens the apply page → updates tracker → <b>emails you a confirmation</b>. You review + click Submit there (30 seconds). Maximum safe automation.</div>
         </div>
       </section>
     </main>
@@ -257,6 +269,16 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 
   <footer>RCW Job Agent · free · resume never leaves your browser · made for rcwittraining.in 💼</footer>
 </div>
+
+<dialog id="queue-modal">
+  <h3 style="margin-top:0">🚀 Guided Apply Queue <span id="q-count"></span></h3>
+  <div id="q-body"></div>
+  <div class="row" style="margin-top:12px">
+    <button class="btn primary" id="q-apply">⚡ Apply to this job</button>
+    <button class="btn ghost" id="q-skip">Skip →</button>
+    <button class="btn ghost" onclick="document.getElementById('queue-modal').close()">Close</button>
+  </div>
+</dialog>
 
 <dialog id="kit-modal">
   <h3 id="kit-title" style="margin-top:0">⚡ Auto-Apply Kit</h3>
@@ -267,9 +289,9 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
   <div class="kit" id="kit-rb"></div>
   <label class="lbl">Email draft</label>
   <div class="kit" id="kit-em"></div>
-  <div class="row" style="margin:8px 0"><button class="btn ghost small" id="kit-copy-em">📋 Copy email</button></div>
+  <div class="row" style="margin:8px 0"><button class="btn ghost small" id="kit-copy-em">📋 Copy email</button><button class="btn ghost small" id="kit-packet">⬇ Download packet</button></div>
   <div class="row" style="margin-top:12px">
-    <button class="btn primary" id="kit-open">↗ Open Apply page + mark Applied</button>
+    <button class="btn primary" id="kit-open">⚡ Copy + Open Apply + Email me</button>
     <button class="btn ghost" onclick="document.getElementById('kit-modal').close()">Close</button>
   </div>
 </dialog>
@@ -288,9 +310,9 @@ var defaultState = {
   profile: { name:'', email:'', phone:'', location:'Chennai', experience:'', notice:'', salary:'',
              resumeText:'', skills:['javascript','react','python'], keywords:'software developer',
              prefLocation:'both', // chennai | remote | both
-             jobType:'full-time', remoteOnly:false },
+             jobType:'full-time', remoteOnly:false, notify:true },
   jobs: [], tracker: { saved:[], applied:[], interview:[], offer:[] },
-  lastFetch: null, autopilot: false, adzuna: { app_id:'', app_key:'' }
+  lastFetch: null, autopilot: false, adzuna: { app_id:'', app_key:'' }, emailLog: []
 };
 var S = load() || JSON.parse(JSON.stringify(defaultState));
 function load(){ try{ var raw = localStorage.getItem(LS_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; } }
@@ -313,6 +335,55 @@ var SKILLS = ('javascript typescript python java c# c++ c php ruby go golang rus
 +'cybersecurity soc siem splunk wireshark ceh '
 +'intune mdm entra azure-ad active-directory office365 m365 powershell bash '
 +'devops sre support l1 l2 helpdesk').split(' ');
+
+/* ---------- resume keyword scan ---------- */
+var STOP = {};
+('the and for with from that this have has had are was were been will would can could should shall may might must now new also plus very much many more most other some such into over under across within without about above below between both each few per via key inc ltd pvt team teams work worked working project projects experience experienced years year month months day days daily various strong good great best proven detail details plus including includes include included using used use uses useful ability able responsibilites responsibilities responsible role roles exposure hands knowledge proficient proficiency familiar familiarity understanding understand understood basics basic advanced expert level levels item items part parts based total overall summary objective career profile contact address phone email linkedin github portfolio references reference declaration sincerely regards thank thanks developed development designing design build built led lead deliver delivered delivery support supported drive driven passion passionate quick fast learn learner learning self motivated hard smart dedicated dynamic enthusiastic flexible adapt adaptable adopt always never everylation').split(' ').forEach(function(w){ STOP[w]=1; });
+function extractKeywords(text){
+  var t = String(text||'').toLowerCase();
+  var freq = {};
+  t.split(/[^a-z0-9#+]+/).forEach(function(w){
+    if(w.length>1 && !STOP[w] && !/^\d+$/.test(w)) freq[w]=(freq[w]||0)+1;
+  });
+  var TITLEW = ['developer','engineer','analyst','designer','manager','tester','admin','administrator','consultant','specialist','architect','devops','support','scientist','intern'];
+  var scored = Object.keys(freq).map(function(w){
+    var s = freq[w];
+    if(SKILLS.indexOf(w)>-1) s += 5;
+    if(TITLEW.indexOf(w)>-1) s += 4;
+    if(w.length>7) s += 0.5;
+    return {term:w, score:s};
+  });
+  scored.sort(function(a,b){ return b.score-a.score; });
+  return scored.slice(0,18);
+}
+function guessRole(keywords, text){
+  var t = String(text||'').toLowerCase();
+  var roles = ['frontend developer','backend developer','full stack developer','full-stack developer','software developer','software engineer','web developer','react developer','python developer','java developer','node developer','data analyst','data scientist','qa engineer','test engineer','devops engineer','cloud engineer','support engineer','system administrator','network engineer','ui designer','ux designer','mobile developer','android developer','ios developer'];
+  for(var i=0;i<roles.length;i++){ if(t.indexOf(roles[i])>-1) return roles[i]; }
+  var kws = keywords.map(function(k){ return k.term; });
+  var title = null, skill = null, i2;
+  var T2 = ['developer','engineer','analyst','designer','tester','administrator','consultant','architect','scientist','support'];
+  for(i2=0;i2<T2.length;i2++){ if(kws.indexOf(T2[i2])>-1){ title=T2[i2]; break; } }
+  for(i2=0;i2<kws.length;i2++){ if(SKILLS.indexOf(kws[i2])>-1 && kws[i2]!==title){ skill=kws[i2]; break; } }
+  if(skill && title) return skill+' '+title;
+  if(title) return 'software '+title;
+  if(skill) return skill+' developer';
+  return kws.slice(0,2).join(' ') || 'software developer';
+}
+function renderKwChips(){
+  var el = $('kw-chips'); if(!el) return; el.innerHTML='';
+  var list = S.resumeKeywords||[];
+  if(!list.length){ el.innerHTML='<span style="font-size:12px;color:var(--mut)">Analyze your resume to auto-detect keywords.</span>'; var kc=$('kw-count'); if(kc) kc.textContent='0 active'; return; }
+  list.forEach(function(w){
+    var on = S.kwSelected && S.kwSelected[w]!==false;
+    var c = document.createElement('span'); c.className='chip'; c.style.opacity = on?'1':'0.45'; c.style.cursor='pointer'; c.textContent = (on?'\u2713 ':'')+w;
+    c.title = 'click to toggle for search';
+    c.onclick = (function(word, state){ return function(){ S.kwSelected=S.kwSelected||{}; S.kwSelected[word]=!state; save(); renderKwChips(); }; })(w, on);
+    el.appendChild(c);
+  });
+  var n = list.filter(function(w){ return S.kwSelected[w]!==false; }).length;
+  var kc2 = $('kw-count'); if(kc2) kc2.textContent = n+'/'+list.length+' active';
+}
 
 /* ---------- tabs ---------- */
 function showTab(name){
@@ -348,6 +419,9 @@ function bindProfile(){
     S.adzuna = { app_id: $('adz-id').value.trim(), app_key: $('adz-key').value.trim() };
     save(); toast('Adzuna keys saved. They unlock extra India listings on next search.');
   };
+  $('f-notify').checked = (S.profile.notify!==false);
+  $('f-notify').addEventListener('change', collectProfile);
+  $('test-email').onclick = function(){ sendAppliedEmail({title:'Test Role',company:'Test Company',location:S.profile.location||'Chennai',url:location.href,match:99,hitSkills:S.profile.skills.slice(0,3)}); };
 }
 function collectProfile(){
   S.profile.name = $('f-name').value.trim(); S.profile.email = $('f-email').value.trim();
@@ -356,6 +430,7 @@ function collectProfile(){
   S.profile.salary = $('f-salary').value.trim(); S.profile.keywords = $('f-keywords').value.trim();
   S.profile.resumeText = $('f-resume').value;
   S.profile.prefLocation = $('f-pref').value; S.profile.jobType = $('f-type').value;
+  var _nz = $('f-notify'); if(_nz) S.profile.notify = _nz.checked;
   save();
 }
 function addSkill(v){
@@ -425,9 +500,16 @@ function analyzeResume(){
     var pat = new RegExp('(^|[^a-z0-9#+])'+sk.replace(/[#+]/g,'\\$&')+'([^a-z0-9]|$)');
     if(pat.test(t) && S.profile.skills.indexOf(sk)===-1){ S.profile.skills.push(sk); found.push(sk); }
   });
-  collectProfile(); renderSkillChips();
+  var kws = extractKeywords($('f-resume').value);
+  S.resumeKeywords = kws.map(function(k){ return k.term; });
+  S.kwSelected = S.kwSelected || {};
+  S.resumeKeywords.forEach(function(w){ if(!(w in S.kwSelected)) S.kwSelected[w] = true; });
+  var roleGuess = guessRole(kws, $('f-resume').value);
+  $('f-keywords').value = roleGuess;
+  collectProfile(); renderSkillChips(); renderKwChips(); renderPortals();
   botSay('Resume analyzed ✅ — found <b>'+found.length+' new skills</b>'+(found.length?(': '+esc(found.slice(0,12).join(', '))):'')+'. '+( $('f-name').value?('Nice to meet you, <b>'+esc($('f-name').value.split(' ')[0])+'</b>! '):'')+'Hit <b>Find Jobs</b> and I\'ll score every job against your profile.');
-  toast('Resume analyzed: +' + found.length + ' skills detected.');
+  toast('Resume analyzed: +' + found.length + ' skills, role = ' + roleGuess);
+  botSay('\ud83d\udd11 <b>Resume scan:</b> detected role <b>'+esc(roleGuess)+'</b> \u2014 search keywords set automatically. Top keywords: '+esc(S.resumeKeywords.slice(0,8).join(', '))+'. Toggle them in the \ud83d\udd11 section to refine, then hit <b>Find Jobs</b>.');
   showTab('find');
 }
 
@@ -473,10 +555,14 @@ function findJobs(){
   var btn = $('find-btn'); btn.disabled = true; btn.textContent = '🔍 Agent searching…';
   $('jobs').innerHTML = '<div class="note">🤖 Agent is searching Remotive + Arbeitnow + Chennai portals for <b>'+esc(S.profile.keywords||'software')+'</b>…</div>';
   var q = encodeURIComponent(S.profile.keywords||'software developer');
+  var selKw = (S.resumeKeywords||[]).filter(function(w){ return S.kwSelected && S.kwSelected[w]!==false; });
+  var kwl = (S.profile.keywords||'').toLowerCase();
+  var extraQ = selKw.filter(function(w){ return w.length>2 && kwl.indexOf(w)===-1; }).slice(0,2).join(' ');
   var calls = [
     fetchWithTimeout('https://remotive.com/api/remote-jobs?search='+q+'&limit=40').then(function(d){ return (d.jobs||[]).map(normRemotive); }).catch(function(e){ return {__err:'Remotive: '+e.message}; }),
     fetchWithTimeout('https://www.arbeitnow.com/api/job-board-api').then(function(d){ return (d.data||[]).map(normArbeitnow); }).catch(function(e){ return {__err:'Arbeitnow: '+e.message}; })
   ];
+  if(extraQ){ calls.push(fetchWithTimeout('https://remotive.com/api/remote-jobs?search='+encodeURIComponent(extraQ)+'&limit=25').then(function(d){ return (d.jobs||[]).map(normRemotive); }).catch(function(e){ return {__err:'Resume-keyword query: '+e.message}; })); }
   // optional Adzuna (India)
   if(S.adzuna && S.adzuna.app_id && S.adzuna.app_key){
     var aq = 'https://api.adzuna.com/v1/api/jobs/in/search/1?app_id='+encodeURIComponent(S.adzuna.app_id)+'&app_key='+encodeURIComponent(S.adzuna.app_key)+'&what='+q+'&where=Chennai&results_per_page=20&content-type=application/json';
@@ -488,6 +574,9 @@ function findJobs(){
     var errs = [];
     var all = [];
     parts.forEach(function(p){ if(p && p.__err) errs.push(p.__err); else if(Array.isArray(p)) all = all.concat(p); });
+    var seen = {}, dedup = [];
+    all.forEach(function(j){ if(!seen[j.id]){ seen[j.id]=1; dedup.push(j); } });
+    all = dedup;
     // location preference filter
     var pref = S.profile.prefLocation||'both';
     var filtered = all.filter(function(j){
@@ -510,7 +599,7 @@ function findJobs(){
     S.lastFetch = new Date().toISOString();
     save(); renderJobs(); renderStats();
     btn.disabled = false; btn.textContent = '🔍 Find Jobs';
-    var msg = 'Search done ✅ — <b>'+S.jobs.length+' jobs</b> ('+seeded.length+' Chennai/portal links + '+jobs.length+' live API results). Top match: <b>'+S.jobs[0].match+'%</b>. Open the <b>Auto-Apply Kit</b> on any card to apply in 1 click.'
+    var msg = 'Search done ✅ — <b>'+S.jobs.length+' jobs</b> ('+seeded.length+' Chennai/portal links + '+jobs.length+' live API results). Top match: <b>'+S.jobs[0].match+'%</b>. Ranked by your resume keywords \u2014 use <b>\u26a1 1-Click Apply</b> on any card.'
       + (errs.length?('<br><span style="opacity:.8">Note: '+esc(errs.join(' · '))+' — showing portal links + cached results. Check internet / AdBlock if APIs fail.</span>'):'');
     botSay(msg);
   });
@@ -539,6 +628,8 @@ function scoreJob(j){
   if(pref==='remote' && /remote/.test(text)) score += 8;
   if(/india/.test(text)) score += 4;
   if(j.posted==='live') score += 2;
+  var sel2 = (S.resumeKeywords||[]).filter(function(w){ return S.kwSelected && S.kwSelected[w]!==false; });
+  sel2.forEach(function(w){ if(w.length>2 && text.indexOf(w)>-1) score += 2; });
   j.hitSkills = hits.slice(0,8);
   return Math.max(5, Math.min(98, score));
 }
@@ -565,8 +656,10 @@ function renderJobs(){
     var acts = d.querySelector('.acts');
     var bKit = mkBtn('⚡ Auto-Apply Kit','btn primary small',function(){ openKit(j); });
     var bSave = mkBtn('💾 Save','btn ghost small',function(){ moveTo(j,'saved'); });
-    var bApply = mkBtn('↗ Apply ↗','btn small',function(){ window.open(j.url,'_blank'); moveTo(j,'applied',true); });
-    acts.appendChild(bKit); acts.appendChild(bApply); acts.appendChild(bSave);
+    var bOne = mkBtn('⚡ 1-Click Apply','btn primary small',function(){ doOneClickApply(j); });
+    acts.appendChild(bOne); acts.appendChild(bKit); acts.appendChild(bSave);
+    var jem = extractEmail(j.desc||'');
+    if(jem){ acts.appendChild(mkBtn('📧 Email Apply','btn small',function(){ applyViaEmail(j, jem); })); }
     el.appendChild(d);
   });
   var info = $('result-info');
@@ -624,6 +717,78 @@ function copyText(t,msg){
 }
 function fallbackCopy(t){ var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
 
+/* ---------- email confirmations + 1-click apply ---------- */
+function extractEmail(text){
+  var m = String(text||'').match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i);
+  return m ? m[0] : null;
+}
+function sendAppliedEmail(job){
+  var to = (S.profile.email||'').trim();
+  if(!to || to.indexOf('@')<0){ toast('⚠️ Add your email in Profile to receive apply confirmations.'); return; }
+  toast('📧 Sending confirmation email…');
+  var msg = 'You applied via RCW Job Agent ✅\n\nJob: '+job.title+'\nCompany: '+job.company+'\nLocation: '+(job.location||'')+'\nMatch: '+(job.match||'')+'%\nApply link: '+job.url+'\nDate: '+new Date().toLocaleString()+'\n\n--- Cover letter used ---\n'+coverLetter(job);
+  fetch('https://formsubmit.co/ajax/'+encodeURIComponent(to),{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:'RCW Job Agent',_subject:'✅ Applied: '+job.title+' @ '+job.company,_template:'table',message:msg})})
+  .then(function(r){ return r.json(); }).then(function(){
+    S.emailLog = S.emailLog||[]; S.emailLog.unshift({job:job.title+' @ '+job.company,at:new Date().toISOString(),ok:true}); save(); renderEmailLog(); renderTracker();
+    toast('📧 Confirmation sent to '+to+' ✅');
+  }).catch(function(){
+    S.emailLog = S.emailLog||[]; S.emailLog.unshift({job:job.title+' @ '+job.company,at:new Date().toISOString(),ok:false}); save(); renderEmailLog(); renderTracker();
+    toast('⚠️ Email failed. First time? Check inbox for the FormSubmit activation mail, click Activate, then retry.');
+  });
+}
+function renderEmailLog(){
+  var el = $('email-log'); if(!el) return;
+  var log = S.emailLog||[];
+  el.innerHTML = log.length ? log.slice(0,8).map(function(e){ return '<div class="titem">'+(e.ok?'✅':'❌')+' '+esc(e.job)+'<br><span style="color:var(--mut)">'+new Date(e.at).toLocaleString()+'</span></div>'; }).join('')
+    : '<div class="note">No confirmations sent yet. They appear here after each apply.</div>';
+}
+function doOneClickApply(job){
+  copyText(coverLetter(job), 'Cover letter copied ✅ — paste it in the application form.');
+  try{ window.open(job.url,'_blank'); }catch(e){}
+  moveTo(job,'applied',true,true);
+  renderStats();
+  if(S.profile.notify!==false){ sendAppliedEmail(job); }
+  else toast('Marked Applied ✅ (email confirmations are OFF)');
+  botSay('⚡ <b>1-Click Apply done</b> for <b>'+esc(job.title)+'</b> @ '+esc(job.company)+': cover letter copied, apply page opened, tracker updated'+(S.profile.notify!==false?(' + confirmation email sent to <b>'+esc(S.profile.email||'your email')+'</b>'):'')+'. Now complete the form on the opened page and hit their Submit button.');
+}
+function applyViaEmail(job, mail){
+  var p = S.profile;
+  var subject = 'Application — '+job.title+' | '+(p.name||'Candidate');
+  window.location.href = 'mailto:'+mail+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(coverLetter(job)+'\n\n---\nApply link: '+job.url);
+  moveTo(job,'applied',true,true);
+  if(S.profile.notify!==false) sendAppliedEmail(job);
+  toast('Email app opened + confirmation on the way 📧');
+}
+function downloadPacket(job){
+  var txt = 'RCW JOB AGENT — APPLICATION PACKET\n'+job.title+' @ '+job.company+' ('+(job.location||'')+')\nApply: '+job.url+'\n\n=== COVER LETTER ===\n'+coverLetter(job)+'\n\n=== RESUME TWEAKS ===\n'+resumeBullets(job)+'\n\n=== EMAIL DRAFT ===\n'+emailDraft(job)+'\n';
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt],{type:'text/plain'})); a.download = 'apply-'+String(job.id||'job').replace(/[^a-z0-9]+/gi,'-')+'.txt'; a.click();
+  toast('Application packet downloaded ⬇');
+}
+var Q = {list:[], i:0};
+function startQueue(){
+  if(!S.jobs.length){ toast('Finding jobs first — then I will queue the top 5.'); findJobs(); setTimeout(startQueue, 6000); return; }
+  Q.list = S.jobs.slice(0,5); Q.i = 0;
+  renderQueue();
+  var dlg = $('queue-modal');
+  if(typeof dlg.showModal==='function') dlg.showModal();
+}
+function renderQueue(){
+  var total = Q.list.length;
+  if(Q.i >= total){
+    $('q-body').innerHTML = '<div class="ok">🎉 Queue complete! You applied to '+total+' jobs. Confirmations emailed to <b>'+esc(S.profile.email||'your email')+'</b>. Track everything in the 📋 Tracker tab.</div>';
+    $('q-count').textContent = 'done';
+    $('q-apply').classList.add('hidden'); $('q-skip').classList.add('hidden');
+    return;
+  }
+  var j = Q.list[Q.i];
+  $('q-count').textContent = '('+(Q.i+1)+'/'+total+')';
+  $('q-apply').classList.remove('hidden'); $('q-skip').classList.remove('hidden');
+  $('q-body').innerHTML = '<div class="qjob"><b>'+esc(j.title)+'</b><br><span style="color:var(--mut)">'+esc(j.company)+' · '+esc(j.location)+' · '+j.match+'% match</span></div>'
+    + '<div class="note">Click below: cover letter auto-copied → apply page opens → tracker updated → confirmation emailed. Then complete the form on the opened page.</div>';
+  $('q-apply').onclick = function(){ doOneClickApply(j); Q.i++; setTimeout(renderQueue, 700); };
+  $('q-skip').onclick = function(){ Q.i++; renderQueue(); };
+}
+
 /* ---------- tracker ---------- */
 function moveTo(j,stage,silent){
   ['saved','applied','interview','offer'].forEach(function(k){
@@ -651,6 +816,8 @@ function renderTracker(){
     });
     el.appendChild(col);
   });
+  var tm = $('tracker-mail');
+  if(tm){ var n = (S.emailLog||[]).filter(function(e){ return e.ok; }).length; tm.textContent = '· 📧 ' + n + ' email confirmations sent'; }
 }
 
 /* ---------- portals ---------- */
@@ -680,10 +847,13 @@ function chatReply(text){
   if(/hello|hi\b|hey|namaste|vanakkam/.test(t)) return 'Vanakkam! 🙏 I am your job agent. Tell me: <b>1)</b> paste/upload resume, <b>2)</b> confirm keywords (e.g. "react developer"), <b>3)</b> hit Find Jobs. Want me to run a search now?';
   if(/find|search|job/.test(t)){ setTimeout(findJobs,400); return 'On it — searching live jobs for <b>'+esc(S.profile.keywords||'software')+'</b> in Chennai + Remote India… 🔍'; }
   if(/resume|upload|cv/.test(t)) return 'Upload your resume (PDF/TXT) in the left panel, or paste the text. Then click <b>Analyze Resume</b> — I\'ll extract skills + guess contact details automatically. Nothing leaves your browser.';
-  if(/cover|letter|apply/.test(t)){
-    if(!S.jobs.length) return 'No jobs loaded yet — hit <b>Find Jobs</b> first, then open the ⚡ Auto-Apply Kit on any card.';
-    var j=S.jobs[0]; setTimeout(function(){openKit(j);},400); return 'Opening the Auto-Apply Kit for your top match (<b>'+esc(j.title)+' @ '+esc(j.company)+'</b>)… ⚡';
+  if(/guided|queue|blast|bulk/.test(t)){ setTimeout(startQueue,400); return 'Starting the <b>🚀 Guided Apply Queue</b> — I\'ll walk you through your top 5 jobs one by one: copy cover letter + open apply page + track + email you a confirmation. Allow pop-ups if your browser asks.'; }
+  if(/email|mail|confirm/.test(t)) return '📧 <b>Email confirmations</b> are ON: every 1-Click Apply sends a confirmation to <b>'+esc(S.profile.email||'(set your email in Profile first)')+'</b> with job details + the cover letter used. First time only: FormSubmit emails you an <b>activation link</b> — click it once, then confirmations flow automatically. Use <b>Send test email</b> in Setup to verify.';
+  if(/auto|1-click|one click|cover|letter|apply/.test(t)){
+    if(!S.jobs.length) return 'No jobs loaded yet — hit <b>Find Jobs</b> first, then use <b>⚡ 1-Click Apply</b> on any card.';
+    return 'Use <b>⚡ 1-Click Apply</b> on any job card — it copies your cover letter, opens the apply page, updates the tracker and <b>emails you a confirmation</b>. Or press <b>🚀 Guided Apply: Top 5</b> and I\'ll walk you through 5 jobs in a row. (Note: LinkedIn/Naukri need your login + their Submit click — no tool can skip that safely.)';
   }
+  if(/keyword|scan resume|resume scan/.test(t)) return '\ud83d\udd11 <b>Resume scan:</b> I extract skills + top keywords from your resume, auto-set the search role, run an extra job query from your keywords, and rank every job by keyword overlap. Toggle keywords in the \ud83d\udd11 section anytime.';
   if(/remote/.test(t)) return 'For Remote India roles: Remotive + Arbeitnow APIs are live in this agent, plus LinkedIn Remote-India deep links. Tip: remote posts get 200+ applicants — apply within 24h with a tailored cover letter.';
   if(/chennai/.test(t)) return 'For Chennai: Naukri + LinkedIn Chennai links are in the Portals section with your keywords pre-filled. Chennai IT corridors to target: OMR, Guindy, DLF Cybercity, Navalur. Want me to search now?';
   if(/fresher|experience|salary/.test(t)) return 'Chennai fresher reality check (2026): IT services ₹3–4.5 LPA, product/startups ₹5–10 LPA for strong portfolios, remote ₹6–15 LPA but competitive. A GitHub + 2 deployed projects doubles replies. Want resume tweak tips for your top job?';
@@ -735,11 +905,14 @@ function init(){
   bindProfile(); bindResume(); bindChat();
   $('find-btn').onclick = findJobs;
   $('auto-btn').onclick = autopilot;
+  var _qs = $('qstart-btn'); if(_qs) _qs.onclick = startQueue;
+  S.emailLog = S.emailLog || []; renderEmailLog();
+  S.resumeKeywords = S.resumeKeywords || []; S.kwSelected = S.kwSelected || {}; renderKwChips();
   $('export-btn').onclick = exportData;
   $('reset-btn').onclick = resetAll;
   renderPortals(); renderJobs(); renderTracker(); renderStats();
   $('f-keywords').addEventListener('input', function(){ S.profile.keywords=$('f-keywords').value; save(); renderPortals(); });
-  botSay('Vanakkam! 🙏 I\'m the <b>RCW Job Agent</b> — I find <b>Software jobs in Chennai + Remote India</b> and apply with you. Steps: <b>1)</b> upload/paste resume → Analyze, <b>2)</b> set keywords, <b>3)</b> hit <b>🔍 Find Jobs</b>. Or press <b>🤖 Autopilot</b> and I\'ll do it in one go.');
+  botSay('Vanakkam! 🙏 I\'m the <b>RCW Job Agent</b> — I find <b>Software jobs in Chennai + Remote India</b> and apply with you. Steps: <b>1)</b> upload/paste resume → Analyze, <b>2)</b> set keywords, <b>3)</b> hit <b>🔍 Find Jobs</b>. Plus: every <b>⚡ 1-Click Apply</b> copies your cover letter, opens the apply page, updates the tracker AND <b>emails you a confirmation</b>. 📧 Start: add email + resume → Analyze → <b>🔍 Find Jobs</b> → <b>🚀 Guided Apply</b>.');
   // pdf.js lazy loader (needs internet once; optional)
   var sc=document.createElement('script');
   sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
