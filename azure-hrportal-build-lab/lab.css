@@ -1,0 +1,80 @@
+/* Extra styles for the Azure build-lab simulator (on top of styles.css) */
+
+/* ---------- Lab progress rail ---------- */
+.progress-rail{display:flex;gap:0;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:2px;box-shadow:0 1.6px 3.6px rgba(0,0,0,.06);margin-bottom:16px;overflow:hidden}
+.stage-chip{flex:1;min-width:104px;padding:10px 8px;text-align:center;font-size:11px;color:var(--muted);border-right:1px solid #f0f0f0;cursor:pointer;position:relative;background:#fff}
+.stage-chip:last-child{border-right:none}
+.stage-chip .num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#f3f2f1;color:var(--muted);align-items:center;justify-content:center;font-weight:600;margin-bottom:4px;font-size:11px}
+.stage-chip.done .num{background:var(--good);color:#fff}
+.stage-chip.current{background:#eff6fc}
+.stage-chip.current .num{background:var(--azure);color:#fff}
+.stage-chip.locked{opacity:.45;cursor:not-allowed}
+.stage-chip .t{display:block;line-height:1.25}
+
+/* ---------- Task panel ---------- */
+.task-panel{background:#fff;border:1px solid var(--line);border-left:4px solid var(--azure);border-radius:2px;box-shadow:0 1.6px 3.6px rgba(0,0,0,.06);padding:16px 18px;margin-bottom:16px}
+.task-panel h2{font-size:15px;font-weight:600;margin-bottom:6px}
+.task-panel .why{background:#faf9f8;border:1px solid var(--line);padding:10px 12px;margin:10px 0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.task-panel .why b{color:var(--text)}
+.task-list{margin:8px 0 0 0;list-style:none}
+.task-list li{padding:5px 0 5px 26px;position:relative;font-size:12.5px;line-height:1.5}
+.task-list li::before{content:"\25cb";position:absolute;left:4px;color:var(--faint)}
+.task-list li.ok::before{content:"\2713";color:var(--good);font-weight:700}
+.task-list li.ok{color:var(--good)}
+
+/* ---------- Create blade (right drawer) ---------- */
+.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:150}
+.drawer{position:fixed;top:var(--topbar-h);right:0;bottom:0;width:min(620px,96vw);background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.25);z-index:160;display:flex;flex-direction:column}
+.drawer .d-head{padding:14px 20px;border-bottom:1px solid var(--line)}
+.drawer .d-head h2{font-size:17px;font-weight:600}
+.drawer .d-head .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.drawer .d-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);padding:0 20px}
+.drawer .d-tab{padding:9px 14px;font-size:12.5px;cursor:default;color:var(--muted);border-bottom:2px solid transparent}
+.drawer .d-tab.active{color:var(--azure);border-bottom-color:var(--azure);font-weight:600}
+.drawer .d-body{flex:1;overflow-y:auto;padding:16px 20px}
+.drawer .d-foot{border-top:1px solid var(--line);padding:12px 20px;display:flex;gap:10px}
+.field-err{color:var(--bad);font-size:11.5px;margin-top:3px}
+.review-row{display:flex;font-size:12.5px;padding:5px 0;border-bottom:1px solid #f5f5f5}
+.review-row .k{width:220px;color:var(--muted);flex:none}
+
+/* ---------- Resource list ---------- */
+.res-ico{width:26px;height:26px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;margin-right:8px;vertical-align:middle;background:#eff6fc}
+.deploy-banner{display:flex;align-items:center;gap:10px;background:#fff4ce;border:1px solid #f0e6b8;padding:10px 14px;font-size:12.5px;margin-bottom:14px;border-radius:2px}
+.deploy-banner.ok{background:#dff6dd;border-color:#c3e6c0}
+.spinner{width:14px;height:14px;border:2px solid #d0d0d0;border-top-color:var(--azure);border-radius:50%;animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- Cloud Shell ---------- */
+.shell-wrap{position:fixed;left:var(--side-w);right:0;bottom:0;height:260px;background:#012456;z-index:80;display:flex;flex-direction:column;border-top:3px solid var(--azure);transition:left .15s}
+.shell-wrap.wide{left:48px}
+.shell-wrap.hidden{display:none}
+.shell-bar{display:flex;align-items:center;gap:10px;background:#013a75;color:#fff;padding:4px 12px;font-size:12px}
+.shell-bar .x{margin-left:auto;cursor:pointer;padding:2px 8px}
+.shell-bar .x:hover{background:rgba(255,255,255,.15)}
+.shell-out{flex:1;overflow-y:auto;padding:10px 14px;font-family:Consolas,Menlo,monospace;font-size:12.5px;color:#e8e8e8;line-height:1.55;white-space:pre-wrap;word-break:break-all}
+.shell-out .ok{color:#6ee7a0}.shell-out .err{color:#ff8a80}.shell-out .dim{color:#8fb3d9}
+.shell-in{display:flex;align-items:center;padding:6px 14px;border-top:1px solid #024a8c}
+.shell-in .ps{color:#6ee7a0;font-family:Consolas,Menlo,monospace;font-size:12.5px;margin-right:8px;white-space:nowrap}
+.shell-in input{flex:1;background:transparent;border:none;color:#fff;font-family:Consolas,Menlo,monospace;font-size:12.5px;height:24px;padding:0}
+.shell-in input:focus{outline:none;box-shadow:none}
+
+/* ---------- Quiz ---------- */
+.quiz-opt{display:block;border:1px solid var(--line);border-radius:2px;padding:10px 12px;margin:8px 0;cursor:pointer;font-size:12.5px;background:#fff}
+.quiz-opt:hover{border-color:var(--azure)}
+.quiz-opt.sel{border-color:var(--azure);background:#eff6fc}
+.quiz-opt.right{border-color:var(--good);background:#dff6dd}
+.quiz-opt.wrong{border-color:var(--bad);background:#fde7e9}
+.quiz-opt input{width:auto;height:auto;margin-right:8px}
+
+/* ---------- Score / cert ---------- */
+.badge-score{display:inline-flex;align-items:center;gap:6px;background:#eff6fc;color:var(--azure);font-weight:700;padding:3px 12px;border-radius:12px;font-size:12px}
+.cert{border:2px solid var(--azure);padding:34px;text-align:center;background:linear-gradient(160deg,#fff, #eff6fc);margin-top:10px}
+.cert h2{font-size:22px;color:var(--azure);margin-bottom:6px}
+.cert .name{font-size:19px;font-weight:600;margin:12px 0 4px}
+.arch{width:100%;overflow-x:auto;background:#fff;border:1px solid var(--line);padding:10px;margin-top:10px}
+.hinted{background:#fff4ce;border-left:3px solid var(--amber);padding:8px 12px;font-size:12px;margin-top:8px}
+
+@media (max-width:800px){
+  .shell-wrap{left:48px}
+  .review-row .k{width:130px}
+}

@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "Build the HR Portal on Azure \u2014 Guided Azure Portal Simulator (10 GUI Stages)",
+    "category": "Azure Portal GUI \u2022 App Service \u2022 Entra ID \u2022 Blob Storage \u2022 SQL \u2022 Key Vault \u2022 Validated Lab",
+    "badge": "AZURE-BUILD",
+    "accent": "#0078d4",
+    "id": "azure-hrportal-build-lab",
+    "targetUrl": "https://www.rcwittraining.in/azure-hrportal-build-lab/",
+    "contentType": "Simulator",
+    "technology": "Microsoft Azure",
+    "subcategory": "Cloud Architecture Practice",
+    "group": "Azure Mini Project"
+  },
+
+  {
     "title": "HR Interview & Assessment Portal \u2014 GD Video Recording + Scenario Questions (Azure Portal Replica)",
     "category": "Azure Portal UI \u2022 HR Simulator \u2022 GD Video Recording \u2022 Scenario Questions \u2022 DPDP/GDPR Compliance",
     "badge": "AZURE-HR",
