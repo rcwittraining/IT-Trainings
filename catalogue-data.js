@@ -1,5 +1,18 @@
 window.RCW_CATALOGUE = Object.freeze([
   {
+    "title": "HR Interview & Assessment Portal \u2014 GD Video Recording + Scenario Questions (Azure Portal Replica)",
+    "category": "Azure Portal UI \u2022 HR Simulator \u2022 GD Video Recording \u2022 Scenario Questions \u2022 DPDP/GDPR Compliance",
+    "badge": "AZURE-HR",
+    "accent": "#0078d4",
+    "id": "azure-hr-interview-simulator",
+    "targetUrl": "https://www.rcwittraining.in/azure-hr-interview-simulator/",
+    "contentType": "Simulator",
+    "technology": "Microsoft Azure",
+    "subcategory": "HR & Interview Practice",
+    "group": "Azure Mini Project"
+  },
+
+  {
   "title": "Microsoft Intune Exam Simulator \u2014 MD-102 Endpoint Administrator (400+ Questions)",
   "category": "Microsoft Intune \u2022 MD-102 \u2022 Exam Simulator \u2022 Timed Mock \u2022 60 Questions",
   "badge": "INTUNE-EXAM",
