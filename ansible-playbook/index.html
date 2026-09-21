@@ -9,8 +9,51 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Ansible Playbooks · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Ansible Playbooks: free hands-on DevOps lab. Write and run Ansible playbooks. Practise cat, ansible-playbook, ansible-playbook in a browser terminal.">
+  <link rel="canonical" href="https://www.rcwittraining.in/ansible-playbook/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Ansible Playbooks · RCW IT Training">
+  <meta property="og:description" content="Ansible Playbooks: free hands-on DevOps lab. Write and run Ansible playbooks. Practise cat, ansible-playbook, ansible-playbook in a browser terminal.">
+  <meta property="og:url" content="https://www.rcwittraining.in/ansible-playbook/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ansible Playbooks", "description": "Ansible Playbooks: free hands-on DevOps lab. Write and run Ansible playbooks. Practise cat, ansible-playbook, ansible-playbook in a browser terminal.", "url": "https://www.rcwittraining.in/ansible-playbook/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Ansible Playbooks</span></nav>
+  <p class="rcw-eyebrow">DevOps • Automation</p>
+  <h1>Ansible Playbooks</h1>
+  <p class="rcw-lead">Write and run Ansible playbooks.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>View playbook</strong> — Read playbook.yml. <span class=rcw-pts>25 pts</span></li><li><strong>Syntax check</strong> — Check with ansible-playbook --syntax-check. <span class=rcw-pts>25 pts</span></li><li><strong>Run playbook</strong> — Run with ansible-playbook. <span class=rcw-pts>25 pts</span></li><li><strong>Check mode</strong> — Dry-run with --check. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>cat /app/playbook.yml</code></li><li><code>ansible-playbook playbook.yml --syntax-check</code></li><li><code>ansible-playbook playbook.yml</code></li><li><code>ansible-playbook playbook.yml --check</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/app/playbook.yml</code><pre><code>---
+- name: Install nginx
+  hosts: webservers
+  tasks:
+    - name: Install
+      dnf:
+        name: nginx
+        state: present</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "ansible-playbook", "title": "Ansible Playbooks", "category": "DevOps • Automation", "badge": "ANS", "accent": "#e00", "difficulty": "INTERMEDIATE", "host": "iac-node-01", "user": "devops", "intro": ["Write and run Ansible playbooks."], "files": {"/app/playbook.yml": "---\n- name: Install nginx\n  hosts: webservers\n  tasks:\n    - name: Install\n      dnf:\n        name: nginx\n        state: present\n"}, "objectives": [{"name": "View playbook", "desc": "Read playbook.yml.", "points": 25, "match": ["cat\\s+/app/playbook\\.yml"], "success": "✓ Playbook read."}, {"name": "Syntax check", "desc": "Check with ansible-playbook --syntax-check.", "points": 25, "match": ["ansible-playbook\\s+.*--syntax-check"], "success": "✓ Syntax checked."}, {"name": "Run playbook", "desc": "Run with ansible-playbook.", "points": 25, "match": ["ansible-playbook\\s+\\S+\\.yml"], "success": "✓ Playbook run."}, {"name": "Check mode", "desc": "Dry-run with --check.", "points": 25, "match": ["ansible-playbook\\s+.*--check"], "success": "✓ Check mode run."}], "hint": ["cat /app/playbook.yml", "ansible-playbook playbook.yml --syntax-check", "ansible-playbook playbook.yml", "ansible-playbook playbook.yml --check"], "help": "ansible-playbook PLAYBOOK.yml --syntax-check · --check · -i INVENTORY", "certTitle": "Ansible Champion", "certDesc1": "for mastering Ansible playbooks", "certDesc2": "with syntax checks and runs.", "certChallenge": "Ansible playbooks", "certFooter": "DevOps • Challenge", "headline": "Ansible Playbooks", "lead": "Write and run Ansible playbooks.", "brief": "Ansible Playbooks", "briefCopy": "Write and run Ansible playbooks.", "incident": "ANSIBLE-PLAYBOOK · iac-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Ansible Playbooks.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "ANS", "minutes": 10};</script>
   <script src="../passport.js"></script>

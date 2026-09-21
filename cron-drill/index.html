@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>cron Syntax Drill · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="cron Syntax Drill: free hands-on Linux lab. Master cron schedule syntax for common scenarios.">
+  <link rel="canonical" href="https://www.rcwittraining.in/cron-drill/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="cron Syntax Drill · RCW IT Training">
+  <meta property="og:description" content="cron Syntax Drill: free hands-on Linux lab. Master cron schedule syntax for common scenarios.">
+  <meta property="og:url" content="https://www.rcwittraining.in/cron-drill/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "cron Syntax Drill", "description": "cron Syntax Drill: free hands-on Linux lab. Master cron schedule syntax for common scenarios.", "url": "https://www.rcwittraining.in/cron-drill/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>cron Syntax Drill</span></nav>
+  <p class="rcw-eyebrow">Linux • Automation</p>
+  <h1>cron Syntax Drill</h1>
+  <p class="rcw-lead">Master cron schedule syntax for common scenarios.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Daily job</strong> — Schedule daily at 2am (0 2 * * *). <span class=rcw-pts>25 pts</span></li><li><strong>Weekly job</strong> — Monday 6am (0 6 * * 1). <span class=rcw-pts>25 pts</span></li><li><strong>Every 5 min</strong> — Every 5 minutes (*/5 * * * *). <span class=rcw-pts>25 pts</span></li><li><strong>Hourly</strong> — Every hour (0 * * * *). <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>0 2 * * * CMD</code></li><li><code>0 6 * * 1 CMD</code></li><li><code>*/5 * * * * CMD</code></li><li><code>0 * * * * CMD</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "cron-drill", "title": "cron Syntax Drill", "category": "Linux • Automation", "badge": "CRON", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "cron-node-01", "user": "student", "intro": ["Master cron schedule syntax for common scenarios."], "objectives": [{"name": "Daily job", "desc": "Schedule daily at 2am (0 2 * * *).", "points": 25, "match": ["0\\s+2\\s+\\*\\s+\\*\\s+\\*"], "success": "✓ Daily job set."}, {"name": "Weekly job", "desc": "Monday 6am (0 6 * * 1).", "points": 25, "match": ["0\\s+6\\s+\\*\\s+\\*\\s+1"], "success": "✓ Weekly job set."}, {"name": "Every 5 min", "desc": "Every 5 minutes (*/5 * * * *).", "points": 25, "match": ["\\*/5\\s+\\*\\s+\\*\\s+\\*\\s+\\*"], "success": "✓ Interval set."}, {"name": "Hourly", "desc": "Every hour (0 * * * *).", "points": 25, "match": ["0\\s+\\*\\s+\\*\\s+\\*\\s+\\*"], "success": "✓ Hourly set."}], "hint": ["0 2 * * * CMD", "0 6 * * 1 CMD", "*/5 * * * * CMD", "0 * * * * CMD"], "help": "cron: MIN HOUR DOM MON DOW — */5 every 5, 0 2 daily 2am, 0 6 * * 1 weekly Mon", "certTitle": "cron Syntax Champion", "certDesc1": "for mastering cron syntax", "certDesc2": "for common schedules.", "certChallenge": "cron syntax", "certFooter": "Linux Automation • Challenge", "headline": "cron Syntax Drill", "lead": "Master cron schedule syntax for common scenarios.", "brief": "cron Syntax Drill", "briefCopy": "Master cron schedule syntax for common scenarios.", "incident": "CRON-DRILL · cron-node-01 · hands-on practice", "resultCopy": "You completed all objectives for cron Syntax Drill.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "CRON", "minutes": 10};</script>
   <script src="../passport.js"></script>

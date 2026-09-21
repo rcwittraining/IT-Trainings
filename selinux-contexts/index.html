@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>SELinux Context Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="SELinux Context Management: free hands-on Linux lab. Inspect and manage SELinux modes and file contexts.">
+  <link rel="canonical" href="https://www.rcwittraining.in/selinux-contexts/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="SELinux Context Management · RCW IT Training">
+  <meta property="og:description" content="SELinux Context Management: free hands-on Linux lab. Inspect and manage SELinux modes and file contexts.">
+  <meta property="og:url" content="https://www.rcwittraining.in/selinux-contexts/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "SELinux Context Management", "description": "SELinux Context Management: free hands-on Linux lab. Inspect and manage SELinux modes and file contexts.", "url": "https://www.rcwittraining.in/selinux-contexts/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>SELinux Context Management</span></nav>
+  <p class="rcw-eyebrow">Linux • Security</p>
+  <h1>SELinux Context Management</h1>
+  <p class="rcw-lead">Inspect and manage SELinux modes and file contexts.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Check status</strong> — Show SELinux status with sestatus. <span class=rcw-pts>25 pts</span></li><li><strong>Get mode</strong> — Show the mode with getenforce. <span class=rcw-pts>25 pts</span></li><li><strong>Set permissive</strong> — Set permissive with setenforce 0. <span class=rcw-pts>25 pts</span></li><li><strong>Restore context</strong> — Restore contexts with restorecon. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>sestatus</code></li><li><code>getenforce</code></li><li><code>setenforce 0</code></li><li><code>restorecon -Rv /var/www</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "selinux-contexts", "title": "SELinux Context Management", "category": "Linux • Security", "badge": "SELINUX", "accent": "#d71920", "difficulty": "INTERMEDIATE", "host": "selinux-node-01", "user": "student", "intro": ["Inspect and manage SELinux modes and file contexts."], "objectives": [{"name": "Check status", "desc": "Show SELinux status with sestatus.", "points": 25, "match": ["sestatus"], "success": "✓ Status shown."}, {"name": "Get mode", "desc": "Show the mode with getenforce.", "points": 25, "match": ["getenforce"], "success": "✓ Mode shown."}, {"name": "Set permissive", "desc": "Set permissive with setenforce 0.", "points": 25, "match": ["setenforce\\s+0"], "success": "✓ Set to permissive."}, {"name": "Restore context", "desc": "Restore contexts with restorecon.", "points": 25, "match": ["restorecon\\s+-\\S*\\s*\\S+"], "success": "✓ Contexts restored."}], "hint": ["sestatus", "getenforce", "setenforce 0", "restorecon -Rv /var/www"], "help": "sestatus · getenforce · setenforce 0|1 · restorecon -Rv PATH · ls -Z", "certTitle": "SELinux Champion", "certDesc1": "for mastering SELinux", "certDesc2": "with modes and file contexts.", "certChallenge": "SELinux contexts", "certFooter": "Linux Security • Challenge", "headline": "SELinux Context Management", "lead": "Inspect and manage SELinux modes and file contexts.", "brief": "SELinux Context Management", "briefCopy": "Inspect and manage SELinux modes and file contexts.", "incident": "SELINUX-CONTEXTS · selinux-node-01 · hands-on practice", "resultCopy": "You completed all objectives for SELinux Context Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SELI", "minutes": 10};</script>
   <script src="../passport.js"></script>

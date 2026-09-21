@@ -4,13 +4,49 @@
   <script src="../../rcw-consent.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Original stateful RHEL 10 administration task for RHCSA certification practice.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>IPv4 and IPv6 Addressing | RHCSA Certification Practice | RCW IT Training</title>
   <link rel="stylesheet" href="../practice.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="IPv4 and IPv6 Addressing: free hands-on RHCSA Certification Practice · Networking · NetworkManager lab. Configure the operations connection with the assign…">
+  <link rel="canonical" href="https://www.rcwittraining.in/rhcsa-practice/47-ipv4-ipv6-addressing/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="IPv4 and IPv6 Addressing · RCW IT Training">
+  <meta property="og:description" content="IPv4 and IPv6 Addressing: free hands-on RHCSA Certification Practice · Networking · NetworkManager lab. Configure the operations connection with the assign…">
+  <meta property="og:url" content="https://www.rcwittraining.in/rhcsa-practice/47-ipv4-ipv6-addressing/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "IPv4 and IPv6 Addressing", "description": "IPv4 and IPv6 Addressing: free hands-on RHCSA Certification Practice · Networking · NetworkManager lab. Configure the operations connection with the assign…", "url": "https://www.rcwittraining.in/rhcsa-practice/47-ipv4-ipv6-addressing/", "learningResourceType": "Hands-on lab", "educationalLevel": "RHCSA / EX200", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+<!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>IPv4 and IPv6 Addressing</span></nav>
+  <p class="rcw-eyebrow">RHCSA Certification Practice · Networking · NetworkManager</p>
+  <h1>IPv4 and IPv6 Addressing</h1>
+  <p class="rcw-lead">Configure the operations connection with the assigned static IPv4 and IPv6 addresses, gateways, and automatic activation.</p>
+  <p class=rcw-number>Task 47 of 62 in the RHCSA practice series. Mapped to the published <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" rel="nofollow noopener">EX200 skill areas</a>.</p>
+  <ul class="rcw-facts"><li><strong>RHCSA / EX200</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Assess the starting state</strong> — Network devices inspected. <span class=rcw-pts>20 pts</span></li><li><strong>Configure persistent dual-stack addressing</strong> — Produce the required modeled system state using supported administrative commands. <span class=rcw-pts>60 pts</span></li><li><strong>Validate the resulting state</strong> — Persistent dual-stack configuration validated. <span class=rcw-pts>20 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>nmcli device status</code></li><li><code>nmcli connection modify Operations ipv4.method manual ipv4.addresses 10.24.8.40/24 ipv4.gateway 10.24.8.1</code></li><li><code>nmcli connection modify Operations ipv6.method manual ipv6.addresses 2001:db8:24:8::40/64 ipv6.gateway 2001:db8:24:8::1</code></li><li><code>nmcli connection modify Operations connection.autoconnect yes &amp;&amp; nmcli connection up Operations</code></li><li><code>nmcli -f ipv4.addresses,ipv6.addresses,connection.autoconnect connection show Operations</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
+  <div id="labRoot"></div>
   <noscript>This interactive practice task requires JavaScript. Enable it, then reload the page.</noscript>
   <script src="../../passport.js"></script>
   <script src="config.js"></script>

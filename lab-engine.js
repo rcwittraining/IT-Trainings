@@ -45,7 +45,7 @@
       <div class="welcome-grid">
         <div class="welcome-copy">
           <span class="eyebrow"><span class="eyebrow-icon">⌁</span> ${C.category}</span>
-          <h1>${C.headline || C.title}</h1>
+          <h2 class="h1">${C.headline || C.title}</h2>
           <p class="lead">${C.lead || ""}</p>
           ${C.incident ? `<div class="incident-chip">${C.incident}</div>` : ""}
           <div class="feature-row">

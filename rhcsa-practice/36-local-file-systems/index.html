@@ -4,13 +4,49 @@
   <script src="../../rcw-consent.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Original stateful RHEL 10 administration task for RHCSA certification practice.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>VFAT, ext4 and XFS File Systems | RHCSA Certification Practice | RCW IT Training</title>
   <link rel="stylesheet" href="../practice.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="VFAT, ext4 and XFS File Systems: free hands-on RHCSA Certification Practice · File Systems · Local File Systems lab. Prepare three training volumes with th…">
+  <link rel="canonical" href="https://www.rcwittraining.in/rhcsa-practice/36-local-file-systems/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="VFAT, ext4 and XFS File Systems · RCW IT Training">
+  <meta property="og:description" content="VFAT, ext4 and XFS File Systems: free hands-on RHCSA Certification Practice · File Systems · Local File Systems lab. Prepare three training volumes with th…">
+  <meta property="og:url" content="https://www.rcwittraining.in/rhcsa-practice/36-local-file-systems/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "VFAT, ext4 and XFS File Systems", "description": "VFAT, ext4 and XFS File Systems: free hands-on RHCSA Certification Practice · File Systems · Local File Systems lab. Prepare three training volumes with th…", "url": "https://www.rcwittraining.in/rhcsa-practice/36-local-file-systems/", "learningResourceType": "Hands-on lab", "educationalLevel": "RHCSA / EX200", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+<!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>VFAT, ext4 and XFS File Systems</span></nav>
+  <p class="rcw-eyebrow">RHCSA Certification Practice · File Systems · Local File Systems</p>
+  <h1>VFAT, ext4 and XFS File Systems</h1>
+  <p class="rcw-lead">Prepare three training volumes with the required VFAT, ext4, and XFS formats, mount them, and verify each type.</p>
+  <p class=rcw-number>Task 36 of 62 in the RHCSA practice series. Mapped to the published <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" rel="nofollow noopener">EX200 skill areas</a>.</p>
+  <ul class="rcw-facts"><li><strong>RHCSA / EX200</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Assess the starting state</strong> — Target devices inspected. <span class=rcw-pts>20 pts</span></li><li><strong>Create and mount three local file-system types</strong> — Produce the required modeled system state using supported administrative commands. <span class=rcw-pts>60 pts</span></li><li><strong>Validate the resulting state</strong> — Mounted file-system types validated. <span class=rcw-pts>20 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>lsblk -f /dev/vdb /dev/vdc /dev/vdd</code></li><li><code>mkfs.vfat -n TRANSFER /dev/vdb1</code></li><li><code>mkfs.ext4 -L ARCHIVE /dev/vdc1</code></li><li><code>mkfs.xfs -L APPDATA /dev/vdd1</code></li><li><code>mkdir -p /mnt/transfer /mnt/archive /mnt/appdata &amp;&amp; mount /dev/vdb1 /mnt/transfer &amp;&amp; mount /dev/vdc1 /mnt/archive &amp;&amp; mount /dev/vdd1 /mnt/appdata</code></li><li><code>findmnt -no FSTYPE /mnt/transfer /mnt/archive /mnt/appdata</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
+  <div id="labRoot"></div>
   <noscript>This interactive practice task requires JavaScript. Enable it, then reload the page.</noscript>
   <script src="../../passport.js"></script>
   <script src="config.js"></script>

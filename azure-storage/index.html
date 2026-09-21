@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Azure Storage · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Azure Storage: free hands-on Azure lab. Manage Azure storage accounts and blobs. Practise az, az, az in a browser terminal.">
+  <link rel="canonical" href="https://www.rcwittraining.in/azure-storage/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Azure Storage · RCW IT Training">
+  <meta property="og:description" content="Azure Storage: free hands-on Azure lab. Manage Azure storage accounts and blobs. Practise az, az, az in a browser terminal.">
+  <meta property="og:url" content="https://www.rcwittraining.in/azure-storage/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Azure Storage", "description": "Azure Storage: free hands-on Azure lab. Manage Azure storage accounts and blobs. Practise az, az, az in a browser terminal.", "url": "https://www.rcwittraining.in/azure-storage/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Azure Storage</span></nav>
+  <p class="rcw-eyebrow">Azure • Storage</p>
+  <h1>Azure Storage</h1>
+  <p class="rcw-lead">Manage Azure storage accounts and blobs.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List accounts</strong> — List with az storage account list. <span class=rcw-pts>34 pts</span></li><li><strong>List containers</strong> — List with az storage container list. <span class=rcw-pts>33 pts</span></li><li><strong>Upload blob</strong> — Upload with az storage blob upload. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>az storage account list</code></li><li><code>az storage container list --account-name sa</code></li><li><code>az storage blob upload --account-name sa --container-name c --name file.txt --file file.txt</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "azure-storage", "title": "Azure Storage", "category": "Azure • Storage", "badge": "AZ", "accent": "#087ed2", "difficulty": "INTERMEDIATE", "host": "azure-cli-01", "user": "clouduser", "intro": ["Manage Azure storage accounts and blobs."], "objectives": [{"name": "List accounts", "desc": "List with az storage account list.", "points": 34, "match": ["az\\s+storage\\s+account\\s+list"], "success": "✓ Accounts listed."}, {"name": "List containers", "desc": "List with az storage container list.", "points": 33, "match": ["az\\s+storage\\s+container\\s+list"], "success": "✓ Containers listed."}, {"name": "Upload blob", "desc": "Upload with az storage blob upload.", "points": 33, "match": ["az\\s+storage\\s+blob\\s+upload"], "success": "✓ Blob uploaded."}], "hint": ["az storage account list", "az storage container list --account-name sa", "az storage blob upload --account-name sa --container-name c --name file.txt --file file.txt"], "help": "az storage account list · container list · blob upload", "certTitle": "Azure Storage Champion", "certDesc1": "for mastering Azure storage", "certDesc2": "with accounts and blobs.", "certChallenge": "Azure Storage", "certFooter": "Azure • Challenge", "headline": "Azure Storage", "lead": "Manage Azure storage accounts and blobs.", "brief": "Azure Storage", "briefCopy": "Manage Azure storage accounts and blobs.", "incident": "AZURE-STORAGE · azure-cli-01 · hands-on practice", "resultCopy": "You completed all objectives for Azure Storage.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "AZ", "minutes": 10};</script>
   <script src="../passport.js"></script>

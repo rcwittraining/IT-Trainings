@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Subnetting Practice · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Subnetting Practice: free hands-on Networking lab. Practice IP subnetting calculations with ipcalc.">
+  <link rel="canonical" href="https://www.rcwittraining.in/subnetting-drill/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Subnetting Practice · RCW IT Training">
+  <meta property="og:description" content="Subnetting Practice: free hands-on Networking lab. Practice IP subnetting calculations with ipcalc.">
+  <meta property="og:url" content="https://www.rcwittraining.in/subnetting-drill/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Subnetting Practice", "description": "Subnetting Practice: free hands-on Networking lab. Practice IP subnetting calculations with ipcalc.", "url": "https://www.rcwittraining.in/subnetting-drill/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Subnetting Practice</span></nav>
+  <p class="rcw-eyebrow">Networking • Subnetting</p>
+  <h1>Subnetting Practice</h1>
+  <p class="rcw-lead">Practice IP subnetting calculations with ipcalc.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>/24 subnet</strong> — Analyse 10.0.0.0/24 with ipcalc. <span class=rcw-pts>25 pts</span></li><li><strong>/26 subnet</strong> — Analyse 192.168.1.0/26. <span class=rcw-pts>25 pts</span></li><li><strong>/16 subnet</strong> — Analyse 172.16.0.0/16. <span class=rcw-pts>25 pts</span></li><li><strong>/30 subnet</strong> — Analyse a point-to-point 10.1.1.0/30. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>ipcalc 10.0.0.0/24</code></li><li><code>ipcalc 192.168.1.0/26</code></li><li><code>ipcalc 172.16.0.0/16</code></li><li><code>ipcalc 10.1.1.0/30</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "subnetting-drill", "title": "Subnetting Practice", "category": "Networking • Subnetting", "badge": "SUBNET", "accent": "#00bcd4", "difficulty": "INTERMEDIATE", "host": "net-node-01", "user": "student", "intro": ["Practice IP subnetting calculations with ipcalc."], "objectives": [{"name": "/24 subnet", "desc": "Analyse 10.0.0.0/24 with ipcalc.", "points": 25, "match": ["ipcalc\\s+10\\.0\\.0\\.0/24"], "success": "✓ /24 analysed."}, {"name": "/26 subnet", "desc": "Analyse 192.168.1.0/26.", "points": 25, "match": ["ipcalc\\s+192\\.168\\.1\\.0/26"], "success": "✓ /26 analysed."}, {"name": "/16 subnet", "desc": "Analyse 172.16.0.0/16.", "points": 25, "match": ["ipcalc\\s+172\\.16\\.0\\.0/16"], "success": "✓ /16 analysed."}, {"name": "/30 subnet", "desc": "Analyse a point-to-point 10.1.1.0/30.", "points": 25, "match": ["ipcalc\\s+10\\.1\\.1\\.0/30"], "success": "✓ /30 analysed."}], "hint": ["ipcalc 10.0.0.0/24", "ipcalc 192.168.1.0/26", "ipcalc 172.16.0.0/16", "ipcalc 10.1.1.0/30"], "help": "ipcalc IP/PREFIX — shows Network, Netmask, Broadcast, Host range", "certTitle": "Subnetting Champion", "certDesc1": "for mastering IP subnetting", "certDesc2": "across multiple prefix lengths.", "certChallenge": "subnetting", "certFooter": "Networking • Challenge", "headline": "Subnetting Practice", "lead": "Practice IP subnetting calculations with ipcalc.", "brief": "Subnetting Practice", "briefCopy": "Practice IP subnetting calculations with ipcalc.", "incident": "SUBNETTING-DRILL · net-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Subnetting Practice.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SUBN", "minutes": 10};</script>
   <script src="../passport.js"></script>

@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Docker Volumes · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Docker Volumes: free hands-on Containers lab. Persist data with Docker volumes. Practise docker, docker, docker in a browser terminal.">
+  <link rel="canonical" href="https://www.rcwittraining.in/docker-volumes/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Docker Volumes · RCW IT Training">
+  <meta property="og:description" content="Docker Volumes: free hands-on Containers lab. Persist data with Docker volumes. Practise docker, docker, docker in a browser terminal.">
+  <meta property="og:url" content="https://www.rcwittraining.in/docker-volumes/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Docker Volumes", "description": "Docker Volumes: free hands-on Containers lab. Persist data with Docker volumes. Practise docker, docker, docker in a browser terminal.", "url": "https://www.rcwittraining.in/docker-volumes/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Docker Volumes</span></nav>
+  <p class="rcw-eyebrow">Containers • Docker</p>
+  <h1>Docker Volumes</h1>
+  <p class="rcw-lead">Persist data with Docker volumes.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List volumes</strong> — List with docker volume ls. <span class=rcw-pts>34 pts</span></li><li><strong>Create volume</strong> — Create with docker volume create. <span class=rcw-pts>33 pts</span></li><li><strong>Run with volume</strong> — Mount a volume with docker run -v. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>docker volume ls</code></li><li><code>docker volume create data</code></li><li><code>docker run -d -v data:/app nginx</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "docker-volumes", "title": "Docker Volumes", "category": "Containers • Docker", "badge": "DKR", "accent": "#2496ed", "difficulty": "INTERMEDIATE", "host": "docker-host-01", "user": "dev", "intro": ["Persist data with Docker volumes."], "objectives": [{"name": "List volumes", "desc": "List with docker volume ls.", "points": 34, "match": ["docker\\s+volume\\s+ls"], "success": "✓ Volumes listed."}, {"name": "Create volume", "desc": "Create with docker volume create.", "points": 33, "match": ["docker\\s+volume\\s+create\\s+\\S+"], "success": "✓ Volume created."}, {"name": "Run with volume", "desc": "Mount a volume with docker run -v.", "points": 33, "match": ["docker\\s+run\\s+.*-v\\s+\\S+"], "success": "✓ Volume mounted."}], "hint": ["docker volume ls", "docker volume create data", "docker run -d -v data:/app nginx"], "help": "docker volume ls|create|inspect|rm · docker run -v VOL:PATH IMG", "certTitle": "Docker Volumes Champion", "certDesc1": "for mastering Docker volumes", "certDesc2": "with creation and mounting.", "certChallenge": "Docker volumes", "certFooter": "Containers • Challenge", "headline": "Docker Volumes", "lead": "Persist data with Docker volumes.", "brief": "Docker Volumes", "briefCopy": "Persist data with Docker volumes.", "incident": "DOCKER-VOLUMES · docker-host-01 · hands-on practice", "resultCopy": "You completed all objectives for Docker Volumes.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "DKR", "minutes": 10};</script>
   <script src="../passport.js"></script>

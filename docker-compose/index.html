@@ -9,8 +9,78 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Docker Compose · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Learn Docker Compose hands-on: read a compose file, build, start a two-service stack detached, inspect it and tear it down — with the mistakes that trip up be">
+  <link rel="canonical" href="https://www.rcwittraining.in/docker-compose/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Docker Compose · RCW IT Training">
+  <meta property="og:description" content="Learn Docker Compose hands-on: read a compose file, build, start a two-service stack detached, inspect it and tear it down — with the mistakes that trip up be">
+  <meta property="og:url" content="https://www.rcwittraining.in/docker-compose/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Docker Compose", "description": "Learn Docker Compose hands-on: read a compose file, build, start a two-service stack detached, inspect it and tear it down — with the mistakes that trip up be", "url": "https://www.rcwittraining.in/docker-compose/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Docker Compose</span></nav>
+  <p class="rcw-eyebrow">Containers • Docker</p>
+  <h1>Docker Compose</h1>
+  <p class="rcw-lead">Define and run multi-container apps with docker compose.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  <h2>Why this lab exists</h2>
+<p>Most people meet Docker through a single <code>docker run</code> command. The moment an application needs two containers — a web server and a database, say — the command lines get long, the port mappings get forgotten, and nobody remembers which flags were used last time. Docker Compose fixes that by putting the whole stack in one declarative file, <code>docker-compose.yml</code>, and giving you four verbs to manage it: <code>build</code>, <code>up</code>, <code>ps</code>/<code>logs</code>, and <code>down</code>.</p>
+<p>In this lab you work on a host called <code>docker-host-01</code> as the user <code>dev</code>. The application lives in <code>/app</code> and already has a compose file. Your job is to read it, build it, run it in the background, and shut it down cleanly. Those four steps are exactly what you would do on a real development box on day one of a new project.</p>
+<h2>Reading the compose file before you run anything</h2>
+<p>Get into the habit of running <code>cat /app/docker-compose.yml</code> <em>before</em> you start a stack. Two things in this file matter:</p>
+<ul>
+<li><strong><code>services:</code></strong> — every top-level key underneath is one container. Here there are two: <code>web</code> (built from the <code>nginx</code> image) and <code>db</code> (built from the <code>mysql</code> image).</li>
+<li><strong><code>ports:</code></strong> — <code>80:80</code> means <em>host port 80 → container port 80</em>. The left-hand number is the one your browser will use. If port 80 is already taken on the host, <code>up</code> will fail with <code>address already in use</code>, so check with <code>ss -ltnp | grep :80</code> if you are ever unsure.</li>
+</ul>
+<p>Notice that <code>db</code> has no <code>ports:</code> entry. That is intentional and good practice: the database only needs to be reachable by <code>web</code> over the private network Compose creates, not from the outside world.</p>
+<blockquote>Compose creates a network per project named <code>&lt;folder&gt;_default</code>. Services reach each other by service name — <code>web</code> can talk to the database as <code>db:3306</code> — with no IP addresses involved.</blockquote>
+<h2>The four commands, and what each one really does</h2>
+<ol>
+<li><strong><code>docker compose build</code></strong> — builds any service that has a <code>build:</code> section and pulls images for services that only have <code>image:</code>. In this file both services use published images, so the command finishes quickly, but you should still run it: it validates the YAML and confirms the images are available <em>before</em> you try to start anything.</li>
+<li><strong><code>docker compose up -d</code></strong> — creates the network, creates the containers and starts them. The <code>-d</code> (detached) flag returns your terminal immediately. Without <code>-d</code> Compose streams every container's logs to your screen and stops the stack when you press Ctrl+C — fine for debugging, wrong for anything you want to keep running.</li>
+<li><strong><code>docker compose ps</code></strong> and <strong><code>docker compose logs web</code></strong> — the two commands you use most after <code>up</code>. <code>ps</code> shows state and port mappings; <code>logs</code> shows stdout/stderr from a service. Add <code>-f</code> to follow.</li>
+<li><strong><code>docker compose down</code></strong> — stops and removes the containers <em>and</em> the network. It does <strong>not</strong> remove named volumes, so database data survives a <code>down</code> unless you add <code>-v</code>.</li>
+</ol>
+<h2>Mistakes I see in every beginner batch</h2>
+<ul>
+<li><strong>Running the commands from the wrong directory.</strong> Compose looks for <code>docker-compose.yml</code> (or <code>compose.yaml</code>) in the current directory. If you are in <code>/home/dev</code> instead of <code>/app</code>, you get <code>no configuration file provided: not found</code>. Either <code>cd /app</code> first or pass <code>-f /app/docker-compose.yml</code>.</li>
+<li><strong>Typing <code>docker-compose</code> with a hyphen.</strong> That is the old Python v1 tool, removed in 2023. Modern Docker ships Compose v2 as a plugin: <code>docker compose</code> with a space.</li>
+<li><strong>Forgetting <code>-d</code>, then closing the terminal.</strong> The stack dies with the shell. If you did this, just run <code>up -d</code> again — Compose is idempotent and will only recreate what changed.</li>
+<li><strong>Using <code>docker rm</code> on compose-managed containers.</strong> It works, but Compose then loses track of them. Always use <code>down</code> (or <code>stop</code>/<code>rm</code> through Compose) so the project state stays consistent.</li>
+<li><strong>Expecting MySQL to come up without a root password.</strong> The official image refuses to start unless <code>MYSQL_ROOT_PASSWORD</code> (or one of its alternatives) is set. In this simulated lab the container starts either way; on a real host you would add an <code>environment:</code> block to the <code>db</code> service.</li>
+</ul>
+<h2>How the lab scores you</h2>
+<p>The terminal below checks each objective as you type. Reading the file, building, starting detached and tearing down are worth 25 points each. You can retype a command if you make a mistake — only correct commands count. When you finish, download the scorecard; the lab does not store anything on a server, so keep the file if you want it.</p>
+<h2>Where to go next</h2>
+<p>Once this feels easy, try the <strong>Docker Networking</strong> and <strong>Docker Volumes</strong> labs on this site — they cover the two things this compose file deliberately leaves out: how <code>web</code> actually reaches <code>db</code>, and how to stop losing your database every time you run <code>down -v</code>.</p>
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>View compose file</strong> — Read docker-compose.yml. <span class=rcw-pts>25 pts</span></li><li><strong>Build</strong> — Build with docker compose build. <span class=rcw-pts>25 pts</span></li><li><strong>Up detached</strong> — Start with docker compose up -d. <span class=rcw-pts>25 pts</span></li><li><strong>Down</strong> — Stop with docker compose down. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>cat /app/docker-compose.yml</code></li><li><code>docker compose build</code></li><li><code>docker compose up -d</code></li><li><code>docker compose down</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/app/docker-compose.yml</code><pre><code>services:
+  web:
+    image: nginx
+    ports:
+      - 80:80
+  db:
+    image: mysql</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "docker-compose", "title": "Docker Compose", "category": "Containers • Docker", "badge": "COMP", "accent": "#2496ed", "difficulty": "INTERMEDIATE", "host": "docker-host-01", "user": "dev", "intro": ["Define and run multi-container apps with docker compose."], "files": {"/app/docker-compose.yml": "services:\n  web:\n    image: nginx\n    ports:\n      - 80:80\n  db:\n    image: mysql\n"}, "objectives": [{"name": "View compose file", "desc": "Read docker-compose.yml.", "points": 25, "match": ["cat\\s+/app/docker-compose\\.yml"], "success": "✓ Compose file read."}, {"name": "Build", "desc": "Build with docker compose build.", "points": 25, "match": ["docker\\s+compose\\s+build"], "success": "✓ Built."}, {"name": "Up detached", "desc": "Start with docker compose up -d.", "points": 25, "match": ["docker\\s+compose\\s+up\\s+-d"], "success": "✓ Started."}, {"name": "Down", "desc": "Stop with docker compose down.", "points": 25, "match": ["docker\\s+compose\\s+down"], "success": "✓ Stopped."}], "hint": ["cat /app/docker-compose.yml", "docker compose build", "docker compose up -d", "docker compose down"], "help": "docker compose build · up -d · ps · logs · down", "certTitle": "Docker Compose Champion", "certDesc1": "for mastering docker compose", "certDesc2": "with multi-container apps.", "certChallenge": "Docker compose", "certFooter": "Containers • Challenge", "headline": "Docker Compose", "lead": "Define and run multi-container apps with docker compose.", "brief": "Docker Compose", "briefCopy": "Define and run multi-container apps with docker compose.", "incident": "DOCKER-COMPOSE · docker-host-01 · hands-on practice", "resultCopy": "You completed all objectives for Docker Compose.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "COMP", "minutes": 10};</script>
   <script src="../passport.js"></script>

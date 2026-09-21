@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Docker Image Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Docker Image Management: free hands-on Containers lab. Manage Docker images — pull, list, inspect, and remove.">
+  <link rel="canonical" href="https://www.rcwittraining.in/docker-images/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Docker Image Management · RCW IT Training">
+  <meta property="og:description" content="Docker Image Management: free hands-on Containers lab. Manage Docker images — pull, list, inspect, and remove.">
+  <meta property="og:url" content="https://www.rcwittraining.in/docker-images/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Docker Image Management", "description": "Docker Image Management: free hands-on Containers lab. Manage Docker images — pull, list, inspect, and remove.", "url": "https://www.rcwittraining.in/docker-images/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Docker Image Management</span></nav>
+  <p class="rcw-eyebrow">Containers • Docker</p>
+  <h1>Docker Image Management</h1>
+  <p class="rcw-lead">Manage Docker images — pull, list, inspect, and remove.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List images</strong> — List images with docker images. <span class=rcw-pts>25 pts</span></li><li><strong>Pull an image</strong> — Pull alpine with docker pull alpine. <span class=rcw-pts>25 pts</span></li><li><strong>Inspect</strong> — Inspect with docker inspect. <span class=rcw-pts>25 pts</span></li><li><strong>Remove</strong> — Remove with docker rmi. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>docker images</code></li><li><code>docker pull alpine</code></li><li><code>docker inspect alpine</code></li><li><code>docker rmi alpine</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "docker-images", "title": "Docker Image Management", "category": "Containers • Docker", "badge": "DKR", "accent": "#2496ed", "difficulty": "BEGINNER", "host": "docker-host-01", "user": "dev", "intro": ["Manage Docker images — pull, list, inspect, and remove."], "objectives": [{"name": "List images", "desc": "List images with docker images.", "points": 25, "match": ["docker\\s+images"], "success": "✓ Images listed."}, {"name": "Pull an image", "desc": "Pull alpine with docker pull alpine.", "points": 25, "match": ["docker\\s+pull\\s+alpine"], "success": "✓ Image pulled."}, {"name": "Inspect", "desc": "Inspect with docker inspect.", "points": 25, "match": ["docker\\s+inspect\\s+\\S+"], "success": "✓ Image inspected."}, {"name": "Remove", "desc": "Remove with docker rmi.", "points": 25, "match": ["docker\\s+rmi\\s+\\S+"], "success": "✓ Image removed."}], "hint": ["docker images", "docker pull alpine", "docker inspect alpine", "docker rmi alpine"], "help": "docker images · pull IMG · inspect IMG · rmi IMG", "certTitle": "Docker Image Champion", "certDesc1": "for mastering Docker images", "certDesc2": "with pull, inspect, and remove.", "certChallenge": "Docker images", "certFooter": "Containers • Challenge", "headline": "Docker Image Management", "lead": "Manage Docker images — pull, list, inspect, and remove.", "brief": "Docker Image Management", "briefCopy": "Manage Docker images — pull, list, inspect, and remove.", "incident": "DOCKER-IMAGES · docker-host-01 · hands-on practice", "resultCopy": "You completed all objectives for Docker Image Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "DKR", "minutes": 10};</script>
   <script src="../passport.js"></script>

@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Environment Variables · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Environment Variables: free hands-on Linux lab. Understand and manage shell environment variables.">
+  <link rel="canonical" href="https://www.rcwittraining.in/environment-vars/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Environment Variables · RCW IT Training">
+  <meta property="og:description" content="Environment Variables: free hands-on Linux lab. Understand and manage shell environment variables.">
+  <meta property="og:url" content="https://www.rcwittraining.in/environment-vars/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Environment Variables", "description": "Environment Variables: free hands-on Linux lab. Understand and manage shell environment variables.", "url": "https://www.rcwittraining.in/environment-vars/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Environment Variables</span></nav>
+  <p class="rcw-eyebrow">Linux • Shell</p>
+  <h1>Environment Variables</h1>
+  <p class="rcw-lead">Understand and manage shell environment variables.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Show all vars</strong> — List with env or printenv. <span class=rcw-pts>25 pts</span></li><li><strong>Show PATH</strong> — Print with echo $PATH. <span class=rcw-pts>25 pts</span></li><li><strong>Set a variable</strong> — Set with export. <span class=rcw-pts>25 pts</span></li><li><strong>Show home</strong> — Print with echo $HOME. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>env</code></li><li><code>echo $PATH</code></li><li><code>export APP_ENV=prod</code></li><li><code>echo $HOME</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "environment-vars", "title": "Environment Variables", "category": "Linux • Shell", "badge": "ENV", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "shell-node-01", "user": "student", "intro": ["Understand and manage shell environment variables."], "objectives": [{"name": "Show all vars", "desc": "List with env or printenv.", "points": 25, "match": ["env|printenv"], "success": "✓ Variables listed."}, {"name": "Show PATH", "desc": "Print with echo $PATH.", "points": 25, "match": ["echo\\s+\\$PATH"], "success": "✓ PATH shown."}, {"name": "Set a variable", "desc": "Set with export.", "points": 25, "match": ["export\\s+\\w+=\\S+"], "success": "✓ Variable set."}, {"name": "Show home", "desc": "Print with echo $HOME.", "points": 25, "match": ["echo\\s+\\$HOME"], "success": "✓ HOME shown."}], "hint": ["env", "echo $PATH", "export APP_ENV=prod", "echo $HOME"], "help": "env · printenv · echo $VAR · export VAR=value", "certTitle": "Env Var Champion", "certDesc1": "for mastering environment variables", "certDesc2": "with env, export, and echo.", "certChallenge": "environment variables", "certFooter": "Linux Shell • Challenge", "headline": "Environment Variables", "lead": "Understand and manage shell environment variables.", "brief": "Environment Variables", "briefCopy": "Understand and manage shell environment variables.", "incident": "ENVIRONMENT-VARS · shell-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Environment Variables.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "ENV", "minutes": 10};</script>
   <script src="../passport.js"></script>

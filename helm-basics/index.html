@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Helm Package Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Helm Package Management: free hands-on Kubernetes lab. Install and manage apps with Helm charts.">
+  <link rel="canonical" href="https://www.rcwittraining.in/helm-basics/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Helm Package Management · RCW IT Training">
+  <meta property="og:description" content="Helm Package Management: free hands-on Kubernetes lab. Install and manage apps with Helm charts.">
+  <meta property="og:url" content="https://www.rcwittraining.in/helm-basics/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Helm Package Management", "description": "Helm Package Management: free hands-on Kubernetes lab. Install and manage apps with Helm charts.", "url": "https://www.rcwittraining.in/helm-basics/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Helm Package Management</span></nav>
+  <p class="rcw-eyebrow">Kubernetes • Helm</p>
+  <h1>Helm Package Management</h1>
+  <p class="rcw-lead">Install and manage apps with Helm charts.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Add repo</strong> — Add a repo with helm repo add. <span class=rcw-pts>25 pts</span></li><li><strong>Update repos</strong> — Update with helm repo update. <span class=rcw-pts>25 pts</span></li><li><strong>Install chart</strong> — Install with helm install. <span class=rcw-pts>25 pts</span></li><li><strong>List releases</strong> — List with helm list. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>helm repo add bitnami https://charts.bitnami.com/bitnami</code></li><li><code>helm repo update</code></li><li><code>helm install myapp bitnami/nginx</code></li><li><code>helm list</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "helm-basics", "title": "Helm Package Management", "category": "Kubernetes • Helm", "badge": "HELM", "accent": "#326ce5", "difficulty": "INTERMEDIATE", "host": "k8s-master-01", "user": "admin", "intro": ["Install and manage apps with Helm charts."], "objectives": [{"name": "Add repo", "desc": "Add a repo with helm repo add.", "points": 25, "match": ["helm\\s+repo\\s+add\\s+\\S+"], "success": "✓ Repo added."}, {"name": "Update repos", "desc": "Update with helm repo update.", "points": 25, "match": ["helm\\s+repo\\s+update"], "success": "✓ Repos updated."}, {"name": "Install chart", "desc": "Install with helm install.", "points": 25, "match": ["helm\\s+install\\s+\\S+"], "success": "✓ Chart installed."}, {"name": "List releases", "desc": "List with helm list.", "points": 25, "match": ["helm\\s+list"], "success": "✓ Releases listed."}], "hint": ["helm repo add bitnami https://charts.bitnami.com/bitnami", "helm repo update", "helm install myapp bitnami/nginx", "helm list"], "help": "helm repo add NAME URL · repo update · install · list · uninstall", "certTitle": "Helm Champion", "certDesc1": "for mastering Helm", "certDesc2": "with repos and charts.", "certChallenge": "Helm packages", "certFooter": "Kubernetes • Challenge", "headline": "Helm Package Management", "lead": "Install and manage apps with Helm charts.", "brief": "Helm Package Management", "briefCopy": "Install and manage apps with Helm charts.", "incident": "HELM-BASICS · k8s-master-01 · hands-on practice", "resultCopy": "You completed all objectives for Helm Package Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "HELM", "minutes": 10};</script>
   <script src="../passport.js"></script>

@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>GCP IAM · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="GCP IAM: free hands-on GCP lab. Manage IAM roles and service accounts with gcloud. Practise gcloud, gcloud, gcloud in a browser terminal.">
+  <link rel="canonical" href="https://www.rcwittraining.in/gcp-iam/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="GCP IAM · RCW IT Training">
+  <meta property="og:description" content="GCP IAM: free hands-on GCP lab. Manage IAM roles and service accounts with gcloud. Practise gcloud, gcloud, gcloud in a browser terminal.">
+  <meta property="og:url" content="https://www.rcwittraining.in/gcp-iam/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "GCP IAM", "description": "GCP IAM: free hands-on GCP lab. Manage IAM roles and service accounts with gcloud. Practise gcloud, gcloud, gcloud in a browser terminal.", "url": "https://www.rcwittraining.in/gcp-iam/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>GCP IAM</span></nav>
+  <p class="rcw-eyebrow">GCP • Identity</p>
+  <h1>GCP IAM</h1>
+  <p class="rcw-lead">Manage IAM roles and service accounts with gcloud.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List service accounts</strong> — List with gcloud iam service-accounts list. <span class=rcw-pts>34 pts</span></li><li><strong>List roles</strong> — List with gcloud iam roles list. <span class=rcw-pts>33 pts</span></li><li><strong>Get policy</strong> — Get with gcloud projects get-iam-policy. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>gcloud iam service-accounts list</code></li><li><code>gcloud iam roles list</code></li><li><code>gcloud projects get-iam-policy PROJECT</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "gcp-iam", "title": "GCP IAM", "category": "GCP • Identity", "badge": "GCP", "accent": "#4285f4", "difficulty": "INTERMEDIATE", "host": "gcloud-01", "user": "clouduser", "intro": ["Manage IAM roles and service accounts with gcloud."], "objectives": [{"name": "List service accounts", "desc": "List with gcloud iam service-accounts list.", "points": 34, "match": ["gcloud\\s+iam\\s+service-accounts\\s+list"], "success": "✓ Service accounts listed."}, {"name": "List roles", "desc": "List with gcloud iam roles list.", "points": 33, "match": ["gcloud\\s+iam\\s+roles\\s+list"], "success": "✓ Roles listed."}, {"name": "Get policy", "desc": "Get with gcloud projects get-iam-policy.", "points": 33, "match": ["gcloud\\s+projects\\s+get-iam-policy"], "success": "✓ Policy retrieved."}], "hint": ["gcloud iam service-accounts list", "gcloud iam roles list", "gcloud projects get-iam-policy PROJECT"], "help": "gcloud iam service-accounts list · roles list · projects get-iam-policy", "certTitle": "GCP IAM Champion", "certDesc1": "for mastering GCP IAM", "certDesc2": "with roles and policies.", "certChallenge": "GCP IAM", "certFooter": "GCP • Challenge", "headline": "GCP IAM", "lead": "Manage IAM roles and service accounts with gcloud.", "brief": "GCP IAM", "briefCopy": "Manage IAM roles and service accounts with gcloud.", "incident": "GCP-IAM · gcloud-01 · hands-on practice", "resultCopy": "You completed all objectives for GCP IAM.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "GCP", "minutes": 10};</script>
   <script src="../passport.js"></script>

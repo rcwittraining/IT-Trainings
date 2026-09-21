@@ -9,8 +9,84 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>User Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Create a Linux user with useradd -m, set a password, grant sudo through the wheel group with usermod -aG and verify with id — plus the flags that quietly brea">
+  <link rel="canonical" href="https://www.rcwittraining.in/user-management/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="User Management · RCW IT Training">
+  <meta property="og:description" content="Create a Linux user with useradd -m, set a password, grant sudo through the wheel group with usermod -aG and verify with id — plus the flags that quietly brea">
+  <meta property="og:url" content="https://www.rcwittraining.in/user-management/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "User Management", "description": "Create a Linux user with useradd -m, set a password, grant sudo through the wheel group with usermod -aG and verify with id — plus the flags that quietly brea", "url": "https://www.rcwittraining.in/user-management/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>User Management</span></nav>
+  <p class="rcw-eyebrow">Linux • Users &amp; Groups</p>
+  <h1>User Management</h1>
+  <p class="rcw-lead">Create, modify, and manage Linux user accounts.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  <h2>What you are actually doing when you "create a user"</h2>
+<p>A Linux account is not one thing; it is at least four things that have to agree with each other:</p>
+<ul>
+<li>a line in <code>/etc/passwd</code> (name, UID, primary GID, home directory, login shell),</li>
+<li>a line in <code>/etc/shadow</code> (the hashed password and ageing rules),</li>
+<li>a primary group in <code>/etc/group</code>, usually with the same name as the user,</li>
+<li>a home directory, populated from <code>/etc/skel</code>, owned by the new UID.</li>
+</ul>
+<p><code>useradd</code> writes all four in one go — <strong>if</strong> you ask it to. This lab runs on <code>user-node-01</code> where the current <code>/etc/passwd</code> shows <code>root</code>, <code>student</code> (UID 1000) and <code>operator</code> (UID 1001). You will add a fourth account, <code>anna</code>, give her a password, put her in the <code>wheel</code> group so she can use <code>sudo</code>, and prove it worked.</p>
+<h2>Step 1 — <code>useradd -m anna</code></h2>
+<p>The <code>-m</code> flag creates the home directory. Leave it out and the account exists but <code>/home/anna</code> does not; the first login then fails with <code>Could not chdir to home directory</code> and a confusing shell in <code>/</code>. On RHEL-family systems <code>CREATE_HOME yes</code> in <code>/etc/login.defs</code> makes <code>-m</code> the default, but Debian and Ubuntu do <strong>not</strong> create the home unless you pass <code>-m</code> — which is why the habit is worth building.</p>
+<p>Other flags you will use in real life:</p>
+<ul>
+<li><code>-c "Anna Kumar"</code> — the comment / GECOS field, which is what shows up in <code>finger</code> and the GUI login screen.</li>
+<li><code>-s /bin/bash</code> — the login shell. Debian defaults to <code>/bin/sh</code>; set this explicitly on servers where people actually log in.</li>
+<li><code>-u 1502</code> — pin a UID when the account must match another machine (NFS home directories break silently if UIDs differ between hosts).</li>
+<li><code>-G wheel</code> — supplementary groups at creation time, so step 3 becomes unnecessary.</li>
+</ul>
+<h2>Step 2 — <code>passwd anna</code></h2>
+<p>A freshly created account is <strong>locked</strong>: the shadow field contains <code>!</code> and nobody can log in with a password. <code>passwd anna</code> prompts twice, hashes the password (SHA-512 or yescrypt depending on the distribution) and writes it to <code>/etc/shadow</code>. Only root can set another user's password without knowing the old one.</p>
+<p>Two things to know for exams and audits:</p>
+<ul>
+<li><code>passwd -l anna</code> locks the account again without deleting it — the right move when someone leaves.</li>
+<li><code>chage -l anna</code> shows the ageing policy. <code>chage -d 0 anna</code> forces a password change at next login, which is what you want after handing someone a temporary password.</li>
+</ul>
+<h2>Step 3 — <code>usermod -aG wheel anna</code></h2>
+<p><code>wheel</code> is the group that <code>/etc/sudoers</code> on RHEL, Fedora and Rocky allows to run any command with <code>sudo</code> (on Debian/Ubuntu the equivalent group is <code>sudo</code>). Adding a user to it is a one-liner, but the flags matter more than anywhere else in this lab:</p>
+<blockquote><strong><code>-aG</code>, never <code>-G</code> alone.</strong> <code>usermod -G wheel anna</code> <em>replaces</em> Anna's supplementary group list with just <code>wheel</code>. If she was also in <code>developers</code> and <code>docker</code>, she has just been removed from both — and nothing warns you. The <code>-a</code> (append) flag is what makes it additive.</blockquote>
+<p>I have watched this exact mistake take an engineer out of the <code>docker</code> group on a production host at 2 a.m. Type <code>-aG</code> until it is muscle memory.</p>
+<h2>Step 4 — <code>id anna</code></h2>
+<p><code>id</code> prints the UID, primary GID and every supplementary group. You are looking for <code>groups=1002(anna),10(wheel)</code>. If <code>wheel</code> is missing, step 3 did not apply. If the user's <em>existing</em> shell session does not see the new group, that is normal — group membership is read at login, so Anna needs to log out and back in (or run <code>newgrp wheel</code>).</p>
+<p>For a fuller check on a real system:</p>
+<pre><code>getent passwd anna        # confirms the passwd entry (works with LDAP/SSSD too)
+getent group wheel        # confirms membership from the group side
+ls -ld /home/anna         # home exists and is owned by anna:anna
+sudo -l -U anna           # what sudo will actually let her run</code></pre>
+<h2>Cleaning up properly</h2>
+<p>When an account is retired, <code>userdel -r anna</code> removes the passwd/shadow/group entries <strong>and</strong> the home directory and mail spool. Plain <code>userdel</code> leaves <code>/home/anna</code> behind owned by an orphaned UID — which is exactly the situation the <em>User Lifecycle and Orphaned Home</em> challenge on this site makes you fix.</p>
+<h2>How this maps to RHCSA</h2>
+<p>The EX200 objectives "Create, delete, and modify local user accounts", "Change passwords and adjust password aging" and "Create, delete, and modify local groups and group memberships" are all exercised here. In the exam you will not be told which flags to use, so the point of this lab is to make the correct flags automatic.</p>
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Create a user</strong> — Create user &#x27;anna&#x27; with useradd -m. <span class=rcw-pts>25 pts</span></li><li><strong>Set password</strong> — Set the password with passwd. <span class=rcw-pts>25 pts</span></li><li><strong>Add to group</strong> — Add anna to wheel with usermod -aG. <span class=rcw-pts>25 pts</span></li><li><strong>Verify</strong> — Check with id anna. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>useradd -m anna</code></li><li><code>passwd anna</code></li><li><code>usermod -aG wheel anna</code></li><li><code>id anna</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/etc/passwd</code><pre><code>root:x:0:0:root:/root:/bin/bash
+student:x:1000:1000:Student:/home/student:/bin/bash
+operator:x:1001:1001:Operator:/home/operator:/bin/bash</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "user-management", "title": "User Management", "category": "Linux • Users & Groups", "badge": "USER", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "user-node-01", "user": "student", "intro": ["Create, modify, and manage Linux user accounts."], "files": {"/etc/passwd": "root:x:0:0:root:/root:/bin/bash\nstudent:x:1000:1000:Student:/home/student:/bin/bash\noperator:x:1001:1001:Operator:/home/operator:/bin/bash\n"}, "objectives": [{"name": "Create a user", "desc": "Create user 'anna' with useradd -m.", "points": 25, "match": ["useradd\\s+-m\\s+anna"], "success": "✓ User created."}, {"name": "Set password", "desc": "Set the password with passwd.", "points": 25, "match": ["passwd\\s+anna"], "success": "✓ Password set."}, {"name": "Add to group", "desc": "Add anna to wheel with usermod -aG.", "points": 25, "match": ["usermod\\s+-aG\\s+wheel\\s+anna"], "success": "✓ Added to group."}, {"name": "Verify", "desc": "Check with id anna.", "points": 25, "match": ["id\\s+anna"], "success": "✓ User verified."}], "hint": ["useradd -m anna", "passwd anna", "usermod -aG wheel anna", "id anna"], "help": "useradd -m NAME · passwd NAME · usermod -aG GROUP NAME · id NAME", "certTitle": "User Management Champion", "certDesc1": "for mastering Linux user management", "certDesc2": "with creation, passwords, and groups.", "certChallenge": "user management", "certFooter": "Linux Users & Groups • Challenge", "headline": "User Management", "lead": "Create, modify, and manage Linux user accounts.", "brief": "User Management", "briefCopy": "Create, modify, and manage Linux user accounts.", "incident": "USER-MANAGEMENT · user-node-01 · hands-on practice", "resultCopy": "You completed all objectives for User Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "USER", "minutes": 10};</script>
   <script src="../passport.js"></script>

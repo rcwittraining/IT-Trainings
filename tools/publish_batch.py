@@ -17,7 +17,7 @@ DRAFTS = ROOT / "drafts"
 MARKER = ROOT / "tools" / "published_batches.txt"
 BASE = "https://www.rcwittraining.in"
 SITEMAP_ANCHOR = '  <url><loc>https://www.rcwittraining.in/cissp-bootcamp/</loc>'
-HOMEPAGE_ANCHOR = 'href="microsoft-security-patch-roundup-2026-08-25.html"'
+HOMEPAGE_ANCHOR = 'href="rhcsa-common-mistakes.html"'
 
 
 def next_batch():

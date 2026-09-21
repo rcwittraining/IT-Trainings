@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>MySQL Basics · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="MySQL Basics: free hands-on Databases lab. Manage a MySQL database — show, create, and query.">
+  <link rel="canonical" href="https://www.rcwittraining.in/mysql-basics/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="MySQL Basics · RCW IT Training">
+  <meta property="og:description" content="MySQL Basics: free hands-on Databases lab. Manage a MySQL database — show, create, and query.">
+  <meta property="og:url" content="https://www.rcwittraining.in/mysql-basics/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "MySQL Basics", "description": "MySQL Basics: free hands-on Databases lab. Manage a MySQL database — show, create, and query.", "url": "https://www.rcwittraining.in/mysql-basics/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>MySQL Basics</span></nav>
+  <p class="rcw-eyebrow">Databases • MySQL</p>
+  <h1>MySQL Basics</h1>
+  <p class="rcw-lead">Manage a MySQL database — show, create, and query.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Show databases</strong> — List databases with SHOW DATABASES. <span class=rcw-pts>25 pts</span></li><li><strong>Create database</strong> — Create with CREATE DATABASE. <span class=rcw-pts>25 pts</span></li><li><strong>Use database</strong> — Select with USE. <span class=rcw-pts>25 pts</span></li><li><strong>Show tables</strong> — List tables with SHOW TABLES. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>SHOW DATABASES;</code></li><li><code>CREATE DATABASE app;</code></li><li><code>USE app;</code></li><li><code>SHOW TABLES;</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "mysql-basics", "title": "MySQL Basics", "category": "Databases • MySQL", "badge": "SQL", "accent": "#e38c00", "difficulty": "BEGINNER", "host": "db-node-01", "user": "dbadmin", "intro": ["Manage a MySQL database — show, create, and query."], "objectives": [{"name": "Show databases", "desc": "List databases with SHOW DATABASES.", "points": 25, "match": ["show\\s+databases"], "success": "✓ Databases listed."}, {"name": "Create database", "desc": "Create with CREATE DATABASE.", "points": 25, "match": ["create\\s+database\\s+\\S+"], "success": "✓ Database created."}, {"name": "Use database", "desc": "Select with USE.", "points": 25, "match": ["use\\s+\\S+"], "success": "✓ Database selected."}, {"name": "Show tables", "desc": "List tables with SHOW TABLES.", "points": 25, "match": ["show\\s+tables"], "success": "✓ Tables listed."}], "hint": ["SHOW DATABASES;", "CREATE DATABASE app;", "USE app;", "SHOW TABLES;"], "help": "SHOW DATABASES · CREATE DATABASE NAME · USE NAME · SHOW TABLES", "certTitle": "MySQL Champion", "certDesc1": "for mastering MySQL basics", "certDesc2": "with databases and tables.", "certChallenge": "MySQL basics", "certFooter": "Databases • Challenge", "headline": "MySQL Basics", "lead": "Manage a MySQL database — show, create, and query.", "brief": "MySQL Basics", "briefCopy": "Manage a MySQL database — show, create, and query.", "incident": "MYSQL-BASICS · db-node-01 · hands-on practice", "resultCopy": "You completed all objectives for MySQL Basics.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SQL", "minutes": 10};</script>
   <script src="../passport.js"></script>

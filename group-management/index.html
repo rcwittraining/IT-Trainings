@@ -9,8 +9,46 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Group Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Group Management: free hands-on Linux lab. Manage Linux groups with groupadd, groupdel, and getent.">
+  <link rel="canonical" href="https://www.rcwittraining.in/group-management/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Group Management · RCW IT Training">
+  <meta property="og:description" content="Group Management: free hands-on Linux lab. Manage Linux groups with groupadd, groupdel, and getent.">
+  <meta property="og:url" content="https://www.rcwittraining.in/group-management/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Group Management", "description": "Group Management: free hands-on Linux lab. Manage Linux groups with groupadd, groupdel, and getent.", "url": "https://www.rcwittraining.in/group-management/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Group Management</span></nav>
+  <p class="rcw-eyebrow">Linux • Users &amp; Groups</p>
+  <h1>Group Management</h1>
+  <p class="rcw-lead">Manage Linux groups with groupadd, groupdel, and getent.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Create a group</strong> — Create group &#x27;devs&#x27; with groupadd. <span class=rcw-pts>34 pts</span></li><li><strong>Verify group</strong> — Check with getent group devs. <span class=rcw-pts>33 pts</span></li><li><strong>Delete group</strong> — Remove group &#x27;devs&#x27; with groupdel. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>groupadd devs</code></li><li><code>getent group devs</code></li><li><code>groupdel devs</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/etc/group</code><pre><code>root:x:0:
+wheel:x:10:student
+student:x:1000:</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "group-management", "title": "Group Management", "category": "Linux • Users & Groups", "badge": "GROUP", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "user-node-01", "user": "student", "intro": ["Manage Linux groups with groupadd, groupdel, and getent."], "files": {"/etc/group": "root:x:0:\nwheel:x:10:student\nstudent:x:1000:\n"}, "objectives": [{"name": "Create a group", "desc": "Create group 'devs' with groupadd.", "points": 34, "match": ["groupadd\\s+devs"], "success": "✓ Group created."}, {"name": "Verify group", "desc": "Check with getent group devs.", "points": 33, "match": ["getent\\s+group\\s+devs"], "success": "✓ Group verified."}, {"name": "Delete group", "desc": "Remove group 'devs' with groupdel.", "points": 33, "match": ["groupdel\\s+devs"], "success": "✓ Group deleted."}], "hint": ["groupadd devs", "getent group devs", "groupdel devs"], "help": "groupadd NAME · getent group NAME · groupdel NAME", "certTitle": "Group Management Champion", "certDesc1": "for mastering Linux group management", "certDesc2": "with create, verify, and delete.", "certChallenge": "group management", "certFooter": "Linux Users & Groups • Challenge", "headline": "Group Management", "lead": "Manage Linux groups with groupadd, groupdel, and getent.", "brief": "Group Management", "briefCopy": "Manage Linux groups with groupadd, groupdel, and getent.", "incident": "GROUP-MANAGEMENT · user-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Group Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "GROU", "minutes": 10};</script>
   <script src="../passport.js"></script>

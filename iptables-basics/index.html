@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>iptables Basics · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="iptables Basics: free hands-on Networking lab. Manage packet filtering with iptables. Practise iptables, iptables, iptables in a browser terminal.">
+  <link rel="canonical" href="https://www.rcwittraining.in/iptables-basics/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iptables Basics · RCW IT Training">
+  <meta property="og:description" content="iptables Basics: free hands-on Networking lab. Manage packet filtering with iptables. Practise iptables, iptables, iptables in a browser terminal.">
+  <meta property="og:url" content="https://www.rcwittraining.in/iptables-basics/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "iptables Basics", "description": "iptables Basics: free hands-on Networking lab. Manage packet filtering with iptables. Practise iptables, iptables, iptables in a browser terminal.", "url": "https://www.rcwittraining.in/iptables-basics/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>iptables Basics</span></nav>
+  <p class="rcw-eyebrow">Networking • Firewall</p>
+  <h1>iptables Basics</h1>
+  <p class="rcw-lead">Manage packet filtering with iptables.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List rules</strong> — List rules with iptables -L. <span class=rcw-pts>25 pts</span></li><li><strong>Allow port</strong> — Allow port 80 with -A INPUT. <span class=rcw-pts>25 pts</span></li><li><strong>Drop source</strong> — Drop traffic with -j DROP. <span class=rcw-pts>25 pts</span></li><li><strong>Save rules</strong> — Save with service iptables save. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>iptables -L</code></li><li><code>iptables -A INPUT -p tcp --dport 80 -j ACCEPT</code></li><li><code>iptables -A INPUT -s 203.0.113.66 -j DROP</code></li><li><code>iptables-save</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "iptables-basics", "title": "iptables Basics", "category": "Networking • Firewall", "badge": "IPT", "accent": "#00bcd4", "difficulty": "INTERMEDIATE", "host": "fw-node-01", "user": "student", "intro": ["Manage packet filtering with iptables."], "objectives": [{"name": "List rules", "desc": "List rules with iptables -L.", "points": 25, "match": ["iptables\\s+-L"], "success": "✓ Rules listed."}, {"name": "Allow port", "desc": "Allow port 80 with -A INPUT.", "points": 25, "match": ["iptables\\s+-A\\s+INPUT\\s+-p\\s+tcp\\s+--dport\\s+80\\s+-j\\s+ACCEPT"], "success": "✓ Port allowed."}, {"name": "Drop source", "desc": "Drop traffic with -j DROP.", "points": 25, "match": ["iptables\\s+-A\\s+\\S+\\s+-s\\s+\\S+\\s+-j\\s+DROP"], "success": "✓ Traffic dropped."}, {"name": "Save rules", "desc": "Save with service iptables save.", "points": 25, "match": ["service\\s+iptables\\s+save|iptables-save"], "success": "✓ Rules saved."}], "hint": ["iptables -L", "iptables -A INPUT -p tcp --dport 80 -j ACCEPT", "iptables -A INPUT -s 203.0.113.66 -j DROP", "iptables-save"], "help": "iptables -L · -A CHAIN ... -j TARGET · iptables-save", "certTitle": "iptables Champion", "certDesc1": "for mastering iptables", "certDesc2": "with rules and packet filtering.", "certChallenge": "iptables", "certFooter": "Networking • Challenge", "headline": "iptables Basics", "lead": "Manage packet filtering with iptables.", "brief": "iptables Basics", "briefCopy": "Manage packet filtering with iptables.", "incident": "IPTABLES-BASICS · fw-node-01 · hands-on practice", "resultCopy": "You completed all objectives for iptables Basics.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "IPT", "minutes": 10};</script>
   <script src="../passport.js"></script>

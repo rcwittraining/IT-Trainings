@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>nmcli Connection Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="nmcli Connection Management: free hands-on Networking lab. Manage network connections with nmcli.">
+  <link rel="canonical" href="https://www.rcwittraining.in/nmcli-connections/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="nmcli Connection Management · RCW IT Training">
+  <meta property="og:description" content="nmcli Connection Management: free hands-on Networking lab. Manage network connections with nmcli.">
+  <meta property="og:url" content="https://www.rcwittraining.in/nmcli-connections/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "nmcli Connection Management", "description": "nmcli Connection Management: free hands-on Networking lab. Manage network connections with nmcli.", "url": "https://www.rcwittraining.in/nmcli-connections/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>nmcli Connection Management</span></nav>
+  <p class="rcw-eyebrow">Networking • RHEL</p>
+  <h1>nmcli Connection Management</h1>
+  <p class="rcw-lead">Manage network connections with nmcli.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Show connections</strong> — List connections with nmcli con show. <span class=rcw-pts>25 pts</span></li><li><strong>Device status</strong> — Show devices with nmcli dev status. <span class=rcw-pts>25 pts</span></li><li><strong>Set hostname</strong> — Set the hostname with hostnamectl. <span class=rcw-pts>25 pts</span></li><li><strong>Check connectivity</strong> — Check with nmcli general status. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>nmcli con show</code></li><li><code>nmcli dev status</code></li><li><code>hostnamectl set-hostname new</code></li><li><code>nmcli general status</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "nmcli-connections", "title": "nmcli Connection Management", "category": "Networking • RHEL", "badge": "NMCLI", "accent": "#00bcd4", "difficulty": "INTERMEDIATE", "host": "net-node-01", "user": "student", "intro": ["Manage network connections with nmcli."], "objectives": [{"name": "Show connections", "desc": "List connections with nmcli con show.", "points": 25, "match": ["nmcli\\s+(con|connection)\\s+show"], "success": "✓ Connections listed."}, {"name": "Device status", "desc": "Show devices with nmcli dev status.", "points": 25, "match": ["nmcli\\s+dev\\s+status"], "success": "✓ Devices shown."}, {"name": "Set hostname", "desc": "Set the hostname with hostnamectl.", "points": 25, "match": ["hostnamectl\\s+set-hostname\\s+\\S+"], "success": "✓ Hostname set."}, {"name": "Check connectivity", "desc": "Check with nmcli general status.", "points": 25, "match": ["nmcli\\s+general\\s+status"], "success": "✓ Status checked."}], "hint": ["nmcli con show", "nmcli dev status", "hostnamectl set-hostname new", "nmcli general status"], "help": "nmcli con show · nmcli dev status · hostnamectl set-hostname NAME", "certTitle": "nmcli Champion", "certDesc1": "for mastering nmcli", "certDesc2": "with connections and devices.", "certChallenge": "nmcli connections", "certFooter": "Networking • Challenge", "headline": "nmcli Connection Management", "lead": "Manage network connections with nmcli.", "brief": "nmcli Connection Management", "briefCopy": "Manage network connections with nmcli.", "incident": "NMCLI-CONNECTIONS · net-node-01 · hands-on practice", "resultCopy": "You completed all objectives for nmcli Connection Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "NMCL", "minutes": 10};</script>
   <script src="../passport.js"></script>

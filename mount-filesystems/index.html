@@ -9,8 +9,45 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Mount & Filesystem Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Mount &amp; Filesystem Management: free hands-on Linux lab. Mount, unmount, and inspect filesystems with mount, umount, and findmnt.">
+  <link rel="canonical" href="https://www.rcwittraining.in/mount-filesystems/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Mount &amp; Filesystem Management · RCW IT Training">
+  <meta property="og:description" content="Mount &amp; Filesystem Management: free hands-on Linux lab. Mount, unmount, and inspect filesystems with mount, umount, and findmnt.">
+  <meta property="og:url" content="https://www.rcwittraining.in/mount-filesystems/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Mount & Filesystem Management", "description": "Mount & Filesystem Management: free hands-on Linux lab. Mount, unmount, and inspect filesystems with mount, umount, and findmnt.", "url": "https://www.rcwittraining.in/mount-filesystems/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Mount &amp; Filesystem Management</span></nav>
+  <p class="rcw-eyebrow">Linux • Storage</p>
+  <h1>Mount &amp; Filesystem Management</h1>
+  <p class="rcw-lead">Mount, unmount, and inspect filesystems with mount, umount, and findmnt.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List mounts</strong> — List mounted filesystems with mount or findmnt. <span class=rcw-pts>25 pts</span></li><li><strong>Mount a device</strong> — Mount /dev/sdb1 on /mnt. <span class=rcw-pts>25 pts</span></li><li><strong>Unmount</strong> — Unmount with umount /mnt. <span class=rcw-pts>25 pts</span></li><li><strong>Check fstab</strong> — Read /etc/fstab. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>findmnt</code></li><li><code>mount /dev/sdb1 /mnt</code></li><li><code>umount /mnt</code></li><li><code>cat /etc/fstab</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/etc/fstab</code><pre><code>/dev/mapper/rhel-root / xfs defaults 0 0
+/dev/sda1 /boot xfs defaults 0 0</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "mount-filesystems", "title": "Mount & Filesystem Management", "category": "Linux • Storage", "badge": "MNT", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "disk-node-01", "user": "student", "intro": ["Mount, unmount, and inspect filesystems with mount, umount, and findmnt."], "files": {"/etc/fstab": "/dev/mapper/rhel-root / xfs defaults 0 0\n/dev/sda1 /boot xfs defaults 0 0\n"}, "objectives": [{"name": "List mounts", "desc": "List mounted filesystems with mount or findmnt.", "points": 25, "match": ["mount|findmnt"], "success": "✓ Mounts listed."}, {"name": "Mount a device", "desc": "Mount /dev/sdb1 on /mnt.", "points": 25, "match": ["mount\\s+/dev/sdb1\\s+/mnt"], "success": "✓ Device mounted."}, {"name": "Unmount", "desc": "Unmount with umount /mnt.", "points": 25, "match": ["umount\\s+/mnt"], "success": "✓ Unmounted."}, {"name": "Check fstab", "desc": "Read /etc/fstab.", "points": 25, "match": ["cat\\s+/etc/fstab"], "success": "✓ fstab read."}], "hint": ["findmnt", "mount /dev/sdb1 /mnt", "umount /mnt", "cat /etc/fstab"], "help": "mount DEVICE MOUNTPOINT · umount MOUNTPOINT · findmnt · cat /etc/fstab", "certTitle": "Mount Champion", "certDesc1": "for mastering filesystem mounts", "certDesc2": "with mount, umount, and findmnt.", "certChallenge": "mount management", "certFooter": "Linux Storage • Challenge", "headline": "Mount & Filesystem Management", "lead": "Mount, unmount, and inspect filesystems with mount, umount, and findmnt.", "brief": "Mount & Filesystem Management", "briefCopy": "Mount, unmount, and inspect filesystems with mount, umount, and findmnt.", "incident": "MOUNT-FILESYSTEMS · disk-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Mount & Filesystem Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "MNT", "minutes": 10};</script>
   <script src="../passport.js"></script>

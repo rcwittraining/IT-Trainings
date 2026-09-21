@@ -9,8 +9,47 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>System Log Analysis · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="System Log Analysis: free hands-on Security lab. Analyse system logs to find errors and anomalies.">
+  <link rel="canonical" href="https://www.rcwittraining.in/log-analysis/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="System Log Analysis · RCW IT Training">
+  <meta property="og:description" content="System Log Analysis: free hands-on Security lab. Analyse system logs to find errors and anomalies.">
+  <meta property="og:url" content="https://www.rcwittraining.in/log-analysis/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "System Log Analysis", "description": "System Log Analysis: free hands-on Security lab. Analyse system logs to find errors and anomalies.", "url": "https://www.rcwittraining.in/log-analysis/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>System Log Analysis</span></nav>
+  <p class="rcw-eyebrow">Security • Logs</p>
+  <h1>System Log Analysis</h1>
+  <p class="rcw-lead">Analyse system logs to find errors and anomalies.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Read logs</strong> — View /var/log/messages. <span class=rcw-pts>25 pts</span></li><li><strong>Find errors</strong> — Grep for &#x27;failed&#x27;. <span class=rcw-pts>25 pts</span></li><li><strong>Find OOM</strong> — Grep for &#x27;OOM&#x27;. <span class=rcw-pts>25 pts</span></li><li><strong>Count failures</strong> — Count with grep -c. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>cat /var/log/messages</code></li><li><code>grep failed /var/log/messages</code></li><li><code>grep OOM /var/log/messages</code></li><li><code>grep -c failed /var/log/messages</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/var/log/messages</code><pre><code>Aug 16 10:00:01 host systemd[1]: Started Session.
+Aug 16 10:05:22 host kernel: OOM killer activated
+Aug 16 10:06:11 host systemd[1]: Unit app.service failed.
+Aug 16 10:07:40 host kernel: watchdog: BUG: soft lockup</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "log-analysis", "title": "System Log Analysis", "category": "Security • Logs", "badge": "LOG", "accent": "#ef405b", "difficulty": "BEGINNER", "host": "sec-node-01", "user": "analyst", "intro": ["Analyse system logs to find errors and anomalies."], "files": {"/var/log/messages": "Aug 16 10:00:01 host systemd[1]: Started Session.\nAug 16 10:05:22 host kernel: OOM killer activated\nAug 16 10:06:11 host systemd[1]: Unit app.service failed.\nAug 16 10:07:40 host kernel: watchdog: BUG: soft lockup\n"}, "objectives": [{"name": "Read logs", "desc": "View /var/log/messages.", "points": 25, "match": ["cat\\s+/var/log/messages"], "success": "✓ Logs read."}, {"name": "Find errors", "desc": "Grep for 'failed'.", "points": 25, "match": ["grep\\s+failed\\s+/var/log/messages"], "success": "✓ Errors found."}, {"name": "Find OOM", "desc": "Grep for 'OOM'.", "points": 25, "match": ["grep\\s+OOM\\s+/var/log/messages"], "success": "✓ OOM found."}, {"name": "Count failures", "desc": "Count with grep -c.", "points": 25, "match": ["grep\\s+-c\\s+\\S+\\s+/var/log/messages"], "success": "✓ Counted."}], "hint": ["cat /var/log/messages", "grep failed /var/log/messages", "grep OOM /var/log/messages", "grep -c failed /var/log/messages"], "help": "cat /var/log/messages · grep PATTERN · grep -c PATTERN", "certTitle": "Log Analysis Champion", "certDesc1": "for mastering log analysis", "certDesc2": "with grep and pattern matching.", "certChallenge": "log analysis", "certFooter": "Security • Challenge", "headline": "System Log Analysis", "lead": "Analyse system logs to find errors and anomalies.", "brief": "System Log Analysis", "briefCopy": "Analyse system logs to find errors and anomalies.", "incident": "LOG-ANALYSIS · sec-node-01 · hands-on practice", "resultCopy": "You completed all objectives for System Log Analysis.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "LOG", "minutes": 10};</script>
   <script src="../passport.js"></script>

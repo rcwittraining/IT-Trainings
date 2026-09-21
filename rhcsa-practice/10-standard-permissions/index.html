@@ -4,13 +4,88 @@
   <script src="../../rcw-consent.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Original stateful RHEL 10 administration task for RHCSA certification practice.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Standard Linux Permissions | RHCSA Certification Practice | RCW IT Training</title>
   <link rel="stylesheet" href="../practice.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="RHCSA practice task 10 — restrict a payroll export so only the owner can write and the auditors group can read: stat, chgrp, chmod 0640 and verification, expl">
+  <link rel="canonical" href="https://www.rcwittraining.in/rhcsa-practice/10-standard-permissions/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Standard Linux Permissions · RCW IT Training">
+  <meta property="og:description" content="RHCSA practice task 10 — restrict a payroll export so only the owner can write and the auditors group can read: stat, chgrp, chmod 0640 and verification, expl">
+  <meta property="og:url" content="https://www.rcwittraining.in/rhcsa-practice/10-standard-permissions/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Standard Linux Permissions", "description": "RHCSA practice task 10 — restrict a payroll export so only the owner can write and the auditors group can read: stat, chgrp, chmod 0640 and verification, expl", "url": "https://www.rcwittraining.in/rhcsa-practice/10-standard-permissions/", "learningResourceType": "Hands-on lab", "educationalLevel": "RHCSA / EX200", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <!-- rcw-guide:end -->
 </head>
 <body>
+<!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Standard Linux Permissions</span></nav>
+  <p class="rcw-eyebrow">RHCSA Certification Practice · Essential Tools · Permissions</p>
+  <h1>Standard Linux Permissions</h1>
+  <p class="rcw-lead">Restrict a payroll export so only its owner can modify it and members of the audit group can read it.</p>
+  <p class=rcw-number>Task 10 of 62 in the RHCSA practice series. Mapped to the published <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" rel="nofollow noopener">EX200 skill areas</a>.</p>
+  <ul class="rcw-facts"><li><strong>RHCSA / EX200</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  <h2>The scenario</h2>
+<p>A payroll export at <code>/srv/payroll/export.csv</code> was written by a script running as root and left with mode <code>666</code> — readable <em>and writable by every user on the system</em>. The requirement is the classic one from a security review: the owner may modify it, the <code>auditors</code> group may read it, and nobody else may touch it. In numbers, that is <strong>0640</strong>, group <strong>auditors</strong>.</p>
+<p>This is the exact shape of a permissions item on the EX200: a file exists, its ownership or mode is wrong, and you must fix it and prove it. Speed comes from knowing the four commands cold; marks come from <em>verifying</em> rather than assuming.</p>
+<h2>Read before you write: <code>stat -c '%U:%G %a %n'</code></h2>
+<p><code>ls -l</code> shows permissions as <code>-rw-rw-rw-</code>, which is fine for eyeballing but slow to compare. <code>stat</code> with a format string gives you the octal mode directly:</p>
+<pre><code>stat -c &#x27;%U:%G %a %n&#x27; /srv/payroll/export.csv
+root:root 666 /srv/payroll/export.csv</code></pre>
+<ul>
+<li><code>%U:%G</code> — owner and group <strong>names</strong>.</li>
+<li><code>%a</code> — mode in octal (<code>%A</code> gives the symbolic form if you prefer it).</li>
+<li><code>%n</code> — the file name, useful when you stat several paths at once.</li>
+</ul>
+<p>Doing this first is not ceremony. On the real exam it catches the two things that ruin a task: a file that is not where the question implies, and a mode that already has setuid/setgid bits you did not expect to preserve.</p>
+<h2>Fix the group: <code>chgrp auditors /srv/payroll/export.csv</code></h2>
+<p><code>chgrp</code> changes only the group-owner. You could also write <code>chown :auditors file</code> or <code>chown root:auditors file</code>; all three are equivalent here. Use <code>chgrp</code> when you want to be explicit that the user-owner must not change — it removes a whole class of typo (<code>chown auditors file</code> would make <em>auditors</em> the user-owner, which fails because it is a group, but <code>chown auditor file</code> with a real user named <code>auditor</code> would silently succeed).</p>
+<p>If the group does not exist yet, <code>chgrp</code> fails with <code>invalid group</code>. Create it with <code>groupadd auditors</code> and re-run. In this task the group already exists.</p>
+<h2>Fix the mode: <code>chmod 0640 /srv/payroll/export.csv</code></h2>
+<p>Octal modes read left to right as <strong>special / user / group / other</strong>:</p>
+<ul>
+<li><strong>0</strong> — no setuid, setgid or sticky bit. Writing the leading zero is a habit worth keeping; on some systems <code>chmod 640</code> on a file that had setgid set would <em>keep</em> the setgid bit, whereas <code>chmod 0640</code> always clears it.</li>
+<li><strong>6</strong> = <code>rw-</code> — owner can read and write.</li>
+<li><strong>4</strong> = <code>r--</code> — group can read.</li>
+<li><strong>0</strong> = <code>---</code> — others get nothing.</li>
+</ul>
+<p>You could reach the same result symbolically with <code>chmod u=rw,g=r,o= file</code>. Symbolic mode is safer for <em>adjusting</em> (<code>g+r</code>), octal is faster for <em>setting</em> a known target — and exam tasks almost always give you a known target.</p>
+<h2>Verify: <code>stat -c '%G %a'</code></h2>
+<pre><code>stat -c &#x27;%G %a&#x27; /srv/payroll/export.csv
+auditors 640</code></pre>
+<p>That one line is your evidence. The lab marks the task complete only when the verification command runs <em>after</em> the fixes — the same discipline that keeps you from losing points on the exam because you "knew" a command had worked.</p>
+<h2>Traps around this task</h2>
+<ul>
+<li><strong>The directory matters too.</strong> A member of <code>auditors</code> still cannot read the file if <code>/srv/payroll</code> lacks the execute (search) bit for them. Check with <code>stat -c '%a' /srv/payroll</code>; <code>750</code> with group <code>auditors</code> is a sensible pairing.</li>
+<li><strong><code>umask</code> will not save you.</strong> It only shapes <em>new</em> files. Existing files need <code>chmod</code>.</li>
+<li><strong>ACLs override what you see.</strong> A <code>+</code> at the end of the <code>ls -l</code> mode string (<code>-rw-r-----+</code>) means an ACL is present; <code>getfacl</code> shows the real picture. This task has no ACL, but the RHCSA does test them — see the <em>Access Control Lists</em> practice task.</li>
+<li><strong>SELinux is a separate gate.</strong> Correct mode and group are necessary but not sufficient if the file's SELinux context is wrong for the service reading it. <code>ls -Z</code> is your friend; it is covered in the SELinux tasks later in this series.</li>
+</ul>
+<h2>Command summary</h2>
+<pre><code>stat -c &#x27;%U:%G %a %n&#x27; /srv/payroll/export.csv   # observe
+chgrp auditors /srv/payroll/export.csv           # group-owner
+chmod 0640 /srv/payroll/export.csv               # owner rw, group r, other none
+stat -c &#x27;%G %a&#x27; /srv/payroll/export.csv          # prove it</code></pre>
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Assess the starting state</strong> — Current ownership and mode inspected. <span class=rcw-pts>20 pts</span></li><li><strong>Apply the required owner, group and mode</strong> — Produce the required modeled system state using supported administrative commands. <span class=rcw-pts>60 pts</span></li><li><strong>Validate the resulting state</strong> — Final permissions validated. <span class=rcw-pts>20 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>stat -c &#x27;%U:%G %a %n&#x27; /srv/payroll/export.csv</code></li><li><code>chgrp auditors /srv/payroll/export.csv</code></li><li><code>chmod 0640 /srv/payroll/export.csv</code></li><li><code>stat -c &#x27;%G %a&#x27; /srv/payroll/export.csv</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
+  <div id="labRoot"></div>
   <noscript>This interactive practice task requires JavaScript. Enable it, then reload the page.</noscript>
   <script src="../../passport.js"></script>
   <script src="config.js"></script>

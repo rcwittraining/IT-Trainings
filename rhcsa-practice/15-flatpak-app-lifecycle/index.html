@@ -4,13 +4,49 @@
   <script src="../../rcw-consent.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Original stateful RHEL 10 administration task for RHCSA certification practice.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Flatpak Application Lifecycle | RHCSA Certification Practice | RCW IT Training</title>
   <link rel="stylesheet" href="../practice.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Flatpak Application Lifecycle: free hands-on RHCSA Certification Practice · Software Management · Flatpak lab. Deploy the approved diagram application from…">
+  <link rel="canonical" href="https://www.rcwittraining.in/rhcsa-practice/15-flatpak-app-lifecycle/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Flatpak Application Lifecycle · RCW IT Training">
+  <meta property="og:description" content="Flatpak Application Lifecycle: free hands-on RHCSA Certification Practice · Software Management · Flatpak lab. Deploy the approved diagram application from…">
+  <meta property="og:url" content="https://www.rcwittraining.in/rhcsa-practice/15-flatpak-app-lifecycle/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Flatpak Application Lifecycle", "description": "Flatpak Application Lifecycle: free hands-on RHCSA Certification Practice · Software Management · Flatpak lab. Deploy the approved diagram application from…", "url": "https://www.rcwittraining.in/rhcsa-practice/15-flatpak-app-lifecycle/", "learningResourceType": "Hands-on lab", "educationalLevel": "RHCSA / EX200", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+<!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Flatpak Application Lifecycle</span></nav>
+  <p class="rcw-eyebrow">RHCSA Certification Practice · Software Management · Flatpak</p>
+  <h1>Flatpak Application Lifecycle</h1>
+  <p class="rcw-lead">Deploy the approved diagram application from the training remote and remove its retired predecessor.</p>
+  <p class=rcw-number>Task 15 of 62 in the RHCSA practice series. Mapped to the published <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" rel="nofollow noopener">EX200 skill areas</a>.</p>
+  <ul class="rcw-facts"><li><strong>RHCSA / EX200</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Assess the starting state</strong> — Installed Flatpak applications inspected. <span class=rcw-pts>20 pts</span></li><li><strong>Install and remove Flatpak applications</strong> — Produce the required modeled system state using supported administrative commands. <span class=rcw-pts>60 pts</span></li><li><strong>Validate the resulting state</strong> — Final Flatpak application state validated. <span class=rcw-pts>20 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>flatpak list --app</code></li><li><code>flatpak install -y training org.example.Diagram</code></li><li><code>flatpak uninstall -y org.example.OldDiagram</code></li><li><code>flatpak info org.example.Diagram</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
+  <div id="labRoot"></div>
   <noscript>This interactive practice task requires JavaScript. Enable it, then reload the page.</noscript>
   <script src="../../passport.js"></script>
   <script src="config.js"></script>

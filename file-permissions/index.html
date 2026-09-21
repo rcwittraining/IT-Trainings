@@ -9,8 +9,45 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>File Permissions (chmod) · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="File Permissions (chmod): free hands-on Linux lab. Understand and modify file permissions with chmod (symbolic and numeric).">
+  <link rel="canonical" href="https://www.rcwittraining.in/file-permissions/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="File Permissions (chmod) · RCW IT Training">
+  <meta property="og:description" content="File Permissions (chmod): free hands-on Linux lab. Understand and modify file permissions with chmod (symbolic and numeric).">
+  <meta property="og:url" content="https://www.rcwittraining.in/file-permissions/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "File Permissions (chmod)", "description": "File Permissions (chmod): free hands-on Linux lab. Understand and modify file permissions with chmod (symbolic and numeric).", "url": "https://www.rcwittraining.in/file-permissions/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>File Permissions (chmod)</span></nav>
+  <p class="rcw-eyebrow">Linux • Permissions</p>
+  <h1>File Permissions (chmod)</h1>
+  <p class="rcw-lead">Understand and modify file permissions with chmod (symbolic and numeric).</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Make executable</strong> — Make script.sh executable with chmod +x. <span class=rcw-pts>25 pts</span></li><li><strong>Numeric mode</strong> — Set report.txt to 644 with numeric mode. <span class=rcw-pts>25 pts</span></li><li><strong>Read-only</strong> — Remove write with chmod -w. <span class=rcw-pts>25 pts</span></li><li><strong>Recursive</strong> — Apply recursively with -R. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>chmod +x /data/script.sh</code></li><li><code>chmod 644 /data/report.txt</code></li><li><code>chmod -w /data/report.txt</code></li><li><code>chmod -R 755 /data</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/data/script.sh</code><pre><code>#!/bin/bash
+echo hi</code></pre></li><li><code>/data/report.txt</code><pre><code>report</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "file-permissions", "title": "File Permissions (chmod)", "category": "Linux • Permissions", "badge": "CHMOD", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "perm-node-01", "user": "student", "intro": ["Understand and modify file permissions with chmod (symbolic and numeric)."], "files": {"/data/script.sh": "#!/bin/bash\necho hi\n", "/data/report.txt": "report\n"}, "objectives": [{"name": "Make executable", "desc": "Make script.sh executable with chmod +x.", "points": 25, "match": ["chmod\\s+\\+x\\s+/data/script\\.sh"], "success": "✓ Made executable."}, {"name": "Numeric mode", "desc": "Set report.txt to 644 with numeric mode.", "points": 25, "match": ["chmod\\s+644\\s+/data/report\\.txt"], "success": "✓ Numeric mode set."}, {"name": "Read-only", "desc": "Remove write with chmod -w.", "points": 25, "match": ["chmod\\s+-w\\s+\\S+"], "success": "✓ Write removed."}, {"name": "Recursive", "desc": "Apply recursively with -R.", "points": 25, "match": ["chmod\\s+-R\\s+\\S+"], "success": "✓ Recursive chmod done."}], "hint": ["chmod +x /data/script.sh", "chmod 644 /data/report.txt", "chmod -w /data/report.txt", "chmod -R 755 /data"], "help": "chmod +x FILE · chmod 644 FILE · chmod -w FILE · chmod -R MODE DIR", "certTitle": "Permissions Champion", "certDesc1": "for mastering file permissions", "certDesc2": "with symbolic and numeric modes.", "certChallenge": "file permissions", "certFooter": "Linux Permissions • Challenge", "headline": "File Permissions (chmod)", "lead": "Understand and modify file permissions with chmod (symbolic and numeric).", "brief": "File Permissions (chmod)", "briefCopy": "Understand and modify file permissions with chmod (symbolic and numeric).", "incident": "FILE-PERMISSIONS · perm-node-01 · hands-on practice", "resultCopy": "You completed all objectives for File Permissions (chmod).", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "CHMO", "minutes": 10};</script>
   <script src="../passport.js"></script>

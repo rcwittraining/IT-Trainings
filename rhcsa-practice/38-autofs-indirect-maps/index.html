@@ -4,13 +4,49 @@
   <script src="../../rcw-consent.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Original stateful RHEL 10 administration task for RHCSA certification practice.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Autofs Configuration | RHCSA Certification Practice | RCW IT Training</title>
   <link rel="stylesheet" href="../practice.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Autofs Configuration: free hands-on RHCSA Certification Practice · File Systems · Autofs lab. Configure an indirect automount so project exports appear ben…">
+  <link rel="canonical" href="https://www.rcwittraining.in/rhcsa-practice/38-autofs-indirect-maps/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Autofs Configuration · RCW IT Training">
+  <meta property="og:description" content="Autofs Configuration: free hands-on RHCSA Certification Practice · File Systems · Autofs lab. Configure an indirect automount so project exports appear ben…">
+  <meta property="og:url" content="https://www.rcwittraining.in/rhcsa-practice/38-autofs-indirect-maps/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Autofs Configuration", "description": "Autofs Configuration: free hands-on RHCSA Certification Practice · File Systems · Autofs lab. Configure an indirect automount so project exports appear ben…", "url": "https://www.rcwittraining.in/rhcsa-practice/38-autofs-indirect-maps/", "learningResourceType": "Hands-on lab", "educationalLevel": "RHCSA / EX200", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+<!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Autofs Configuration</span></nav>
+  <p class="rcw-eyebrow">RHCSA Certification Practice · File Systems · Autofs</p>
+  <h1>Autofs Configuration</h1>
+  <p class="rcw-lead">Configure an indirect automount so project exports appear beneath /projects only when accessed.</p>
+  <p class=rcw-number>Task 38 of 62 in the RHCSA practice series. Mapped to the published <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" rel="nofollow noopener">EX200 skill areas</a>.</p>
+  <ul class="rcw-facts"><li><strong>RHCSA / EX200</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Assess the starting state</strong> — Autofs package state inspected. <span class=rcw-pts>20 pts</span></li><li><strong>Configure and activate the autofs map</strong> — Produce the required modeled system state using supported administrative commands. <span class=rcw-pts>60 pts</span></li><li><strong>Validate the resulting state</strong> — On-demand project mount validated. <span class=rcw-pts>20 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>rpm -q autofs</code></li><li><code>printf &#x27;/projects /etc/auto.projects\n&#x27; &gt; /etc/auto.master.d/projects.autofs</code></li><li><code>printf &#x27;alpha -rw,sync files.lab.example:/exports/alpha\n&#x27; &gt; /etc/auto.projects</code></li><li><code>systemctl enable --now autofs</code></li><li><code>ls /projects/alpha &amp;&amp; mount | grep &#x27;/projects/alpha&#x27;</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
+  <div id="labRoot"></div>
   <noscript>This interactive practice task requires JavaScript. Enable it, then reload the page.</noscript>
   <script src="../../passport.js"></script>
   <script src="config.js"></script>

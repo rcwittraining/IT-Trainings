@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Port & Socket Inspection · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Port &amp; Socket Inspection: free hands-on Networking lab. Inspect open ports and sockets with ss and netstat.">
+  <link rel="canonical" href="https://www.rcwittraining.in/port-scanning/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Port &amp; Socket Inspection · RCW IT Training">
+  <meta property="og:description" content="Port &amp; Socket Inspection: free hands-on Networking lab. Inspect open ports and sockets with ss and netstat.">
+  <meta property="og:url" content="https://www.rcwittraining.in/port-scanning/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Port & Socket Inspection", "description": "Port & Socket Inspection: free hands-on Networking lab. Inspect open ports and sockets with ss and netstat.", "url": "https://www.rcwittraining.in/port-scanning/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Port &amp; Socket Inspection</span></nav>
+  <p class="rcw-eyebrow">Networking • Troubleshooting</p>
+  <h1>Port &amp; Socket Inspection</h1>
+  <p class="rcw-lead">Inspect open ports and sockets with ss and netstat.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List listening ports</strong> — Show listeners with ss -tlnp. <span class=rcw-pts>34 pts</span></li><li><strong>All sockets</strong> — Show all with ss -a. <span class=rcw-pts>33 pts</span></li><li><strong>netstat</strong> — Use netstat -tulpn. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>ss -tlnp</code></li><li><code>ss -a</code></li><li><code>netstat -tulpn</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "port-scanning", "title": "Port & Socket Inspection", "category": "Networking • Troubleshooting", "badge": "SS", "accent": "#00bcd4", "difficulty": "BEGINNER", "host": "net-node-01", "user": "student", "intro": ["Inspect open ports and sockets with ss and netstat."], "objectives": [{"name": "List listening ports", "desc": "Show listeners with ss -tlnp.", "points": 34, "match": ["ss\\s+-tlnp"], "success": "✓ Listening ports shown."}, {"name": "All sockets", "desc": "Show all with ss -a.", "points": 33, "match": ["ss\\s+-a"], "success": "✓ All sockets shown."}, {"name": "netstat", "desc": "Use netstat -tulpn.", "points": 33, "match": ["netstat\\s+-tulpn"], "success": "✓ netstat used."}], "hint": ["ss -tlnp", "ss -a", "netstat -tulpn"], "help": "ss -tlnp (listening) · ss -a (all) · netstat -tulpn", "certTitle": "Socket Inspection Champion", "certDesc1": "for mastering port inspection", "certDesc2": "with ss and netstat.", "certChallenge": "port scanning", "certFooter": "Networking • Challenge", "headline": "Port & Socket Inspection", "lead": "Inspect open ports and sockets with ss and netstat.", "brief": "Port & Socket Inspection", "briefCopy": "Inspect open ports and sockets with ss and netstat.", "incident": "PORT-SCANNING · net-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Port & Socket Inspection.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SS", "minutes": 10};</script>
   <script src="../passport.js"></script>

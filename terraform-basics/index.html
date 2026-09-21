@@ -9,8 +9,50 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Terraform Basics · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Terraform Basics: free hands-on DevOps lab. Work with Terraform configuration files and state.">
+  <link rel="canonical" href="https://www.rcwittraining.in/terraform-basics/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Terraform Basics · RCW IT Training">
+  <meta property="og:description" content="Terraform Basics: free hands-on DevOps lab. Work with Terraform configuration files and state.">
+  <meta property="og:url" content="https://www.rcwittraining.in/terraform-basics/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Terraform Basics", "description": "Terraform Basics: free hands-on DevOps lab. Work with Terraform configuration files and state.", "url": "https://www.rcwittraining.in/terraform-basics/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Terraform Basics</span></nav>
+  <p class="rcw-eyebrow">DevOps • IaC</p>
+  <h1>Terraform Basics</h1>
+  <p class="rcw-lead">Work with Terraform configuration files and state.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>View config</strong> — Read main.tf. <span class=rcw-pts>25 pts</span></li><li><strong>Format</strong> — Format with terraform fmt. <span class=rcw-pts>25 pts</span></li><li><strong>Validate</strong> — Validate with terraform validate. <span class=rcw-pts>25 pts</span></li><li><strong>Init</strong> — Initialise with terraform init. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>cat /app/main.tf</code></li><li><code>terraform fmt</code></li><li><code>terraform validate</code></li><li><code>terraform init</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/app/main.tf</code><pre><code>provider &quot;aws&quot; {
+  region = &quot;ap-south-1&quot;
+}
+
+resource &quot;aws_s3_bucket&quot; &quot;app&quot; {
+  bucket = &quot;my-app-bucket&quot;
+}</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "terraform-basics", "title": "Terraform Basics", "category": "DevOps • IaC", "badge": "TF", "accent": "#7b42bc", "difficulty": "INTERMEDIATE", "host": "iac-node-01", "user": "devops", "intro": ["Work with Terraform configuration files and state."], "files": {"/app/main.tf": "provider \"aws\" {\n  region = \"ap-south-1\"\n}\n\nresource \"aws_s3_bucket\" \"app\" {\n  bucket = \"my-app-bucket\"\n}\n"}, "objectives": [{"name": "View config", "desc": "Read main.tf.", "points": 25, "match": ["cat\\s+/app/main\\.tf"], "success": "✓ Config read."}, {"name": "Format", "desc": "Format with terraform fmt.", "points": 25, "match": ["terraform\\s+fmt"], "success": "✓ Formatted."}, {"name": "Validate", "desc": "Validate with terraform validate.", "points": 25, "match": ["terraform\\s+validate"], "success": "✓ Validated."}, {"name": "Init", "desc": "Initialise with terraform init.", "points": 25, "match": ["terraform\\s+init"], "success": "✓ Initialised."}], "hint": ["cat /app/main.tf", "terraform fmt", "terraform validate", "terraform init"], "help": "terraform fmt · validate · init · plan · apply", "certTitle": "Terraform Champion", "certDesc1": "for mastering Terraform", "certDesc2": "with config, validate, and init.", "certChallenge": "Terraform basics", "certFooter": "DevOps • Challenge", "headline": "Terraform Basics", "lead": "Work with Terraform configuration files and state.", "brief": "Terraform Basics", "briefCopy": "Work with Terraform configuration files and state.", "incident": "TERRAFORM-BASICS · iac-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Terraform Basics.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "TF", "minutes": 10};</script>
   <script src="../passport.js"></script>

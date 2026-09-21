@@ -1,9 +1,8 @@
 name: daily-publish
 
 on:
-  schedule:
-    # 09:00 IST daily (UTC 03:30)
-    - cron: "30 3 * * *"
+  # Schedule removed 2026-09-21: bulk daily publishing looked auto-generated to AdSense reviewers.
+  # Publish new guides deliberately (2-4 a week) with:  gh workflow run daily-publish
   workflow_dispatch: {}
 
 permissions:

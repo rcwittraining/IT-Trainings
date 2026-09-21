@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>tar Archive Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="tar Archive Management: free hands-on Linux lab. Create, list, and extract tar archives with compression.">
+  <link rel="canonical" href="https://www.rcwittraining.in/tar-archives/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="tar Archive Management · RCW IT Training">
+  <meta property="og:description" content="tar Archive Management: free hands-on Linux lab. Create, list, and extract tar archives with compression.">
+  <meta property="og:url" content="https://www.rcwittraining.in/tar-archives/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "tar Archive Management", "description": "tar Archive Management: free hands-on Linux lab. Create, list, and extract tar archives with compression.", "url": "https://www.rcwittraining.in/tar-archives/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>tar Archive Management</span></nav>
+  <p class="rcw-eyebrow">Linux • File Management</p>
+  <h1>tar Archive Management</h1>
+  <p class="rcw-lead">Create, list, and extract tar archives with compression.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Create archive</strong> — Create a gzipped tar of Documents. <span class=rcw-pts>34 pts</span></li><li><strong>List archive</strong> — List the archive contents with -tf. <span class=rcw-pts>33 pts</span></li><li><strong>Extract</strong> — Extract with -xf. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>tar -czf backup.tar.gz Documents</code></li><li><code>tar -tf backup.tar.gz</code></li><li><code>tar -xf backup.tar.gz</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/home/student/Documents/a.txt</code><pre><code>alpha</code></pre></li><li><code>/home/student/Documents/b.txt</code><pre><code>beta</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "tar-archives", "title": "tar Archive Management", "category": "Linux • File Management", "badge": "TAR", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "fs-node-01", "user": "student", "intro": ["Create, list, and extract tar archives with compression."], "dirs": ["/home/student/Documents", "/home/student/backups"], "files": {"/home/student/Documents/a.txt": "alpha\n", "/home/student/Documents/b.txt": "beta\n"}, "objectives": [{"name": "Create archive", "desc": "Create a gzipped tar of Documents.", "points": 34, "match": ["tar\\s+-czf\\s+\\S+\\.tar\\.gz\\s+Documents"], "success": "✓ Archive created."}, {"name": "List archive", "desc": "List the archive contents with -tf.", "points": 33, "match": ["tar\\s+-tf\\s+\\S+\\.tar\\.gz"], "success": "✓ Archive listed."}, {"name": "Extract", "desc": "Extract with -xf.", "points": 33, "match": ["tar\\s+-xf\\s+\\S+\\.tar\\.gz"], "success": "✓ Archive extracted."}], "hint": ["tar -czf backup.tar.gz Documents", "tar -tf backup.tar.gz", "tar -xf backup.tar.gz"], "help": "tar -czf out.tar.gz dir/ (create) · tar -tf out.tar.gz (list) · tar -xf out.tar.gz (extract)", "certTitle": "tar Archive Champion", "certDesc1": "for mastering tar archives", "certDesc2": "with create, list, and extract.", "certChallenge": "tar archive management", "certFooter": "Linux File Management • Challenge", "headline": "tar Archive Management", "lead": "Create, list, and extract tar archives with compression.", "brief": "tar Archive Management", "briefCopy": "Create, list, and extract tar archives with compression.", "incident": "TAR-ARCHIVES · fs-node-01 · hands-on practice", "resultCopy": "You completed all objectives for tar Archive Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "TAR", "minutes": 10};</script>
   <script src="../passport.js"></script>

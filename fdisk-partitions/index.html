@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>fdisk Partition Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="fdisk Partition Management: free hands-on Linux lab. List and manage disk partitions with fdisk and lsblk.">
+  <link rel="canonical" href="https://www.rcwittraining.in/fdisk-partitions/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="fdisk Partition Management · RCW IT Training">
+  <meta property="og:description" content="fdisk Partition Management: free hands-on Linux lab. List and manage disk partitions with fdisk and lsblk.">
+  <meta property="og:url" content="https://www.rcwittraining.in/fdisk-partitions/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "fdisk Partition Management", "description": "fdisk Partition Management: free hands-on Linux lab. List and manage disk partitions with fdisk and lsblk.", "url": "https://www.rcwittraining.in/fdisk-partitions/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>fdisk Partition Management</span></nav>
+  <p class="rcw-eyebrow">Linux • Storage</p>
+  <h1>fdisk Partition Management</h1>
+  <p class="rcw-lead">List and manage disk partitions with fdisk and lsblk.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List block devices</strong> — Show devices with lsblk. <span class=rcw-pts>25 pts</span></li><li><strong>List partitions</strong> — List partitions with fdisk -l. <span class=rcw-pts>25 pts</span></li><li><strong>Show UUIDs</strong> — Show filesystem UUIDs with blkid. <span class=rcw-pts>25 pts</span></li><li><strong>Partition info</strong> — Inspect with parted -l. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>lsblk</code></li><li><code>fdisk -l</code></li><li><code>blkid</code></li><li><code>parted -l</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "fdisk-partitions", "title": "fdisk Partition Management", "category": "Linux • Storage", "badge": "FDISK", "accent": "#0ba8ee", "difficulty": "INTERMEDIATE", "host": "disk-node-01", "user": "student", "intro": ["List and manage disk partitions with fdisk and lsblk."], "objectives": [{"name": "List block devices", "desc": "Show devices with lsblk.", "points": 25, "match": ["lsblk"], "success": "✓ Devices listed."}, {"name": "List partitions", "desc": "List partitions with fdisk -l.", "points": 25, "match": ["fdisk\\s+-l"], "success": "✓ Partitions listed."}, {"name": "Show UUIDs", "desc": "Show filesystem UUIDs with blkid.", "points": 25, "match": ["blkid"], "success": "✓ UUIDs shown."}, {"name": "Partition info", "desc": "Inspect with parted -l.", "points": 25, "match": ["parted\\s+-l"], "success": "✓ Partitions inspected."}], "hint": ["lsblk", "fdisk -l", "blkid", "parted -l"], "help": "lsblk · fdisk -l · blkid · parted -l", "certTitle": "Partition Champion", "certDesc1": "for mastering disk partitions", "certDesc2": "with fdisk, lsblk, and blkid.", "certChallenge": "fdisk partitions", "certFooter": "Linux Storage • Challenge", "headline": "fdisk Partition Management", "lead": "List and manage disk partitions with fdisk and lsblk.", "brief": "fdisk Partition Management", "briefCopy": "List and manage disk partitions with fdisk and lsblk.", "incident": "FDISK-PARTITIONS · disk-node-01 · hands-on practice", "resultCopy": "You completed all objectives for fdisk Partition Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "FDIS", "minutes": 10};</script>
   <script src="../passport.js"></script>

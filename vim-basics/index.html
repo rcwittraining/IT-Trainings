@@ -9,8 +9,46 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Vim Editor Basics · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Vim Editor Basics: free hands-on Linux lab. Learn the essential Vim commands for editing files.">
+  <link rel="canonical" href="https://www.rcwittraining.in/vim-basics/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Vim Editor Basics · RCW IT Training">
+  <meta property="og:description" content="Vim Editor Basics: free hands-on Linux lab. Learn the essential Vim commands for editing files.">
+  <meta property="og:url" content="https://www.rcwittraining.in/vim-basics/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Vim Editor Basics", "description": "Vim Editor Basics: free hands-on Linux lab. Learn the essential Vim commands for editing files.", "url": "https://www.rcwittraining.in/vim-basics/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Vim Editor Basics</span></nav>
+  <p class="rcw-eyebrow">Linux • Editors</p>
+  <h1>Vim Editor Basics</h1>
+  <p class="rcw-lead">Learn the essential Vim commands for editing files.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Open file</strong> — Open with vim notes.txt. <span class=rcw-pts>25 pts</span></li><li><strong>View file</strong> — Read with cat. <span class=rcw-pts>25 pts</span></li><li><strong>Vim modes</strong> — Check help for modes. <span class=rcw-pts>25 pts</span></li><li><strong>Save &amp; quit</strong> — Learn :wq with help. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>vim notes.txt</code></li><li><code>cat notes.txt</code></li><li><code>man vim</code></li><li><code>(in vim) :wq to save and quit</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/home/student/notes.txt</code><pre><code>line one
+line two
+line three</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "vim-basics", "title": "Vim Editor Basics", "category": "Linux • Editors", "badge": "VIM", "accent": "#0ba8ee", "difficulty": "BEGINNER", "host": "edit-node-01", "user": "student", "intro": ["Learn the essential Vim commands for editing files."], "files": {"/home/student/notes.txt": "line one\nline two\nline three\n"}, "objectives": [{"name": "Open file", "desc": "Open with vim notes.txt.", "points": 25, "match": ["vim\\s+\\S+"], "success": "✓ File opened."}, {"name": "View file", "desc": "Read with cat.", "points": 25, "match": ["cat\\s+\\S+"], "success": "✓ File read."}, {"name": "Vim modes", "desc": "Check help for modes.", "points": 25, "match": ["man\\s+vim|vim\\s+--help"], "success": "✓ Modes reviewed."}, {"name": "Save & quit", "desc": "Learn :wq with help.", "points": 25, "match": ["help|:wq"], "success": "✓ Save/quit learned."}], "hint": ["vim notes.txt", "cat notes.txt", "man vim", "(in vim) :wq to save and quit"], "help": "vim FILE · i (insert) · Esc (normal) · :w (save) · :q (quit) · :wq (both)", "certTitle": "Vim Basics Champion", "certDesc1": "for learning Vim essentials", "certDesc2": "with modes and save/quit.", "certChallenge": "Vim basics", "certFooter": "Linux Editors • Challenge", "headline": "Vim Editor Basics", "lead": "Learn the essential Vim commands for editing files.", "brief": "Vim Editor Basics", "briefCopy": "Learn the essential Vim commands for editing files.", "incident": "VIM-BASICS · edit-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Vim Editor Basics.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "VIM", "minutes": 10};</script>
   <script src="../passport.js"></script>

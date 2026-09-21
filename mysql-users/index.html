@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>MySQL Users & Grants · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="MySQL Users &amp; Grants: free hands-on Databases lab. Manage MySQL users and permissions. Practise CREATE, GRANT, FLUSH in a browser terminal.">
+  <link rel="canonical" href="https://www.rcwittraining.in/mysql-users/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="MySQL Users &amp; Grants · RCW IT Training">
+  <meta property="og:description" content="MySQL Users &amp; Grants: free hands-on Databases lab. Manage MySQL users and permissions. Practise CREATE, GRANT, FLUSH in a browser terminal.">
+  <meta property="og:url" content="https://www.rcwittraining.in/mysql-users/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "MySQL Users & Grants", "description": "MySQL Users & Grants: free hands-on Databases lab. Manage MySQL users and permissions. Practise CREATE, GRANT, FLUSH in a browser terminal.", "url": "https://www.rcwittraining.in/mysql-users/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>MySQL Users &amp; Grants</span></nav>
+  <p class="rcw-eyebrow">Databases • MySQL</p>
+  <h1>MySQL Users &amp; Grants</h1>
+  <p class="rcw-lead">Manage MySQL users and permissions.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Create user</strong> — Create with CREATE USER. <span class=rcw-pts>34 pts</span></li><li><strong>Grant privileges</strong> — Grant with GRANT ALL. <span class=rcw-pts>33 pts</span></li><li><strong>Flush privileges</strong> — Apply with FLUSH PRIVILEGES. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>CREATE USER &#x27;app&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;password&#x27;;</code></li><li><code>GRANT ALL ON app.* TO &#x27;app&#x27;@&#x27;localhost&#x27;;</code></li><li><code>FLUSH PRIVILEGES;</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "mysql-users", "title": "MySQL Users & Grants", "category": "Databases • MySQL", "badge": "SQL", "accent": "#e38c00", "difficulty": "INTERMEDIATE", "host": "db-node-01", "user": "dbadmin", "intro": ["Manage MySQL users and permissions."], "objectives": [{"name": "Create user", "desc": "Create with CREATE USER.", "points": 34, "match": ["create\\s+user\\s+['\\\"][^'\\\"]+['\\\"]"], "success": "✓ User created."}, {"name": "Grant privileges", "desc": "Grant with GRANT ALL.", "points": 33, "match": ["grant\\s+all"], "success": "✓ Privileges granted."}, {"name": "Flush privileges", "desc": "Apply with FLUSH PRIVILEGES.", "points": 33, "match": ["flush\\s+privileges"], "success": "✓ Privileges flushed."}], "hint": ["CREATE USER 'app'@'localhost' IDENTIFIED BY 'password';", "GRANT ALL ON app.* TO 'app'@'localhost';", "FLUSH PRIVILEGES;"], "help": "CREATE USER · GRANT ALL ON db.* TO user · FLUSH PRIVILEGES", "certTitle": "MySQL Admin Champion", "certDesc1": "for mastering MySQL users", "certDesc2": "with grants and privileges.", "certChallenge": "MySQL users", "certFooter": "Databases • Challenge", "headline": "MySQL Users & Grants", "lead": "Manage MySQL users and permissions.", "brief": "MySQL Users & Grants", "briefCopy": "Manage MySQL users and permissions.", "incident": "MYSQL-USERS · db-node-01 · hands-on practice", "resultCopy": "You completed all objectives for MySQL Users & Grants.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SQL", "minutes": 10};</script>
   <script src="../passport.js"></script>

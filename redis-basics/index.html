@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Redis Basics · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Redis Basics: free hands-on Databases lab. Work with Redis keys and data structures with redis-cli.">
+  <link rel="canonical" href="https://www.rcwittraining.in/redis-basics/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Redis Basics · RCW IT Training">
+  <meta property="og:description" content="Redis Basics: free hands-on Databases lab. Work with Redis keys and data structures with redis-cli.">
+  <meta property="og:url" content="https://www.rcwittraining.in/redis-basics/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Redis Basics", "description": "Redis Basics: free hands-on Databases lab. Work with Redis keys and data structures with redis-cli.", "url": "https://www.rcwittraining.in/redis-basics/", "learningResourceType": "Hands-on lab", "educationalLevel": "Beginner", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Redis Basics</span></nav>
+  <p class="rcw-eyebrow">Databases • Redis</p>
+  <h1>Redis Basics</h1>
+  <p class="rcw-lead">Work with Redis keys and data structures with redis-cli.</p>
+  
+  <ul class="rcw-facts"><li><strong>Beginner</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Ping</strong> — Test with redis-cli ping. <span class=rcw-pts>25 pts</span></li><li><strong>Set key</strong> — Set a key with SET. <span class=rcw-pts>25 pts</span></li><li><strong>Get key</strong> — Get a key with GET. <span class=rcw-pts>25 pts</span></li><li><strong>Keys pattern</strong> — List keys with KEYS *. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>redis-cli ping</code></li><li><code>redis-cli set name RCW</code></li><li><code>redis-cli get name</code></li><li><code>redis-cli keys &#x27;*&#x27;</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "redis-basics", "title": "Redis Basics", "category": "Databases • Redis", "badge": "REDIS", "accent": "#d82c20", "difficulty": "BEGINNER", "host": "cache-node-01", "user": "dev", "intro": ["Work with Redis keys and data structures with redis-cli."], "objectives": [{"name": "Ping", "desc": "Test with redis-cli ping.", "points": 25, "match": ["redis-cli\\s+ping"], "success": "✓ Pong."}, {"name": "Set key", "desc": "Set a key with SET.", "points": 25, "match": ["redis-cli\\s+set\\s+\\S+\\s+\\S+"], "success": "✓ Key set."}, {"name": "Get key", "desc": "Get a key with GET.", "points": 25, "match": ["redis-cli\\s+get\\s+\\S+"], "success": "✓ Key retrieved."}, {"name": "Keys pattern", "desc": "List keys with KEYS *.", "points": 25, "match": ["redis-cli\\s+keys\\s+\\*"], "success": "✓ Keys listed."}], "hint": ["redis-cli ping", "redis-cli set name RCW", "redis-cli get name", "redis-cli keys '*'"], "help": "redis-cli ping · set K V · get K · keys PATTERN · del K · expire K N", "certTitle": "Redis Champion", "certDesc1": "for mastering Redis", "certDesc2": "with keys and commands.", "certChallenge": "Redis basics", "certFooter": "Databases • Challenge", "headline": "Redis Basics", "lead": "Work with Redis keys and data structures with redis-cli.", "brief": "Redis Basics", "briefCopy": "Work with Redis keys and data structures with redis-cli.", "incident": "REDIS-BASICS · cache-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Redis Basics.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "REDI", "minutes": 10};</script>
   <script src="../passport.js"></script>

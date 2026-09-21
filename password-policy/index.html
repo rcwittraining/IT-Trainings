@@ -9,8 +9,47 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Password Policy Audit · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Password Policy Audit: free hands-on Security lab. Audit password aging policies with chage.">
+  <link rel="canonical" href="https://www.rcwittraining.in/password-policy/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Password Policy Audit · RCW IT Training">
+  <meta property="og:description" content="Password Policy Audit: free hands-on Security lab. Audit password aging policies with chage.">
+  <meta property="og:url" content="https://www.rcwittraining.in/password-policy/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Password Policy Audit", "description": "Password Policy Audit: free hands-on Security lab. Audit password aging policies with chage.", "url": "https://www.rcwittraining.in/password-policy/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Password Policy Audit</span></nav>
+  <p class="rcw-eyebrow">Security • Compliance</p>
+  <h1>Password Policy Audit</h1>
+  <p class="rcw-lead">Audit password aging policies with chage.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>View policy</strong> — Read /etc/login.defs. <span class=rcw-pts>34 pts</span></li><li><strong>Check user aging</strong> — Check with chage -l. <span class=rcw-pts>33 pts</span></li><li><strong>Set max days</strong> — Set with chage -M 90. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>cat /etc/login.defs</code></li><li><code>chage -l student</code></li><li><code>chage -M 90 student</code></li></ul>
+  <h2>Files present on the lab host</h2><ul class=rcw-files><li><code>/etc/login.defs</code><pre><code>PASS_MAX_DAYS 90
+PASS_MIN_DAYS 7
+PASS_WARN_AGE 14
+PASS_MIN_LEN 8</code></pre></li></ul>
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "password-policy", "title": "Password Policy Audit", "category": "Security • Compliance", "badge": "SEC", "accent": "#ef405b", "difficulty": "INTERMEDIATE", "host": "sec-node-01", "user": "analyst", "intro": ["Audit password aging policies with chage."], "files": {"/etc/login.defs": "PASS_MAX_DAYS 90\nPASS_MIN_DAYS 7\nPASS_WARN_AGE 14\nPASS_MIN_LEN 8\n"}, "objectives": [{"name": "View policy", "desc": "Read /etc/login.defs.", "points": 34, "match": ["cat\\s+/etc/login\\.defs"], "success": "✓ Policy read."}, {"name": "Check user aging", "desc": "Check with chage -l.", "points": 33, "match": ["chage\\s+-l\\s+\\S+"], "success": "✓ Aging checked."}, {"name": "Set max days", "desc": "Set with chage -M 90.", "points": 33, "match": ["chage\\s+-M\\s+\\d+\\s+\\S+"], "success": "✓ Max days set."}], "hint": ["cat /etc/login.defs", "chage -l student", "chage -M 90 student"], "help": "cat /etc/login.defs · chage -l USER · chage -M DAYS USER", "certTitle": "Password Policy Champion", "certDesc1": "for auditing password policies", "certDesc2": "with chage and login.defs.", "certChallenge": "password policy", "certFooter": "Security • Challenge", "headline": "Password Policy Audit", "lead": "Audit password aging policies with chage.", "brief": "Password Policy Audit", "briefCopy": "Audit password aging policies with chage.", "incident": "PASSWORD-POLICY · sec-node-01 · hands-on practice", "resultCopy": "You completed all objectives for Password Policy Audit.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "SEC", "minutes": 10};</script>
   <script src="../passport.js"></script>

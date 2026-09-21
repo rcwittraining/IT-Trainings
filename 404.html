@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Page not found · RCW IT Training</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/guides.css">
+  <style>
+    /* layout fix: guides.css defines .wrap but not .container/.top-in (the old About page rendered unstyled) */
+    .top{display:block;padding:0}
+    .top-in{max-width:900px;margin:0 auto;padding:16px 22px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+    .top-in .brand{color:#fff;text-decoration:none;font-size:18px;font-weight:800}
+    .top-in nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+    .top-in nav a{color:#9eb6d7;text-decoration:none;font-size:14px;font-weight:600}
+    .top-in nav a:hover,.top-in nav a[aria-current]{color:#4bd7ff}
+    .container{max-width:850px;margin:auto;padding:36px 22px 60px}
+    .container h1{font-size:clamp(28px,4vw,40px);line-height:1.15;margin:0 0 14px}
+    .container h2{font-size:22px;margin:34px 0 10px}
+    .nf{max-width:760px;margin:60px auto;padding:0 22px;text-align:center}
+    .nf .code{font:900 84px/1 Inter,system-ui,sans-serif;color:#078be8;letter-spacing:-3px}
+    .nf p{color:#3a4a66;font-size:17px}
+    .nf-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:28px 0;text-align:left}
+    .nf-links a{display:block;background:#fff;border:1px solid #dce5f1;border-radius:14px;padding:14px 16px;text-decoration:none;color:#0769be;font-weight:700;box-shadow:0 8px 22px #081f4510}
+    .nf-links a small{display:block;color:#5f6c84;font-weight:400;margin-top:2px}
+  </style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="brand" href="/">RCW IT Training</a>
+  <nav><a href="/">Home</a><a href="/#labs">Labs</a><a href="/cert-exams/">Practice exams</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav>
+</div></div>
+<div class="nf">
+  <div class="code">404</div>
+  <h1>That page is not here</h1>
+  <p>The address may have changed when a lab was renamed or moved. Nothing is lost — everything is still free and public.</p>
+  <div class="nf-links">
+    <a href="/#labs">Browse all labs<small>225+ free hands-on labs and simulators</small></a>
+    <a href="/rhcsa-practice/">RHCSA practice<small>62 RHEL 10 tasks mapped to EX200</small></a>
+    <a href="/cert-exams/">Certification exams<small>Intune MD-102, CCNA, VCF, CCE-V</small></a>
+    <a href="/microsoft-intune-exam-simulator/">Intune MD-102 simulator<small>60-question timed exam</small></a>
+    <a href="/incident-response-freshers/">Incident response desk<small>L1 tickets for freshers</small></a>
+    <a href="/contact.html">Report a broken link<small>Tell us where you came from</small></a>
+  </div>
+  <p style="font-size:14px;color:#5f6c84">Looking for a specific lab? Use the search box on the <a href="/#labs">home page catalogue</a>.</p>
+</div>
+</body>
+</html>

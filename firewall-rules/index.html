@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>firewalld Rule Management · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="firewalld Rule Management: free hands-on Linux lab. Manage the firewalld firewall with firewall-cmd.">
+  <link rel="canonical" href="https://www.rcwittraining.in/firewall-rules/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="firewalld Rule Management · RCW IT Training">
+  <meta property="og:description" content="firewalld Rule Management: free hands-on Linux lab. Manage the firewalld firewall with firewall-cmd.">
+  <meta property="og:url" content="https://www.rcwittraining.in/firewall-rules/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "firewalld Rule Management", "description": "firewalld Rule Management: free hands-on Linux lab. Manage the firewalld firewall with firewall-cmd.", "url": "https://www.rcwittraining.in/firewall-rules/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>firewalld Rule Management</span></nav>
+  <p class="rcw-eyebrow">Linux • Security</p>
+  <h1>firewalld Rule Management</h1>
+  <p class="rcw-lead">Manage the firewalld firewall with firewall-cmd.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List rules</strong> — Show active services with --list-all. <span class=rcw-pts>25 pts</span></li><li><strong>Add service</strong> — Allow http with --add-service=http. <span class=rcw-pts>25 pts</span></li><li><strong>Add port</strong> — Open port 8080 with --add-port. <span class=rcw-pts>25 pts</span></li><li><strong>Reload</strong> — Apply changes with --reload. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>firewall-cmd --list-all</code></li><li><code>firewall-cmd --add-service=http --permanent</code></li><li><code>firewall-cmd --add-port=8080/tcp --permanent</code></li><li><code>firewall-cmd --reload</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "firewall-rules", "title": "firewalld Rule Management", "category": "Linux • Security", "badge": "FW", "accent": "#d71920", "difficulty": "INTERMEDIATE", "host": "fw-node-01", "user": "student", "intro": ["Manage the firewalld firewall with firewall-cmd."], "objectives": [{"name": "List rules", "desc": "Show active services with --list-all.", "points": 25, "match": ["firewall-cmd\\s+--list-all"], "success": "✓ Rules listed."}, {"name": "Add service", "desc": "Allow http with --add-service=http.", "points": 25, "match": ["firewall-cmd\\s+--add-service=http"], "success": "✓ Service added."}, {"name": "Add port", "desc": "Open port 8080 with --add-port.", "points": 25, "match": ["firewall-cmd\\s+--add-port=8080/tcp"], "success": "✓ Port opened."}, {"name": "Reload", "desc": "Apply changes with --reload.", "points": 25, "match": ["firewall-cmd\\s+--reload"], "success": "✓ Reloaded."}], "hint": ["firewall-cmd --list-all", "firewall-cmd --add-service=http --permanent", "firewall-cmd --add-port=8080/tcp --permanent", "firewall-cmd --reload"], "help": "firewall-cmd --list-all · --add-service=SVC --permanent · --add-port=P/tcp · --reload", "certTitle": "firewalld Champion", "certDesc1": "for mastering firewalld rules", "certDesc2": "with services, ports, and reload.", "certChallenge": "firewalld rules", "certFooter": "Linux Security • Challenge", "headline": "firewalld Rule Management", "lead": "Manage the firewalld firewall with firewall-cmd.", "brief": "firewalld Rule Management", "briefCopy": "Manage the firewalld firewall with firewall-cmd.", "incident": "FIREWALL-RULES · fw-node-01 · hands-on practice", "resultCopy": "You completed all objectives for firewalld Rule Management.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "FW", "minutes": 10};</script>
   <script src="../passport.js"></script>

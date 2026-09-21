@@ -22,7 +22,7 @@
     }).join('');
   }
 
-  document.body.innerHTML =
+  (document.getElementById('labRoot') || document.body).innerHTML =
     '<header class="topbar"><a class="brand" href="../"><span>RCW</span><strong>IT Training</strong></a>' +
       '<div class="task-context"><span>RHCSA Certification Practice</span><b>Task ' + String(C.number).padStart(2, '0') + ' / ' + C.total + '</b></div>' +
       '<a class="catalogue-link" href="../../">All labs</a></header>' +

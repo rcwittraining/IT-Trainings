@@ -4,13 +4,49 @@
   <script src="../../rcw-consent.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Original stateful RHEL 10 administration task for RHCSA certification practice.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Command Output in Shell Scripts | RHCSA Certification Practice | RCW IT Training</title>
   <link rel="stylesheet" href="../practice.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Command Output in Shell Scripts: free hands-on RHCSA Certification Practice · Shell Scripting · Bash lab. Create a snapshot helper that captures the curren…">
+  <link rel="canonical" href="https://www.rcwittraining.in/rhcsa-practice/19-script-command-output/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Command Output in Shell Scripts · RCW IT Training">
+  <meta property="og:description" content="Command Output in Shell Scripts: free hands-on RHCSA Certification Practice · Shell Scripting · Bash lab. Create a snapshot helper that captures the curren…">
+  <meta property="og:url" content="https://www.rcwittraining.in/rhcsa-practice/19-script-command-output/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Command Output in Shell Scripts", "description": "Command Output in Shell Scripts: free hands-on RHCSA Certification Practice · Shell Scripting · Bash lab. Create a snapshot helper that captures the curren…", "url": "https://www.rcwittraining.in/rhcsa-practice/19-script-command-output/", "learningResourceType": "Hands-on lab", "educationalLevel": "RHCSA / EX200", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+<!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>Command Output in Shell Scripts</span></nav>
+  <p class="rcw-eyebrow">RHCSA Certification Practice · Shell Scripting · Bash</p>
+  <h1>Command Output in Shell Scripts</h1>
+  <p class="rcw-lead">Create a snapshot helper that captures the current host, timestamp, and uptime using command substitution in a structured report.</p>
+  <p class=rcw-number>Task 19 of 62 in the RHCSA practice series. Mapped to the published <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" rel="nofollow noopener">EX200 skill areas</a>.</p>
+  <ul class="rcw-facts"><li><strong>RHCSA / EX200</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Assess the starting state</strong> — Source command output inspected. <span class=rcw-pts>20 pts</span></li><li><strong>Process command output inside a script</strong> — Produce the required modeled system state using supported administrative commands. <span class=rcw-pts>60 pts</span></li><li><strong>Validate the resulting state</strong> — Captured command output validated. <span class=rcw-pts>20 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>hostname -f</code></li><li><code>chmod 0755 /usr/local/bin/host-snapshot</code></li><li><code>bash -n /usr/local/bin/host-snapshot</code></li><li><code>/usr/local/bin/host-snapshot &amp;&amp; grep -E &#x27;^(host|time|uptime)=&#x27; /var/tmp/host.snapshot</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
+  <div id="labRoot"></div>
   <noscript>This interactive practice task requires JavaScript. Enable it, then reload the page.</noscript>
   <script src="../../passport.js"></script>
   <script src="config.js"></script>

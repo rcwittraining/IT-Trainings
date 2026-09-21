@@ -9,8 +9,81 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>kubectl Deployments · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="Kubernetes Deployments hands-on: list, create with kubectl create deployment, scale replicas, and delete — with what a Deployment really is and how to read th">
+  <link rel="canonical" href="https://www.rcwittraining.in/kubectl-deployments/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="kubectl Deployments · RCW IT Training">
+  <meta property="og:description" content="Kubernetes Deployments hands-on: list, create with kubectl create deployment, scale replicas, and delete — with what a Deployment really is and how to read th">
+  <meta property="og:url" content="https://www.rcwittraining.in/kubectl-deployments/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "kubectl Deployments", "description": "Kubernetes Deployments hands-on: list, create with kubectl create deployment, scale replicas, and delete — with what a Deployment really is and how to read th", "url": "https://www.rcwittraining.in/kubectl-deployments/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>kubectl Deployments</span></nav>
+  <p class="rcw-eyebrow">Kubernetes</p>
+  <h1>kubectl Deployments</h1>
+  <p class="rcw-lead">Create and scale Kubernetes deployments.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>4</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  <h2>What a Deployment is (and what it is not)</h2>
+<p>New Kubernetes users often think a Deployment <em>is</em> the running application. It is not — it is a <strong>controller</strong> that describes the application you want and then works continuously to make reality match. Concretely, a Deployment owns a <strong>ReplicaSet</strong>, and the ReplicaSet owns the <strong>Pods</strong>. When you say "3 replicas", the Deployment tells the ReplicaSet to keep exactly three Pods alive; if a node dies and a Pod disappears, a new one is created without you doing anything.</p>
+<p>That chain — Deployment → ReplicaSet → Pod — is the single most useful thing to hold in your head during this lab, because every <code>kubectl</code> command below is talking to a different link in it.</p>
+<p>You are logged in to <code>k8s-master-01</code> as <code>admin</code> with a working kubeconfig, so <code>kubectl</code> already points at the cluster.</p>
+<h2>1. <code>kubectl get deployments</code> — read the columns properly</h2>
+<p>Run it first even if you expect the namespace to be empty; it proves the API server is reachable. When deployments exist, the output looks like this:</p>
+<pre><code>NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web    2/3     3            2           45s</code></pre>
+<ul>
+<li><strong>READY</strong> <code>2/3</code> — two Pods are passing their readiness checks out of three desired.</li>
+<li><strong>UP-TO-DATE</strong> — how many Pods run the <em>current</em> Pod template. During a rolling update this number climbs while old Pods are replaced.</li>
+<li><strong>AVAILABLE</strong> — Pods ready for at least <code>minReadySeconds</code>. This is what your Service is actually sending traffic to.</li>
+</ul>
+<p>If READY stays below the desired count for more than a minute, stop and run <code>kubectl get pods</code> — the Pod STATUS column (<code>ImagePullBackOff</code>, <code>CrashLoopBackOff</code>, <code>Pending</code>) tells you why, and the <em>Kubernetes Workload Failures</em> guide on this site walks through each one.</p>
+<h2>2. <code>kubectl create deployment web --image=nginx</code></h2>
+<p>This imperative command generates a Deployment named <code>web</code> with one replica running the <code>nginx</code> image from Docker Hub. Behind the scenes it creates a ReplicaSet named <code>web-&lt;hash&gt;</code> and a Pod named <code>web-&lt;hash&gt;-&lt;random&gt;</code>. Check all three levels once:</p>
+<pre><code>kubectl get deployment,replicaset,pod -l app=web</code></pre>
+<p>The <code>-l app=web</code> label selector works because <code>kubectl create deployment</code> automatically adds the label <code>app=web</code> to everything it creates — that same label is what a Service would later use to find these Pods.</p>
+<p><strong>In real work, prefer the declarative route:</strong> <code>kubectl create deployment web --image=nginx --dry-run=client -o yaml &gt; web.yaml</code>, edit the file, then <code>kubectl apply -f web.yaml</code>. Committing that YAML to Git is how changes stay reviewable. The imperative form is perfect for the CKA/CKAD exam clock and for labs like this one.</p>
+<h2>3. <code>kubectl scale deployment web --replicas=3</code></h2>
+<p>Scaling changes one field — <code>.spec.replicas</code> — and the controller does the rest. Watch it happen:</p>
+<pre><code>kubectl get pods -l app=web -w</code></pre>
+<p>You will see two new Pods go <code>Pending → ContainerCreating → Running</code> within a few seconds on a healthy cluster. Two things worth knowing:</p>
+<ul>
+<li>Scaling to <strong>0</strong> is a legitimate way to "pause" an application without deleting its configuration. The Deployment and Service remain; only the Pods go.</li>
+<li>If you have a <strong>HorizontalPodAutoscaler</strong> attached, it will fight a manual <code>scale</code> and win. Check with <code>kubectl get hpa</code> before wondering why the count keeps changing back.</li>
+</ul>
+<h2>4. <code>kubectl delete deployment web</code></h2>
+<p>Deleting the Deployment cascades: the ReplicaSet and its Pods are removed too (this is the default <em>background</em> propagation). Pods enter <code>Terminating</code>, receive SIGTERM, and are given <code>terminationGracePeriodSeconds</code> (30 s by default) to shut down before SIGKILL. For nginx that is instant; for a database you would want to raise the grace period.</p>
+<p>If you only wanted to remove the Pods but keep the Deployment, you would scale to 0 instead — delete is permanent, and there is no undo other than re-applying the YAML you hopefully saved in step 2.</p>
+<h2>Mistakes that cost points here and in the CKA</h2>
+<ul>
+<li>Typing <code>kubectl create deploy web nginx</code> (positional image). The image must be a flag: <code>--image=nginx</code>.</li>
+<li>Forgetting <code>-n &lt;namespace&gt;</code> on a real cluster and creating things in <code>default</code> by accident. Use <code>kubectl config set-context --current --namespace=&lt;ns&gt;</code> at the start of a task.</li>
+<li>Running <code>kubectl delete pod web-xxxx</code> to "restart" and being surprised it comes back. That is the controller doing its job; use <code>kubectl rollout restart deployment web</code> for a controlled restart.</li>
+<li>Not checking <code>kubectl rollout status deployment web</code> after an image change. It blocks until the rollout succeeds or times out — the cleanest pass/fail signal you can get in a script.</li>
+</ul>
+<h2>Next steps on this site</h2>
+<p>Pair this lab with <strong>kubectl Services</strong> (exposing the Deployment you just created) and the <strong>Kubernetes Cluster Setup Challenge</strong> if you want to see what happens underneath the API server.</p>
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>List deployments</strong> — List with kubectl get deployments. <span class=rcw-pts>25 pts</span></li><li><strong>Create deployment</strong> — Create with kubectl create deployment. <span class=rcw-pts>25 pts</span></li><li><strong>Scale up</strong> — Scale with kubectl scale --replicas. <span class=rcw-pts>25 pts</span></li><li><strong>Delete</strong> — Delete with kubectl delete deployment. <span class=rcw-pts>25 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>kubectl get deployments</code></li><li><code>kubectl create deployment web --image=nginx</code></li><li><code>kubectl scale deployment web --replicas=3</code></li><li><code>kubectl delete deployment web</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "kubectl-deployments", "title": "kubectl Deployments", "category": "Kubernetes", "badge": "K8S", "accent": "#326ce5", "difficulty": "INTERMEDIATE", "host": "k8s-master-01", "user": "admin", "intro": ["Create and scale Kubernetes deployments."], "objectives": [{"name": "List deployments", "desc": "List with kubectl get deployments.", "points": 25, "match": ["kubectl\\s+get\\s+deployments"], "success": "✓ Deployments listed."}, {"name": "Create deployment", "desc": "Create with kubectl create deployment.", "points": 25, "match": ["kubectl\\s+create\\s+deployment\\s+\\S+\\s+--image=\\S+"], "success": "✓ Deployment created."}, {"name": "Scale up", "desc": "Scale with kubectl scale --replicas.", "points": 25, "match": ["kubectl\\s+scale\\s+.*--replicas=\\d+"], "success": "✓ Scaled."}, {"name": "Delete", "desc": "Delete with kubectl delete deployment.", "points": 25, "match": ["kubectl\\s+delete\\s+deployment\\s+\\S+"], "success": "✓ Deleted."}], "hint": ["kubectl get deployments", "kubectl create deployment web --image=nginx", "kubectl scale deployment web --replicas=3", "kubectl delete deployment web"], "help": "kubectl get|create|scale|delete deployment", "certTitle": "kubectl Deployment Champion", "certDesc1": "for mastering deployments", "certDesc2": "with create and scale.", "certChallenge": "kubectl deployments", "certFooter": "Kubernetes • Challenge", "headline": "kubectl Deployments", "lead": "Create and scale Kubernetes deployments.", "brief": "kubectl Deployments", "briefCopy": "Create and scale Kubernetes deployments.", "incident": "KUBECTL-DEPLOYMENTS · k8s-master-01 · hands-on practice", "resultCopy": "You completed all objectives for kubectl Deployments.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "K8S", "minutes": 10};</script>
   <script src="../passport.js"></script>

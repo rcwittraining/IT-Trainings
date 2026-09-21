@@ -1,45 +1,173 @@
-<!doctype html><html lang="en"><head>
-  <script src="rcw-consent.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About RCW IT Training</title><meta name="description" content="Who runs RCW IT Training, what the platform offers, and how its labs, guides and simulators are built."><meta name="keywords" content="about rcw it training, infrastructure training platform, free it labs, vmware labs, linux labs"><link rel="canonical" href="https://www.rcwittraining.in/about.html"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="guides.css"></head><body><div class="top"><div class="top-in"><a class="brand" href="/">RCW IT Training</a><nav><a href="/">Home</a><a href="/downloads/index.html">Tools</a><a href="/labs/index.html">Labs</a><a href="/challenge.html">Challenges</a><a href="/certification.html">Certificates</a><a href="mailto:info@rcwittraining.in">Contact</a></nav></div></div><div class="container"><h1>About RCW IT Training</h1>
-<p>RCW IT Training is an independent educational platform for enterprise infrastructure
-skills. It is built and maintained by a working infrastructure practitioner who has spent
-years operating VMware platforms, Linux estates, backup and storage systems, Active
-Directory environments and cloud workloads in production.</p>
-<p>The idea behind the site is simple: most people learn infrastructure best by <em>doing</em>.
-So every part of the platform is built around hands-on practice rather than passive
-reading.</p>
-<h2>What you will find here</h2>
-<ul>
-<li><strong>Free simulators and labs</strong> — interactive ESXi, Kubernetes, Jenkins,
-Windows Server and Active Directory labs that run in your browser, with no account
-required.</li>
-<li><strong>Troubleshooting guides</strong> — long-form articles on real production
-problems: Active Directory replication, Kerberos and DFS, backup failures, storage
-performance, vSphere upgrade planning and more, each written from operational
-experience.</li>
-<li><strong>Scenario challenges and certificates</strong> — timed diagnostic scenarios
-and self-assessment quizzes for certification readiness.</li>
-<li><strong>Security updates</strong> — a weekly index of official Microsoft security
-advisories, collected to help teams plan patching.</li>
-<li><strong>Downloadable tools</strong> — small utilities for lab and operations work.</li>
-</ul>
-<h2>How the content is made</h2>
-<p>The guides and labs on this site are produced from real operational scenarios —
-issues that come up in production infrastructure work, tested and verified in lab
-environments before they are published. Articles are reviewed and updated as products
-and best practices change.</p>
-<h2>Independence and trademarks</h2>
-<p>RCW IT Training is independent and not affiliated with, endorsed by, or sponsored by
-VMware, Broadcom, Microsoft, Red Hat, Google, AWS, Veeam, Cisco or any other vendor
-mentioned on this site. All product names, logos and brands are the property of their
-respective owners and are used for identification and educational purposes only.</p>
-<h2>Advertising and privacy</h2>
-<p>Some informational pages display advertising provided by Google AdSense, which is how
-the platform stays free. Ads are never shown in labs, challenges or assessment areas.
-You can review or change your consent choices at any time from the
-<a href="/privacy.html#privacy-choices">Privacy and cookie settings</a> link in the footer
-of every page. Full details are in the <a href="/privacy.html">privacy policy</a>.</p>
-<h2>Get in touch</h2>
-<p>For questions, corrections, tool requests or feedback, email
-<a href="mailto:info@rcwittraining.in">info@rcwittraining.in</a>. Corrections to technical
-content are especially welcome — accuracy matters more than pride here.</p>
-</div><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="rcw-consent.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About RCW IT Training — who writes the labs, and how they are built</title>
+  <meta name="description" content="RCW IT Training is written and maintained by Pradeep Raju, a Chennai-based enterprise infrastructure architect with 19+ years in production. How the labs, guides and simulators are built, tested and corrected.">
+  <link rel="canonical" href="https://www.rcwittraining.in/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About RCW IT Training">
+  <meta property="og:description" content="Who writes RCW IT Training, how the free labs and troubleshooting guides are built and tested, and how to send corrections.">
+  <meta property="og:url" content="https://www.rcwittraining.in/about.html">
+  <meta property="og:image" content="https://www.rcwittraining.in/rhcsa-practice/assets/pradeep-raju.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="guides.css">
+  <style>
+    /* layout fix: guides.css defines .wrap but not .container/.top-in (the old About page rendered unstyled) */
+    .top{display:block;padding:0}
+    .top-in{max-width:900px;margin:0 auto;padding:16px 22px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+    .top-in .brand{color:#fff;text-decoration:none;font-size:18px;font-weight:800}
+    .top-in nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+    .top-in nav a{color:#9eb6d7;text-decoration:none;font-size:14px;font-weight:600}
+    .top-in nav a:hover,.top-in nav a[aria-current]{color:#4bd7ff}
+    .container{max-width:850px;margin:auto;padding:36px 22px 60px}
+    .container h1{font-size:clamp(28px,4vw,40px);line-height:1.15;margin:0 0 14px}
+    .container h2{font-size:22px;margin:34px 0 10px}
+    .author-card{display:flex;gap:22px;align-items:flex-start;background:#fff;border:1px solid #dce5f1;border-radius:18px;padding:24px;margin:22px 0 30px;box-shadow:0 10px 28px #081f4512}
+    .author-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #078be8;flex:none}
+    .author-card h2{margin:0 0 4px;font-size:22px}
+    .author-card .role{color:#5f6c84;font-weight:600;margin:0 0 10px}
+    .author-card ul{margin:8px 0 0;padding-left:20px}
+    .author-links a{display:inline-block;margin:8px 10px 0 0;font-weight:700;text-decoration:none;color:#0769be}
+    .fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0 26px}
+    .fact-grid div{background:#f4f7fb;border:1px solid #dce5f1;border-radius:12px;padding:12px 14px}
+    .fact-grid strong{display:block;font-size:20px}
+    .fact-grid span{font-size:12px;color:#5f6c84;text-transform:uppercase;letter-spacing:.6px}
+    .timeline li{margin:6px 0}
+    @media(max-width:560px){.author-card{flex-direction:column;align-items:center;text-align:center}}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.rcwittraining.in/#org",
+        "name": "RCW IT Training",
+        "url": "https://www.rcwittraining.in/",
+        "logo": "https://www.rcwittraining.in/og-scorecard.png",
+        "email": "info@rcwittraining.in",
+        "address": {"@type": "PostalAddress", "addressLocality": "Chennai", "addressRegion": "Tamil Nadu", "addressCountry": "IN"},
+        "founder": {"@id": "https://www.rcwittraining.in/about.html#pradeep-raju"},
+        "sameAs": ["https://www.youtube.com/@RajuRishiDev", "https://www.linkedin.com/in/pradeepmcp826/"]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.rcwittraining.in/about.html#pradeep-raju",
+        "name": "Pradeep Raju",
+        "jobTitle": "Enterprise Infrastructure Architect",
+        "image": "https://www.rcwittraining.in/rhcsa-practice/assets/pradeep-raju.jpg",
+        "url": "https://www.rcwittraining.in/about.html",
+        "worksFor": {"@id": "https://www.rcwittraining.in/#org"},
+        "knowsAbout": ["Red Hat Enterprise Linux", "VMware vSphere", "Microsoft Intune", "Microsoft Azure", "AWS", "Active Directory", "Enterprise storage and backup", "Kubernetes"],
+        "sameAs": ["https://www.linkedin.com/in/pradeepmcp826/", "https://www.youtube.com/@RajuRishiDev"]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="brand" href="/">RCW IT Training</a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/#labs">Labs</a>
+    <a href="/cert-exams/">Practice exams</a>
+    <a href="/rhcsa-practice/">RHCSA</a>
+    <a href="/about.html" aria-current="page">About</a>
+    <a href="/contact.html">Contact</a>
+  </nav>
+</div></div>
+
+<div class="container">
+  <h1>About RCW IT Training</h1>
+  <p>RCW IT Training is a free, browser-based practice ground for people who run — or want to run — enterprise
+  infrastructure: Linux and RHEL, Microsoft Intune and Azure, AWS and GCP, VMware, storage, backup and networking.
+  Everything on the site is public, needs no account, and is written by one person who still does this work every day.</p>
+
+  <!-- ========== AUTHOR ========== -->
+  <div class="author-card" id="pradeep-raju">
+    <img src="/rhcsa-practice/assets/pradeep-raju.jpg" alt="Pradeep Raju, author of RCW IT Training" width="120" height="120">
+    <div>
+      <h2>Pradeep Raju</h2>
+      <p class="role">Enterprise Infrastructure Architect · Chennai, India · 19+ years in production environments</p>
+      <p>I design and operate infrastructure for large organisations — VMware and Linux estates, Active Directory and
+      Entra ID, Microsoft Intune device management, backup and storage platforms, and workloads on AWS, Azure and GCP.
+      RCW IT Training started as the practice environment I wished I had when I was preparing for my first
+      certifications, and grew into the labs, simulators and troubleshooting notes published here.</p>
+      <ul>
+        <li><strong>Focus:</strong> VMware and Linux estates, Active Directory and Entra ID, Microsoft Intune device
+          management, backup and storage platforms, and workloads on AWS, Azure and GCP.</li>
+        <li><strong>Teaching:</strong> 14 RHEL 10 video lessons on <a href="https://www.youtube.com/@RajuRishiDev" rel="me noopener">YouTube</a>, plus the labs, simulators and practice tasks published on this site.</li>
+      </ul>
+      <p class="author-links">
+        <a href="https://www.linkedin.com/in/pradeepmcp826/" rel="me noopener">LinkedIn ↗</a>
+        <a href="https://www.youtube.com/@RajuRishiDev" rel="me noopener">YouTube ↗</a>
+        <a href="/contact.html">Contact</a>
+      </p>
+    </div>
+  </div>
+
+  <h2>What is on the site</h2>
+  <div class="fact-grid">
+    <div><strong>225+</strong><span>free browser labs &amp; simulators</span></div>
+    <div><strong>62</strong><span>RHCSA / EX200 practice tasks</span></div>
+    <div><strong>430+</strong><span>certification practice questions</span></div>
+    <div><strong>55+</strong><span>troubleshooting &amp; design guides</span></div>
+  </div>
+  <ul>
+    <li><strong>Hands-on labs</strong> — a simulated terminal with objectives that are checked as you type: Linux administration,
+    Docker, Kubernetes, Ansible, Terraform, AWS/Azure/GCP CLI, databases and networking. Each lab page now opens with a written
+    study guide so you can learn the concepts before, or instead of, running the lab.</li>
+    <li><strong>Certification practice</strong> — timed exam simulators for Microsoft Intune MD-102, Cisco CCNA 200-301, VMware Cloud Foundation
+    and Citrix CCE-V, and a 62-task RHCSA series mapped to the published EX200 skill areas.</li>
+    <li><strong>Troubleshooting guides</strong> — long-form write-ups of production problems I have actually been paged for: AD replication,
+    VMware datastores and PSODs, Intune enrolment, Veeam and Commvault jobs, Kubernetes workload failures, storage path loss and more.</li>
+    <li><strong>Incident-response desk and challenges</strong> — realistic tickets for freshers and L1 analysts, and scored challenges for experienced engineers.</li>
+  </ul>
+
+  <h2>How the content is made — and what it is not</h2>
+  <p>Every lab and guide begins with a real scenario from production work or from a certification objective. I build and test it
+  in a lab environment (RHEL 10, vSphere, an Intune tenant, cloud sandboxes), write it up, and publish it here. Where I use
+  AI tools, it is for proof-reading and formatting; the technical content, command sequences and the mistakes described come
+  from operating these systems. If a page reads like a vendor manual, that is a bug — please <a href="/contact.html">tell me</a>.</p>
+  <p>The site is <strong>not</strong> affiliated with, endorsed by or sponsored by Red Hat, Microsoft, VMware/Broadcom, Cisco, Citrix,
+  Amazon, Google or any other vendor named here. Practice questions are original and are not exam dumps; RHCSA tasks are original
+  exercises aligned to public objectives, not exam content. All product names and trademarks belong to their owners.</p>
+
+  <h2>Corrections and update policy</h2>
+  <ul class="timeline">
+    <li>Every article shows a <em>published</em> date and, when changed, an <em>updated</em> date.</li>
+    <li>Guides are re-checked when a product version changes the behaviour described (for example, RHEL point releases and Intune service updates).</li>
+    <li>Reported errors are fixed within a week and acknowledged on the page with credit to the reporter, unless they prefer otherwise.</li>
+  </ul>
+
+  <h2>Privacy, advertising and how the site stays free</h2>
+  <p>Labs run entirely in your browser; names entered for certificates never leave your device. Some informational pages show
+  Google AdSense advertising, which pays for hosting and domain costs. Ads are never placed inside labs, exams or scored challenges.
+  You can change your consent at any time from the <a href="/privacy.html#privacy-choices">Privacy and cookie settings</a> link in the footer.
+  See the full <a href="/privacy.html">privacy policy</a>, <a href="/terms-of-use.html">terms of use</a> and <a href="/disclaimer.html">disclaimer</a>.</p>
+
+  <h2>Get in touch</h2>
+  <p>Questions, corrections, lab requests or partnership enquiries: <a href="/contact.html">contact page</a> or
+  <a href="mailto:info@rcwittraining.in">info@rcwittraining.in</a>. Corrections to technical content are especially welcome —
+  accuracy matters more than pride here.</p>
+</div>
+
+<footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif">
+  <nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+    <a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a>
+    <a href="/contact.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a>
+    <a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a>
+    <a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a>
+    <a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a>
+    <a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a>
+  </nav>
+  <p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">© RCW IT Training, Chennai, India. An independent educational platform. All product names, logos and brands are the property of their respective owners and are used for identification and educational purposes only.</p>
+</footer>
+</body>
+</html>

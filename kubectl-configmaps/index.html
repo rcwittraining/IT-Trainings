@@ -9,8 +9,44 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'self'">
   <title>kubectl ConfigMaps & Secrets · RCW IT Training</title>
   <link rel="stylesheet" href="styles.css">
+    <!-- rcw-guide:start -->
+  <meta name="description" content="kubectl ConfigMaps &amp; Secrets: free hands-on Kubernetes lab. Manage configuration with ConfigMaps and Secrets.">
+  <link rel="canonical" href="https://www.rcwittraining.in/kubectl-configmaps/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="kubectl ConfigMaps &amp; Secrets · RCW IT Training">
+  <meta property="og:description" content="kubectl ConfigMaps &amp; Secrets: free hands-on Kubernetes lab. Manage configuration with ConfigMaps and Secrets.">
+  <meta property="og:url" content="https://www.rcwittraining.in/kubectl-configmaps/">
+  <meta name="author" content="Pradeep Raju">
+  <link rel="stylesheet" href="/lab-guide.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "kubectl ConfigMaps & Secrets", "description": "kubectl ConfigMaps & Secrets: free hands-on Kubernetes lab. Manage configuration with ConfigMaps and Secrets.", "url": "https://www.rcwittraining.in/kubectl-configmaps/", "learningResourceType": "Hands-on lab", "educationalLevel": "Intermediate", "timeRequired": "PT10M", "isAccessibleForFree": true, "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in"}, "dateModified": "2026-09-21"}</script>
+  <meta name="robots" content="noindex,follow">
+  <!-- rcw-guide:end -->
 </head>
 <body>
+  <!-- rcw-guide:start -->
+<article class="rcw-guide" id="guide">
+  <nav class="rcw-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/#labs">Labs</a> › <span>kubectl ConfigMaps &amp; Secrets</span></nav>
+  <p class="rcw-eyebrow">Kubernetes</p>
+  <h1>kubectl ConfigMaps &amp; Secrets</h1>
+  <p class="rcw-lead">Manage configuration with ConfigMaps and Secrets.</p>
+  
+  <ul class="rcw-facts"><li><strong>Intermediate</strong><span>level</span></li><li><strong>3</strong><span>objectives</span></li><li><strong>10 min</strong><span>target time</span></li><li><strong>100</strong><span>points + certificate</span></li></ul>
+  <p class="rcw-cta"><a class="rcw-btn" href="#labRoot">Start the interactive lab ↓</a>
+     <span>Free · runs in your browser · no login</span></p>
+
+  
+
+  <h2>What you will practise</h2>
+  <ol class="rcw-objectives"><li><strong>Create configmap</strong> — Create with kubectl create configmap. <span class=rcw-pts>34 pts</span></li><li><strong>Get configmaps</strong> — List with kubectl get configmaps. <span class=rcw-pts>33 pts</span></li><li><strong>Create secret</strong> — Create a secret with kubectl create secret. <span class=rcw-pts>33 pts</span></li></ol>
+
+  <h2>Commands used in this lab</h2>
+  <ul class="rcw-commands"><li><code>kubectl create configmap app-config --from-literal=key=value</code></li><li><code>kubectl get configmaps</code></li><li><code>kubectl create secret generic db-secret --from-literal=password=secret</code></li></ul>
+  
+
+  <p class="rcw-byline">Written and maintained by <a href="/about.html">Pradeep Raju</a>, enterprise infrastructure architect.
+     Found a mistake? <a href="/contact.html">Tell us</a> — corrections are published with credit.</p>
+</article>
+<!-- rcw-guide:end -->
   <div id="labRoot"></div>
   <script>window.RCW_LAB = {"id": "kubectl-configmaps", "title": "kubectl ConfigMaps & Secrets", "category": "Kubernetes", "badge": "K8S", "accent": "#326ce5", "difficulty": "INTERMEDIATE", "host": "k8s-master-01", "user": "admin", "intro": ["Manage configuration with ConfigMaps and Secrets."], "objectives": [{"name": "Create configmap", "desc": "Create with kubectl create configmap.", "points": 34, "match": ["kubectl\\s+create\\s+configmap\\s+\\S+"], "success": "✓ ConfigMap created."}, {"name": "Get configmaps", "desc": "List with kubectl get configmaps.", "points": 33, "match": ["kubectl\\s+get\\s+configmaps"], "success": "✓ ConfigMaps listed."}, {"name": "Create secret", "desc": "Create a secret with kubectl create secret.", "points": 33, "match": ["kubectl\\s+create\\s+secret\\s+\\S+"], "success": "✓ Secret created."}], "hint": ["kubectl create configmap app-config --from-literal=key=value", "kubectl get configmaps", "kubectl create secret generic db-secret --from-literal=password=secret"], "help": "kubectl create configmap NAME --from-literal=k=v · get configmaps · create secret generic NAME", "certTitle": "kubectl Config Champion", "certDesc1": "for mastering ConfigMaps and Secrets", "certDesc2": "with creation and listing.", "certChallenge": "ConfigMaps & Secrets", "certFooter": "Kubernetes • Challenge", "headline": "kubectl ConfigMaps & Secrets", "lead": "Manage configuration with ConfigMaps and Secrets.", "brief": "kubectl ConfigMaps & Secrets", "briefCopy": "Manage configuration with ConfigMaps and Secrets.", "incident": "KUBECTL-CONFIGMAPS · k8s-master-01 · hands-on practice", "resultCopy": "You completed all objectives for kubectl ConfigMaps & Secrets.", "verdict": "All objectives passed", "certStatus": "All objectives passed", "certPrefix": "K8S", "minutes": 10};</script>
   <script src="../passport.js"></script>
