@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RCW Battle | RCW IT Training</title>
+  <meta name="description" content="RCW Battle - AI-powered battle companion from RCW IT Training.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#061633">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+      background: #061633;
+      color: #eaf4ff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ---- Your site's own chrome, so visitors always see rcwittraining.in ---- */
+    .site-bar {
+      flex: 0 0 auto;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px;
+      background: #071733;
+      border-bottom: 1px solid rgba(7, 139, 232, 0.4);
+    }
+    .site-bar .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #eaf4ff;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .site-bar .brand .rcw { color: #4db8ff; }
+    .site-bar .brand .mark {
+      width: 26px; height: 26px; flex: 0 0 auto;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #078be8, #0758c8);
+    }
+    .site-bar .brand .mark svg { width: 16px; height: 16px; color: #f7d03c; }
+    .site-bar .back {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(7, 139, 232, 0.55);
+      color: #4db8ff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: background 0.15s ease;
+    }
+    .site-bar .back:hover { background: rgba(7, 139, 232, 0.16); }
+    .site-bar .back svg { width: 16px; height: 16px; }
+
+    /* ---- The app ---- */
+    .stage { position: relative; flex: 1 1 auto; min-height: 0; }
+    .stage iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #0f0c29;
+    }
+
+    /* Loading state */
+    .loader {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      background: #061633;
+      color: #9fc4e8;
+      font-size: 14px;
+      transition: opacity 0.3s ease;
+    }
+    .loader.hidden { opacity: 0; pointer-events: none; }
+    .ring {
+      width: 38px; height: 38px;
+      border: 3px solid rgba(7, 139, 232, 0.3);
+      border-top-color: #078be8;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Fallback message */
+    .fallback {
+      position: absolute; inset: 0; z-index: 3;
+      display: none;
+      flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      text-align: center; padding: 24px;
+      background: #061633;
+    }
+    .fallback.show { display: flex; }
+    .fallback p { color: #9fc4e8; max-width: 440px; line-height: 1.55; }
+    .fallback strong { color: #eaf4ff; }
+    .fallback a { color: #4db8ff; font-weight: 700; }
+
+    @media (max-width: 520px) {
+      .site-bar .back span { display: none; }
+      .site-bar .back { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-bar">
+    <a class="brand" href="../">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <g transform="rotate(45 12 12)">
+            <path d="M12 1.5 L13.9 6.6 L13.9 12.8 L10.1 12.8 L10.1 6.6 Z" />
+            <path d="M6 12.8 H18 V15.1 H6 Z" />
+            <path d="M10.8 15.1 H13.2 V20 H10.8 Z" />
+            <circle cx="12" cy="21.3" r="1.7" />
+          </g>
+          <g transform="rotate(-45 12 12)">
+            <path d="M12 1.5 L13.9 6.6 L13.9 12.8 L10.1 12.8 L10.1 6.6 Z" />
+            <path d="M6 12.8 H18 V15.1 H6 Z" />
+            <path d="M10.8 15.1 H13.2 V20 H10.8 Z" />
+            <circle cx="12" cy="21.3" r="1.7" />
+          </g>
+        </svg>
+      </span>
+      <span><span class="rcw">RCW</span> IT Training</span>
+    </a>
+    <a class="back" href="../">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
+      </svg>
+      <span>Home</span>
+    </a>
+  </header>
+
+  <main class="stage">
+    <div class="loader" id="loader">
+      <div class="ring"></div>
+      <div>Loading RCW Battle&hellip;</div>
+    </div>
+
+    <iframe
+      id="rcwApp"
+      src="https://rcw-battle.rcw-battle.workers.dev/"
+      title="RCW Battle"
+      allow="clipboard-write; fullscreen; autoplay"
+      loading="eager"></iframe>
+
+    <div class="fallback" id="fallback">
+      <p><strong>RCW Battle could not be loaded.</strong></p>
+      <p>The app may be temporarily unavailable. Please try again in a moment, or <a href="../">return to the home page</a>.</p>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var iframe = document.getElementById('rcwApp');
+      var loader = document.getElementById('loader');
+      var fallback = document.getElementById('fallback');
+      var done = false;
+
+      function hideLoader() {
+        if (done) return;
+        done = true;
+        loader.classList.add('hidden');
+      }
+
+      iframe.addEventListener('load', hideLoader);
+      setTimeout(hideLoader, 10000);      // safety net
+      setTimeout(function () {             // graceful message if it never loads
+        if (!done) fallback.classList.add('show');
+      }, 15000);
+    })();
+  </script>
+</body>
+</html>
