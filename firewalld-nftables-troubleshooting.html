@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>firewalld and nftables Troubleshooting: Zones, Rich Rules and Ports That Stay Blocked | RCW IT Training</title><meta name="description" content="A practical guide to diagnosing Linux firewall problems: which zone an interface actually lands in, runtime versus permanent configuration, rich rule precedence, direct rules, and reading the generated nftables ruleset underneath firewalld."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/firewalld-nftables-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "firewalld and nftables: Zones, Rich Rules and Why Your Port Is Still Blocked", "description": "A practical guide to diagnosing Linux firewall problems: which zone an interface actually lands in, runtime versus permanent configuration, rich rule precedence, direct rules, and reading the generated nftables ruleset underneath firewalld.", "url": "https://www.rcwittraining.in/firewalld-nftables-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/firewalld-nftables-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Networking · Detailed troubleshooting guide</div><h1>firewalld and nftables: Zones, Rich Rules and Why Your Port Is Still Blocked</h1><p class="lead">The commonest Linux firewall fault is a rule that was added correctly to the wrong zone, or added to the runtime and never made permanent. This guide shows how to confirm what the kernel is actually enforcing rather than what you intended.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Establish which zone is actually in effect</h2>
+<div class="card">
+<p>firewalld applies rules per zone, and every interface or source belongs to exactly one. Adding a port to <code>public</code> while the interface sits in <code>trusted</code> — or in a zone NetworkManager chose for you — is the single most common cause of "I opened the port and it is still blocked".</p>
+<pre>firewall-cmd --state
+firewall-cmd --get-active-zones
+firewall-cmd --get-default-zone
+firewall-cmd --get-zone-of-interface=ens192</pre>
+<pre># everything currently enforced in that zone
+firewall-cmd --zone=public --list-all</pre>
+<p>Note the precedence: a zone bound to a <strong>source address</strong> wins over a zone bound to an <strong>interface</strong>. A host can therefore have its traffic evaluated in a zone its interface is not assigned to, which is bewildering until you know to look.</p>
+</div>
+</section><section><h2>Runtime versus permanent</h2>
+<div class="card">
+<p>firewalld maintains two separate configurations. Omitting <code>--permanent</code> changes only the running state, which is lost on reload or reboot. Including it changes only the on-disk state, which has no effect until reloaded.</p>
+<pre># runtime only — disappears on reload
+firewall-cmd --add-port=8443/tcp
+
+# permanent only — not yet active
+firewall-cmd --permanent --add-port=8443/tcp
+
+# the correct pattern: both
+firewall-cmd --permanent --add-port=8443/tcp
+firewall-cmd --reload</pre>
+<p>Compare the two directly to find drift — this is worth doing routinely on any host that has been hand-edited during an incident:</p>
+<pre>diff &lt;(firewall-cmd --list-all --zone=public) \
+     &lt;(firewall-cmd --permanent --list-all --zone=public)</pre>
+<p>There is also <code>--runtime-to-permanent</code>, which promotes the whole running configuration. It is convenient after an incident, but it will also persist anything you added as a temporary test, so review first.</p>
+</div>
+</section><section><h2>Services, ports and the difference that matters</h2>
+<div class="card">
+<p>firewalld ships named service definitions — small XML files listing ports and any helper modules. Using the service name is preferable to a bare port because it documents intent and stays correct if the definition changes.</p>
+<pre>firewall-cmd --get-services | tr ' ' '\n' | grep -i http
+firewall-cmd --info-service=https
+firewall-cmd --permanent --add-service=https
+firewall-cmd --reload</pre>
+<p>For a non-standard port, define a service rather than scattering port numbers across zones:</p>
+<pre>firewall-cmd --permanent --new-service=myapp
+firewall-cmd --permanent --service=myapp --set-description="Internal app API"
+firewall-cmd --permanent --service=myapp --add-port=8443/tcp
+firewall-cmd --reload
+firewall-cmd --permanent --zone=internal --add-service=myapp
+firewall-cmd --reload</pre>
+<p>Remember that on SELinux-enforcing systems, opening the firewall port is only half the job — the port must also carry the right SELinux label or the service will fail to bind at all.</p>
+</div>
+</section><section><h2>Rich rules and their evaluation order</h2>
+<div class="card">
+<p>Rich rules express source-specific, logged or rate-limited policy. They are evaluated in a fixed priority order that is not the order you typed them:</p>
+<ol>
+<li>Port forwarding and masquerading</li>
+<li>Logging</li>
+<li>Deny rules</li>
+<li>Allow rules</li>
+</ol>
+<p>Because deny is evaluated before allow, a broad deny will silently defeat a narrower allow added afterwards:</p>
+<pre>firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4" source address="10.20.0.0/16" service name="ssh" accept'
+
+firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4" source address="10.20.5.7/32" service name="ssh" reject'
+
+firewall-cmd --reload
+firewall-cmd --zone=public --list-rich-rules</pre>
+<p>Add logging with a rate limit when you need evidence without filling the journal:</p>
+<pre>firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4" source address="192.0.2.0/24"
+  log prefix="BLOCKED-TEST " level="info" limit value="5/m" reject'</pre>
+</div>
+</section><section><h2>Read the nftables ruleset underneath</h2>
+<div class="card">
+<p>firewalld is a front end. On any current RHEL, Rocky or Ubuntu release it generates an nftables ruleset, and that ruleset is what the kernel enforces. When firewalld's view and observed behaviour disagree, this is the tie-breaker:</p>
+<pre>nft list ruleset | less
+nft list table inet firewalld
+nft -a list chain inet firewalld filter_IN_public   # -a shows rule handles</pre>
+<p>Watch for rules placed by something other than firewalld — Docker, Kubernetes, Podman and some VPN clients all insert their own tables and chains:</p>
+<pre>nft list tables
+# table ip nat
+# table ip filter
+# table inet firewalld
+# table ip docker            ← inserted by the container runtime</pre>
+<p>Docker in particular manipulates the NAT path directly and can publish a container port that bypasses the policy you believe is in force. If a port is reachable that firewalld says is closed, check for a published container before anything else.</p>
+</div>
+<div class="card">
+<p>Counters tell you whether a rule is being hit at all, which separates "wrong rule" from "traffic never arrived":</p>
+<pre>nft list ruleset -a | grep -A2 'counter'
+nft reset counters table inet firewalld   # zero, reproduce, re-read</pre>
+</div>
+</section><section><h2>Prove it from both ends</h2>
+<div class="card">
+<p>Before changing anything, establish whether the service is listening, whether packets arrive, and where they stop.</p>
+<pre># is anything bound, and on which address?
+ss -ltnp | grep 8443
+# 0.0.0.0:8443 is all interfaces; 127.0.0.1:8443 will never answer remotely
+
+# do packets reach the host at all?
+tcpdump -ni ens192 'tcp port 8443' -c 20
+
+# from the client
+nc -vz host.example.com 8443
+curl -v --connect-timeout 5 https://host.example.com:8443/</pre>
+<p>The distinction in the client's response is informative:</p>
+<table>
+<tr><th>Symptom</th><th>Usual meaning</th></tr>
+<tr><td>Connection refused (fast)</td><td>Packet reached the host; nothing listening. Not a firewall issue.</td></tr>
+<tr><td>Connection timed out</td><td>Packet dropped silently — firewall <code>DROP</code>, or routing</td></tr>
+<tr><td>No route to host</td><td>ICMP rejection — firewall <code>REJECT</code>, or genuine routing failure</td></tr>
+<tr><td>TLS handshake begins then stalls</td><td>Not the firewall — MTU, proxy or certificate</td></tr>
+</table>
+<p>A timeout with packets visible in <code>tcpdump</code> on the server is a local policy drop. A timeout with nothing visible means the traffic never arrived, and the problem is upstream — a security group, a network ACL or a route.</p>
+</div>
+</section><section><h2>Panic mode, failed reloads and recovery</h2>
+<div class="card">
+<p>Two commands are worth knowing before you need them. <code>--panic-on</code> drops all traffic immediately, including your SSH session, and is occasionally the right containment action:</p>
+<pre>firewall-cmd --panic-on
+firewall-cmd --query-panic
+firewall-cmd --panic-off</pre>
+<p>When testing remote rule changes, protect yourself with a timed rollback so a mistake self-corrects:</p>
+<pre>( sleep 300; firewall-cmd --reload ) &amp;
+# make changes to the runtime only; if locked out, the reload restores permanent config</pre>
+<p>If <code>--reload</code> fails, the permanent configuration contains an error and the runtime is left untouched. Find it before retrying:</p>
+<pre>firewall-cmd --check-config
+journalctl -u firewalld -n 50 --no-pager</pre>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li><code>--get-active-zones</code> before anything else; confirm which zone governs the traffic.</li>
+<li>Remember source-bound zones outrank interface-bound zones.</li>
+<li>Diff runtime against permanent to catch changes that will vanish or never apply.</li>
+<li>Check rich-rule precedence: deny is evaluated before allow regardless of entry order.</li>
+<li>Confirm the service is bound to the right address with <code>ss -ltnp</code>.</li>
+<li>Use <code>tcpdump</code> to establish whether packets arrive at all.</li>
+<li>Read <code>nft list ruleset</code> for the authoritative view, and look for container-inserted tables.</li>
+<li>On SELinux hosts, open the port in policy too, or the bind fails regardless of the firewall.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> Find the zone before writing a rule — <code>firewall-cmd --get-active-zones</code> answers more questions than any other command here. Remember that <code>--permanent</code> changes nothing until reload, and that the generated <code>nft list ruleset</code> is the only authoritative view of what the kernel enforces.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

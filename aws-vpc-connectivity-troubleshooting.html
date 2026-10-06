@@ -1,0 +1,130 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>AWS VPC Troubleshooting: Route Tables, NAT, Security Groups and NACLs | RCW IT Training</title><meta name="description" content="Diagnosing AWS VPC connectivity: public versus private subnet routing, NAT gateway requirements, stateful security groups versus stateless NACLs, VPC peering limitations, endpoint policies and reading VPC Flow Logs REJECT entries."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/aws-vpc-connectivity-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "AWS VPC Connectivity: Routes, NAT, Security Groups and the Rules That Are Stateless", "description": "Diagnosing AWS VPC connectivity: public versus private subnet routing, NAT gateway requirements, stateful security groups versus stateless NACLs, VPC peering limitations, endpoint policies and reading VPC Flow Logs REJECT entries.", "url": "https://www.rcwittraining.in/aws-vpc-connectivity-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/aws-vpc-connectivity-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">AWS · Detailed troubleshooting guide</div><h1>AWS VPC Connectivity: Routes, NAT, Security Groups and the Rules That Are Stateless</h1><p class="lead">Nearly every AWS connectivity problem reduces to one of four things: a missing route, a stateless NACL, a security group that does not reference what you think, or a subnet that is private when you believed it public. This guide separates them quickly.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Establish what kind of subnet you are actually in</h2>
+<div class="card">
+<p>There is no "public subnet" attribute in AWS. A subnet is public only because its route table has a default route to an internet gateway. Checking this takes seconds and resolves a surprising proportion of cases.</p>
+<pre>aws ec2 describe-route-tables \
+  --filters "Name=association.subnet-id,Values=subnet-0abc123" \
+  --query 'RouteTables[].Routes[]' --output table</pre>
+<table>
+<tr><th>Destination</th><th>Target</th><th>Subnet is…</th></tr>
+<tr><td>0.0.0.0/0</td><td>igw-…</td><td>Public</td></tr>
+<tr><td>0.0.0.0/0</td><td>nat-…</td><td>Private with outbound internet</td></tr>
+<tr><td>no 0.0.0.0/0</td><td>—</td><td>Isolated; local VPC traffic only</td></tr>
+</table>
+<p>If a subnet has no explicit route-table association it inherits the VPC's <strong>main</strong> route table, which is a frequent surprise after infrastructure is created by hand:</p>
+<pre>aws ec2 describe-route-tables \
+  --filters "Name=vpc-id,Values=vpc-0abc" "Name=association.main,Values=true"</pre>
+<p>For an instance in a public subnet to be reachable it needs all three: the IGW route, a public IP or Elastic IP, and permissive security group rules. A public subnet with no public IP assigned is unreachable regardless of everything else.</p>
+</div>
+</section><section><h2>Security groups are stateful; NACLs are not</h2>
+<div class="card">
+<p>This distinction causes more wasted hours than any other topic in VPC networking.</p>
+<table>
+<tr><th></th><th>Security group</th><th>Network ACL</th></tr>
+<tr><td>Applies to</td><td>ENI (instance)</td><td>Subnet</td></tr>
+<tr><td>State</td><td>Stateful — return traffic automatically allowed</td><td>Stateless — return traffic needs its own rule</td></tr>
+<tr><td>Rules</td><td>Allow only</td><td>Allow and deny</td></tr>
+<tr><td>Evaluation</td><td>All rules, permissive union</td><td>In rule-number order, first match wins</td></tr>
+<tr><td>Default</td><td>Deny inbound, allow outbound</td><td>Default NACL allows everything</td></tr>
+</table>
+<p>Because a security group is stateful, allowing inbound 443 is sufficient — the response is permitted automatically. A NACL requires both directions, and the return traffic uses an <strong>ephemeral port</strong>, not 443:</p>
+<pre># inbound rule
+100  TCP  443        0.0.0.0/0  ALLOW
+
+# outbound rule — the response leaves from an ephemeral port
+100  TCP  1024-65535 0.0.0.0/0  ALLOW</pre>
+<p>Omitting the second rule produces the classic signature: the connection establishes and then hangs, or works in one direction only. Ephemeral ranges differ by client — Linux typically 32768–60999, Windows 49152–65535, and NAT gateways use 1024–65535, so allow the full range unless you have a specific reason not to.</p>
+</div>
+<div class="card">
+<p>Security group rules can reference another security group rather than a CIDR. This is the preferred pattern, but it is frequently misread: referencing a group permits traffic from <em>instances in that group</em>, not from the group's subnet.</p>
+<pre>aws ec2 describe-security-groups --group-ids sg-0abc \
+  --query 'SecurityGroups[].IpPermissions[]' --output json</pre>
+<p>Also check rule count limits. The default quota is 60 inbound and 60 outbound rules per group, and a group that has silently hit the limit will reject new rules during a deployment.</p>
+</div>
+</section><section><h2>NAT gateway requirements</h2>
+<div class="card">
+<p>A NAT gateway lets private instances reach the internet outbound. Four conditions must all hold, and the second is the one most often missed:</p>
+<ol>
+<li>The NAT gateway sits in a <strong>public</strong> subnet — one with an IGW route.</li>
+<li>The <strong>private</strong> subnet's route table points <code>0.0.0.0/0</code> at the NAT gateway.</li>
+<li>The NAT gateway has an Elastic IP.</li>
+<li>The public subnet's own route table has the IGW route.</li>
+</ol>
+<p>Placing the NAT gateway in the private subnet it serves is a configuration that creates a routing loop and fails with no obvious error.</p>
+<pre>aws ec2 describe-nat-gateways \
+  --filter "Name=vpc-id,Values=vpc-0abc" \
+  --query 'NatGateways[].{Id:NatGatewayId,Subnet:SubnetId,State:State}' --output table</pre>
+<p>Note that NAT gateways are zonal. A NAT gateway in <code>eu-west-1a</code> serving private subnets in <code>1b</code> and <code>1c</code> works, but the cross-AZ traffic is chargeable and becomes a single point of failure for both zones. Deploy one per availability zone for production.</p>
+<pre># watch for port allocation errors under load
+aws cloudwatch get-metric-statistics --namespace AWS/NATGateway \
+  --metric-name ErrorPortAllocation --statistics Sum \
+  --start-time 2026-10-05T00:00:00Z --end-time 2026-10-06T00:00:00Z --period 3600</pre>
+<p><code>ErrorPortAllocation</code> above zero means the NAT gateway exhausted ports to a single destination — typically many instances polling one endpoint. The fix is more destinations, connection reuse, or an additional NAT gateway.</p>
+</div>
+</section><section><h2>Peering, transit and what is not transitive</h2>
+<div class="card">
+<p>VPC peering is explicitly non-transitive. If A peers with B and B peers with C, A cannot reach C. No route table entry will create that path; the packet is dropped at B.</p>
+<pre>aws ec2 describe-vpc-peering-connections \
+  --query 'VpcPeeringConnections[].{Id:VpcPeeringConnectionId,Status:Status.Code}' --output table</pre>
+<p>Both sides need routes — a peering connection in <code>active</code> state with routes on only one side gives you traffic out and nothing back. Overlapping CIDRs cannot be peered at all, which is the usual reason a peering request cannot be created in the first place.</p>
+<p>For more than a handful of VPCs, Transit Gateway replaces the mesh and does support transitive routing, but each attachment needs an entry in the relevant transit gateway route table — attachment alone does not create reachability:</p>
+<pre>aws ec2 describe-transit-gateway-route-tables
+aws ec2 search-transit-gateway-routes \
+  --transit-gateway-route-table-id tgw-rtb-0abc \
+  --filters "Name=state,Values=active"</pre>
+</div>
+</section><section><h2>VPC endpoints and the policy that blocks you</h2>
+<div class="card">
+<p>Endpoints keep traffic to AWS services off the internet. The two types behave differently and fail differently:</p>
+<ul>
+<li><strong>Gateway endpoints</strong> (S3, DynamoDB) add a prefix-list route to the route table. They cost nothing and are invisible to the instance. If the route is missing from the subnet's table, traffic silently falls back to the internet path — or fails if there is none.</li>
+<li><strong>Interface endpoints</strong> (most other services) create an ENI with a private DNS name, and are governed by a <strong>security group</strong>. Forgetting to allow 443 inbound on that security group is the most common interface-endpoint failure.</li>
+</ul>
+<pre>aws ec2 describe-vpc-endpoints \
+  --query 'VpcEndpoints[].{Id:VpcEndpointId,Service:ServiceName,Type:VpcEndpointType,State:State}' \
+  --output table</pre>
+<p>Endpoint policies are a second, separate control. A restrictive endpoint policy will deny access even when the IAM policy permits it — both must allow the call:</p>
+<pre>aws ec2 describe-vpc-endpoints --vpc-endpoint-ids vpce-0abc \
+  --query 'VpcEndpoints[].PolicyDocument' --output text</pre>
+<p>For interface endpoints, private DNS must be enabled for the standard service hostname to resolve to the endpoint; without it the SDK continues to use the public endpoint.</p>
+</div>
+</section><section><h2>Let AWS trace it for you</h2>
+<div class="card">
+<p>Reachability Analyzer evaluates the entire path — routes, security groups, NACLs, peering — and names the exact component that blocks it. It is faster and more reliable than manual tracing and should usually be the first step rather than the last.</p>
+<pre>aws ec2 create-network-insights-path \
+  --source i-0source --destination i-0dest \
+  --destination-port 443 --protocol tcp
+
+aws ec2 start-network-insights-analysis \
+  --network-insights-path-id nip-0abc
+
+aws ec2 describe-network-insights-analyses \
+  --network-insights-analysis-ids nia-0abc \
+  --query 'NetworkInsightsAnalyses[].{Reachable:NetworkPathFound,Explanation:Explanations}'</pre>
+<p>When the path is not reachable, the <code>Explanations</code> array names the component and the rule responsible.</p>
+</div>
+<div class="card">
+<p>Flow Logs show what actually happened on the wire. Filter for rejects to find the drop:</p>
+<pre>fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action, logStatus
+| filter action = "REJECT"
+| filter dstPort = 443
+| sort @timestamp desc
+| limit 50</pre>
+<p>Two interpretation notes that matter. A REJECT recorded on the inbound ENI points at a security group or NACL on the destination. An <em>absence</em> of any record for the flow means the packet never arrived — look at routing, not filtering. And <code>logStatus = SKIPDATA</code> means entries were dropped during aggregation, so an empty result is not proof of absence.</p>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li>Check the subnet's route table — including whether it is using the main table by default.</li>
+<li>Confirm public-subnet instances actually have a public or Elastic IP.</li>
+<li>Remember security groups are stateful; NACLs need an explicit ephemeral-port return rule.</li>
+<li>For NAT: gateway in a public subnet, private route to the NAT, EIP attached, IGW route present.</li>
+<li>Check <code>ErrorPortAllocation</code> before blaming the application for intermittent timeouts.</li>
+<li>Peering is not transitive, and both sides need routes.</li>
+<li>Interface endpoints need an open security group and private DNS; check the endpoint policy too.</li>
+<li>Run Reachability Analyzer early, and use Flow Log REJECT entries to confirm the layer.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> Security groups are stateful and NACLs are not — a NACL that allows inbound but not the ephemeral return range breaks connections in one direction only, which is the signature of this fault. Use VPC Reachability Analyzer before manual tracing, and read Flow Logs for REJECT entries to see which layer dropped the packet.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

@@ -1,0 +1,172 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>MySQL Replication Troubleshooting: Lag, Broken Replicas, GTID and Relay Logs | RCW IT Training</title><meta name="description" content="Reading SHOW REPLICA STATUS properly: why Seconds_Behind_Source lies, single-threaded apply bottlenecks, GTID gaps and errant transactions, relay log corruption, and rebuilding a replica safely with consistent snapshots."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/mysql-replication-lag-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "MySQL Replication: Diagnosing Lag, Broken Replicas and GTID Inconsistency", "description": "Reading SHOW REPLICA STATUS properly: why Seconds_Behind_Source lies, single-threaded apply bottlenecks, GTID gaps and errant transactions, relay log corruption, and rebuilding a replica safely with consistent snapshots.", "url": "https://www.rcwittraining.in/mysql-replication-lag-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/mysql-replication-lag-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">MySQL · Detailed troubleshooting guide</div><h1>MySQL Replication: Diagnosing Lag, Broken Replicas and GTID Inconsistency</h1><p class="lead">Replication lag is rarely a network problem. It is usually one long transaction, a missing index on the replica, or single-threaded apply struggling with a parallel write workload. This guide shows how to tell which, and how to repair a replica without guessing.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Read the status output properly</h2>
+<div class="card">
+<p>Everything starts here. On MySQL 8.0.22 and later use the current terminology; older releases use <code>SHOW SLAVE STATUS</code> with the same fields under the previous names.</p>
+<pre>SHOW REPLICA STATUS\G</pre>
+<p>Seven fields carry the diagnosis:</p>
+<table>
+<tr><th>Field</th><th>Healthy</th><th>What it means</th></tr>
+<tr><td>Replica_IO_Running</td><td>Yes</td><td>Connected to the source and receiving binlog</td></tr>
+<tr><td>Replica_SQL_Running</td><td>Yes</td><td>Applying relay log events</td></tr>
+<tr><td>Seconds_Behind_Source</td><td>0</td><td>Apply delay — see the caveats below</td></tr>
+<tr><td>Last_IO_Error</td><td>empty</td><td>Connection, authentication or binlog retention failure</td></tr>
+<tr><td>Last_SQL_Error</td><td>empty</td><td>A statement failed to apply</td></tr>
+<tr><td>Retrieved_Gtid_Set</td><td>—</td><td>What this replica has received</td></tr>
+<tr><td>Executed_Gtid_Set</td><td>—</td><td>What this replica has actually applied</td></tr>
+</table>
+<p>The two threads fail independently. IO running with SQL stopped means data is arriving but not being applied — look at <code>Last_SQL_Error</code>. SQL running with IO stopped means the replica is applying a backlog it already has and will then go quiet.</p>
+</div>
+<div class="card">
+<p><code>Seconds_Behind_Source</code> is widely misread. It is the difference between the timestamp of the event being applied and the replica's clock — which means:</p>
+<ul>
+<li>It reports <strong>0</strong> when the IO thread is disconnected, because there is nothing in the relay log to compare against. A completely stalled replica can show zero lag.</li>
+<li>It is distorted by clock skew between source and replica.</li>
+<li>It measures apply delay only, excluding time the data spent in flight.</li>
+</ul>
+<p>Compare GTID sets for a truthful answer:</p>
+<pre>-- on the source
+SELECT @@GLOBAL.gtid_executed;
+
+-- on the replica
+SELECT @@GLOBAL.gtid_executed;
+
+-- transactions the source has that this replica does not
+SELECT GTID_SUBTRACT('&lt;source_set&gt;', '&lt;replica_set&gt;');</pre>
+<p>An empty result means the replica is genuinely caught up. A non-empty result names exactly which transactions are missing.</p>
+</div>
+</section><section><h2>Why a replica falls behind</h2>
+<div class="card">
+<p>Four causes account for the overwhelming majority of lag, and they are distinguishable.</p>
+<p><strong>1. Single-threaded apply.</strong> Historically the replica applied serially while the source wrote in parallel. Check and enable parallel apply:</p>
+<pre>SELECT @@replica_parallel_workers, @@replica_parallel_type,
+       @@replica_preserve_commit_order, @@binlog_transaction_dependency_tracking;
+
+STOP REPLICA SQL_THREAD;
+SET GLOBAL replica_parallel_workers = 8;
+SET GLOBAL replica_parallel_type = 'LOGICAL_CLOCK';
+SET GLOBAL replica_preserve_commit_order = ON;
+START REPLICA SQL_THREAD;</pre>
+<p>On the source, <code>binlog_transaction_dependency_tracking = WRITESET</code> substantially improves the parallelism the replica can extract, because it marks which transactions genuinely conflict.</p>
+<p><strong>2. One enormous transaction.</strong> A single large <code>DELETE</code> or <code>UPDATE</code> applies as one unit and blocks everything behind it:</p>
+<pre>SELECT * FROM performance_schema.replication_applier_status_by_worker\G
+SELECT * FROM sys.session WHERE command = 'Query' AND time &gt; 10;</pre>
+<p><strong>3. Missing index on the replica.</strong> With row-based replication, an <code>UPDATE</code> or <code>DELETE</code> on the replica locates each affected row by key. If the replica lacks an index the source has, it performs a full table scan per row — turning a fast statement into hours of work. Compare schemas before anything else.</p>
+<p><strong>4. Disk or fsync contention.</strong> Replicas are often provisioned on slower storage than the source on the assumption they are read-only.</p>
+</div>
+</section><section><h2>When the SQL thread stops with an error</h2>
+<div class="card">
+<p>A stopped SQL thread names the problem precisely. Read the error before taking any action:</p>
+<pre>SHOW REPLICA STATUS\G
+-- Last_SQL_Errno: 1062
+-- Last_SQL_Error: Could not execute Write_rows event on table app.orders;
+--   Duplicate entry '48213' for key 'PRIMARY'</pre>
+<table>
+<tr><th>Error</th><th>Meaning</th><th>Usual root cause</th></tr>
+<tr><td>1062</td><td>Duplicate key</td><td>A write was made directly on the replica</td></tr>
+<tr><td>1032</td><td>Cannot find record</td><td>Replica data diverged; the row does not exist</td></tr>
+<tr><td>1452</td><td>Foreign key constraint fails</td><td>Out-of-order apply or divergence</td></tr>
+<tr><td>1236</td><td>Could not find first log file</td><td>Source purged binlogs the replica still needed</td></tr>
+<tr><td>1593</td><td>Fatal error</td><td>Duplicate <code>server_id</code> or <code>server_uuid</code></td></tr>
+</table>
+<p>Errors 1062 and 1032 both indicate the replica's data no longer matches the source. The data divergence is the fault; the stopped thread is the symptom, and it is doing you a favour by stopping.</p>
+<p>Error 1236 means the binary logs needed are gone. Check retention on the source and size it against the longest outage you intend to survive:</p>
+<pre>SELECT @@binlog_expire_logs_seconds / 86400 AS days_retained;
+SHOW BINARY LOGS;</pre>
+</div>
+<div class="card">
+<p>Verify divergence rather than assuming it, using checksums across the whole topology:</p>
+<pre>pt-table-checksum --replicate=percona.checksums h=source-host
+pt-table-sync --print --replicate=percona.checksums h=replica-host</pre>
+<p>Always run <code>pt-table-sync</code> with <code>--print</code> first and read the statements it proposes before letting it execute anything.</p>
+</div>
+</section><section><h2>GTID errant transactions — the failover landmine</h2>
+<div class="card">
+<p>In a GTID topology, every transaction carries a globally unique identifier. A transaction executed directly on a replica receives that <em>replica's</em> UUID, producing a GTID the source has never seen — an errant transaction.</p>
+<p>It causes no immediate symptom. It breaks the next failover, when the old source tries to replicate from the promoted replica, finds a GTID it does not recognise, and refuses to start.</p>
+<pre>-- on the replica: transactions it has that the source does not
+SELECT GTID_SUBTRACT(@@GLOBAL.gtid_executed, '&lt;source_gtid_executed&gt;');</pre>
+<p>A non-empty result is an errant transaction and must be dealt with deliberately. Prevent them in the first place:</p>
+<pre>SET GLOBAL super_read_only = ON;   -- also blocks users with SUPER
+SELECT @@read_only, @@super_read_only;</pre>
+<p><code>read_only</code> alone does not stop accounts holding <code>SUPER</code>, which is how most errant transactions are created — by an administrator, not an application.</p>
+</div>
+<div class="card">
+<p>This is why <code>sql_slave_skip_counter</code> must not be used on GTID topologies. The supported method is to inject an empty transaction with the offending GTID, which marks it applied without executing anything:</p>
+<pre>STOP REPLICA;
+SET GTID_NEXT = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:1234';
+BEGIN; COMMIT;
+SET GTID_NEXT = 'AUTOMATIC';
+START REPLICA;</pre>
+<p>Treat this as a conscious decision to discard a transaction. Establish what it contained first — from the source's binary log — and confirm the data can be lost or will be restored another way:</p>
+<pre>mysqlbinlog --include-gtids='aaaaaaaa-...:1234' \
+  --base64-output=DECODE-ROWS -vv binlog.000042</pre>
+</div>
+</section><section><h2>Relay log corruption and clean recovery</h2>
+<div class="card">
+<p>After an unclean shutdown the relay log may be truncated. The error is explicit:</p>
+<pre>Last_IO_Error: Relay log read failure: Could not parse relay log event entry.</pre>
+<p>With GTID and auto-positioning, recovery is straightforward because the replica can ask for exactly what it needs:</p>
+<pre>STOP REPLICA;
+RESET REPLICA;                      -- discards relay logs, keeps connection settings
+CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION = 1;
+START REPLICA;
+SHOW REPLICA STATUS\G</pre>
+<p>Use <code>RESET REPLICA</code>, not <code>RESET REPLICA ALL</code> — the latter also deletes the connection configuration, leaving a replica that cannot find its source.</p>
+<p>Enable crash-safe replication so this does not recur. These settings store replication position in InnoDB tables rather than files, keeping position and data consistent through a crash:</p>
+<pre>relay_log_recovery = ON
+relay_log_info_repository = TABLE     -- default in 8.0
+master_info_repository = TABLE        -- default in 8.0
+sync_binlog = 1
+innodb_flush_log_at_trx_commit = 1</pre>
+</div>
+</section><section><h2>Rebuilding a replica without guesswork</h2>
+<div class="card">
+<p>When divergence is extensive, rebuilding is faster and safer than repairing. The essential requirement is a snapshot that is consistent with a known GTID position.</p>
+<pre># clone plugin (MySQL 8.0.17+) — simplest and fastest
+SET GLOBAL clone_valid_donor_list = 'source-host:3306';
+CLONE INSTANCE FROM 'repl_user'@'source-host':3306
+  IDENTIFIED BY '&lt;password&gt;';</pre>
+<pre># logical dump with GTID position recorded
+mysqldump --single-transaction --source-data=2 --set-gtid-purged=ON \
+  --all-databases --triggers --routines --events &gt; dump.sql</pre>
+<p><code>--single-transaction</code> gives a consistent snapshot without locking InnoDB tables. <code>--set-gtid-purged=ON</code> writes the GTID position into the dump so the restored replica knows precisely where to resume.</p>
+<pre>mysql &lt; dump.sql
+CHANGE REPLICATION SOURCE TO
+  SOURCE_HOST='source-host', SOURCE_USER='repl_user',
+  SOURCE_PASSWORD='&lt;password&gt;', SOURCE_AUTO_POSITION=1;
+START REPLICA;</pre>
+<p>For large datasets, Percona XtraBackup produces a physical copy with far less impact than a logical dump and records the GTID position in <code>xtrabackup_binlog_info</code>.</p>
+</div>
+</section><section><h2>Monitoring that catches this early</h2>
+<div class="card">
+<pre>-- authoritative lag, independent of Seconds_Behind_Source
+SELECT CHANNEL_NAME, SERVICE_STATE,
+       LAST_APPLIED_TRANSACTION_END_APPLY_TIMESTAMP,
+       APPLYING_TRANSACTION_START_APPLY_TIMESTAMP
+FROM performance_schema.replication_applier_status_by_coordinator;
+
+-- per-worker progress, to spot one stuck thread
+SELECT WORKER_ID, LAST_ERROR_MESSAGE, APPLYING_TRANSACTION
+FROM performance_schema.replication_applier_status_by_worker;
+
+-- connection health
+SELECT CHANNEL_NAME, SERVICE_STATE, LAST_ERROR_MESSAGE
+FROM performance_schema.replication_connection_status;</pre>
+<p>Alert on three things rather than one: both threads running, GTID gap size against the source, and heartbeat age. A heartbeat table written every few seconds on the source and read on the replica measures true end-to-end staleness and is immune to the quirks of <code>Seconds_Behind_Source</code>.</p>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li>Check both thread states before anything else; they fail independently.</li>
+<li>Do not trust <code>Seconds_Behind_Source</code> — compare GTID sets with <code>GTID_SUBTRACT</code>.</li>
+<li>For lag: check parallel workers, one long transaction, and replica-side missing indexes, in that order.</li>
+<li>Errors 1062 and 1032 mean divergence — verify with <code>pt-table-checksum</code> before repairing.</li>
+<li>Error 1236 means purged binlogs; review retention.</li>
+<li>Check for errant GTIDs on every replica, and enforce <code>super_read_only</code>.</li>
+<li>Never use <code>sql_slave_skip_counter</code> with GTID; inject an empty transaction instead.</li>
+<li>Rebuild with the clone plugin or a GTID-aware dump rather than repairing extensive divergence.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> <code>Seconds_Behind_Source</code> measures apply delay, not data staleness, and reads zero while a replica is stalled waiting for the network. Compare GTID sets instead. Never use <code>sql_slave_skip_counter</code> on a GTID topology — skipping a transaction creates an errant GTID that will break the next failover.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

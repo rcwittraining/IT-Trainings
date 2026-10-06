@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Windows Failover Cluster Troubleshooting: Quorum Loss, Witness Failures and Node Eviction | RCW IT Training</title><meta name="description" content="Diagnosing Windows Server Failover Cluster problems: how dynamic quorum and dynamic witness actually vote, reading the cluster log, Event IDs 1135 and 1177, node isolation versus eviction, and recovering a cluster that will not start."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/windows-failover-cluster-quorum-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Windows Failover Cluster: Quorum Loss, Witness Failures and Nodes That Will Not Join", "description": "Diagnosing Windows Server Failover Cluster problems: how dynamic quorum and dynamic witness actually vote, reading the cluster log, Event IDs 1135 and 1177, node isolation versus eviction, and recovering a cluster that will not start.", "url": "https://www.rcwittraining.in/windows-failover-cluster-quorum-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/windows-failover-cluster-quorum-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Windows Server · Detailed troubleshooting guide</div><h1>Windows Failover Cluster: Quorum Loss, Witness Failures and Nodes That Will Not Join</h1><p class="lead">Most failover cluster incidents are quorum incidents wearing a different name. This guide explains how votes are counted at the moment of failure, how to read the cluster log, and how to recover a cluster that has shut itself down to protect data.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>What quorum actually counts</h2>
+<div class="card">
+<p>A failover cluster stays online while it holds a majority of votes. Each node normally has one vote, and a witness may hold one more. If a majority cannot be assembled, the remaining nodes deliberately stop — this is correct behaviour that prevents a split brain writing to shared storage from two directions.</p>
+<pre>Get-ClusterQuorum
+Get-ClusterNode | Select-Object Name, State, NodeWeight, DynamicWeight
+Get-Cluster | Select-Object Name, DynamicQuorum, WitnessDynamicWeight</pre>
+<p>Two columns matter and are easily confused:</p>
+<ul>
+<li><strong>NodeWeight</strong> — the configured vote, 0 or 1. Set by the administrator.</li>
+<li><strong>DynamicWeight</strong> — the vote the cluster is currently granting. Adjusted automatically by dynamic quorum.</li>
+</ul>
+<p>Since Windows Server 2012 R2, dynamic quorum removes votes from nodes as they leave, so a cluster can survive sequential failures that static arithmetic says should have killed it. It cannot survive <em>simultaneous</em> loss of a majority, which is why a single network event that isolates several nodes at once is far more dangerous than the same nodes failing one at a time.</p>
+</div>
+<div class="card">
+<p>Dynamic witness complements this: the witness vote is granted only when the node count is even, and withdrawn when it is odd, keeping the total odd at all times.</p>
+<pre>Get-ClusterResource -Name "File Share Witness" | Get-ClusterParameter
+(Get-Cluster).WitnessDynamicWeight    # 1 = witness currently voting, 0 = not</pre>
+<p>A witness reporting <code>WitnessDynamicWeight = 0</code> on an even-node cluster is a real problem and usually means the witness resource is failed or unreachable.</p>
+</div>
+</section><section><h2>Event IDs that tell you what happened</h2>
+<div class="card">
+<table>
+<tr><th>Event ID</th><th>Source</th><th>Meaning</th></tr>
+<tr><td>1135</td><td>FailoverClustering</td><td>A node was removed from active membership. Network or heartbeat loss, not necessarily a crash.</td></tr>
+<tr><td>1177</td><td>FailoverClustering</td><td>The node stopped because quorum was lost. The cluster service shut down on purpose.</td></tr>
+<tr><td>1069</td><td>FailoverClustering</td><td>A clustered role or resource failed.</td></tr>
+<tr><td>1146</td><td>FailoverClustering</td><td>The resource hosting subsystem (RHS) crashed — usually a misbehaving resource DLL.</td></tr>
+<tr><td>1230</td><td>FailoverClustering</td><td>A resource deadlocked and was terminated.</td></tr>
+<tr><td>5120</td><td>FailoverClustering</td><td>Cluster Shared Volume paused — storage path loss. Common and important.</td></tr>
+<tr><td>5142</td><td>FailoverClustering</td><td>CSV no longer accessible from this node.</td></tr>
+</table>
+<pre>Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-FailoverClustering'} -MaxEvents 100 |
+  Where-Object Id -in 1135,1177,1069,1146,5120 |
+  Format-Table TimeCreated, Id, Message -Wrap</pre>
+<p>The sequence matters more than any single event. A 1135 followed seconds later by 1177 on the surviving nodes describes a network partition. A 1177 with no preceding 1135 points at storage or at the witness.</p>
+</div>
+</section><section><h2>Generate and read the cluster log</h2>
+<div class="card">
+<p>The cluster log is far more detailed than the event log and is not written as a text file until you ask for it. Timestamps are UTC by default, so convert them or you will misalign events by hours:</p>
+<pre># last 24 hours, local time, to C:\Logs
+Get-ClusterLog -Destination C:\Logs -TimeSpan 1440 -UseLocalTime</pre>
+<p>Search for the moment of the decision rather than reading linearly:</p>
+<pre>Select-String -Path C:\Logs\*_cluster.log -Pattern 'quorum|lost quorum|NetftIsConnected|IsolatedNode|Shutting down' |
+  Select-Object -First 60</pre>
+<p>Useful markers inside the log:</p>
+<ul>
+<li><code>[QUORUM]</code> — vote arithmetic at the time of the event.</li>
+<li><code>[NETFTAPI]</code> — the cluster virtual adapter; heartbeat loss appears here first.</li>
+<li><code>[RCM]</code> — Resource Control Manager, showing resource state changes and failover decisions.</li>
+<li><code>[DCM]</code> — Distributed Cluster Manager, for CSV events.</li>
+</ul>
+</div>
+</section><section><h2>Heartbeat and network isolation</h2>
+<div class="card">
+<p>Clustering health checks are sensitive by design: the defaults assume a low-latency LAN. On stretched clusters, oversubscribed virtual switches or networks with aggressive QoS, a node can be evicted for a delay that no user would ever notice.</p>
+<pre>Get-Cluster | Select-Object SameSubnetDelay, SameSubnetThreshold,
+                            CrossSubnetDelay, CrossSubnetThreshold,
+                            RouteHistoryLength</pre>
+<table>
+<tr><th>Setting</th><th>Default</th><th>Meaning</th></tr>
+<tr><td>SameSubnetDelay</td><td>1000 ms</td><td>Interval between heartbeats</td></tr>
+<tr><td>SameSubnetThreshold</td><td>5 (10 on 2019+)</td><td>Missed heartbeats before the node is considered down</td></tr>
+<tr><td>CrossSubnetDelay</td><td>1000 ms</td><td>Interval for nodes on different subnets</td></tr>
+<tr><td>CrossSubnetThreshold</td><td>5 (20 on 2019+)</td><td>Missed heartbeats across subnets</td></tr>
+</table>
+<p>Raising thresholds on a stretched cluster is legitimate; raising them to mask a genuine network fault is not — it extends the time before a real failure is detected.</p>
+<pre>(Get-Cluster).SameSubnetThreshold = 10
+(Get-Cluster).CrossSubnetThreshold = 20</pre>
+<p>Confirm the cluster networks are classified correctly. A storage or backup network accidentally marked as cluster-capable will carry heartbeats and introduce jitter:</p>
+<pre>Get-ClusterNetwork | Select-Object Name, Role, Address, State
+# Role: 0 = none, 1 = cluster only, 3 = cluster and client</pre>
+</div>
+</section><section><h2>Witness problems</h2>
+<div class="card">
+<p>The witness is the most commonly neglected component in a cluster and the one that decides the outcome of a tie.</p>
+<pre>Get-ClusterQuorum | Select-Object Cluster, QuorumResource, QuorumType</pre>
+<ul>
+<li><strong>File share witness</strong> — must be on a server outside the cluster, with the <em>cluster name object</em> granted both share and NTFS write permission. Granting rights to the node computer accounts rather than the CNO is a frequent misconfiguration.</li>
+<li><strong>Disk witness</strong> — small shared LUN; fails with the storage path, so it is a poor choice when storage is the likely failure domain.</li>
+<li><strong>Cloud witness</strong> — an Azure storage account; requires outbound HTTPS to <code>*.core.windows.net</code> from every node, which proxies and firewalls often block.</li>
+</ul>
+<pre># reconfigure witness types
+Set-ClusterQuorum -NodeAndFileShareMajority "\\fs01\ClusterWitness$"
+Set-ClusterQuorum -NodeAndCloudMajority -AccountName "stwitness01" -AccessKey "&lt;key&gt;"
+Set-ClusterQuorum -NodeMajority           # odd node count, no witness</pre>
+<p>Microsoft's current guidance is to configure a witness in all cases, including odd-node clusters, because dynamic quorum can reduce an odd cluster to an even one during a failure.</p>
+</div>
+</section><section><h2>Recovering a cluster that will not start</h2>
+<div class="card">
+<p>When too many nodes are lost, the cluster service will not start — correctly, because it cannot prove it is the authoritative copy. Forcing it is a deliberate data-risk decision and should be taken on exactly one node.</p>
+<pre># start this node as authoritative, ignoring quorum
+Start-ClusterNode -Name NODE1 -FixQuorum</pre>
+<p>Immediately afterwards, correct the vote configuration before starting anything else, or the next transient fault repeats the outage:</p>
+<pre>(Get-ClusterNode NODE2).NodeWeight = 0
+(Get-ClusterNode NODE3).NodeWeight = 0
+Get-ClusterNode | Select-Object Name, NodeWeight, DynamicWeight</pre>
+<p>Bring the remaining nodes back one at a time, restoring their weight as each rejoins. Never force quorum on two nodes concurrently — that is precisely the split brain the shutdown was protecting you from.</p>
+</div>
+<div class="card">
+<p>Validate before declaring the incident closed. The validation report is also what Microsoft support will ask for first:</p>
+<pre>Test-Cluster -Node NODE1,NODE2,NODE3 -ReportName C:\Logs\ClusterValidation
+Test-Cluster -Include "Storage","Network","Inventory"</pre>
+<p>Run storage tests only when the clustered roles are offline — they take disks offline as part of the test and will cause an outage if run against a live cluster.</p>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li><code>Get-ClusterNode</code> first: compare NodeWeight with DynamicWeight.</li>
+<li>Establish whether the witness is voting — <code>WitnessDynamicWeight</code>.</li>
+<li>Build a timeline from Event IDs 1135, 1177, 5120 across <em>all</em> nodes, not just the one that complained.</li>
+<li>1135 before 1177 means network. 1177 alone points at witness or storage.</li>
+<li>Generate the cluster log with <code>-UseLocalTime</code> and search <code>[QUORUM]</code> and <code>[NETFTAPI]</code>.</li>
+<li>Check cluster network roles — a storage network carrying heartbeats causes phantom evictions.</li>
+<li>Only force quorum on one node, then immediately fix node weights.</li>
+<li>Finish with <code>Test-Cluster</code> and keep the report.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> A cluster shuts down when it loses quorum, and quorum is recalculated continuously by dynamic quorum. Event ID 1177 means the node stopped because it could not form a majority; 1135 means a node was removed from active membership, usually by network or heartbeat loss rather than a crash. Start with <code>Get-ClusterNode</code> votes, not with the application.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

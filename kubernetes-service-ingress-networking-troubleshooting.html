@@ -1,0 +1,157 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kubernetes Networking Troubleshooting: Services, Endpoints, DNS and Ingress 502s | RCW IT Training</title><meta name="description" content="Tracing Kubernetes connectivity from pod to service to ingress: selector and endpoint mismatches, named ports, CoreDNS and ndots resolution delays, NetworkPolicy defaults, and reading ingress controller 502 and 504 errors."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/kubernetes-service-ingress-networking-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Kubernetes Service and Ingress Networking: Empty Endpoints, DNS Failures and 502s", "description": "Tracing Kubernetes connectivity from pod to service to ingress: selector and endpoint mismatches, named ports, CoreDNS and ndots resolution delays, NetworkPolicy defaults, and reading ingress controller 502 and 504 errors.", "url": "https://www.rcwittraining.in/kubernetes-service-ingress-networking-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/kubernetes-service-ingress-networking-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Kubernetes · Detailed troubleshooting guide</div><h1>Kubernetes Service and Ingress Networking: Empty Endpoints, DNS Failures and 502s</h1><p class="lead">Kubernetes networking fails at four identifiable layers, and the fastest route to the cause is to test each in order rather than jumping to the ingress. This guide walks pod, service, DNS and ingress in sequence, with the command that settles each.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Test layer by layer, in order</h2>
+<div class="card">
+<p>Connectivity traverses four layers. Testing them out of order wastes most of the time spent on these incidents.</p>
+<ol>
+<li><strong>Pod</strong> — is the container listening, and on which address?</li>
+<li><strong>Service</strong> — does the selector match pods, and are they Ready?</li>
+<li><strong>DNS</strong> — does the name resolve from inside the cluster?</li>
+<li><strong>Ingress</strong> — does the controller have a backend and a route?</li>
+</ol>
+<pre># 1 — straight to the pod, bypassing everything else
+kubectl port-forward pod/myapp-7d4b 8080:8080
+curl -sS localhost:8080/healthz
+
+# 2 — the service, from inside the cluster
+kubectl run tmp --rm -it --image=nicolaka/netshoot --restart=Never -- \
+  curl -sS http://myapp.default.svc.cluster.local:80/healthz</pre>
+<p>If step 1 fails, nothing downstream matters — the application is not serving. A very common cause is binding to <code>127.0.0.1</code> instead of <code>0.0.0.0</code>, which works in local development and is unreachable from any other pod.</p>
+</div>
+</section><section><h2>Empty endpoints: the single most common fault</h2>
+<div class="card">
+<p>A Service is a label selector with a virtual IP. If the selector matches nothing — or matches pods that are not Ready — the endpoint list is empty and every connection fails, while the Service itself looks entirely healthy.</p>
+<pre>kubectl get svc myapp -o wide
+kubectl get endpointslice -l kubernetes.io/service-name=myapp
+kubectl describe svc myapp | grep -A3 Endpoints</pre>
+<pre>NAME          ADDRESSTYPE   PORTS   ENDPOINTS
+myapp-abc12   IPv4          8080    &lt;none&gt;        ← the fault</pre>
+<p>Compare the selector against the pod labels directly — they must match exactly, including case:</p>
+<pre>kubectl get svc myapp -o jsonpath='{.spec.selector}'
+# {"app":"myapp","tier":"backend"}
+
+kubectl get pods --show-labels | grep myapp
+# myapp-7d4b  1/1  Running  app=myapp,tier=api     ← tier does not match
+
+kubectl get pods -l app=myapp,tier=backend        # confirm the selector finds nothing</pre>
+<p>If the labels do match, check readiness. Pods that are <code>Running</code> but not <code>Ready</code> are deliberately excluded from endpoints:</p>
+<pre>kubectl get pods -l app=myapp -o wide
+# READY 0/1 with STATUS Running means a failing readiness probe
+kubectl describe pod myapp-7d4b | grep -A10 'Readiness\|Conditions'</pre>
+</div>
+<div class="card">
+<p>Port mismatches produce the same symptom with a populated endpoint list. Three port fields are involved and they are easily confused:</p>
+<table>
+<tr><th>Field</th><th>Meaning</th></tr>
+<tr><td><code>port</code></td><td>The port the Service listens on</td></tr>
+<tr><td><code>targetPort</code></td><td>The port on the pod traffic is sent to</td></tr>
+<tr><td><code>containerPort</code></td><td>Documentation only — does not affect routing</td></tr>
+</table>
+<p>Using a named <code>targetPort</code> requires the name to exist in the pod spec; a typo yields endpoints with no port and silent failure:</p>
+<pre>kubectl get endpointslice -l kubernetes.io/service-name=myapp -o yaml | grep -A4 ports</pre>
+</div>
+</section><section><h2>DNS: ndots and the five-lookup penalty</h2>
+<div class="card">
+<p>Cluster DNS is served by CoreDNS. Resolution failures and resolution <em>slowness</em> are different problems with different causes.</p>
+<pre>kubectl run tmp --rm -it --image=nicolaka/netshoot --restart=Never -- bash
+# inside:
+nslookup myapp.default.svc.cluster.local
+nslookup kubernetes.default
+cat /etc/resolv.conf</pre>
+<pre>search default.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.96.0.10
+options ndots:5</pre>
+<p><code>ndots:5</code> means any name containing fewer than five dots is first tried against every entry in the search list. Resolving <code>api.githubusercontent.com</code> — three dots — therefore generates four failed cluster lookups before the external one succeeds. On a busy cluster this is a measurable source of latency and of CoreDNS load.</p>
+<p>Fix it for the workloads that talk to external endpoints, either with a trailing dot to force an absolute name, or per-pod:</p>
+<pre>spec:
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "2"</pre>
+</div>
+<div class="card">
+<p>If resolution fails entirely, check CoreDNS itself before suspecting the application:</p>
+<pre>kubectl -n kube-system get pods -l k8s-app=kube-dns
+kubectl -n kube-system logs -l k8s-app=kube-dns --tail=50
+kubectl -n kube-system get cm coredns -o yaml</pre>
+<p>A CoreDNS log full of <code>i/o timeout</code> against the upstream resolver means the cluster cannot reach its forwarders — a node networking or egress problem, not a Kubernetes one.</p>
+</div>
+</section><section><h2>NetworkPolicy: default-deny is not the default</h2>
+<div class="card">
+<p>With no NetworkPolicy, all pod-to-pod traffic is permitted. The moment <em>any</em> policy selects a pod, that pod switches to deny-by-default for the direction the policy covers. Applying a narrow ingress policy therefore silently blocks traffic nobody intended to block.</p>
+<pre>kubectl get networkpolicy -A
+kubectl describe networkpolicy allow-frontend -n production</pre>
+<p>Two mistakes recur:</p>
+<ul>
+<li>Writing an <code>Ingress</code> policy and forgetting that the <em>reply</em> traffic for outbound connections is handled by connection tracking — but a separate <code>Egress</code> policy will block the outbound connection itself, including DNS.</li>
+<li>Blocking DNS. If an egress policy exists and does not permit UDP 53 to <code>kube-system</code>, every name lookup in the selected pods fails, and the symptom looks like total network loss.</li>
+</ul>
+<pre>egress:
+  - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+    ports:
+      - protocol: UDP
+        port: 53
+      - protocol: TCP
+        port: 53</pre>
+<p>Note that NetworkPolicy requires a CNI that implements it. On a cluster running a plugin without policy support, the objects are accepted by the API server and enforce nothing at all — a dangerous false sense of security worth verifying explicitly.</p>
+</div>
+</section><section><h2>Ingress 502, 503 and 504</h2>
+<div class="card">
+<p>The three codes an ingress controller returns are not interchangeable, and each points at a different layer:</p>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>Look at</th></tr>
+<tr><td>503</td><td>No healthy backend available</td><td>Service endpoints — almost always empty</td></tr>
+<tr><td>502</td><td>Backend reached but the reply was invalid or the connection was reset</td><td>Application crash, wrong port, or TLS expected where plain HTTP was sent</td></tr>
+<tr><td>504</td><td>Backend accepted the connection but did not respond in time</td><td>Slow application, or a proxy timeout set too low</td></tr>
+</table>
+<pre>kubectl -n ingress-nginx logs -l app.kubernetes.io/component=controller --tail=100
+kubectl describe ingress myapp
+kubectl get ingress myapp -o jsonpath='{.status.loadBalancer}'</pre>
+<p>A 502 immediately after deployment, resolving by itself, usually indicates missing readiness gates — the controller sent traffic to pods that were accepting connections but not yet able to serve. A 502 that mentions SSL in the controller log means the backend expects HTTPS while the controller is speaking HTTP; with ingress-nginx this is fixed by the backend-protocol annotation:</p>
+<pre>metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"</pre>
+</div>
+<div class="card">
+<p>Check that the Ingress is bound to a controller at all. An Ingress with no <code>ingressClassName</code> on a cluster with no default class is simply ignored — no error, no traffic:</p>
+<pre>kubectl get ingressclass
+kubectl get ingress myapp -o jsonpath='{.spec.ingressClassName}'</pre>
+</div>
+</section><section><h2>Useful one-liners</h2>
+<div class="card">
+<pre># every service in the namespace with no endpoints
+kubectl get endpointslice -o json | jq -r '
+  .items[] | select((.endpoints // []) | length == 0)
+  | .metadata.labels["kubernetes.io/service-name"]' | sort -u
+
+# which node is each backing pod on (helps isolate node-level CNI faults)
+kubectl get pods -l app=myapp -o wide
+
+# does kube-proxy have rules for the service IP?
+kubectl -n kube-system logs -l k8s-app=kube-proxy --tail=50
+iptables-save | grep &lt;service-cluster-ip&gt;        # on the node, iptables mode
+ipvsadm -Ln | grep -A3 &lt;service-cluster-ip&gt;      # IPVS mode
+
+# full path test from a throwaway pod
+kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- \
+  sh -c 'nslookup myapp; curl -sv --max-time 5 http://myapp:80/healthz'</pre>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li><code>port-forward</code> to the pod first — prove the application serves at all.</li>
+<li><code>kubectl get endpointslice</code>. Empty means selector mismatch or pods not Ready.</li>
+<li>Compare <code>spec.selector</code> with actual pod labels character by character.</li>
+<li>Confirm <code>targetPort</code> matches the port the container actually listens on.</li>
+<li>Resolve the service name from inside a pod; check <code>ndots</code> if resolution is slow rather than broken.</li>
+<li>List NetworkPolicies; confirm DNS egress is permitted if any egress policy exists.</li>
+<li>Map the HTTP code: 503 endpoints, 502 backend, 504 timeout.</li>
+<li>Verify the Ingress has an <code>ingressClassName</code> and a controller that claims it.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> <code>kubectl get endpointslice</code> is the single most valuable command in Kubernetes networking: empty endpoints mean the selector does not match or the pods are not Ready, and no ingress configuration can fix that. Work pod → service → DNS → ingress, and never assume the layer you were told about is the layer that failed.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

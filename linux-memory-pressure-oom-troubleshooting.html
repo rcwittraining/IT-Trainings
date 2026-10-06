@@ -1,0 +1,141 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux Memory Troubleshooting: OOM Killer, Swap Thrash, Page Cache and cgroup Limits | RCW IT Training</title><meta name="description" content="Why free memory is the wrong metric, how to read an OOM killer dump, the difference between system-wide and cgroup OOM events, detecting swap thrash with PSI, and sizing overcommit and swappiness deliberately."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/linux-memory-pressure-oom-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Linux Memory Pressure: Reading the OOM Killer, Swap Thrash and cgroup Limits", "description": "Why free memory is the wrong metric, how to read an OOM killer dump, the difference between system-wide and cgroup OOM events, detecting swap thrash with PSI, and sizing overcommit and swappiness deliberately.", "url": "https://www.rcwittraining.in/linux-memory-pressure-oom-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/linux-memory-pressure-oom-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Linux · Detailed troubleshooting guide</div><h1>Linux Memory Pressure: Reading the OOM Killer, Swap Thrash and cgroup Limits</h1><p class="lead">A Linux box with almost no free memory is usually healthy, and one with plenty free can still be thrashing. This guide covers the metrics that actually indicate memory pressure, and how to read an OOM dump to find out what really died and why.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>free is not the metric you think it is</h2>
+<div class="card">
+<p>Linux deliberately uses otherwise-idle RAM for page cache. A healthy, well-used server shows very little free memory, and that is correct behaviour rather than a warning sign.</p>
+<pre>free -h
+#               total   used   free   shared  buff/cache   available
+# Mem:           31Gi   9.2Gi  412Mi   1.1Gi      21Gi        20Gi</pre>
+<p>Here <code>free</code> is 412 MiB but <code>available</code> is 20 GiB. The kernel can reclaim most of the page cache on demand. <strong>available</strong> is the only column that answers "can I start another process".</p>
+<pre>grep -E 'MemTotal|MemFree|MemAvailable|Dirty|Writeback|SwapTotal|SwapFree' /proc/meminfo</pre>
+<p>Alert on <code>MemAvailable</code> as a percentage of <code>MemTotal</code>. Alerting on <code>MemFree</code> generates constant false positives on exactly the machines that are performing well.</p>
+</div>
+</section><section><h2>Pressure Stall Information: the signal that is actually actionable</h2>
+<div class="card">
+<p>PSI reports the proportion of time tasks were stalled waiting on memory. Unlike utilisation, it measures harm directly, and it is available on any kernel 4.20 or later.</p>
+<pre>cat /proc/pressure/memory
+# some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+# full avg10=0.00 avg60=0.00 avg300=0.00 total=0</pre>
+<ul>
+<li><strong>some</strong> — at least one task was stalled waiting for memory.</li>
+<li><strong>full</strong> — every runnable task was stalled; nothing useful progressed.</li>
+</ul>
+<p>A sustained <code>some avg60</code> above roughly 10 means reclaim is costing real throughput. Any sustained <code>full</code> above zero means the machine is spending measurable wall-clock time doing nothing but reclaim, which is the quantitative definition of thrashing.</p>
+<pre>cat /sys/fs/cgroup/&lt;slice&gt;/memory.pressure     # per-cgroup, same format</pre>
+</div>
+</section><section><h2>Reading an OOM kill dump</h2>
+<div class="card">
+<p>When the kernel kills a process, it logs a full report. Most people read the last line and stop, which is where the misdiagnosis starts.</p>
+<pre>dmesg -T | grep -i -A5 'killed process'
+journalctl -k --since "1 hour ago" | grep -i 'oom\|killed process'</pre>
+<pre>Out of memory: Killed process 12843 (java) total-vm:9183424kB,
+  anon-rss:6291456kB, file-rss:0kB, shmem-rss:0kB,
+  UID:1001 pgtables:13420kB oom_score_adj:0</pre>
+<ul>
+<li><strong>anon-rss</strong> is the figure that matters — anonymous resident memory, which cannot be reclaimed, only swapped or freed.</li>
+<li><strong>total-vm</strong> is virtual address space and is frequently enormous and harmless. A JVM reserving 9 GiB of address space while using 6 GiB resident is normal.</li>
+<li><strong>oom_score_adj</strong> shows whether the process had been biased for or against selection.</li>
+</ul>
+</div>
+<div class="card">
+<p>The critical field appears just above the kill line and tells you <em>which</em> memory ran out:</p>
+<pre>oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),
+  cpuset=docker-9f2c.scope,mems_allowed=0,
+  oom_memcg=/system.slice/docker-9f2c.scope</pre>
+<table>
+<tr><th>Constraint</th><th>Meaning</th><th>Where to fix it</th></tr>
+<tr><td><code>CONSTRAINT_NONE</code></td><td>The host genuinely exhausted memory</td><td>Host sizing, or the leaking process</td></tr>
+<tr><td><code>CONSTRAINT_MEMCG</code></td><td>A cgroup hit its own limit; the host was fine</td><td>Container or unit memory limit</td></tr>
+<tr><td><code>CONSTRAINT_CPUSET</code></td><td>Memory exhausted within a restricted cpuset</td><td>NUMA or cpuset placement</td></tr>
+<tr><td><code>CONSTRAINT_MEMORY_POLICY</code></td><td>A NUMA node was exhausted</td><td>NUMA balancing or node pinning</td></tr>
+</table>
+<p>A <code>CONSTRAINT_MEMCG</code> kill on a host showing 60 percent free memory is not a host capacity problem, and adding RAM will change nothing.</p>
+</div>
+</section><section><h2>cgroup v2 limits and the kill you can prevent</h2>
+<div class="card">
+<p>Under cgroup v2, three files govern behaviour, and the middle one is the one most people never set:</p>
+<table>
+<tr><th>File</th><th>Effect</th></tr>
+<tr><td><code>memory.max</code></td><td>Hard limit. Exceeding it triggers a cgroup OOM kill.</td></tr>
+<tr><td><code>memory.high</code></td><td>Soft limit. The kernel throttles and reclaims aggressively instead of killing.</td></tr>
+<tr><td><code>memory.min</code></td><td>Reclaim protection — memory guaranteed not to be reclaimed.</td></tr>
+</table>
+<pre>systemctl show myapp.service -p MemoryMax -p MemoryHigh -p MemoryCurrent
+cat /sys/fs/cgroup/system.slice/myapp.service/memory.events
+# low 0
+# high 142
+# max 3
+# oom 1
+# oom_kill 1</pre>
+<p><code>memory.events</code> is the cleanest evidence available. A rising <code>high</code> counter with zero <code>oom_kill</code> means the workload is being throttled but surviving — uncomfortable, not fatal. Setting <code>MemoryHigh=</code> slightly below <code>MemoryMax=</code> converts abrupt kills into gradual slowdowns you can alert on.</p>
+</div>
+</section><section><h2>Swap, swappiness and when swap is correct</h2>
+<div class="card">
+<p>Swap is not a substitute for RAM and its presence does not cause slowness — using it heavily does. The useful distinction is between <em>cold</em> pages being swapped out once (beneficial) and pages being swapped in and out continuously (thrashing).</p>
+<pre>vmstat 1 10
+# si and so columns: sustained non-zero values are thrash
+# a one-off burst during a backup is not
+
+sar -W 1 5          # pswpin/s and pswpout/s
+swapon --show</pre>
+<p>Find the processes actually swapped out rather than guessing:</p>
+<pre>for p in /proc/[0-9]*; do
+  s=$(awk '/^VmSwap/{print $2}' $p/status 2>/dev/null)
+  [ -n "$s" ] &amp;&amp; [ "$s" -gt 0 ] &amp;&amp; echo "$s KB  $(cat $p/comm)"
+done | sort -rn | head -10</pre>
+</div>
+<div class="card">
+<p><code>vm.swappiness</code> sets the kernel's relative preference for reclaiming anonymous pages versus page cache. It is a ratio, not an on/off switch:</p>
+<pre>sysctl vm.swappiness
+sysctl -w vm.swappiness=10      # test
+echo 'vm.swappiness=10' &gt; /etc/sysctl.d/99-swap.conf   # persist</pre>
+<ul>
+<li><strong>60</strong> — distribution default, reasonable for general workloads.</li>
+<li><strong>10</strong> — databases and latency-sensitive services; prefer dropping cache over swapping.</li>
+<li><strong>1</strong> — swap only under genuine pressure.</li>
+<li><strong>0</strong> — does not disable swap; it makes the kernel avoid it until an allocation would otherwise fail, which can make OOM kills more likely and more abrupt.</li>
+</ul>
+</div>
+</section><section><h2>Overcommit, and why raising it rarely helps</h2>
+<div class="card">
+<p>Linux allows processes to reserve more address space than exists, because most reservations are never touched. Three modes are available:</p>
+<table>
+<tr><th>vm.overcommit_memory</th><th>Behaviour</th></tr>
+<tr><td><code>0</code> (default)</td><td>Heuristic — obvious overcommits refused, most allowed</td></tr>
+<tr><td><code>1</code></td><td>Always allow. Required by Redis and some in-memory stores for fork-based persistence</td></tr>
+<tr><td><code>2</code></td><td>Strict accounting against <code>swap + RAM × overcommit_ratio</code>; allocations fail rather than OOM later</td></tr>
+</table>
+<pre>sysctl vm.overcommit_memory vm.overcommit_ratio
+grep -E 'Commit' /proc/meminfo</pre>
+<p>Mode 2 converts an unpredictable OOM kill into a predictable <code>malloc()</code> failure, which well-written software handles gracefully and poorly-written software crashes on anyway. It is worth considering on single-purpose hosts and rarely worth it on mixed ones.</p>
+</div>
+</section><section><h2>Protecting the processes that matter</h2>
+<div class="card">
+<p>The OOM killer selects a victim by score, roughly proportional to memory use. You can bias the choice, and should for anything whose death makes the incident worse — an SSH daemon, a monitoring agent, a cluster heartbeat:</p>
+<pre>cat /proc/$(pidof sshd)/oom_score
+cat /proc/$(pidof sshd)/oom_score_adj
+
+# bias strongly against selection (-1000 .. 1000)
+echo -900 &gt; /proc/$(pidof sshd)/oom_score_adj</pre>
+<p>In a unit file, make it durable and explicit:</p>
+<pre>[Service]
+OOMScoreAdjust=-900
+MemoryHigh=2G
+MemoryMax=3G</pre>
+<p>Never set <code>-1000</code> on a process that can itself leak: it becomes unkillable by the OOM path and the kernel will work through every other process on the box before touching it.</p>
+</div>
+</section><section><h2>Triage order</h2>
+<div class="card">
+<ol>
+<li>Check <code>MemAvailable</code>, not <code>MemFree</code>.</li>
+<li>Check <code>/proc/pressure/memory</code> — <code>full</code> above zero means real stalling.</li>
+<li>Search <code>dmesg -T</code> for OOM dumps and read the <strong>constraint</strong> line.</li>
+<li><code>CONSTRAINT_MEMCG</code> means a container limit, not a host shortage.</li>
+<li>Check <code>memory.events</code> for the cgroup: <code>high</code> versus <code>oom_kill</code> distinguishes throttling from killing.</li>
+<li>Check <code>vmstat</code> si/so for sustained swap traffic, not one-off bursts.</li>
+<li>Identify growth with <code>smem -rs uss</code> or per-process <code>VmRSS</code> over time before blaming the kernel.</li>
+<li>Set <code>MemoryHigh=</code> and <code>OOMScoreAdjust=</code> deliberately rather than removing limits.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> Available, not free, is the number that matters, and PSI is the number that matters most. An OOM dump names the victim and the constraint — <code>oom_kill_constraint=CONSTRAINT_MEMCG</code> means a container hit its own limit while the host had memory to spare. Fix the limit or the leak; raising overcommit only moves the failure.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

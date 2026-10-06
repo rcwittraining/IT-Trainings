@@ -1,0 +1,130 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>Email Authentication Troubleshooting: SPF, DKIM and DMARC Failures Explained | RCW IT Training</title><meta name="description" content="A practical guide to email authentication failures: reading Authentication-Results headers, the SPF ten-lookup limit, DKIM selectors and body hash failures, DMARC alignment versus pass, and why forwarding and mailing lists break SPF."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/spf-dkim-dmarc-email-authentication-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "SPF, DKIM and DMARC: Diagnosing Why Legitimate Mail Is Being Rejected", "description": "A practical guide to email authentication failures: reading Authentication-Results headers, the SPF ten-lookup limit, DKIM selectors and body hash failures, DMARC alignment versus pass, and why forwarding and mailing lists break SPF.", "url": "https://www.rcwittraining.in/spf-dkim-dmarc-email-authentication-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/spf-dkim-dmarc-email-authentication-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Microsoft 365 · Detailed troubleshooting guide</div><h1>SPF, DKIM and DMARC: Diagnosing Why Legitimate Mail Is Being Rejected</h1><p class="lead">SPF, DKIM and DMARC fail in distinct and identifiable ways, and the header of a rejected message usually names which. This guide covers reading those headers, the alignment rule that catches everyone out, and the limits that silently break a correct-looking SPF record.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Read the Authentication-Results header first</h2>
+<div class="card">
+<p>Every receiving system that performs these checks records the outcome in a header. It is the fastest route to a diagnosis and it removes all guesswork about which mechanism failed.</p>
+<pre>Authentication-Results: mx.google.com;
+  spf=fail (google.com: domain of bounce@marketing.example.com does not
+      designate 198.51.100.7 as permitted sender) smtp.mailfrom=marketing.example.com;
+  dkim=pass header.i=@example.com header.s=selector1;
+  dmarc=fail (p=REJECT sp=REJECT dis=REJECT) header.from=example.com</pre>
+<p>Three separate verdicts, and they can disagree. Here SPF failed, DKIM passed, and DMARC still failed — which seems contradictory until alignment is understood.</p>
+<p>In Microsoft 365, the equivalent summary appears in <code>Authentication-Results</code> plus a composite header:</p>
+<pre>X-Forefront-Antispam-Report: CIP:198.51.100.7;CTRY:US;SFV:SPM;
+  SCL:5;SRV:;IPV:NLI;H:mail.example.com;DIR:INB;</pre>
+<p>Obtain the full headers before theorising: in Outlook, <em>File → Properties → Internet headers</em>; in Gmail, <em>Show original</em>.</p>
+</div>
+</section><section><h2>SPF: the ten-lookup limit breaks correct records</h2>
+<div class="card">
+<p>SPF publishes which hosts may send for a domain, and it validates the <strong>envelope sender</strong> (<code>MAIL FROM</code>), not the visible From: address. This distinction is the root of much confusion.</p>
+<pre>dig +short TXT example.com | grep spf
+# "v=spf1 include:spf.protection.outlook.com include:_spf.google.com
+#   include:sendgrid.net include:mail.zendesk.com ~all"</pre>
+<p>Each <code>include</code>, <code>a</code>, <code>mx</code>, <code>ptr</code> and <code>exists</code> consumes DNS lookups, and the specification caps the total at <strong>ten</strong>. Crucially, includes nest: <code>include:spf.protection.outlook.com</code> may itself perform several. Exceed ten and the result is <code>permerror</code>, which most receivers treat as a failure — the record looks perfect and does not work.</p>
+<pre># count the real total, including nested includes
+dig +short TXT spf.protection.outlook.com
+dig +short TXT _spf.google.com</pre>
+<p>Remedies, in order of preference: remove services no longer used; move sources onto subdomains with their own records (<code>mail.example.com</code>); use SPF flattening only with automation, since flattened records break silently when a provider changes its IP ranges.</p>
+</div>
+<div class="card">
+<p>The qualifier at the end sets the policy for everything not listed:</p>
+<table>
+<tr><th>Qualifier</th><th>Result</th><th>Typical handling</th></tr>
+<tr><td><code>-all</code></td><td>fail (hard)</td><td>Reject</td></tr>
+<tr><td><code>~all</code></td><td>softfail</td><td>Accept, mark suspicious</td></tr>
+<tr><td><code>?all</code></td><td>neutral</td><td>No opinion — effectively no protection</td></tr>
+<tr><td><code>+all</code></td><td>pass everything</td><td>Never use; authorises the entire internet</td></tr>
+</table>
+<p>Publish exactly one SPF record. Two TXT records beginning <code>v=spf1</code> produce <code>permerror</code> under the specification — a frequent outcome when a second mail provider is onboarded by a different team.</p>
+</div>
+</section><section><h2>DKIM: selectors, key length and body hash</h2>
+<div class="card">
+<p>DKIM signs headers and body with a private key; the receiver fetches the public key from DNS at <code>&lt;selector&gt;._domainkey.&lt;domain&gt;</code>. The selector is named in the signature itself:</p>
+<pre>DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=example.com;
+  s=selector1; h=from:to:subject:date; bh=47DEQpj8HBSa...; b=Xk3p...</pre>
+<pre>dig +short TXT selector1._domainkey.example.com
+# "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A..."</pre>
+<p>Distinguish the two hashes, because they fail for different reasons:</p>
+<ul>
+<li><strong>bh=</strong> is the body hash. A <code>bodyhash did not verify</code> error means the body changed in transit — a mailing list footer, a scanning gateway rewriting links, or a disclaimer appliance.</li>
+<li><strong>b=</strong> is the signature over the headers. Failure here means a signed header was altered or the key does not match.</li>
+</ul>
+<p>Use relaxed canonicalisation (<code>c=relaxed/relaxed</code>) unless you have a specific reason not to; strict canonicalisation fails on trivial whitespace changes that intermediate systems make routinely.</p>
+</div>
+<div class="card">
+<p>In Microsoft 365, DKIM uses two selectors with CNAMEs so keys can be rotated without a DNS change:</p>
+<pre>dig +short CNAME selector1._domainkey.example.com
+dig +short CNAME selector2._domainkey.example.com
+# selector1-example-com._domainkey.tenant.onmicrosoft.com</pre>
+<pre>Get-DkimSigningConfig -Identity example.com | Format-List
+Rotate-DkimSigningConfig -Identity example.com -KeySize 2048</pre>
+<p>Use 2048-bit keys. 1024-bit keys are still accepted but are increasingly treated as weak, and some receivers now discount them.</p>
+</div>
+</section><section><h2>DMARC alignment — the rule that explains the contradictions</h2>
+<div class="card">
+<p>DMARC does not simply ask whether SPF or DKIM passed. It asks whether either passed <strong>for a domain that matches the From: header domain</strong>. That is alignment, and it is where otherwise-correct configurations fail.</p>
+<pre>dig +short TXT _dmarc.example.com
+# "v=DMARC1; p=reject; rua=mailto:dmarc@example.com; pct=100; adkim=s; aspf=s"</pre>
+<table>
+<tr><th>Tag</th><th>Meaning</th></tr>
+<tr><td><code>p=</code></td><td>Policy: <code>none</code>, <code>quarantine</code> or <code>reject</code></td></tr>
+<tr><td><code>sp=</code></td><td>Policy for subdomains</td></tr>
+<tr><td><code>adkim=</code></td><td>DKIM alignment: <code>r</code> relaxed (default) or <code>s</code> strict</td></tr>
+<tr><td><code>aspf=</code></td><td>SPF alignment: <code>r</code> relaxed or <code>s</code> strict</td></tr>
+<tr><td><code>pct=</code></td><td>Percentage of mail the policy applies to</td></tr>
+<tr><td><code>rua=</code></td><td>Address for aggregate XML reports</td></tr>
+</table>
+<p>Relaxed alignment accepts an organisational-domain match: <code>mail.example.com</code> aligns with <code>example.com</code>. Strict alignment requires an exact match. Setting <code>aspf=s</code> while a bulk provider sends with an envelope domain of <code>bounce.provider.net</code> guarantees DMARC failure however valid the SPF record is.</p>
+</div>
+<div class="card">
+<p>Work through the earlier example with alignment in mind:</p>
+<ul>
+<li>SPF checked <code>marketing.example.com</code> (envelope) — failed.</li>
+<li>DKIM passed for <code>d=example.com</code>.</li>
+<li>From: header is <code>example.com</code>, so DKIM <em>is</em> aligned and DMARC should pass.</li>
+</ul>
+<p>If DMARC nonetheless reports failure, the usual cause is that the DKIM signature broke in transit while the header still records the attempt — check for <code>bodyhash did not verify</code> rather than assuming the policy is wrong.</p>
+</div>
+</section><section><h2>Forwarding and mailing lists break SPF by design</h2>
+<div class="card">
+<p>When a message is forwarded, the forwarding server becomes the sender. SPF then evaluates that server against the original domain's record and fails — correctly, by the specification's own logic. Nothing is misconfigured.</p>
+<p>This is the principal reason to rely on DKIM for DMARC alignment: the signature travels with the message and survives forwarding, provided the body is not altered.</p>
+<ul>
+<li><strong>Simple forwarding</strong> — SPF fails, DKIM survives, DMARC passes on DKIM alignment.</li>
+<li><strong>Mailing lists</strong> — subject prefixes and footers are added, breaking the body hash, so DKIM fails too. Well-behaved lists rewrite the From: header to their own domain to avoid this.</li>
+<li><strong>Sender Rewriting Scheme (SRS)</strong> — rewrites the envelope sender so SPF passes at the next hop; supported by Microsoft 365 for mail forwarded out of the service.</li>
+</ul>
+<p>Before moving to <code>p=reject</code>, confirm from aggregate reports that legitimate forwarded mail still aligns on DKIM. Deploying reject while list traffic depends on SPF is the classic way to lose real mail.</p>
+</div>
+</section><section><h2>Deploy DMARC in stages</h2>
+<div class="card">
+<p>Never publish <code>p=reject</code> first. The aggregate reports are the point of the exercise — they reveal legitimate senders nobody remembered.</p>
+<ol>
+<li><strong>Monitor.</strong> <code>v=DMARC1; p=none; rua=mailto:dmarc@example.com</code>. Collect for at least two to four weeks.</li>
+<li><strong>Read the reports.</strong> They are XML; use a parser or a reporting service. Identify every source sending as your domain.</li>
+<li><strong>Fix or remove each source.</strong> Add legitimate ones to SPF, enable DKIM signing, decommission the rest.</li>
+<li><strong>Quarantine gradually.</strong> <code>p=quarantine; pct=10</code>, then raise the percentage as reports stay clean.</li>
+<li><strong>Reject.</strong> <code>p=reject; pct=100</code>, with <code>sp=reject</code> so subdomains are covered.</li>
+</ol>
+<pre># publish a null MX and DMARC reject on domains that never send mail
+dig +short MX parked.example.com
+# 0 .
+dig +short TXT _dmarc.parked.example.com
+# "v=DMARC1; p=reject;"</pre>
+<p>Non-sending domains are a favourite target for spoofing precisely because they are forgotten. A reject policy and a null MX cost nothing and remove the opportunity.</p>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li>Read <code>Authentication-Results</code> before changing any DNS record.</li>
+<li>Count SPF DNS lookups including nested includes; over ten is <code>permerror</code>.</li>
+<li>Confirm exactly one <code>v=spf1</code> TXT record exists.</li>
+<li>Check the DKIM selector named in the signature actually resolves.</li>
+<li>Distinguish <code>bh=</code> failures (body altered) from <code>b=</code> failures (headers or key).</li>
+<li>Verify DMARC <em>alignment</em>, not just pass — compare the From: domain with the SPF and DKIM domains.</li>
+<li>Expect SPF to fail on forwarded mail; rely on DKIM alignment there.</li>
+<li>Move through none → quarantine → reject on evidence from aggregate reports.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> DMARC requires <em>alignment</em>, not merely a pass: the domain that passed SPF or DKIM must match the From: header domain. That single rule explains most failures where SPF and DKIM both show <code>pass</code> and DMARC still fails. Watch the ten-lookup SPF limit, and prefer DKIM, which survives forwarding.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

@@ -1,0 +1,127 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>SELinux Troubleshooting: Reading AVC Denials, Booleans, Contexts and Port Labels | RCW IT Training</title><meta name="description" content="How to diagnose SELinux denials properly on RHEL and Rocky Linux: decoding AVC messages, the difference between a boolean, a file context and a port label, dontaudit rules that hide failures, and building a targeted policy module instead of setting permissive."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/selinux-denials-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "SELinux Denials: Reading AVCs, Fixing Contexts and Knowing When Not to Disable It", "description": "How to diagnose SELinux denials properly on RHEL and Rocky Linux: decoding AVC messages, the difference between a boolean, a file context and a port label, dontaudit rules that hide failures, and building a targeted policy module instead of setting permissive.", "url": "https://www.rcwittraining.in/selinux-denials-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/selinux-denials-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Linux · Detailed troubleshooting guide</div><h1>SELinux Denials: Reading AVCs, Fixing Contexts and Knowing When Not to Disable It</h1><p class="lead">Setting SELinux to permissive is the fastest way to end an outage and the fastest way to fail an audit. This guide reads denials the way the policy engine does, so you can fix the actual label, boolean or port in about the same time it takes to disable enforcement.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Confirm SELinux is actually the cause</h2>
+<div class="card">
+<p>Thirty seconds of checking prevents hours of chasing the wrong subsystem. SELinux denials are silent to the application: you usually see "permission denied" with filesystem permissions that look perfectly correct.</p>
+<pre>getenforce                 # Enforcing | Permissive | Disabled
+sestatus                   # mode, policy, and whether config matches runtime
+ausearch -m AVC,USER_AVC -ts recent    # denials in the last few minutes</pre>
+<p>The decisive test is to toggle enforcement briefly and see whether the symptom disappears:</p>
+<pre>setenforce 0
+# reproduce the failure
+setenforce 1</pre>
+<p>If the behaviour is unchanged, SELinux is not involved — stop here and look at ownership, ACLs or the application. If it <em>is</em> involved, the denial you just generated in permissive mode is now logged, which is precisely the evidence you need.</p>
+</div>
+</section><section><h2>Decode the AVC line</h2>
+<div class="card">
+<p>Every denial carries the same five fields. Once you can read them in order, most denials explain themselves:</p>
+<pre>type=AVC msg=audit(1759740000.123:456): avc:  denied  { name_bind } for
+  pid=2841 comm="nginx" src=8443
+  scontext=system_u:system_r:httpd_t:s0
+  tcontext=system_u:object_r:unreserved_port_t:s0
+  tclass=tcp_socket permissive=0</pre>
+<ul>
+<li><strong>{ name_bind }</strong> — the permission that was refused. This names the operation.</li>
+<li><strong>comm / pid</strong> — who tried it.</li>
+<li><strong>scontext</strong> — the <em>source</em> context: the domain the process runs in (<code>httpd_t</code>).</li>
+<li><strong>tcontext</strong> — the <em>target</em> context: the label on the thing being touched (<code>unreserved_port_t</code>).</li>
+<li><strong>tclass</strong> — the kind of object: <code>file</code>, <code>dir</code>, <code>tcp_socket</code>, <code>process</code>.</li>
+</ul>
+<p>Read it as a sentence: <em>the httpd_t domain was denied name_bind on a tcp_socket labelled unreserved_port_t</em>. That is a port-labelling problem, and no amount of <code>chmod</code> will touch it.</p>
+</div>
+<div class="card">
+<p>Turn raw audit records into readable explanations:</p>
+<pre>ausearch -m AVC -ts today | audit2why
+ausearch -m AVC -ts recent -i          # -i interprets numeric ids
+journalctl -t setroubleshoot --since today</pre>
+<p><code>audit2why</code> is the most under-used tool in the set: it states whether a boolean would allow the access, which turns a policy puzzle into a one-line fix.</p>
+</div>
+</section><section><h2>Booleans: the fix that is already written for you</h2>
+<div class="card">
+<p>Distribution policy ships with tunable switches for the things administrators commonly need. If a boolean covers your case, use it — it is supported, survives updates, and needs no custom module.</p>
+<pre>getsebool -a | grep httpd        # all httpd-related switches
+semanage boolean -l | grep -i nfs  # with descriptions and defaults</pre>
+<p>Common ones worth knowing by name:</p>
+<table>
+<tr><th>Boolean</th><th>Allows</th></tr>
+<tr><td><code>httpd_can_network_connect</code></td><td>Web server to make outbound TCP connections (reverse proxy, API calls)</td></tr>
+<tr><td><code>httpd_can_network_connect_db</code></td><td>Web server to reach a database port specifically</td></tr>
+<tr><td><code>httpd_use_nfs</code> / <code>httpd_use_fusefs</code></td><td>Serving content from NFS or FUSE mounts</td></tr>
+<tr><td><code>nis_enabled</code></td><td>Broad outbound RPC, often needed by legacy auth</td></tr>
+<tr><td><code>samba_export_all_rw</code></td><td>Samba to export any path read-write</td></tr>
+</table>
+<p>Set it persistently with <code>-P</code>. Without that flag the change is lost at reboot, producing a fault that reappears weeks later with no apparent trigger:</p>
+<pre>setsebool -P httpd_can_network_connect on</pre>
+</div>
+</section><section><h2>File contexts: the problem is almost always a moved file</h2>
+<div class="card">
+<p>A file carries its label with it when moved with <code>mv</code>, and inherits the destination's label when copied with <code>cp</code>. This single asymmetry explains most "it worked in my home directory" failures:</p>
+<pre>ls -Z /var/www/html/index.html
+# unconfined_u:object_r:user_home_t:s0   ← wrong, came from a mv
+
+matchpathcon /var/www/html/index.html
+# /var/www/html/index.html  system_u:object_r:httpd_sys_content_t:s0   ← expected</pre>
+<p>When the actual and expected labels differ, restore from policy rather than setting a label by hand:</p>
+<pre>restorecon -Rv /var/www/html</pre>
+<p><code>chcon</code> also works but is not durable — a filesystem relabel or <code>restorecon</code> run will revert it. Treat <code>chcon</code> as a test and <code>restorecon</code> as the fix.</p>
+</div>
+<div class="card">
+<p>For a non-standard path, register the rule in policy first, then apply it. This is what makes the label survive relabels and reboots:</p>
+<pre>semanage fcontext -a -t httpd_sys_content_t "/srv/sites(/.*)?"
+restorecon -Rv /srv/sites
+
+semanage fcontext -l | grep '/srv/sites'   # verify the rule is recorded</pre>
+<p>Note the regex form <code>(/.*)?</code> — it matches the directory itself and everything beneath it. Omitting it labels the directory but not its contents.</p>
+</div>
+</section><section><h2>Ports, and the denial that has nothing to do with files</h2>
+<div class="card">
+<p>SELinux labels TCP and UDP port numbers as well as files. Running a service on a non-default port fails at <code>bind()</code> even when the firewall is open and the process is root:</p>
+<pre>semanage port -l | grep http_port_t
+# http_port_t  tcp  80, 81, 443, 488, 8008, 8009, 8443, 9000
+
+semanage port -a -t http_port_t -p tcp 8443   # add a new port
+semanage port -m -t http_port_t -p tcp 9443   # modify one already owned by another type</pre>
+<p>Use <code>-a</code> for a port no type currently claims and <code>-m</code> when another type already owns it; using the wrong one returns "port already defined", which reads like a conflict but is only a verb mismatch.</p>
+</div>
+</section><section><h2>dontaudit: the denials you are not being shown</h2>
+<div class="card">
+<p>Policy suppresses a large class of harmless denials to keep logs readable. When a failure is real but nothing appears in the audit log, those suppressions are the likely reason. Disable them temporarily:</p>
+<pre>semodule -DB            # disable dontaudit, rebuild policy
+# reproduce the failure
+ausearch -m AVC -ts recent
+semodule -B             # restore dontaudit rules</pre>
+<p>Always re-enable with <code>semodule -B</code> when finished. Leaving suppressions off floods the audit log and can itself cause disk-pressure incidents on busy hosts.</p>
+</div>
+</section><section><h2>Writing a module — carefully</h2>
+<div class="card">
+<p>When no boolean, context or port applies, generate a module. The danger is that <code>audit2allow</code> will happily grant everything it sees, including denials unrelated to your problem, so filter the input tightly:</p>
+<pre># scope to one process and one time window, review before building
+ausearch -m AVC -ts recent -c nginx | audit2allow -m nginx_local
+
+# read the generated rules. only then build and install
+ausearch -m AVC -ts recent -c nginx | audit2allow -M nginx_local
+semodule -i nginx_local.pp</pre>
+<p>Read the <code>.te</code> output before installing. Rules granting broad permissions on <code>process</code>, or anything mentioning <code>unconfined_t</code>, indicate the input was too wide — narrow the <code>ausearch</code> filter and regenerate.</p>
+<pre>semodule -l | grep nginx_local    # confirm it loaded
+semodule -r nginx_local           # remove if it was wrong</pre>
+</div>
+<div class="card">
+<p>If you must relabel an entire filesystem after a long spell with SELinux disabled, schedule it — on a large filesystem it is slow and the machine is unusable while it runs:</p>
+<pre>touch /.autorelabel &amp;&amp; systemctl reboot</pre>
+</div>
+</section><section><h2>Decision order</h2>
+<div class="card">
+<ol>
+<li>Confirm SELinux is implicated with <code>setenforce 0</code>, then put it straight back.</li>
+<li>Read the AVC: source context, target context, permission, class.</li>
+<li>Run <code>audit2why</code> — it will tell you outright if a boolean covers it.</li>
+<li>Boolean? <code>setsebool -P</code>. Done.</li>
+<li>Wrong label on a file? <code>restorecon</code>, or <code>semanage fcontext -a</code> then <code>restorecon</code> for custom paths.</li>
+<li>Non-standard port? <code>semanage port -a</code> or <code>-m</code>.</li>
+<li>Nothing logged at all? <code>semodule -DB</code>, reproduce, then <code>semodule -B</code>.</li>
+<li>Only then build a narrow module with <code>audit2allow</code>, and read the rules before installing.</li>
+</ol>
+<p>Permanently disabling SELinux in <code>/etc/selinux/config</code> should be a documented, risk-accepted decision — not the default response to a denial you have not read.</p>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> An AVC tells you the source context, the target context and the permission in one line — read those three and the fix follows. Reach for a boolean first, a file context second, a port label third, and a custom module only when none of those fit. <code>setenforce 0</code> is a diagnostic step, never a remediation.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

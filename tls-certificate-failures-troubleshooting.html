@@ -1,0 +1,160 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>TLS Troubleshooting: Chain Order, SAN Mismatch, Expiry and Handshake Failures | RCW IT Training</title><meta name="description" content="Diagnosing TLS failures with openssl s_client: reading verify codes, incomplete intermediate chains that work in browsers but fail in curl and Java, SAN versus CN validation, SNI, clock skew and protocol or cipher mismatches."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/tls-certificate-failures-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "TLS Certificate Failures: Incomplete Chains, SAN Mismatches and Handshakes That Die", "description": "Diagnosing TLS failures with openssl s_client: reading verify codes, incomplete intermediate chains that work in browsers but fail in curl and Java, SAN versus CN validation, SNI, clock skew and protocol or cipher mismatches.", "url": "https://www.rcwittraining.in/tls-certificate-failures-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/tls-certificate-failures-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Networking · Detailed troubleshooting guide</div><h1>TLS Certificate Failures: Incomplete Chains, SAN Mismatches and Handshakes That Die</h1><p class="lead">A certificate that works in Chrome and fails in <code>curl</code>, Java or a Kubernetes pod is almost always a chain problem, not a certificate problem. This guide shows how to read a handshake precisely and identify which of the six common TLS faults you are looking at.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>One command, read carefully</h2>
+<div class="card">
+<p><code>openssl s_client</code> is the reference tool. The <code>-servername</code> flag sends SNI and is mandatory on any shared or virtual host — omit it and you will be served the default certificate and diagnose the wrong problem.</p>
+<pre>openssl s_client -connect www.example.com:443 -servername www.example.com &lt; /dev/null</pre>
+<p>Four parts of the output carry the answer:</p>
+<pre>Certificate chain
+ 0 s:CN=www.example.com
+   i:C=US, O=Let's Encrypt, CN=R11
+ 1 s:C=US, O=Let's Encrypt, CN=R11
+   i:C=US, O=Internet Security Research Group, CN=ISRG Root X1
+
+SSL handshake has read 4283 bytes and written 398 bytes
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Verify return code: 0 (ok)</pre>
+<ul>
+<li><strong>Chain</strong> — each entry's subject (<code>s:</code>) must be matched by the next entry's issuer (<code>i:</code>).</li>
+<li><strong>Protocol and cipher</strong> — what was actually negotiated.</li>
+<li><strong>Verify return code</strong> — the verdict.</li>
+</ul>
+</div>
+<div class="card">
+<p>The verify codes you will meet in practice:</p>
+<table>
+<tr><th>Code</th><th>Message</th><th>Cause</th></tr>
+<tr><td>0</td><td>ok</td><td>Valid</td></tr>
+<tr><td>2</td><td>unable to get issuer certificate</td><td>Issuer not present and not in the local store</td></tr>
+<tr><td>10</td><td>certificate has expired</td><td>Expiry — check the clock too</td></tr>
+<tr><td>18</td><td>self signed certificate</td><td>Self-signed leaf</td></tr>
+<tr><td>19</td><td>self signed certificate in chain</td><td>Private CA not trusted by the client</td></tr>
+<tr><td>20</td><td>unable to get local issuer certificate</td><td>Client has no path to a trusted root</td></tr>
+<tr><td>21</td><td>unable to verify the first certificate</td><td><strong>Server did not send its intermediate</strong></td></tr>
+<tr><td>62</td><td>hostname mismatch</td><td>Name not present in SAN</td></tr>
+</table>
+</div>
+</section><section><h2>The incomplete chain: works in browsers, fails everywhere else</h2>
+<div class="card">
+<p>Verify code 21 is the most frequently misdiagnosed TLS fault in production, because the symptom is inconsistent by design. Browsers cache intermediates they have seen elsewhere and some will fetch a missing one via the Authority Information Access extension. <code>curl</code>, Java, Go, Python and most language runtimes do neither — they fail outright.</p>
+<p>The result is a site that works perfectly for every human who tests it and fails for every automated client.</p>
+<pre># count what the server actually sends
+openssl s_client -connect www.example.com:443 -servername www.example.com \
+  &lt; /dev/null 2&gt;/dev/null | grep -c '^ *[0-9] s:'</pre>
+<p>A public certificate should normally send two: the leaf and at least one intermediate. Sending only the leaf is the bug. The root is deliberately <em>not</em> sent — clients must already trust it, and transmitting it wastes handshake bytes.</p>
+</div>
+<div class="card">
+<p>The fix is server-side: concatenate leaf then intermediates, in that order, never the other way round.</p>
+<pre># correct order: leaf first, then intermediate(s)
+cat example.crt intermediate.crt &gt; fullchain.crt</pre>
+<pre># nginx — ssl_certificate must be the full chain
+ssl_certificate     /etc/ssl/certs/fullchain.crt;
+ssl_certificate_key /etc/ssl/private/example.key;
+
+# Apache 2.4.8+ — SSLCertificateFile takes the chain
+SSLCertificateFile    /etc/ssl/certs/fullchain.crt
+SSLCertificateKeyFile /etc/ssl/private/example.key</pre>
+<p>Verify the order is right before reloading. An out-of-order chain is rejected by strict clients even though every certificate in it is valid:</p>
+<pre>openssl crl2pkcs7 -nocrl -certfile fullchain.crt \
+  | openssl pkcs7 -print_certs -noout</pre>
+</div>
+</section><section><h2>SAN, not CN</h2>
+<div class="card">
+<p>Common Name has been deprecated for hostname validation for years. Every current client validates against the Subject Alternative Name extension exclusively, and a certificate with the hostname only in CN will be rejected even though the name is plainly visible.</p>
+<pre>openssl s_client -connect www.example.com:443 -servername www.example.com \
+  &lt; /dev/null 2&gt;/dev/null \
+  | openssl x509 -noout -subject -ext subjectAltName
+
+# subject=CN=www.example.com
+# X509v3 Subject Alternative Name:
+#     DNS:www.example.com, DNS:example.com</pre>
+<p>Two wildcard rules catch people out:</p>
+<ul>
+<li><code>*.example.com</code> matches <code>www.example.com</code> but <strong>not</strong> <code>example.com</code> itself — the apex needs its own SAN entry.</li>
+<li>Wildcards match exactly one label. <code>*.example.com</code> does not match <code>a.b.example.com</code>.</li>
+</ul>
+</div>
+</section><section><h2>SNI and the wrong certificate</h2>
+<div class="card">
+<p>When several hostnames share an address, the client must declare which it wants during the handshake. A client that omits SNI receives the server's default certificate, which triggers a hostname mismatch that looks like a certificate problem but is a client problem.</p>
+<pre># with SNI — correct certificate
+openssl s_client -connect 203.0.113.10:443 -servername shop.example.com &lt; /dev/null \
+  2&gt;/dev/null | openssl x509 -noout -subject
+
+# without SNI — default certificate
+openssl s_client -connect 203.0.113.10:443 &lt; /dev/null \
+  2&gt;/dev/null | openssl x509 -noout -subject</pre>
+<p>If those return different subjects, the server is SNI-dependent. Old Java 6/7 clients, some embedded devices and a few monitoring agents still omit SNI; for those, the only reliable fix is a dedicated address or a certificate that covers the default vhost too.</p>
+</div>
+</section><section><h2>Expiry, clock skew and the renewal that did not reload</h2>
+<div class="card">
+<p>Check both ends of the validity window. A certificate that is not yet valid produces a near-identical error to one that has expired, and on a host with bad time both can happen at once:</p>
+<pre>openssl s_client -connect www.example.com:443 -servername www.example.com \
+  &lt; /dev/null 2&gt;/dev/null | openssl x509 -noout -dates
+# notBefore=Sep  1 00:00:00 2026 GMT
+# notAfter=Nov 30 23:59:59 2026 GMT
+
+timedatectl status     # verify NTP sync on both client and server</pre>
+<p>A very common operational failure is renewal succeeding on disk while the running process continues serving the old certificate from memory. Compare the file against what is actually being served:</p>
+<pre># what is on disk
+openssl x509 -in /etc/ssl/certs/fullchain.crt -noout -enddate
+
+# what is being served right now
+openssl s_client -connect localhost:443 -servername www.example.com \
+  &lt; /dev/null 2&gt;/dev/null | openssl x509 -noout -enddate</pre>
+<p>If they differ, the renewal hook never reloaded the service. Confirm that key and certificate still match after any renewal — a mismatched pair fails at handshake with an opaque error:</p>
+<pre>openssl x509 -noout -modulus -in fullchain.crt | openssl md5
+openssl rsa  -noout -modulus -in example.key   | openssl md5
+# the two hashes must be identical</pre>
+</div>
+</section><section><h2>Protocol and cipher mismatches</h2>
+<div class="card">
+<p>When a server disables TLS 1.0 and 1.1 — as it should — older clients fail during negotiation, before any certificate is examined. The error mentions protocol or handshake rather than trust:</p>
+<pre>openssl s_client -connect host:443 -tls1_2 &lt; /dev/null
+openssl s_client -connect host:443 -tls1_3 &lt; /dev/null
+
+# what the server will accept
+nmap --script ssl-enum-ciphers -p 443 www.example.com</pre>
+<p>Two error strings are worth recognising on sight:</p>
+<ul>
+<li><code>no protocols available</code> or <code>wrong version number</code> — protocol mismatch; the client and server share no enabled version.</li>
+<li><code>sslv3 alert handshake failure</code> — despite the name, almost always a cipher mismatch or a missing client certificate, not SSLv3.</li>
+</ul>
+<p>If the server requests a client certificate and the client sends none, many servers abort with exactly that alert. Check for <code>Acceptable client certificate CA names</code> in the <code>s_client</code> output — its presence means mutual TLS is expected.</p>
+</div>
+</section><section><h2>Trust stores differ per runtime</h2>
+<div class="card">
+<p>"It works with curl but not from the application" is usually two different trust stores rather than two different behaviours:</p>
+<table>
+<tr><th>Runtime</th><th>Trust store</th></tr>
+<tr><td>OpenSSL / curl (RHEL)</td><td><code>/etc/pki/tls/certs/ca-bundle.crt</code></td></tr>
+<tr><td>OpenSSL / curl (Debian)</td><td><code>/etc/ssl/certs/ca-certificates.crt</code></td></tr>
+<tr><td>Java</td><td><code>$JAVA_HOME/lib/security/cacerts</code></td></tr>
+<tr><td>Python requests</td><td><code>certifi</code> bundle, independent of the OS</td></tr>
+<tr><td>Node.js</td><td>Compiled-in list unless <code>NODE_EXTRA_CA_CERTS</code> is set</td></tr>
+<tr><td>Containers</td><td>The image's own store — frequently minimal or stale</td></tr>
+</table>
+<pre># add a private CA, RHEL family
+cp internal-ca.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+
+# Debian family
+cp internal-ca.crt /usr/local/share/ca-certificates/
+update-ca-certificates</pre>
+<p>Updating the OS store does not update Java or Python. Each needs its own import, which is why a private CA rollout that looks complete still breaks one application.</p>
+</div>
+</section><section><h2>Checklist</h2>
+<div class="card">
+<ol>
+<li>Always pass <code>-servername</code>; without SNI you are testing the wrong certificate.</li>
+<li>Read the verify return code first — it classifies the fault immediately.</li>
+<li>Count the certificates sent. One means a missing intermediate, whatever the browser says.</li>
+<li>Check SAN, not CN, and remember a wildcard does not cover the apex.</li>
+<li>Check <code>notBefore</code> as well as <code>notAfter</code>, and check NTP on both ends.</li>
+<li>Compare the certificate on disk with the one being served to catch a renewal without reload.</li>
+<li>Confirm the key and certificate moduli match.</li>
+<li>If it fails only in one runtime, suspect that runtime's trust store before the certificate.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> <code>openssl s_client -connect host:443 -servername host</code> answers most TLS questions in one command. Verify code 21 means a missing intermediate, code 10 means expiry, code 18 means self-signed, and a hostname error means SAN — browsers hide the first of these by caching intermediates, which is exactly why automated clients fail when browsers do not.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>

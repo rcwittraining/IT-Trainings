@@ -1,0 +1,148 @@
+<!doctype html><html lang="en"><head>
+  <script src="rcw-consent.js"></script><meta charset="utf-8"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225059092422989" crossorigin="anonymous"></script><meta name="viewport" content="width=device-width,initial-scale=1"><title>systemd Troubleshooting: Failed Units, Restart Loops and Dependency Deadlocks | RCW IT Training</title><meta name="description" content="A repeatable workflow for diagnosing systemd unit failures on RHEL and Ubuntu: reading systemctl status exit codes, journalctl correlation, restart storms, ordering versus requirement dependencies, and the timeouts that mask the real fault."><meta name="robots" content="index,follow"><link rel="canonical" href="https://www.rcwittraining.in/systemd-service-failures-troubleshooting.html"><link rel="stylesheet" href="guides.css">  <script src="privacy-settings.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "systemd Service Failures: Failed Units, Restart Loops and Dependency Deadlocks", "description": "A repeatable workflow for diagnosing systemd unit failures on RHEL and Ubuntu: reading systemctl status exit codes, journalctl correlation, restart storms, ordering versus requirement dependencies, and the timeouts that mask the real fault.", "url": "https://www.rcwittraining.in/systemd-service-failures-troubleshooting.html", "mainEntityOfPage": "https://www.rcwittraining.in/systemd-service-failures-troubleshooting.html", "datePublished": "2026-10-06", "dateModified": "2026-10-06", "inLanguage": "en", "author": {"@type": "Person", "name": "Pradeep Raju", "url": "https://www.rcwittraining.in/about.html#pradeep-raju"}, "publisher": {"@type": "Organization", "name": "RCW IT Training", "url": "https://www.rcwittraining.in", "logo": {"@type": "ImageObject", "url": "https://www.rcwittraining.in/og-scorecard.png"}}}</script>
+</head><body><header class="top"><span class="mark">RCW</span><span class="brand">RCW IT Training<small>Free hands-on labs &amp; simulators</small></span><a class="home" href="/">← Back to home</a></header><main class="wrap"><article><div class="hero"><div class="ey">Linux · Detailed troubleshooting guide</div><h1>systemd Service Failures: Failed Units, Restart Loops and Dependency Deadlocks</h1><p class="lead">Almost every Linux service outage ends up in front of <code>systemctl status</code>. This guide shows how to read what it actually tells you, how to separate a crashing process from a broken dependency, and how to stop a restart loop from hiding its own root cause.</p><p class="meta">Published October 6, 2026 · By <a href="/about.html#pradeep-raju" rel="author">Pradeep Raju</a>, Enterprise Infrastructure Architect</p></div><section><h2>Read the status block in the right order</h2>
+<div class="card">
+<p>The output of <code>systemctl status</code> contains four facts that, taken in order, narrow almost any failure to a single cause. Read them deliberately rather than skipping to the log tail.</p>
+<pre>systemctl status nginx.service --no-pager -l</pre>
+<ul>
+<li><strong>Loaded:</strong> tells you whether the unit file was found and whether it is enabled. <code>Loaded: bad setting</code> or <code>not-found</code> is a unit-file problem, not a service problem.</li>
+<li><strong>Drop-In:</strong> lists override fragments under <code>/etc/systemd/system/&lt;unit&gt;.d/</code>. Overrides are the single most common reason a unit behaves differently from its vendor file.</li>
+<li><strong>Active:</strong> the state and the reason. <code>failed (Result: exit-code)</code>, <code>failed (Result: timeout)</code> and <code>inactive (dead)</code> are three completely different investigations.</li>
+<li><strong>Process / Main PID:</strong> the exit status. <code>status=1/FAILURE</code> is the application's own exit code; <code>status=203/EXEC</code> means systemd could not execute the binary at all.</li>
+</ul>
+</div>
+<div class="card">
+<p>The exit codes in the 200 range come from systemd itself, not from your program, and each names a specific failure:</p>
+<table>
+<tr><th>Code</th><th>Meaning</th><th>Usual cause</th></tr>
+<tr><td>200/CHDIR</td><td>Could not change to WorkingDirectory</td><td>Path missing or not readable by User=</td></tr>
+<tr><td>203/EXEC</td><td>Could not execute the binary</td><td>Wrong ExecStart path, missing interpreter, or no execute bit</td></tr>
+<tr><td>204/FDS</td><td>Failed to set up file descriptors</td><td>Socket activation misconfigured</td></tr>
+<tr><td>208/STDIN</td><td>Standard input could not be opened</td><td>StandardInput= points at a missing path</td></tr>
+<tr><td>209/STDOUT</td><td>Standard output could not be opened</td><td>Log path or directory missing</td></tr>
+<tr><td>217/USER</td><td>User= does not exist</td><td>Service account removed or never created</td></tr>
+<tr><td>226/NAMESPACE</td><td>Namespace or sandbox setup failed</td><td>ProtectSystem=, PrivateTmp= or ReadWritePaths= conflict</td></tr>
+</table>
+<p>A 203 is never an application bug. Check the path exists, is executable, and is reachable by the configured <code>User=</code> before reading another log line.</p>
+</div>
+</section><section><h2>Separate the unit's logs from everything else</h2>
+<div class="card">
+<p>Unscoped <code>journalctl</code> output is unusable during an incident. Scope it to the unit and to the current boot, and include the priority so warnings are not lost in debug noise.</p>
+<pre># this boot, this unit, no pager
+journalctl -u nginx.service -b --no-pager
+
+# the last failure only: start at the last restart
+journalctl -u nginx.service --since "10 min ago" -o short-precise
+
+# include everything the unit's children logged too
+journalctl _SYSTEMD_UNIT=nginx.service + UNIT=nginx.service -b
+
+# warnings and worse, across all units, ordered
+journalctl -b -p warning --no-pager</pre>
+<p>The <code>-o short-precise</code> format adds microseconds, which matters when you are trying to establish whether the database died before or after the application that depends on it.</p>
+</div>
+<div class="card">
+<p>If a service writes to its own file rather than the journal, systemd sees only the exit code and the journal looks empty. Confirm where output goes before concluding there is nothing to read:</p>
+<pre>systemctl show nginx.service -p StandardOutput -p StandardError
+systemctl cat nginx.service | grep -i 'Standard\|Log'</pre>
+</div>
+</section><section><h2>Restart loops: when the fix hides the fault</h2>
+<div class="card">
+<p><code>Restart=always</code> with a short <code>RestartSec=</code> turns a clean crash into a storm that overwrites its own evidence. systemd eventually gives up and reports a rate-limit message that is easy to misread as the cause:</p>
+<pre>nginx.service: Start request repeated too quickly.
+nginx.service: Failed with result 'exit-code'.
+nginx.service: Scheduled restart job, restart counter is at 5.</pre>
+<p>"Start request repeated too quickly" is the <em>consequence</em>. The real error is in the first of the five attempts, not the last. Retrieve it directly:</p>
+<pre>journalctl -u nginx.service -b | grep -n -m1 -A20 'Starting\|Started'</pre>
+</div>
+<div class="card">
+<p>The rate limiter is governed by two directives, and raising them is almost always the wrong response during diagnosis — lowering the restart rate so you can read the logs is the right one:</p>
+<pre>[Unit]
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Restart=on-failure
+RestartSec=10s</pre>
+<p>To investigate, stop the loop entirely and run the <code>ExecStart</code> command by hand as the service user. This surfaces errors that systemd swallows:</p>
+<pre>systemctl stop nginx.service
+systemctl show nginx.service -p ExecStart -p User -p Environment
+sudo -u nginx /usr/sbin/nginx -g 'daemon off;'</pre>
+<p>Clear the counter once you have the answer with <code>systemctl reset-failed nginx.service</code>.</p>
+</div>
+</section><section><h2>Dependency problems look like service problems</h2>
+<div class="card">
+<p>When the Active line reads <code>failed (Result: dependency)</code>, the unit never executed. Something it required failed first, and chasing the application is wasted effort. systemd distinguishes two concepts that are routinely conflated:</p>
+<table>
+<tr><th>Directive</th><th>Controls</th><th>Failure behaviour</th></tr>
+<tr><td><code>Requires=</code></td><td>Requirement</td><td>If the dependency fails, this unit is stopped too</td></tr>
+<tr><td><code>Wants=</code></td><td>Weak requirement</td><td>Dependency failure is tolerated</td></tr>
+<tr><td><code>After=</code> / <code>Before=</code></td><td>Ordering only</td><td>No requirement at all — ordering without <code>Requires=</code> does not guarantee the unit ran</td></tr>
+<tr><td><code>BindsTo=</code></td><td>Strict binding</td><td>This unit stops whenever the dependency stops, even cleanly</td></tr>
+</table>
+<p>The classic bug is <code>After=postgresql.service</code> with no <code>Requires=</code>. The application starts in the right order but happily starts when the database is dead.</p>
+</div>
+<div class="card">
+<p>Map the real graph rather than guessing it:</p>
+<pre># what this unit pulls in, recursively
+systemctl list-dependencies myapp.service
+
+# what depends on this unit
+systemctl list-dependencies --reverse postgresql.service
+
+# which units failed this boot
+systemctl --failed --no-pager
+
+# ordering cycles systemd broke on its own
+journalctl -b | grep -i 'ordering cycle\|breaking ordering'</pre>
+<p>An ordering cycle is serious: systemd resolves it by deleting one edge of its choosing, so the unit it drops varies between boots and produces an intermittent failure that is maddening to reproduce.</p>
+</div>
+</section><section><h2>Timeouts, Type= mismatches and the hang that is not a hang</h2>
+<div class="card">
+<p><code>Result: timeout</code> usually means the <code>Type=</code> is wrong for how the process actually behaves. systemd waits for a readiness signal that will never arrive.</p>
+<table>
+<tr><th>Type=</th><th>systemd considers the unit started when…</th><th>Use for</th></tr>
+<tr><td><code>simple</code></td><td>the process is forked (immediately)</td><td>Foreground processes</td></tr>
+<tr><td><code>exec</code></td><td>the binary has been executed successfully</td><td>Foreground processes, stricter than simple</td></tr>
+<tr><td><code>forking</code></td><td>the parent exits</td><td>Classic daemons that background themselves</td></tr>
+<tr><td><code>notify</code></td><td>the process calls <code>sd_notify(READY=1)</code></td><td>systemd-aware daemons</td></tr>
+<tr><td><code>oneshot</code></td><td>the process exits successfully</td><td>Scripts and migrations</td></tr>
+</table>
+<p>A daemon that forks but is declared <code>Type=simple</code> appears to start and then immediately registers as dead. A foreground process declared <code>Type=forking</code> hangs until <code>TimeoutStartSec=</code> expires — 90 seconds by default — then is killed. Both look like application faults and are neither.</p>
+</div>
+<div class="card">
+<p>Shutdown has the mirror problem. A unit that ignores SIGTERM stalls the whole shutdown until <code>TimeoutStopSec=</code> expires:</p>
+<pre>systemd-analyze blame | head -20
+systemd-analyze critical-chain myapp.service
+systemctl show myapp.service -p TimeoutStartUSec -p TimeoutStopUSec -p Type</pre>
+<p>If the service needs longer than the default to come up legitimately — a large database replaying WAL, for example — raise <code>TimeoutStartSec=</code> deliberately rather than setting it to <code>infinity</code>, which simply converts a noisy failure into a silent hang.</p>
+</div>
+</section><section><h2>Validate before you reload</h2>
+<div class="card">
+<p>Editing unit files by hand in <code>/usr/lib/systemd/system/</code> is a mistake: a package update overwrites it. Use an override, which systemd merges over the vendor file:</p>
+<pre>systemctl edit myapp.service          # creates /etc/systemd/system/myapp.service.d/override.conf
+systemctl cat myapp.service           # shows the merged, effective result
+systemd-analyze verify myapp.service  # parses and reports errors before you apply
+systemctl daemon-reload
+systemctl restart myapp.service</pre>
+<p>One override trap deserves naming: list-valued directives such as <code>ExecStart=</code> and <code>Environment=</code> append rather than replace. To replace one you must first clear it with an empty assignment:</p>
+<pre>[Service]
+ExecStart=
+ExecStart=/usr/local/bin/myapp --config /etc/myapp/prod.yaml</pre>
+<p>Omitting the blank <code>ExecStart=</code> yields "Service has more than one ExecStart= setting, which is only allowed for Type=oneshot" — a confusing error with a trivial cause.</p>
+</div>
+</section><section><h2>A diagnosis checklist that works under pressure</h2>
+<div class="card">
+<ol>
+<li>Run <code>systemctl --failed</code> first. The unit you were told about may be a downstream casualty.</li>
+<li>Read <code>Loaded</code>, <code>Drop-In</code>, <code>Active</code> and the exit code before any log.</li>
+<li>If the result is <code>dependency</code>, stop and investigate the dependency instead.</li>
+<li>If the code is in the 200s, it is a unit-file or permission fault, not an application fault.</li>
+<li>If it is a restart loop, read the <em>first</em> attempt in the journal, not the last.</li>
+<li>If the result is <code>timeout</code>, verify <code>Type=</code> matches the process's actual behaviour.</li>
+<li>Reproduce by running <code>ExecStart</code> manually as <code>User=</code> with the unit stopped.</li>
+<li>After any edit: <code>systemd-analyze verify</code>, then <code>daemon-reload</code>, then restart, then <code>reset-failed</code>.</li>
+</ol>
+</div>
+</section><div class="take"><strong>Key takeaway:</strong> Read the exit code before the logs: a non-zero status points at the application, a signal points at the kernel or a timeout, and <code>dependency</code> in the Active line means the unit never ran at all. Use <code>journalctl -u … --no-pager -b</code> scoped to the boot, and always check <code>systemd-analyze verify</code> after editing a unit.</div></article></main><footer style="margin-top:48px;padding:22px 18px 26px;text-align:center;background:#030d20;border-top:1px solid #163b66;color:#dce9f6;font:14px/1.6 Inter,system-ui,sans-serif"><nav style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap"><a href="/disclaimer.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Disclaimer</a><a href="/terms-of-use.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Terms</a><a href="/privacy.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy</a><a href="/privacy.html#privacy-choices" data-privacy-settings style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Privacy and cookie settings</a><a href="/about.html" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">About</a><a href="mailto:info@rcwittraining.in" style="color:#4bd7ff;text-decoration:none;font-size:13px;font-weight:600">Contact</a></nav><p style="margin:12px auto 0;max-width:800px;font-size:12px;line-height:1.6;color:#8fa3b8">RCW IT Training is an independent educational platform. All product names, logos, and brands are the property of their respective owners and are used for identification and educational purposes only. This site shows advertising provided by Google AdSense; see the privacy policy for details and to change your consent choices.</p></footer></body></html>
