@@ -299,8 +299,8 @@ function codeIsValid(codeHash) {
 
 // Hidden downloads folder (obfuscated) + file names.
 var DL_SECRET = "YWVkNjk5NjNhYmFmLWxkL3NkYW9sbndvZA==";
-var DL_PORTABLE = "RCW-AWSNixOps-1.1-portable.zip";
-var DL_SOURCE   = "RCW-AWSNixOps-1.1-source.zip";
+var DL_PORTABLE = "https://github.com/rcwittraining/IT-Trainings/releases/download/tools-v1/RCW-AWSNixOps-1.1-portable.zip";
+var DL_SOURCE   = "https://github.com/rcwittraining/IT-Trainings/releases/download/tools-v1/RCW-AWSNixOps-1.1-source.zip";
 
 function deobf(s){ try{ return atob(s).split("").reverse().join(""); }catch(e){ return ""; } }
 function dlUrl(name){ return deobf(DL_SECRET) + "/" + name; }
